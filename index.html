@@ -42,6 +42,41 @@
             opacity: 0.9;
         }
         
+        .nav-tabs {
+            display: flex;
+            background: rgba(255,255,255,0.1);
+            border-radius: 10px;
+            margin-bottom: 20px;
+            padding: 5px;
+            overflow-x: auto;
+        }
+        
+        .nav-tab {
+            flex: 1;
+            padding: 10px 15px;
+            text-align: center;
+            color: white;
+            cursor: pointer;
+            border-radius: 8px;
+            transition: all 0.3s ease;
+            white-space: nowrap;
+            min-width: 120px;
+        }
+        
+        .nav-tab.active {
+            background: white;
+            color: #4c51bf;
+            font-weight: 600;
+        }
+        
+        .tab-content {
+            display: none;
+        }
+        
+        .tab-content.active {
+            display: block;
+        }
+        
         .dashboard {
             display: grid;
             grid-template-columns: 1fr;
@@ -80,7 +115,7 @@
             font-size: 0.9rem;
         }
         
-        .input-group input, .input-group select {
+        .input-group input, .input-group select, .input-group textarea {
             width: 100%;
             padding: 12px;
             border: 2px solid #e2e8f0;
@@ -91,7 +126,7 @@
             appearance: none;
         }
         
-        .input-group input:focus, .input-group select:focus {
+        .input-group input:focus, .input-group select:focus, .input-group textarea:focus {
             outline: none;
             border-color: #4c51bf;
         }
@@ -116,6 +151,11 @@
             box-shadow: 0 5px 15px rgba(76, 81, 191, 0.4);
         }
         
+        .btn.secondary {
+            background: #e2e8f0;
+            color: #4a5568;
+        }
+        
         .results {
             background: white;
             border-radius: 15px;
@@ -134,6 +174,12 @@
             border-left: 5px solid;
             min-height: 60px;
             touch-action: manipulation;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        
+        .college-match:hover {
+            transform: translateX(5px);
         }
         
         .reach { border-left-color: #f56565; background: #fed7d7; }
@@ -161,6 +207,12 @@
             padding: 15px;
             border-radius: 10px;
             border: 2px solid #e2e8f0;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        
+        .course-category:hover {
+            border-color: #4c51bf;
         }
         
         .course-category h4 {
@@ -191,6 +243,151 @@
             height: 100%;
             background: linear-gradient(90deg, #48bb78, #38a169);
             transition: width 0.3s ease;
+        }
+        
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.5);
+            z-index: 1000;
+        }
+        
+        .modal-content {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background: white;
+            padding: 30px;
+            border-radius: 15px;
+            max-width: 500px;
+            width: 90%;
+            max-height: 80vh;
+            overflow-y: auto;
+        }
+        
+        .close {
+            position: absolute;
+            top: 15px;
+            right: 20px;
+            font-size: 28px;
+            cursor: pointer;
+            color: #666;
+        }
+        
+        .course-list {
+            max-height: 200px;
+            overflow-y: auto;
+            border: 1px solid #e2e8f0;
+            border-radius: 8px;
+            padding: 10px;
+        }
+        
+        .course-item {
+            padding: 8px;
+            border-bottom: 1px solid #e2e8f0;
+            cursor: pointer;
+            transition: background 0.3s ease;
+        }
+        
+        .course-item:hover {
+            background: #f7fafc;
+        }
+        
+        .course-item:last-child {
+            border-bottom: none;
+        }
+        
+        .timeline {
+            position: relative;
+            padding-left: 30px;
+        }
+        
+        .timeline::before {
+            content: '';
+            position: absolute;
+            left: 15px;
+            top: 0;
+            bottom: 0;
+            width: 2px;
+            background: #e2e8f0;
+        }
+        
+        .timeline-item {
+            position: relative;
+            margin-bottom: 25px;
+            background: white;
+            padding: 15px;
+            border-radius: 10px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        
+        .timeline-item::before {
+            content: '';
+            position: absolute;
+            left: -22px;
+            top: 20px;
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            background: #4c51bf;
+        }
+        
+        .timeline-item.completed::before {
+            background: #48bb78;
+        }
+        
+        .timeline-item.overdue::before {
+            background: #f56565;
+        }
+        
+        .user-profile {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 20px;
+        }
+        
+        .profile-section {
+            background: white;
+            padding: 20px;
+            border-radius: 12px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+        }
+        
+        .essay-workspace {
+            min-height: 300px;
+        }
+        
+        .word-count {
+            text-align: right;
+            color: #666;
+            font-size: 0.9rem;
+            margin-top: 5px;
+        }
+        
+        .ai-suggestions {
+            background: #f0f9ff;
+            border: 1px solid #bae6fd;
+            border-radius: 8px;
+            padding: 15px;
+            margin-top: 15px;
+        }
+        
+        .suggestion-item {
+            padding: 10px;
+            margin: 5px 0;
+            background: white;
+            border-radius: 6px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        
+        .suggestion-item:hover {
+            background: #e0f2fe;
         }
         
         @media (min-width: 640px) {
@@ -239,6 +436,10 @@
             .header p {
                 font-size: 1.2rem;
             }
+            
+            .user-profile {
+                grid-template-columns: 1fr 1fr;
+            }
         }
         
         @media (min-width: 1024px) {
@@ -255,162 +456,398 @@
             <p>Your personalized path to UC & CSU success</p>
         </div>
         
-        <div class="dashboard">
-            <div class="card">
-                <h3>📊 GPA & Admission Calculator</h3>
-                <div class="input-group">
-                    <label>Weighted GPA (A-G Courses)</label>
-                    <input type="number" id="gpa" step="0.01" min="0" max="5" placeholder="4.0">
+        <div class="nav-tabs">
+            <div class="nav-tab active" onclick="switchTab('dashboard')">🏠 Dashboard</div>
+            <div class="nav-tab" onclick="switchTab('profile')">👤 Profile</div>
+            <div class="nav-tab" onclick="switchTab('courses')">📚 Courses</div>
+            <div class="nav-tab" onclick="switchTab('colleges')">🏫 Colleges</div>
+            <div class="nav-tab" onclick="switchTab('essays')">✍️ Essays</div>
+            <div class="nav-tab" onclick="switchTab('timeline')">📅 Timeline</div>
+        </div>
+        
+        <!-- Dashboard Tab -->
+        <div id="dashboard" class="tab-content active">
+            <div class="dashboard">
+                <div class="card">
+                    <h3>📊 GPA & Admission Calculator</h3>
+                    <div class="input-group">
+                        <label>Weighted GPA (A-G Courses)</label>
+                        <input type="number" id="gpa" step="0.01" min="0" max="5" placeholder="4.0" onchange="saveUserData()">
+                    </div>
+                    <div class="input-group">
+                        <label>SAT Score (optional)</label>
+                        <input type="number" id="sat" min="400" max="1600" placeholder="1400" onchange="saveUserData()">
+                    </div>
+                    <div class="input-group">
+                        <label>Intended Major</label>
+                        <select id="major" onchange="saveUserData()">
+                            <option value="undeclared">Undeclared</option>
+                            <option value="engineering">Engineering</option>
+                            <option value="business">Business</option>
+                            <option value="computer-science">Computer Science</option>
+                            <option value="biology">Biology</option>
+                            <option value="psychology">Psychology</option>
+                            <option value="english">English</option>
+                            <option value="history">History</option>
+                        </select>
+                    </div>
+                    <button class="btn" onclick="calculateAdmissions()">Calculate My Chances</button>
                 </div>
-                <div class="input-group">
-                    <label>SAT Score (optional)</label>
-                    <input type="number" id="sat" min="400" max="1600" placeholder="1400">
+                
+                <div class="card">
+                    <h3>🎯 College Finder</h3>
+                    <div class="input-group">
+                        <label>Preferred Location</label>
+                        <select id="location" onchange="saveUserData()">
+                            <option value="anywhere">Anywhere in CA</option>
+                            <option value="norcal">Northern California</option>
+                            <option value="socal">Southern California</option>
+                            <option value="central">Central California</option>
+                        </select>
+                    </div>
+                    <div class="input-group">
+                        <label>School Type</label>
+                        <select id="schoolType" onchange="saveUserData()">
+                            <option value="all">All Schools</option>
+                            <option value="uc">UC System</option>
+                            <option value="csu">CSU System</option>
+                            <option value="private">Private Universities</option>
+                            <option value="community">Community Colleges</option>
+                        </select>
+                    </div>
+                    <div class="input-group">
+                        <label>Campus Size Preference</label>
+                        <select id="size" onchange="saveUserData()">
+                            <option value="any">Any Size</option>
+                            <option value="small">Small (< 10k students)</option>
+                            <option value="medium">Medium (10k-30k students)</option>
+                            <option value="large">Large (> 30k students)</option>
+                        </select>
+                    </div>
+                    <button class="btn" onclick="findColleges()">Find My Matches</button>
                 </div>
-                <div class="input-group">
-                    <label>Intended Major</label>
-                    <select id="major">
-                        <option value="undeclared">Undeclared</option>
-                        <option value="engineering">Engineering</option>
-                        <option value="business">Business</option>
-                        <option value="computer-science">Computer Science</option>
-                        <option value="biology">Biology</option>
-                        <option value="psychology">Psychology</option>
-                        <option value="english">English</option>
-                        <option value="history">History</option>
-                    </select>
-                </div>
-                <button class="btn" onclick="calculateAdmissions()">Calculate My Chances</button>
             </div>
             
+            <div class="results" id="results" style="display: none;">
+                <h3>🎓 Your College Matches</h3>
+                <div id="collegeMatches"></div>
+            </div>
+        </div>
+        
+        <!-- Profile Tab -->
+        <div id="profile" class="tab-content">
+            <div class="user-profile">
+                <div class="profile-section">
+                    <h3>📋 Basic Information</h3>
+                    <div class="input-group">
+                        <label>Full Name</label>
+                        <input type="text" id="studentName" placeholder="Enter your name" onchange="saveUserData()">
+                    </div>
+                    <div class="input-group">
+                        <label>High School</label>
+                        <input type="text" id="highSchool" placeholder="Your high school name" onchange="saveUserData()">
+                    </div>
+                    <div class="input-group">
+                        <label>Graduation Year</label>
+                        <select id="gradYear" onchange="saveUserData()">
+                            <option value="2025">2025</option>
+                            <option value="2026">2026</option>
+                            <option value="2027">2027</option>
+                            <option value="2028">2028</option>
+                        </select>
+                    </div>
+                    <div class="input-group">
+                        <label>Current Grade Level</label>
+                        <select id="gradeLevel" onchange="saveUserData()">
+                            <option value="9">9th Grade (Freshman)</option>
+                            <option value="10">10th Grade (Sophomore)</option>
+                            <option value="11">11th Grade (Junior)</option>
+                            <option value="12">12th Grade (Senior)</option>
+                        </select>
+                    </div>
+                </div>
+                
+                <div class="profile-section">
+                    <h3>🎯 Goals & Interests</h3>
+                    <div class="input-group">
+                        <label>Career Interests</label>
+                        <textarea id="careerInterests" placeholder="What careers interest you?" onchange="saveUserData()"></textarea>
+                    </div>
+                    <div class="input-group">
+                        <label>Dream Schools</label>
+                        <textarea id="dreamSchools" placeholder="List your dream colleges" onchange="saveUserData()"></textarea>
+                    </div>
+                    <div class="input-group">
+                        <label>Extracurricular Activities</label>
+                        <textarea id="extracurriculars" placeholder="List your activities, sports, clubs, etc." onchange="saveUserData()"></textarea>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Courses Tab -->
+        <div id="courses" class="tab-content">
+            <div class="card course-tracker">
+                <h3>📚 A-G Course Requirements Tracker</h3>
+                <p>Track your progress toward UC/CSU eligibility requirements</p>
+                <div class="course-grid">
+                    <div class="course-category incomplete" id="english" onclick="openCourseModal('A', 'English', 4)">
+                        <h4>A - English (4 years)</h4>
+                        <div class="progress-bar">
+                            <div class="progress-fill" id="english-progress" style="width: 75%"></div>
+                        </div>
+                        <small id="english-status">3 of 4 years completed</small>
+                    </div>
+                    <div class="course-category complete" id="math" onclick="openCourseModal('B', 'Math', 3)">
+                        <h4>B - Math (3 years)</h4>
+                        <div class="progress-bar">
+                            <div class="progress-fill" id="math-progress" style="width: 100%"></div>
+                        </div>
+                        <small id="math-status">4 of 3 years completed ✓</small>
+                    </div>
+                    <div class="course-category incomplete" id="history" onclick="openCourseModal('C', 'History/Social Science', 2)">
+                        <h4>C - History/Social Science (2 years)</h4>
+                        <div class="progress-bar">
+                            <div class="progress-fill" id="history-progress" style="width: 50%"></div>
+                        </div>
+                        <small id="history-status">1 of 2 years completed</small>
+                    </div>
+                    <div class="course-category complete" id="science" onclick="openCourseModal('D', 'Laboratory Science', 2)">
+                        <h4>D - Laboratory Science (2 years)</h4>
+                        <div class="progress-bar">
+                            <div class="progress-fill" id="science-progress" style="width: 100%"></div>
+                        </div>
+                        <small id="science-status">3 of 2 years completed ✓</small>
+                    </div>
+                    <div class="course-category incomplete" id="language" onclick="openCourseModal('E', 'Language Other Than English', 2)">
+                        <h4>E - Language Other Than English (2 years)</h4>
+                        <div class="progress-bar">
+                            <div class="progress-fill" id="language-progress" style="width: 50%"></div>
+                        </div>
+                        <small id="language-status">1 of 2 years completed</small>
+                    </div>
+                    <div class="course-category complete" id="arts" onclick="openCourseModal('F', 'Visual/Performing Arts', 1)">
+                        <h4>F - Visual/Performing Arts (1 year)</h4>
+                        <div class="progress-bar">
+                            <div class="progress-fill" id="arts-progress" style="width: 100%"></div>
+                        </div>
+                        <small id="arts-status">1 of 1 year completed ✓</small>
+                    </div>
+                    <div class="course-category incomplete" id="elective" onclick="openCourseModal('G', 'College Prep Elective', 1)">
+                        <h4>G - College Prep Elective (1 year)</h4>
+                        <div class="progress-bar">
+                            <div class="progress-fill" id="elective-progress" style="width: 0%"></div>
+                        </div>
+                        <small id="elective-status">0 of 1 year completed</small>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Colleges Tab -->
+        <div id="colleges" class="tab-content">
             <div class="card">
-                <h3>🎯 College Finder</h3>
-                <div class="input-group">
-                    <label>Preferred Location</label>
-                    <select id="location">
-                        <option value="anywhere">Anywhere in CA</option>
-                        <option value="norcal">Northern California</option>
-                        <option value="socal">Southern California</option>
-                        <option value="central">Central California</option>
-                    </select>
-                </div>
-                <div class="input-group">
-                    <label>School Type</label>
-                    <select id="schoolType">
-                        <option value="all">All Schools</option>
-                        <option value="uc">UC System</option>
-                        <option value="csu">CSU System</option>
-                        <option value="private">Private Universities</option>
-                        <option value="community">Community Colleges</option>
-                    </select>
-                </div>
-                <div class="input-group">
-                    <label>Campus Size Preference</label>
-                    <select id="size">
-                        <option value="any">Any Size</option>
-                        <option value="small">Small (< 10k students)</option>
-                        <option value="medium">Medium (10k-30k students)</option>
-                        <option value="large">Large (> 30k students)</option>
-                    </select>
-                </div>
-                <button class="btn" onclick="findColleges()">Find My Matches</button>
-            </div>
-        </div>
-        
-        <div class="card course-tracker">
-            <h3>📚 A-G Course Requirements Tracker</h3>
-            <p>Track your progress toward UC/CSU eligibility requirements</p>
-            <div class="course-grid">
-                <div class="course-category incomplete" id="english">
-                    <h4>A - English (4 years)</h4>
-                    <div class="progress-bar">
-                        <div class="progress-fill" style="width: 75%"></div>
-                    </div>
-                    <small>3 of 4 years completed</small>
-                </div>
-                <div class="course-category complete" id="math">
-                    <h4>B - Math (3 years)</h4>
-                    <div class="progress-bar">
-                        <div class="progress-fill" style="width: 100%"></div>
-                    </div>
-                    <small>4 of 3 years completed ✓</small>
-                </div>
-                <div class="course-category incomplete" id="history">
-                    <h4>C - History/Social Science (2 years)</h4>
-                    <div class="progress-bar">
-                        <div class="progress-fill" style="width: 50%"></div>
-                    </div>
-                    <small>1 of 2 years completed</small>
-                </div>
-                <div class="course-category complete" id="science">
-                    <h4>D - Laboratory Science (2 years)</h4>
-                    <div class="progress-bar">
-                        <div class="progress-fill" style="width: 100%"></div>
-                    </div>
-                    <small>3 of 2 years completed ✓</small>
-                </div>
-                <div class="course-category incomplete" id="language">
-                    <h4>E - Language Other Than English (2 years)</h4>
-                    <div class="progress-bar">
-                        <div class="progress-fill" style="width: 50%"></div>
-                    </div>
-                    <small>1 of 2 years completed</small>
-                </div>
-                <div class="course-category complete" id="arts">
-                    <h4>F - Visual/Performing Arts (1 year)</h4>
-                    <div class="progress-bar">
-                        <div class="progress-fill" style="width: 100%"></div>
-                    </div>
-                    <small>1 of 1 year completed ✓</small>
-                </div>
-                <div class="course-category incomplete" id="elective">
-                    <h4>G - College Prep Elective (1 year)</h4>
-                    <div class="progress-bar">
-                        <div class="progress-fill" style="width: 0%"></div>
-                    </div>
-                    <small>0 of 1 year completed</small>
+                <h3>🏫 Your College List</h3>
+                <div id="savedColleges">
+                    <p>Use the calculator to find colleges, then save them to your list!</p>
                 </div>
             </div>
         </div>
         
-        <div class="results" id="results" style="display: none;">
-            <h3>🎓 Your College Matches</h3>
-            <div id="collegeMatches"></div>
+        <!-- Essays Tab -->
+        <div id="essays" class="tab-content">
+            <div class="card">
+                <h3>✍️ Essay Workspace</h3>
+                <div class="input-group">
+                    <label>Essay Type</label>
+                    <select id="essayType">
+                        <option value="personal-statement">Personal Statement</option>
+                        <option value="uc-piq-1">UC PIQ #1 - Leadership</option>
+                        <option value="uc-piq-2">UC PIQ #2 - Creativity</option>
+                        <option value="uc-piq-3">UC PIQ #3 - Greatest Skill</option>
+                        <option value="uc-piq-4">UC PIQ #4 - Significant Opportunity/Challenge</option>
+                    </select>
+                </div>
+                <div class="input-group">
+                    <label>Essay Content</label>
+                    <textarea id="essayContent" class="essay-workspace" placeholder="Start writing your essay here..." oninput="updateWordCount()"></textarea>
+                    <div class="word-count" id="wordCount">0 words</div>
+                </div>
+                <button class="btn" onclick="getEssayFeedback()">Get AI Feedback</button>
+                
+                <div class="ai-suggestions" id="essayFeedback" style="display: none;">
+                    <h4>💡 AI Suggestions</h4>
+                    <div id="feedbackContent"></div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Timeline Tab -->
+        <div id="timeline" class="tab-content">
+            <div class="card">
+                <h3>📅 Application Timeline</h3>
+                <div class="timeline" id="applicationTimeline">
+                    <!-- Timeline items will be generated here -->
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Course Modal -->
+    <div id="courseModal" class="modal">
+        <div class="modal-content">
+            <span class="close" onclick="closeCourseModal()">&times;</span>
+            <h3 id="modalTitle">Add Courses</h3>
+            <div class="input-group">
+                <label>Course Name</label>
+                <input type="text" id="courseName" placeholder="Enter course name">
+            </div>
+            <div class="input-group">
+                <label>Grade Received</label>
+                <select id="courseGrade">
+                    <option value="A+">A+</option>
+                    <option value="A">A</option>
+                    <option value="A-">A-</option>
+                    <option value="B+">B+</option>
+                    <option value="B">B</option>
+                    <option value="B-">B-</option>
+                    <option value="C+">C+</option>
+                    <option value="C">C</option>
+                    <option value="C-">C-</option>
+                    <option value="D+">D+</option>
+                    <option value="D">D</option>
+                    <option value="F">F</option>
+                    <option value="IP">In Progress</option>
+                </select>
+            </div>
+            <div class="input-group">
+                <label>Semester/Year</label>
+                <input type="text" id="courseSemester" placeholder="Fall 2024">
+            </div>
+            <button class="btn" onclick="addCourse()">Add Course</button>
+            
+            <h4 style="margin-top: 20px;">Your Courses:</h4>
+            <div class="course-list" id="courseList">
+                <!-- Added courses will appear here -->
+            </div>
         </div>
     </div>
 
     <script>
+        // Enhanced California colleges database with more realistic data
         const californiaColleges = {
             uc: [
-                { name: 'UC Berkeley', avgGPA: 4.25, avgSAT: 1450, acceptance: 14, location: 'norcal', size: 'large' },
-                { name: 'UCLA', avgGPA: 4.23, avgSAT: 1440, acceptance: 11, location: 'socal', size: 'large' },
-                { name: 'UC San Diego', avgGPA: 4.15, avgSAT: 1420, acceptance: 32, location: 'socal', size: 'large' },
-                { name: 'UC Davis', avgGPA: 4.05, avgSAT: 1370, acceptance: 39, location: 'norcal', size: 'large' },
-                { name: 'UC Irvine', avgGPA: 4.08, avgSAT: 1380, acceptance: 27, location: 'socal', size: 'large' },
-                { name: 'UC Santa Barbara', avgGPA: 4.12, avgSAT: 1390, acceptance: 26, location: 'socal', size: 'large' },
-                { name: 'UC Santa Cruz', avgGPA: 3.85, avgSAT: 1290, acceptance: 47, location: 'norcal', size: 'medium' },
-                { name: 'UC Riverside', avgGPA: 3.75, avgSAT: 1250, acceptance: 57, location: 'socal', size: 'large' },
-                { name: 'UC Merced', avgGPA: 3.65, avgSAT: 1200, acceptance: 72, location: 'central', size: 'medium' }
+                { name: 'UC Berkeley', avgGPA: 4.25, avgSAT: 1450, acceptance: 14, location: 'norcal', size: 'large', tuition: 14226, programs: ['Engineering', 'Business', 'Computer Science'] },
+                { name: 'UCLA', avgGPA: 4.23, avgSAT: 1440, acceptance: 11, location: 'socal', size: 'large', tuition: 13239, programs: ['Film', 'Business', 'Medicine'] },
+                { name: 'UC San Diego', avgGPA: 4.15, avgSAT: 1420, acceptance: 32, location: 'socal', size: 'large', tuition: 13238, programs: ['Engineering', 'Biology', 'Computer Science'] },
+                { name: 'UC Davis', avgGPA: 4.05, avgSAT: 1370, acceptance: 39, location: 'norcal', size: 'large', tuition: 13229, programs: ['Veterinary', 'Agriculture', 'Engineering'] },
+                { name: 'UC Irvine', avgGPA: 4.08, avgSAT: 1380, acceptance: 27, location: 'socal', size: 'large', tuition: 13228, programs: ['Computer Science', 'Business', 'Medicine'] },
+                { name: 'UC Santa Barbara', avgGPA: 4.12, avgSAT: 1390, acceptance: 26, location: 'socal', size: 'large', tuition: 13235, programs: ['Engineering', 'Film', 'Psychology'] },
+                { name: 'UC Santa Cruz', avgGPA: 3.85, avgSAT: 1290, acceptance: 47, location: 'norcal', size: 'medium', tuition: 13226, programs: ['Computer Science', 'Psychology', 'Arts'] },
+                { name: 'UC Riverside', avgGPA: 3.75, avgSAT: 1250, acceptance: 57, location: 'socal', size: 'large', tuition: 13227, programs: ['Business', 'Engineering', 'Medicine'] },
+                { name: 'UC Merced', avgGPA: 3.65, avgSAT: 1200, acceptance: 72, location: 'central', size: 'medium', tuition: 13224, programs: ['Engineering', 'Biology', 'Psychology'] }
             ],
             csu: [
-                { name: 'San Diego State', avgGPA: 3.85, avgSAT: 1250, acceptance: 34, location: 'socal', size: 'large' },
-                { name: 'Cal Poly San Luis Obispo', avgGPA: 4.05, avgSAT: 1350, acceptance: 25, location: 'central', size: 'medium' },
-                { name: 'CSU Long Beach', avgGPA: 3.75, avgSAT: 1200, acceptance: 31, location: 'socal', size: 'large' },
-                { name: 'SF State', avgGPA: 3.45, avgSAT: 1150, acceptance: 67, location: 'norcal', size: 'large' },
-                { name: 'Cal State Fullerton', avgGPA: 3.65, avgSAT: 1180, acceptance: 43, location: 'socal', size: 'large' }
+                { name: 'San Diego State', avgGPA: 3.85, avgSAT: 1250, acceptance: 34, location: 'socal', size: 'large', tuition: 5742, programs: ['Business', 'Engineering', 'Communications'] },
+                { name: 'Cal Poly San Luis Obispo', avgGPA: 4.05, avgSAT: 1350, acceptance: 25, location: 'central', size: 'medium', tuition: 5742, programs: ['Engineering', 'Architecture', 'Business'] },
+                { name: 'CSU Long Beach', avgGPA: 3.75, avgSAT: 1200, acceptance: 31, location: 'socal', size: 'large', tuition: 5742, programs: ['Engineering', 'Business', 'Arts'] },
+                { name: 'SF State', avgGPA: 3.45, avgSAT: 1150, acceptance: 67, location: 'norcal', size: 'large', tuition: 5742, programs: ['Liberal Arts', 'Business', 'Education'] },
+                { name: 'Cal State Fullerton', avgGPA: 3.65, avgSAT: 1180, acceptance: 43, location: 'socal', size: 'large', tuition: 5742, programs: ['Business', 'Communications', 'Engineering'] },
+                { name: 'Cal Poly Pomona', avgGPA: 3.8, avgSAT: 1230, acceptance: 38, location: 'socal', size: 'large', tuition: 5742, programs: ['Engineering', 'Agriculture', 'Business'] }
             ],
             private: [
-                { name: 'Stanford University', avgGPA: 4.40, avgSAT: 1520, acceptance: 4, location: 'norcal', size: 'medium' },
-                { name: 'USC', avgGPA: 4.10, avgSAT: 1460, acceptance: 11, location: 'socal', size: 'large' },
-                { name: 'Pomona College', avgGPA: 4.15, avgSAT: 1480, acceptance: 7, location: 'socal', size: 'small' },
-                { name: 'Claremont McKenna', avgGPA: 4.05, avgSAT: 1450, acceptance: 9, location: 'socal', size: 'small' }
+                { name: 'Stanford University', avgGPA: 4.40, avgSAT: 1520, acceptance: 4, location: 'norcal', size: 'medium', tuition: 56169, programs: ['Computer Science', 'Engineering', 'Business'] },
+                { name: 'USC', avgGPA: 4.10, avgSAT: 1460, acceptance: 11, location: 'socal', size: 'large', tuition: 60446, programs: ['Film', 'Business', 'Engineering'] },
+                { name: 'Pomona College', avgGPA: 4.15, avgSAT: 1480, acceptance: 7, location: 'socal', size: 'small', tuition: 54380, programs: ['Liberal Arts', 'Sciences', 'Economics'] },
+                { name: 'Claremont McKenna', avgGPA: 4.05, avgSAT: 1450, acceptance: 9, location: 'socal', size: 'small', tuition: 56475, programs: ['Economics', 'Government', 'Psychology'] }
             ]
         };
 
+        // User data storage
+        let userData = JSON.parse(localStorage.getItem('collegeAppUserData')) || {
+            profile: {},
+            courses: {
+                A: [], B: [], C: [], D: [], E: [], F: [], G: []
+            },
+            savedColleges: [],
+            essays: {},
+            timeline: []
+        };
+
+        let currentCourseCategory = '';
+
+        // Tab switching functionality
+        function switchTab(tabName) {
+            // Hide all tab contents
+            document.querySelectorAll('.tab-content').forEach(content => {
+                content.classList.remove('active');
+            });
+            
+            // Remove active class from all tabs
+            document.querySelectorAll('.nav-tab').forEach(tab => {
+                tab.classList.remove('active');
+            });
+            
+            // Show selected tab content
+            document.getElementById(tabName).classList.add('active');
+            
+            // Add active class to clicked tab
+            event.target.classList.add('active');
+            
+            // Initialize specific tab content
+            if (tabName === 'timeline') {
+                generateTimeline();
+            } else if (tabName === 'colleges') {
+                displaySavedColleges();
+            }
+        }
+
+        // Save user data to localStorage
+        function saveUserData() {
+            userData.profile = {
+                name: document.getElementById('studentName').value,
+                highSchool: document.getElementById('highSchool').value,
+                gradYear: document.getElementById('gradYear').value,
+                gradeLevel: document.getElementById('gradeLevel').value,
+                gpa: document.getElementById('gpa').value,
+                sat: document.getElementById('sat').value,
+                major: document.getElementById('major').value,
+                location: document.getElementById('location').value,
+                schoolType: document.getElementById('schoolType').value,
+                size: document.getElementById('size').value,
+                careerInterests: document.getElementById('careerInterests').value,
+                dreamSchools: document.getElementById('dreamSchools').value,
+                extracurriculars: document.getElementById('extracurriculars').value
+            };
+            
+            localStorage.setItem('collegeAppUserData', JSON.stringify(userData));
+        }
+
+        // Load user data
+        function loadUserData() {
+            const profile = userData.profile;
+            if (profile.name) document.getElementById('studentName').value = profile.name;
+            if (profile.highSchool) document.getElementById('highSchool').value = profile.highSchool;
+            if (profile.gradYear) document.getElementById('gradYear').value = profile.gradYear;
+            if (profile.gradeLevel) document.getElementById('gradeLevel').value = profile.gradeLevel;
+            if (profile.gpa) document.getElementById('gpa').value = profile.gpa;
+            if (profile.sat) document.getElementById('sat').value = profile.sat;
+            if (profile.major) document.getElementById('major').value = profile.major;
+            if (profile.location) document.getElementById('location').value = profile.location;
+            if (profile.schoolType) document.getElementById('schoolType').value = profile.schoolType;
+            if (profile.size) document.getElementById('size').value = profile.size;
+            if (profile.careerInterests) document.getElementById('careerInterests').value = profile.careerInterests;
+            if (profile.dreamSchools) document.getElementById('dreamSchools').value = profile.dreamSchools;
+            if (profile.extracurriculars) document.getElementById('extracurriculars').value = profile.extracurriculars;
+        }
+
+        // Enhanced admission calculation
         function calculateAdmissions() {
             const gpa = parseFloat(document.getElementById('gpa').value) || 0;
             const sat = parseInt(document.getElementById('sat').value) || 0;
             const location = document.getElementById('location').value;
             const schoolType = document.getElementById('schoolType').value;
+            const major = document.getElementById('major').value;
             
             if (gpa === 0) {
                 alert('Please enter your GPA to continue');
@@ -433,31 +870,45 @@
                 colleges = colleges.filter(college => college.location === location);
             }
             
-            // Calculate admission probability
+            // Enhanced probability calculation
             colleges.forEach(college => {
                 let probability = 50; // Base probability
                 
-                // GPA factor
-                if (gpa >= college.avgGPA + 0.2) probability += 30;
-                else if (gpa >= college.avgGPA) probability += 15;
-                else if (gpa >= college.avgGPA - 0.2) probability -= 10;
+                // GPA factor (weighted more heavily)
+                const gpaRatio = gpa / college.avgGPA;
+                if (gpaRatio >= 1.05) probability += 25;
+                else if (gpaRatio >= 1.0) probability += 15;
+                else if (gpaRatio >= 0.95) probability += 5;
+                else if (gpaRatio >= 0.9) probability -= 10;
                 else probability -= 25;
                 
                 // SAT factor (if provided)
                 if (sat > 0) {
-                    if (sat >= college.avgSAT + 50) probability += 20;
-                    else if (sat >= college.avgSAT) probability += 10;
-                    else if (sat >= college.avgSAT - 50) probability -= 5;
+                    const satRatio = sat / college.avgSAT;
+                    if (satRatio >= 1.05) probability += 20;
+                    else if (satRatio >= 1.0) probability += 10;
+                    else if (satRatio >= 0.95) probability += 2;
+                    else if (satRatio >= 0.9) probability -= 5;
                     else probability -= 15;
                 }
                 
-                // Acceptance rate factor
-                probability += (college.acceptance - 30);
+                // Major competitiveness factor
+                if (major === 'computer-science' || major === 'engineering') {
+                    probability -= 15; // More competitive
+                } else if (major === 'business') {
+                    probability -= 10;
+                } else if (major === 'english' || major === 'history') {
+                    probability += 5; // Less competitive
+                }
                 
-                college.probability = Math.max(5, Math.min(95, probability));
+                // School acceptance rate factor
+                probability += (college.acceptance - 30) * 0.5;
+                
+                college.probability = Math.max(5, Math.min(95, Math.round(probability)));
             });
             
             displayResults(colleges);
+            saveUserData();
         }
         
         function findColleges() {
@@ -474,16 +925,20 @@
             let html = '';
             colleges.forEach(college => {
                 let category = 'safety';
-                if (college.probability < 30) category = 'reach';
-                else if (college.probability < 60) category = 'target';
+                if (college.probability < 35) category = 'reach';
+                else if (college.probability < 65) category = 'target';
                 
                 html += `
-                    <div class="college-match ${category}">
+                    <div class="college-match ${category}" onclick="saveCollege('${college.name}')">
                         <div>
                             <strong>${college.name}</strong><br>
-                            <small>Avg GPA: ${college.avgGPA} | Avg SAT: ${college.avgSAT} | Acceptance: ${college.acceptance}%</small>
+                            <small>Avg GPA: ${college.avgGPA} | Avg SAT: ${college.avgSAT} | Acceptance: ${college.acceptance}%</small><br>
+                            <small>Tuition: ${college.tuition.toLocaleString()} | Programs: ${college.programs.join(', ')}</small>
                         </div>
-                        <div class="probability">${college.probability}%</div>
+                        <div>
+                            <div class="probability">${college.probability}%</div>
+                            <small>Click to save</small>
+                        </div>
                     </div>
                 `;
             });
@@ -492,10 +947,271 @@
             resultsDiv.style.display = 'block';
             resultsDiv.scrollIntoView({ behavior: 'smooth' });
         }
-        
-        // Initialize with sample calculation
-        document.getElementById('gpa').value = '3.85';
-        document.getElementById('sat').value = '1320';
+
+        // Course management
+        function openCourseModal(category, subject, required) {
+            currentCourseCategory = category;
+            document.getElementById('modalTitle').textContent = `Add ${subject} Courses`;
+            document.getElementById('courseModal').style.display = 'block';
+            updateCourseList();
+        }
+
+        function closeCourseModal() {
+            document.getElementById('courseModal').style.display = 'none';
+            document.getElementById('courseName').value = '';
+            document.getElementById('courseSemester').value = '';
+        }
+
+        function addCourse() {
+            const courseName = document.getElementById('courseName').value;
+            const courseGrade = document.getElementById('courseGrade').value;
+            const courseSemester = document.getElementById('courseSemester').value;
+            
+            if (!courseName) {
+                alert('Please enter a course name');
+                return;
+            }
+            
+            const course = {
+                name: courseName,
+                grade: courseGrade,
+                semester: courseSemester,
+                category: currentCourseCategory
+            };
+            
+            userData.courses[currentCourseCategory].push(course);
+            localStorage.setItem('collegeAppUserData', JSON.stringify(userData));
+            
+            updateCourseList();
+            updateCourseProgress();
+            
+            // Clear inputs
+            document.getElementById('courseName').value = '';
+            document.getElementById('courseSemester').value = '';
+        }
+
+        function updateCourseList() {
+            const courseList = document.getElementById('courseList');
+            const courses = userData.courses[currentCourseCategory] || [];
+            
+            if (courses.length === 0) {
+                courseList.innerHTML = '<p>No courses added yet.</p>';
+                return;
+            }
+            
+            let html = '';
+            courses.forEach((course, index) => {
+                html += `
+                    <div class="course-item">
+                        <strong>${course.name}</strong> - Grade: ${course.grade}<br>
+                        <small>${course.semester}</small>
+                        <button style="float: right; background: #f56565; color: white; border: none; padding: 2px 8px; border-radius: 4px; cursor: pointer;" onclick="removeCourse(${index})">Remove</button>
+                    </div>
+                `;
+            });
+            
+            courseList.innerHTML = html;
+        }
+
+        function removeCourse(index) {
+            userData.courses[currentCourseCategory].splice(index, 1);
+            localStorage.setItem('collegeAppUserData', JSON.stringify(userData));
+            updateCourseList();
+            updateCourseProgress();
+        }
+
+        function updateCourseProgress() {
+            const requirements = {
+                A: 4, B: 3, C: 2, D: 2, E: 2, F: 1, G: 1
+            };
+            
+            Object.keys(requirements).forEach(category => {
+                const completed = userData.courses[category].length;
+                const required = requirements[category];
+                const progress = Math.min(100, (completed / required) * 100);
+                
+                const categoryNames = {
+                    A: 'english', B: 'math', C: 'history', D: 'science', 
+                    E: 'language', F: 'arts', G: 'elective'
+                };
+                
+                const categoryElement = document.getElementById(categoryNames[category]);
+                const progressBar = document.getElementById(categoryNames[category] + '-progress');
+                const statusText = document.getElementById(categoryNames[category] + '-status');
+                
+                if (progressBar) {
+                    progressBar.style.width = progress + '%';
+                }
+                
+                if (statusText) {
+                    const status = completed >= required ? ' ✓' : '';
+                    statusText.textContent = `${completed} of ${required} years completed${status}`;
+                }
+                
+                if (categoryElement) {
+                    categoryElement.className = completed >= required ? 'course-category complete' : 'course-category incomplete';
+                }
+            });
+        }
+
+        // College saving functionality
+        function saveCollege(collegeName) {
+            if (!userData.savedColleges.includes(collegeName)) {
+                userData.savedColleges.push(collegeName);
+                localStorage.setItem('collegeAppUserData', JSON.stringify(userData));
+                alert(`${collegeName} saved to your college list!`);
+            } else {
+                alert(`${collegeName} is already in your college list.`);
+            }
+        }
+
+        function displaySavedColleges() {
+            const savedCollegesDiv = document.getElementById('savedColleges');
+            
+            if (userData.savedColleges.length === 0) {
+                savedCollegesDiv.innerHTML = '<p>No colleges saved yet. Use the calculator to find colleges, then save them to your list!</p>';
+                return;
+            }
+            
+            let html = '<h4>Your Saved Colleges:</h4>';
+            userData.savedColleges.forEach(collegeName => {
+                html += `
+                    <div style="padding: 10px; margin: 5px 0; background: #f7fafc; border-radius: 8px; display: flex; justify-content: space-between; align-items: center;">
+                        <span><strong>${collegeName}</strong></span>
+                        <button style="background: #f56565; color: white; border: none; padding: 5px 10px; border-radius: 4px; cursor: pointer;" onclick="removeFromSaved('${collegeName}')">Remove</button>
+                    </div>
+                `;
+            });
+            
+            savedCollegesDiv.innerHTML = html;
+        }
+
+        function removeFromSaved(collegeName) {
+            userData.savedColleges = userData.savedColleges.filter(name => name !== collegeName);
+            localStorage.setItem('collegeAppUserData', JSON.stringify(userData));
+            displaySavedColleges();
+        }
+
+        // Essay functionality
+        function updateWordCount() {
+            const content = document.getElementById('essayContent').value;
+            const wordCount = content.trim().split(/\s+/).filter(word => word.length > 0).length;
+            document.getElementById('wordCount').textContent = `${wordCount} words`;
+            
+            // Save essay content
+            const essayType = document.getElementById('essayType').value;
+            userData.essays[essayType] = content;
+            localStorage.setItem('collegeAppUserData', JSON.stringify(userData));
+        }
+
+        function getEssayFeedback() {
+            const content = document.getElementById('essayContent').value;
+            const essayType = document.getElementById('essayType').value;
+            
+            if (!content.trim()) {
+                alert('Please write some content first!');
+                return;
+            }
+            
+            // Simulate AI feedback
+            const feedback = generateEssayFeedback(content, essayType);
+            const feedbackDiv = document.getElementById('essayFeedback');
+            const feedbackContent = document.getElementById('feedbackContent');
+            
+            feedbackContent.innerHTML = feedback;
+            feedbackDiv.style.display = 'block';
+        }
+
+        function generateEssayFeedback(content, essayType) {
+            const wordCount = content.trim().split(/\s+/).length;
+            let feedback = '';
+            
+            // Word count feedback
+            if (wordCount < 100) {
+                feedback += '<div class="suggestion-item">📝 Consider expanding your essay. Most college essays should be 250-650 words.</div>';
+            } else if (wordCount > 700) {
+                feedback += '<div class="suggestion-item">✂️ Your essay might be too long. Consider condensing to stay within limits.</div>';
+            } else {
+                feedback += '<div class="suggestion-item">✅ Word count looks good!</div>';
+            }
+            
+            // Content feedback based on essay type
+            if (essayType.includes('uc-piq')) {
+                feedback += '<div class="suggestion-item">💡 Remember: UC Personal Insight Questions should be exactly 350 words.</div>';
+                feedback += '<div class="suggestion-item">🎯 Focus on specific examples and reflect on what you learned.</div>';
+            }
+            
+            // General feedback
+            if (!content.toLowerCase().includes('i')) {
+                feedback += '<div class="suggestion-item">👤 Consider using more personal examples and "I" statements.</div>';
+            }
+            
+            if (content.split('.').length < 5) {
+                feedback += '<div class="suggestion-item">📖 Consider adding more detailed examples and explanations.</div>';
+            }
+            
+            return feedback;
+        }
+
+        // Timeline generation
+        function generateTimeline() {
+            const timelineDiv = document.getElementById('applicationTimeline');
+            const currentDate = new Date();
+            const gradYear = parseInt(userData.profile.gradYear) || 2025;
+            
+            const timelineItems = [
+                { date: `September ${gradYear - 1}`, task: 'Research colleges and create initial list', status: 'completed' },
+                { date: `October ${gradYear - 1}`, task: 'Take SAT/ACT if needed', status: 'completed' },
+                { date: `November ${gradYear - 1}`, task: 'Submit UC applications (deadline Nov 30)', status: currentDate.getMonth() >= 10 ? 'completed' : 'pending' },
+                { date: `December ${gradYear - 1}`, task: 'Submit CSU applications', status: currentDate.getMonth() >= 11 ? 'completed' : 'pending' },
+                { date: `January ${gradYear}`, task: 'Submit FAFSA and Cal Grant applications', status: 'pending' },
+                { date: `February ${gradYear}`, task: 'Submit private college applications', status: 'pending' },
+                { date: `March ${gradYear}`, task: 'Receive UC admission decisions', status: 'pending' },
+                { date: `April ${gradYear}`, task: 'Receive CSU admission decisions', status: 'pending' },
+                { date: `May ${gradYear}`, task: 'Submit Intent to Register (SIR)', status: 'pending' }
+            ];
+            
+            let html = '';
+            timelineItems.forEach(item => {
+                const statusClass = item.status === 'completed' ? 'completed' : 
+                                 (new Date(item.date) < currentDate ? 'overdue' : '');
+                
+                html += `
+                    <div class="timeline-item ${statusClass}">
+                        <h4>${item.date}</h4>
+                        <p>${item.task}</p>
+                        <small>Status: ${item.status.charAt(0).toUpperCase() + item.status.slice(1)}</small>
+                    </div>
+                `;
+            });
+            
+            timelineDiv.innerHTML = html;
+        }
+
+        // Initialize app
+        function initializeApp() {
+            loadUserData();
+            updateCourseProgress();
+            
+            // Set default values if empty
+            if (!document.getElementById('gpa').value) {
+                document.getElementById('gpa').value = '3.8';
+            }
+            if (!document.getElementById('sat').value) {
+                document.getElementById('sat').value = '1300';
+            }
+        }
+
+        // Close modal when clicking outside
+        window.onclick = function(event) {
+            const modal = document.getElementById('courseModal');
+            if (event.target === modal) {
+                closeCourseModal();
+            }
+        }
+
+        // Initialize when page loads
+        document.addEventListener('DOMContentLoaded', initializeApp);
     </script>
 </body>
 </html>
