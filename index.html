@@ -1,518 +1,501 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
-<html>
+<!DOCTYPE html>
+<html lang="en">
 <head>
-  <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-  <meta http-equiv="Content-Style-Type" content="text/css">
-  <title></title>
-  <meta name="Generator" content="Cocoa HTML Writer">
-  <meta name="CocoaVersion" content="2575.7">
-  <style type="text/css">
-    p.p1 {margin: 0.0px 0.0px 0.0px 0.0px; font: 12.0px Helvetica; min-height: 14.0px}
-    p.p2 {margin: 0.0px 0.0px 0.0px 0.0px; font: 12.0px Helvetica}
-  </style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>California College Prep - Your Path to UC & CSU Success</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/3.9.1/chart.min.js"></script>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            color: #333;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 15px;
+        }
+        
+        .header {
+            text-align: center;
+            color: white;
+            margin-bottom: 25px;
+        }
+        
+        .header h1 {
+            font-size: 1.8rem;
+            margin-bottom: 8px;
+            font-weight: 700;
+        }
+        
+        .header p {
+            font-size: 1rem;
+            opacity: 0.9;
+        }
+        
+        .dashboard {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 15px;
+            margin-bottom: 30px;
+        }
+        
+        .card {
+            background: white;
+            border-radius: 12px;
+            padding: 20px;
+            box-shadow: 0 8px 25px rgba(0,0,0,0.1);
+            transition: transform 0.3s ease;
+            margin-bottom: 15px;
+        }
+        
+        .card:hover {
+            transform: translateY(-3px);
+        }
+        
+        .card h3 {
+            color: #4c51bf;
+            margin-bottom: 15px;
+            font-size: 1.2rem;
+        }
+        
+        .input-group {
+            margin-bottom: 15px;
+        }
+        
+        .input-group label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 600;
+            color: #4a5568;
+            font-size: 0.9rem;
+        }
+        
+        .input-group input, .input-group select {
+            width: 100%;
+            padding: 12px;
+            border: 2px solid #e2e8f0;
+            border-radius: 8px;
+            font-size: 16px;
+            transition: border-color 0.3s ease;
+            -webkit-appearance: none;
+            appearance: none;
+        }
+        
+        .input-group input:focus, .input-group select:focus {
+            outline: none;
+            border-color: #4c51bf;
+        }
+        
+        .btn {
+            background: linear-gradient(135deg, #4c51bf, #667eea);
+            color: white;
+            border: none;
+            padding: 12px 24px;
+            border-radius: 8px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            width: 100%;
+            min-height: 48px;
+            touch-action: manipulation;
+        }
+        
+        .btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(76, 81, 191, 0.4);
+        }
+        
+        .results {
+            background: white;
+            border-radius: 15px;
+            padding: 25px;
+            margin-top: 20px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+        }
+        
+        .college-match {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 15px;
+            margin: 10px 0;
+            border-radius: 10px;
+            border-left: 5px solid;
+            min-height: 60px;
+            touch-action: manipulation;
+        }
+        
+        .reach { border-left-color: #f56565; background: #fed7d7; }
+        .target { border-left-color: #ed8936; background: #feebc8; }
+        .safety { border-left-color: #48bb78; background: #c6f6d5; }
+        
+        .probability {
+            font-weight: bold;
+            font-size: 1.1rem;
+        }
+        
+        .course-tracker {
+            grid-column: 1 / -1;
+        }
+        
+        .course-grid {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 12px;
+            margin-top: 15px;
+        }
+        
+        .course-category {
+            background: #f7fafc;
+            padding: 15px;
+            border-radius: 10px;
+            border: 2px solid #e2e8f0;
+        }
+        
+        .course-category h4 {
+            font-size: 0.95rem;
+            margin-bottom: 8px;
+        }
+        
+        .course-category.complete {
+            border-color: #48bb78;
+            background: #c6f6d5;
+        }
+        
+        .course-category.incomplete {
+            border-color: #f56565;
+            background: #fed7d7;
+        }
+        
+        .progress-bar {
+            width: 100%;
+            height: 8px;
+            background: #e2e8f0;
+            border-radius: 4px;
+            overflow: hidden;
+            margin: 10px 0;
+        }
+        
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(90deg, #48bb78, #38a169);
+            transition: width 0.3s ease;
+        }
+        
+        @media (min-width: 640px) {
+            .dashboard {
+                grid-template-columns: 1fr;
+            }
+            
+            .course-grid {
+                grid-template-columns: repeat(2, 1fr);
+                gap: 15px;
+            }
+            
+            .header h1 {
+                font-size: 2.2rem;
+            }
+            
+            .header p {
+                font-size: 1.1rem;
+            }
+        }
+        
+        @media (min-width: 768px) {
+            .dashboard {
+                grid-template-columns: 1fr 1fr;
+                gap: 20px;
+            }
+            
+            .course-grid {
+                grid-template-columns: repeat(3, 1fr);
+            }
+            
+            .container {
+                padding: 20px;
+            }
+            
+            .card {
+                padding: 25px;
+                margin-bottom: 0;
+            }
+            
+            .header h1 {
+                font-size: 2.5rem;
+                margin-bottom: 10px;
+            }
+            
+            .header p {
+                font-size: 1.2rem;
+            }
+        }
+        
+        @media (min-width: 1024px) {
+            .course-grid {
+                grid-template-columns: repeat(4, 1fr);
+            }
+        }
+    </style>
 </head>
 <body>
-<p class="p1"><br></p>
-<p class="p2">&lt;!DOCTYPE html&gt;</p>
-<p class="p2">&lt;html lang="en"&gt;</p>
-<p class="p2">&lt;head&gt;</p>
-<p class="p2"><span class="Apple-converted-space">    </span>&lt;meta charset="UTF-8"&gt;</p>
-<p class="p2"><span class="Apple-converted-space">    </span>&lt;meta name="viewport" content="width=device-width, initial-scale=1.0"&gt;</p>
-<p class="p2"><span class="Apple-converted-space">    </span>&lt;title&gt;California College Prep - Your Path to UC &amp; CSU Success&lt;/title&gt;</p>
-<p class="p2"><span class="Apple-converted-space">    </span>&lt;script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/3.9.1/chart.min.js"&gt;&lt;/script&gt;</p>
-<p class="p2"><span class="Apple-converted-space">    </span>&lt;style&gt;</p>
-<p class="p2"><span class="Apple-converted-space">        </span>* {</p>
-<p class="p2"><span class="Apple-converted-space">            </span>margin: 0;</p>
-<p class="p2"><span class="Apple-converted-space">            </span>padding: 0;</p>
-<p class="p2"><span class="Apple-converted-space">            </span>box-sizing: border-box;</p>
-<p class="p2"><span class="Apple-converted-space">        </span>}</p>
-<p class="p1"><span class="Apple-converted-space">        </span></p>
-<p class="p2"><span class="Apple-converted-space">        </span>body {</p>
-<p class="p2"><span class="Apple-converted-space">            </span>font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;</p>
-<p class="p2"><span class="Apple-converted-space">            </span>background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);</p>
-<p class="p2"><span class="Apple-converted-space">            </span>min-height: 100vh;</p>
-<p class="p2"><span class="Apple-converted-space">            </span>color: #333;</p>
-<p class="p2"><span class="Apple-converted-space">        </span>}</p>
-<p class="p1"><span class="Apple-converted-space">        </span></p>
-<p class="p2"><span class="Apple-converted-space">        </span>.container {</p>
-<p class="p2"><span class="Apple-converted-space">            </span>max-width: 1200px;</p>
-<p class="p2"><span class="Apple-converted-space">            </span>margin: 0 auto;</p>
-<p class="p2"><span class="Apple-converted-space">            </span>padding: 15px;</p>
-<p class="p2"><span class="Apple-converted-space">        </span>}</p>
-<p class="p1"><span class="Apple-converted-space">        </span></p>
-<p class="p2"><span class="Apple-converted-space">        </span>.header {</p>
-<p class="p2"><span class="Apple-converted-space">            </span>text-align: center;</p>
-<p class="p2"><span class="Apple-converted-space">            </span>color: white;</p>
-<p class="p2"><span class="Apple-converted-space">            </span>margin-bottom: 25px;</p>
-<p class="p2"><span class="Apple-converted-space">        </span>}</p>
-<p class="p1"><span class="Apple-converted-space">        </span></p>
-<p class="p2"><span class="Apple-converted-space">        </span>.header h1 {</p>
-<p class="p2"><span class="Apple-converted-space">            </span>font-size: 1.8rem;</p>
-<p class="p2"><span class="Apple-converted-space">            </span>margin-bottom: 8px;</p>
-<p class="p2"><span class="Apple-converted-space">            </span>font-weight: 700;</p>
-<p class="p2"><span class="Apple-converted-space">        </span>}</p>
-<p class="p1"><span class="Apple-converted-space">        </span></p>
-<p class="p2"><span class="Apple-converted-space">        </span>.header p {</p>
-<p class="p2"><span class="Apple-converted-space">            </span>font-size: 1rem;</p>
-<p class="p2"><span class="Apple-converted-space">            </span>opacity: 0.9;</p>
-<p class="p2"><span class="Apple-converted-space">        </span>}</p>
-<p class="p1"><span class="Apple-converted-space">        </span></p>
-<p class="p2"><span class="Apple-converted-space">        </span>.dashboard {</p>
-<p class="p2"><span class="Apple-converted-space">            </span>display: grid;</p>
-<p class="p2"><span class="Apple-converted-space">            </span>grid-template-columns: 1fr;</p>
-<p class="p2"><span class="Apple-converted-space">            </span>gap: 15px;</p>
-<p class="p2"><span class="Apple-converted-space">            </span>margin-bottom: 30px;</p>
-<p class="p2"><span class="Apple-converted-space">        </span>}</p>
-<p class="p1"><span class="Apple-converted-space">        </span></p>
-<p class="p2"><span class="Apple-converted-space">        </span>.card {</p>
-<p class="p2"><span class="Apple-converted-space">            </span>background: white;</p>
-<p class="p2"><span class="Apple-converted-space">            </span>border-radius: 12px;</p>
-<p class="p2"><span class="Apple-converted-space">            </span>padding: 20px;</p>
-<p class="p2"><span class="Apple-converted-space">            </span>box-shadow: 0 8px 25px rgba(0,0,0,0.1);</p>
-<p class="p2"><span class="Apple-converted-space">            </span>transition: transform 0.3s ease;</p>
-<p class="p2"><span class="Apple-converted-space">            </span>margin-bottom: 15px;</p>
-<p class="p2"><span class="Apple-converted-space">        </span>}</p>
-<p class="p1"><span class="Apple-converted-space">        </span></p>
-<p class="p2"><span class="Apple-converted-space">        </span>.card:hover {</p>
-<p class="p2"><span class="Apple-converted-space">            </span>transform: translateY(-3px);</p>
-<p class="p2"><span class="Apple-converted-space">        </span>}</p>
-<p class="p1"><span class="Apple-converted-space">        </span></p>
-<p class="p2"><span class="Apple-converted-space">        </span>.card h3 {</p>
-<p class="p2"><span class="Apple-converted-space">            </span>color: #4c51bf;</p>
-<p class="p2"><span class="Apple-converted-space">            </span>margin-bottom: 15px;</p>
-<p class="p2"><span class="Apple-converted-space">            </span>font-size: 1.2rem;</p>
-<p class="p2"><span class="Apple-converted-space">        </span>}</p>
-<p class="p1"><span class="Apple-converted-space">        </span></p>
-<p class="p2"><span class="Apple-converted-space">        </span>.input-group {</p>
-<p class="p2"><span class="Apple-converted-space">            </span>margin-bottom: 15px;</p>
-<p class="p2"><span class="Apple-converted-space">        </span>}</p>
-<p class="p1"><span class="Apple-converted-space">        </span></p>
-<p class="p2"><span class="Apple-converted-space">        </span>.input-group label {</p>
-<p class="p2"><span class="Apple-converted-space">            </span>display: block;</p>
-<p class="p2"><span class="Apple-converted-space">            </span>margin-bottom: 8px;</p>
-<p class="p2"><span class="Apple-converted-space">            </span>font-weight: 600;</p>
-<p class="p2"><span class="Apple-converted-space">            </span>color: #4a5568;</p>
-<p class="p2"><span class="Apple-converted-space">            </span>font-size: 0.9rem;</p>
-<p class="p2"><span class="Apple-converted-space">        </span>}</p>
-<p class="p1"><span class="Apple-converted-space">        </span></p>
-<p class="p2"><span class="Apple-converted-space">        </span>.input-group input, .input-group select {</p>
-<p class="p2"><span class="Apple-converted-space">            </span>width: 100%;</p>
-<p class="p2"><span class="Apple-converted-space">            </span>padding: 12px;</p>
-<p class="p2"><span class="Apple-converted-space">            </span>border: 2px solid #e2e8f0;</p>
-<p class="p2"><span class="Apple-converted-space">            </span>border-radius: 8px;</p>
-<p class="p2"><span class="Apple-converted-space">            </span>font-size: 16px;</p>
-<p class="p2"><span class="Apple-converted-space">            </span>transition: border-color 0.3s ease;</p>
-<p class="p2"><span class="Apple-converted-space">            </span>-webkit-appearance: none;</p>
-<p class="p2"><span class="Apple-converted-space">            </span>appearance: none;</p>
-<p class="p2"><span class="Apple-converted-space">        </span>}</p>
-<p class="p1"><span class="Apple-converted-space">        </span></p>
-<p class="p2"><span class="Apple-converted-space">        </span>.input-group input:focus, .input-group select:focus {</p>
-<p class="p2"><span class="Apple-converted-space">            </span>outline: none;</p>
-<p class="p2"><span class="Apple-converted-space">            </span>border-color: #4c51bf;</p>
-<p class="p2"><span class="Apple-converted-space">        </span>}</p>
-<p class="p1"><span class="Apple-converted-space">        </span></p>
-<p class="p2"><span class="Apple-converted-space">        </span>.btn {</p>
-<p class="p2"><span class="Apple-converted-space">            </span>background: linear-gradient(135deg, #4c51bf, #667eea);</p>
-<p class="p2"><span class="Apple-converted-space">            </span>color: white;</p>
-<p class="p2"><span class="Apple-converted-space">            </span>border: none;</p>
-<p class="p2"><span class="Apple-converted-space">            </span>padding: 12px 24px;</p>
-<p class="p2"><span class="Apple-converted-space">            </span>border-radius: 8px;</p>
-<p class="p2"><span class="Apple-converted-space">            </span>font-size: 16px;</p>
-<p class="p2"><span class="Apple-converted-space">            </span>font-weight: 600;</p>
-<p class="p2"><span class="Apple-converted-space">            </span>cursor: pointer;</p>
-<p class="p2"><span class="Apple-converted-space">            </span>transition: all 0.3s ease;</p>
-<p class="p2"><span class="Apple-converted-space">            </span>width: 100%;</p>
-<p class="p2"><span class="Apple-converted-space">            </span>min-height: 48px;</p>
-<p class="p2"><span class="Apple-converted-space">            </span>touch-action: manipulation;</p>
-<p class="p2"><span class="Apple-converted-space">        </span>}</p>
-<p class="p1"><span class="Apple-converted-space">        </span></p>
-<p class="p2"><span class="Apple-converted-space">        </span>.btn:hover {</p>
-<p class="p2"><span class="Apple-converted-space">            </span>transform: translateY(-2px);</p>
-<p class="p2"><span class="Apple-converted-space">            </span>box-shadow: 0 5px 15px rgba(76, 81, 191, 0.4);</p>
-<p class="p2"><span class="Apple-converted-space">        </span>}</p>
-<p class="p1"><span class="Apple-converted-space">        </span></p>
-<p class="p2"><span class="Apple-converted-space">        </span>.results {</p>
-<p class="p2"><span class="Apple-converted-space">            </span>background: white;</p>
-<p class="p2"><span class="Apple-converted-space">            </span>border-radius: 15px;</p>
-<p class="p2"><span class="Apple-converted-space">            </span>padding: 25px;</p>
-<p class="p2"><span class="Apple-converted-space">            </span>margin-top: 20px;</p>
-<p class="p2"><span class="Apple-converted-space">            </span>box-shadow: 0 10px 30px rgba(0,0,0,0.1);</p>
-<p class="p2"><span class="Apple-converted-space">        </span>}</p>
-<p class="p1"><span class="Apple-converted-space">        </span></p>
-<p class="p2"><span class="Apple-converted-space">        </span>.college-match {</p>
-<p class="p2"><span class="Apple-converted-space">            </span>display: flex;</p>
-<p class="p2"><span class="Apple-converted-space">            </span>justify-content: space-between;</p>
-<p class="p2"><span class="Apple-converted-space">            </span>align-items: center;</p>
-<p class="p2"><span class="Apple-converted-space">            </span>padding: 15px;</p>
-<p class="p2"><span class="Apple-converted-space">            </span>margin: 10px 0;</p>
-<p class="p2"><span class="Apple-converted-space">            </span>border-radius: 10px;</p>
-<p class="p2"><span class="Apple-converted-space">            </span>border-left: 5px solid;</p>
-<p class="p2"><span class="Apple-converted-space">            </span>min-height: 60px;</p>
-<p class="p2"><span class="Apple-converted-space">            </span>touch-action: manipulation;</p>
-<p class="p2"><span class="Apple-converted-space">        </span>}</p>
-<p class="p1"><span class="Apple-converted-space">        </span></p>
-<p class="p2"><span class="Apple-converted-space">        </span>.reach { border-left-color: #f56565; background: #fed7d7; }</p>
-<p class="p2"><span class="Apple-converted-space">        </span>.target { border-left-color: #ed8936; background: #feebc8; }</p>
-<p class="p2"><span class="Apple-converted-space">        </span>.safety { border-left-color: #48bb78; background: #c6f6d5; }</p>
-<p class="p1"><span class="Apple-converted-space">        </span></p>
-<p class="p2"><span class="Apple-converted-space">        </span>.probability {</p>
-<p class="p2"><span class="Apple-converted-space">            </span>font-weight: bold;</p>
-<p class="p2"><span class="Apple-converted-space">            </span>font-size: 1.1rem;</p>
-<p class="p2"><span class="Apple-converted-space">        </span>}</p>
-<p class="p1"><span class="Apple-converted-space">        </span></p>
-<p class="p2"><span class="Apple-converted-space">        </span>.course-tracker {</p>
-<p class="p2"><span class="Apple-converted-space">            </span>grid-column: 1 / -1;</p>
-<p class="p2"><span class="Apple-converted-space">        </span>}</p>
-<p class="p1"><span class="Apple-converted-space">        </span></p>
-<p class="p2"><span class="Apple-converted-space">        </span>.course-grid {</p>
-<p class="p2"><span class="Apple-converted-space">            </span>display: grid;</p>
-<p class="p2"><span class="Apple-converted-space">            </span>grid-template-columns: 1fr;</p>
-<p class="p2"><span class="Apple-converted-space">            </span>gap: 12px;</p>
-<p class="p2"><span class="Apple-converted-space">            </span>margin-top: 15px;</p>
-<p class="p2"><span class="Apple-converted-space">        </span>}</p>
-<p class="p1"><span class="Apple-converted-space">        </span></p>
-<p class="p2"><span class="Apple-converted-space">        </span>.course-category {</p>
-<p class="p2"><span class="Apple-converted-space">            </span>background: #f7fafc;</p>
-<p class="p2"><span class="Apple-converted-space">            </span>padding: 15px;</p>
-<p class="p2"><span class="Apple-converted-space">            </span>border-radius: 10px;</p>
-<p class="p2"><span class="Apple-converted-space">            </span>border: 2px solid #e2e8f0;</p>
-<p class="p2"><span class="Apple-converted-space">        </span>}</p>
-<p class="p1"><span class="Apple-converted-space">        </span></p>
-<p class="p2"><span class="Apple-converted-space">        </span>.course-category h4 {</p>
-<p class="p2"><span class="Apple-converted-space">            </span>font-size: 0.95rem;</p>
-<p class="p2"><span class="Apple-converted-space">            </span>margin-bottom: 8px;</p>
-<p class="p2"><span class="Apple-converted-space">        </span>}</p>
-<p class="p1"><span class="Apple-converted-space">        </span></p>
-<p class="p2"><span class="Apple-converted-space">        </span>.course-category.complete {</p>
-<p class="p2"><span class="Apple-converted-space">            </span>border-color: #48bb78;</p>
-<p class="p2"><span class="Apple-converted-space">            </span>background: #c6f6d5;</p>
-<p class="p2"><span class="Apple-converted-space">        </span>}</p>
-<p class="p1"><span class="Apple-converted-space">        </span></p>
-<p class="p2"><span class="Apple-converted-space">        </span>.course-category.incomplete {</p>
-<p class="p2"><span class="Apple-converted-space">            </span>border-color: #f56565;</p>
-<p class="p2"><span class="Apple-converted-space">            </span>background: #fed7d7;</p>
-<p class="p2"><span class="Apple-converted-space">        </span>}</p>
-<p class="p1"><span class="Apple-converted-space">        </span></p>
-<p class="p2"><span class="Apple-converted-space">        </span>.progress-bar {</p>
-<p class="p2"><span class="Apple-converted-space">            </span>width: 100%;</p>
-<p class="p2"><span class="Apple-converted-space">            </span>height: 8px;</p>
-<p class="p2"><span class="Apple-converted-space">            </span>background: #e2e8f0;</p>
-<p class="p2"><span class="Apple-converted-space">            </span>border-radius: 4px;</p>
-<p class="p2"><span class="Apple-converted-space">            </span>overflow: hidden;</p>
-<p class="p2"><span class="Apple-converted-space">            </span>margin: 10px 0;</p>
-<p class="p2"><span class="Apple-converted-space">        </span>}</p>
-<p class="p1"><span class="Apple-converted-space">        </span></p>
-<p class="p2"><span class="Apple-converted-space">        </span>.progress-fill {</p>
-<p class="p2"><span class="Apple-converted-space">            </span>height: 100%;</p>
-<p class="p2"><span class="Apple-converted-space">            </span>background: linear-gradient(90deg, #48bb78, #38a169);</p>
-<p class="p2"><span class="Apple-converted-space">            </span>transition: width 0.3s ease;</p>
-<p class="p2"><span class="Apple-converted-space">        </span>}</p>
-<p class="p1"><span class="Apple-converted-space">        </span></p>
-<p class="p2"><span class="Apple-converted-space">        </span>@media (min-width: 640px) {</p>
-<p class="p2"><span class="Apple-converted-space">            </span>.dashboard {</p>
-<p class="p2"><span class="Apple-converted-space">                </span>grid-template-columns: 1fr;</p>
-<p class="p2"><span class="Apple-converted-space">            </span>}</p>
-<p class="p1"><span class="Apple-converted-space">            </span></p>
-<p class="p2"><span class="Apple-converted-space">            </span>.course-grid {</p>
-<p class="p2"><span class="Apple-converted-space">                </span>grid-template-columns: repeat(2, 1fr);</p>
-<p class="p2"><span class="Apple-converted-space">                </span>gap: 15px;</p>
-<p class="p2"><span class="Apple-converted-space">            </span>}</p>
-<p class="p1"><span class="Apple-converted-space">            </span></p>
-<p class="p2"><span class="Apple-converted-space">            </span>.header h1 {</p>
-<p class="p2"><span class="Apple-converted-space">                </span>font-size: 2.2rem;</p>
-<p class="p2"><span class="Apple-converted-space">            </span>}</p>
-<p class="p1"><span class="Apple-converted-space">            </span></p>
-<p class="p2"><span class="Apple-converted-space">            </span>.header p {</p>
-<p class="p2"><span class="Apple-converted-space">                </span>font-size: 1.1rem;</p>
-<p class="p2"><span class="Apple-converted-space">            </span>}</p>
-<p class="p2"><span class="Apple-converted-space">        </span>}</p>
-<p class="p1"><span class="Apple-converted-space">        </span></p>
-<p class="p2"><span class="Apple-converted-space">        </span>@media (min-width: 768px) {</p>
-<p class="p2"><span class="Apple-converted-space">            </span>.dashboard {</p>
-<p class="p2"><span class="Apple-converted-space">                </span>grid-template-columns: 1fr 1fr;</p>
-<p class="p2"><span class="Apple-converted-space">                </span>gap: 20px;</p>
-<p class="p2"><span class="Apple-converted-space">            </span>}</p>
-<p class="p1"><span class="Apple-converted-space">            </span></p>
-<p class="p2"><span class="Apple-converted-space">            </span>.course-grid {</p>
-<p class="p2"><span class="Apple-converted-space">                </span>grid-template-columns: repeat(3, 1fr);</p>
-<p class="p2"><span class="Apple-converted-space">            </span>}</p>
-<p class="p1"><span class="Apple-converted-space">            </span></p>
-<p class="p2"><span class="Apple-converted-space">            </span>.container {</p>
-<p class="p2"><span class="Apple-converted-space">                </span>padding: 20px;</p>
-<p class="p2"><span class="Apple-converted-space">            </span>}</p>
-<p class="p1"><span class="Apple-converted-space">            </span></p>
-<p class="p2"><span class="Apple-converted-space">            </span>.card {</p>
-<p class="p2"><span class="Apple-converted-space">                </span>padding: 25px;</p>
-<p class="p2"><span class="Apple-converted-space">                </span>margin-bottom: 0;</p>
-<p class="p2"><span class="Apple-converted-space">            </span>}</p>
-<p class="p1"><span class="Apple-converted-space">            </span></p>
-<p class="p2"><span class="Apple-converted-space">            </span>.header h1 {</p>
-<p class="p2"><span class="Apple-converted-space">                </span>font-size: 2.5rem;</p>
-<p class="p2"><span class="Apple-converted-space">                </span>margin-bottom: 10px;</p>
-<p class="p2"><span class="Apple-converted-space">            </span>}</p>
-<p class="p1"><span class="Apple-converted-space">            </span></p>
-<p class="p2"><span class="Apple-converted-space">            </span>.header p {</p>
-<p class="p2"><span class="Apple-converted-space">                </span>font-size: 1.2rem;</p>
-<p class="p2"><span class="Apple-converted-space">            </span>}</p>
-<p class="p2"><span class="Apple-converted-space">        </span>}</p>
-<p class="p1"><span class="Apple-converted-space">        </span></p>
-<p class="p2"><span class="Apple-converted-space">        </span>@media (min-width: 1024px) {</p>
-<p class="p2"><span class="Apple-converted-space">            </span>.course-grid {</p>
-<p class="p2"><span class="Apple-converted-space">                </span>grid-template-columns: repeat(4, 1fr);</p>
-<p class="p2"><span class="Apple-converted-space">            </span>}</p>
-<p class="p2"><span class="Apple-converted-space">        </span>}</p>
-<p class="p2"><span class="Apple-converted-space">    </span>&lt;/style&gt;</p>
-<p class="p2">&lt;/head&gt;</p>
-<p class="p2">&lt;body&gt;</p>
-<p class="p2"><span class="Apple-converted-space">    </span>&lt;div class="container"&gt;</p>
-<p class="p2"><span class="Apple-converted-space">        </span>&lt;div class="header"&gt;</p>
-<p class="p2"><span class="Apple-converted-space">            </span>&lt;h1&gt;🌟 California College Prep&lt;/h1&gt;</p>
-<p class="p2"><span class="Apple-converted-space">            </span>&lt;p&gt;Your personalized path to UC &amp; CSU success&lt;/p&gt;</p>
-<p class="p2"><span class="Apple-converted-space">        </span>&lt;/div&gt;</p>
-<p class="p1"><span class="Apple-converted-space">        </span></p>
-<p class="p2"><span class="Apple-converted-space">        </span>&lt;div class="dashboard"&gt;</p>
-<p class="p2"><span class="Apple-converted-space">            </span>&lt;div class="card"&gt;</p>
-<p class="p2"><span class="Apple-converted-space">                </span>&lt;h3&gt;📊 GPA &amp; Admission Calculator&lt;/h3&gt;</p>
-<p class="p2"><span class="Apple-converted-space">                </span>&lt;div class="input-group"&gt;</p>
-<p class="p2"><span class="Apple-converted-space">                    </span>&lt;label&gt;Weighted GPA (A-G Courses)&lt;/label&gt;</p>
-<p class="p2"><span class="Apple-converted-space">                    </span>&lt;input type="number" id="gpa" step="0.01" min="0" max="5" placeholder="4.0"&gt;</p>
-<p class="p2"><span class="Apple-converted-space">                </span>&lt;/div&gt;</p>
-<p class="p2"><span class="Apple-converted-space">                </span>&lt;div class="input-group"&gt;</p>
-<p class="p2"><span class="Apple-converted-space">                    </span>&lt;label&gt;SAT Score (optional)&lt;/label&gt;</p>
-<p class="p2"><span class="Apple-converted-space">                    </span>&lt;input type="number" id="sat" min="400" max="1600" placeholder="1400"&gt;</p>
-<p class="p2"><span class="Apple-converted-space">                </span>&lt;/div&gt;</p>
-<p class="p2"><span class="Apple-converted-space">                </span>&lt;div class="input-group"&gt;</p>
-<p class="p2"><span class="Apple-converted-space">                    </span>&lt;label&gt;Intended Major&lt;/label&gt;</p>
-<p class="p2"><span class="Apple-converted-space">                    </span>&lt;select id="major"&gt;</p>
-<p class="p2"><span class="Apple-converted-space">                        </span>&lt;option value="undeclared"&gt;Undeclared&lt;/option&gt;</p>
-<p class="p2"><span class="Apple-converted-space">                        </span>&lt;option value="engineering"&gt;Engineering&lt;/option&gt;</p>
-<p class="p2"><span class="Apple-converted-space">                        </span>&lt;option value="business"&gt;Business&lt;/option&gt;</p>
-<p class="p2"><span class="Apple-converted-space">                        </span>&lt;option value="computer-science"&gt;Computer Science&lt;/option&gt;</p>
-<p class="p2"><span class="Apple-converted-space">                        </span>&lt;option value="biology"&gt;Biology&lt;/option&gt;</p>
-<p class="p2"><span class="Apple-converted-space">                        </span>&lt;option value="psychology"&gt;Psychology&lt;/option&gt;</p>
-<p class="p2"><span class="Apple-converted-space">                        </span>&lt;option value="english"&gt;English&lt;/option&gt;</p>
-<p class="p2"><span class="Apple-converted-space">                        </span>&lt;option value="history"&gt;History&lt;/option&gt;</p>
-<p class="p2"><span class="Apple-converted-space">                    </span>&lt;/select&gt;</p>
-<p class="p2"><span class="Apple-converted-space">                </span>&lt;/div&gt;</p>
-<p class="p2"><span class="Apple-converted-space">                </span>&lt;button class="btn" onclick="calculateAdmissions()"&gt;Calculate My Chances&lt;/button&gt;</p>
-<p class="p2"><span class="Apple-converted-space">            </span>&lt;/div&gt;</p>
-<p class="p1"><span class="Apple-converted-space">            </span></p>
-<p class="p2"><span class="Apple-converted-space">            </span>&lt;div class="card"&gt;</p>
-<p class="p2"><span class="Apple-converted-space">                </span>&lt;h3&gt;🎯 College Finder&lt;/h3&gt;</p>
-<p class="p2"><span class="Apple-converted-space">                </span>&lt;div class="input-group"&gt;</p>
-<p class="p2"><span class="Apple-converted-space">                    </span>&lt;label&gt;Preferred Location&lt;/label&gt;</p>
-<p class="p2"><span class="Apple-converted-space">                    </span>&lt;select id="location"&gt;</p>
-<p class="p2"><span class="Apple-converted-space">                        </span>&lt;option value="anywhere"&gt;Anywhere in CA&lt;/option&gt;</p>
-<p class="p2"><span class="Apple-converted-space">                        </span>&lt;option value="norcal"&gt;Northern California&lt;/option&gt;</p>
-<p class="p2"><span class="Apple-converted-space">                        </span>&lt;option value="socal"&gt;Southern California&lt;/option&gt;</p>
-<p class="p2"><span class="Apple-converted-space">                        </span>&lt;option value="central"&gt;Central California&lt;/option&gt;</p>
-<p class="p2"><span class="Apple-converted-space">                    </span>&lt;/select&gt;</p>
-<p class="p2"><span class="Apple-converted-space">                </span>&lt;/div&gt;</p>
-<p class="p2"><span class="Apple-converted-space">                </span>&lt;div class="input-group"&gt;</p>
-<p class="p2"><span class="Apple-converted-space">                    </span>&lt;label&gt;School Type&lt;/label&gt;</p>
-<p class="p2"><span class="Apple-converted-space">                    </span>&lt;select id="schoolType"&gt;</p>
-<p class="p2"><span class="Apple-converted-space">                        </span>&lt;option value="all"&gt;All Schools&lt;/option&gt;</p>
-<p class="p2"><span class="Apple-converted-space">                        </span>&lt;option value="uc"&gt;UC System&lt;/option&gt;</p>
-<p class="p2"><span class="Apple-converted-space">                        </span>&lt;option value="csu"&gt;CSU System&lt;/option&gt;</p>
-<p class="p2"><span class="Apple-converted-space">                        </span>&lt;option value="private"&gt;Private Universities&lt;/option&gt;</p>
-<p class="p2"><span class="Apple-converted-space">                        </span>&lt;option value="community"&gt;Community Colleges&lt;/option&gt;</p>
-<p class="p2"><span class="Apple-converted-space">                    </span>&lt;/select&gt;</p>
-<p class="p2"><span class="Apple-converted-space">                </span>&lt;/div&gt;</p>
-<p class="p2"><span class="Apple-converted-space">                </span>&lt;div class="input-group"&gt;</p>
-<p class="p2"><span class="Apple-converted-space">                    </span>&lt;label&gt;Campus Size Preference&lt;/label&gt;</p>
-<p class="p2"><span class="Apple-converted-space">                    </span>&lt;select id="size"&gt;</p>
-<p class="p2"><span class="Apple-converted-space">                        </span>&lt;option value="any"&gt;Any Size&lt;/option&gt;</p>
-<p class="p2"><span class="Apple-converted-space">                        </span>&lt;option value="small"&gt;Small (&lt; 10k students)&lt;/option&gt;</p>
-<p class="p2"><span class="Apple-converted-space">                        </span>&lt;option value="medium"&gt;Medium (10k-30k students)&lt;/option&gt;</p>
-<p class="p2"><span class="Apple-converted-space">                        </span>&lt;option value="large"&gt;Large (&gt; 30k students)&lt;/option&gt;</p>
-<p class="p2"><span class="Apple-converted-space">                    </span>&lt;/select&gt;</p>
-<p class="p2"><span class="Apple-converted-space">                </span>&lt;/div&gt;</p>
-<p class="p2"><span class="Apple-converted-space">                </span>&lt;button class="btn" onclick="findColleges()"&gt;Find My Matches&lt;/button&gt;</p>
-<p class="p2"><span class="Apple-converted-space">            </span>&lt;/div&gt;</p>
-<p class="p2"><span class="Apple-converted-space">        </span>&lt;/div&gt;</p>
-<p class="p1"><span class="Apple-converted-space">        </span></p>
-<p class="p2"><span class="Apple-converted-space">        </span>&lt;div class="card course-tracker"&gt;</p>
-<p class="p2"><span class="Apple-converted-space">            </span>&lt;h3&gt;📚 A-G Course Requirements Tracker&lt;/h3&gt;</p>
-<p class="p2"><span class="Apple-converted-space">            </span>&lt;p&gt;Track your progress toward UC/CSU eligibility requirements&lt;/p&gt;</p>
-<p class="p2"><span class="Apple-converted-space">            </span>&lt;div class="course-grid"&gt;</p>
-<p class="p2"><span class="Apple-converted-space">                </span>&lt;div class="course-category incomplete" id="english"&gt;</p>
-<p class="p2"><span class="Apple-converted-space">                    </span>&lt;h4&gt;A - English (4 years)&lt;/h4&gt;</p>
-<p class="p2"><span class="Apple-converted-space">                    </span>&lt;div class="progress-bar"&gt;</p>
-<p class="p2"><span class="Apple-converted-space">                        </span>&lt;div class="progress-fill" style="width: 75%"&gt;&lt;/div&gt;</p>
-<p class="p2"><span class="Apple-converted-space">                    </span>&lt;/div&gt;</p>
-<p class="p2"><span class="Apple-converted-space">                    </span>&lt;small&gt;3 of 4 years completed&lt;/small&gt;</p>
-<p class="p2"><span class="Apple-converted-space">                </span>&lt;/div&gt;</p>
-<p class="p2"><span class="Apple-converted-space">                </span>&lt;div class="course-category complete" id="math"&gt;</p>
-<p class="p2"><span class="Apple-converted-space">                    </span>&lt;h4&gt;B - Math (3 years)&lt;/h4&gt;</p>
-<p class="p2"><span class="Apple-converted-space">                    </span>&lt;div class="progress-bar"&gt;</p>
-<p class="p2"><span class="Apple-converted-space">                        </span>&lt;div class="progress-fill" style="width: 100%"&gt;&lt;/div&gt;</p>
-<p class="p2"><span class="Apple-converted-space">                    </span>&lt;/div&gt;</p>
-<p class="p2"><span class="Apple-converted-space">                    </span>&lt;small&gt;4 of 3 years completed ✓&lt;/small&gt;</p>
-<p class="p2"><span class="Apple-converted-space">                </span>&lt;/div&gt;</p>
-<p class="p2"><span class="Apple-converted-space">                </span>&lt;div class="course-category incomplete" id="history"&gt;</p>
-<p class="p2"><span class="Apple-converted-space">                    </span>&lt;h4&gt;C - History/Social Science (2 years)&lt;/h4&gt;</p>
-<p class="p2"><span class="Apple-converted-space">                    </span>&lt;div class="progress-bar"&gt;</p>
-<p class="p2"><span class="Apple-converted-space">                        </span>&lt;div class="progress-fill" style="width: 50%"&gt;&lt;/div&gt;</p>
-<p class="p2"><span class="Apple-converted-space">                    </span>&lt;/div&gt;</p>
-<p class="p2"><span class="Apple-converted-space">                    </span>&lt;small&gt;1 of 2 years completed&lt;/small&gt;</p>
-<p class="p2"><span class="Apple-converted-space">                </span>&lt;/div&gt;</p>
-<p class="p2"><span class="Apple-converted-space">                </span>&lt;div class="course-category complete" id="science"&gt;</p>
-<p class="p2"><span class="Apple-converted-space">                    </span>&lt;h4&gt;D - Laboratory Science (2 years)&lt;/h4&gt;</p>
-<p class="p2"><span class="Apple-converted-space">                    </span>&lt;div class="progress-bar"&gt;</p>
-<p class="p2"><span class="Apple-converted-space">                        </span>&lt;div class="progress-fill" style="width: 100%"&gt;&lt;/div&gt;</p>
-<p class="p2"><span class="Apple-converted-space">                    </span>&lt;/div&gt;</p>
-<p class="p2"><span class="Apple-converted-space">                    </span>&lt;small&gt;3 of 2 years completed ✓&lt;/small&gt;</p>
-<p class="p2"><span class="Apple-converted-space">                </span>&lt;/div&gt;</p>
-<p class="p2"><span class="Apple-converted-space">                </span>&lt;div class="course-category incomplete" id="language"&gt;</p>
-<p class="p2"><span class="Apple-converted-space">                    </span>&lt;h4&gt;E - Language Other Than English (2 years)&lt;/h4&gt;</p>
-<p class="p2"><span class="Apple-converted-space">                    </span>&lt;div class="progress-bar"&gt;</p>
-<p class="p2"><span class="Apple-converted-space">                        </span>&lt;div class="progress-fill" style="width: 50%"&gt;&lt;/div&gt;</p>
-<p class="p2"><span class="Apple-converted-space">                    </span>&lt;/div&gt;</p>
-<p class="p2"><span class="Apple-converted-space">                    </span>&lt;small&gt;1 of 2 years completed&lt;/small&gt;</p>
-<p class="p2"><span class="Apple-converted-space">                </span>&lt;/div&gt;</p>
-<p class="p2"><span class="Apple-converted-space">                </span>&lt;div class="course-category complete" id="arts"&gt;</p>
-<p class="p2"><span class="Apple-converted-space">                    </span>&lt;h4&gt;F - Visual/Performing Arts (1 year)&lt;/h4&gt;</p>
-<p class="p2"><span class="Apple-converted-space">                    </span>&lt;div class="progress-bar"&gt;</p>
-<p class="p2"><span class="Apple-converted-space">                        </span>&lt;div class="progress-fill" style="width: 100%"&gt;&lt;/div&gt;</p>
-<p class="p2"><span class="Apple-converted-space">                    </span>&lt;/div&gt;</p>
-<p class="p2"><span class="Apple-converted-space">                    </span>&lt;small&gt;1 of 1 year completed ✓&lt;/small&gt;</p>
-<p class="p2"><span class="Apple-converted-space">                </span>&lt;/div&gt;</p>
-<p class="p2"><span class="Apple-converted-space">                </span>&lt;div class="course-category incomplete" id="elective"&gt;</p>
-<p class="p2"><span class="Apple-converted-space">                    </span>&lt;h4&gt;G - College Prep Elective (1 year)&lt;/h4&gt;</p>
-<p class="p2"><span class="Apple-converted-space">                    </span>&lt;div class="progress-bar"&gt;</p>
-<p class="p2"><span class="Apple-converted-space">                        </span>&lt;div class="progress-fill" style="width: 0%"&gt;&lt;/div&gt;</p>
-<p class="p2"><span class="Apple-converted-space">                    </span>&lt;/div&gt;</p>
-<p class="p2"><span class="Apple-converted-space">                    </span>&lt;small&gt;0 of 1 year completed&lt;/small&gt;</p>
-<p class="p2"><span class="Apple-converted-space">                </span>&lt;/div&gt;</p>
-<p class="p2"><span class="Apple-converted-space">            </span>&lt;/div&gt;</p>
-<p class="p2"><span class="Apple-converted-space">        </span>&lt;/div&gt;</p>
-<p class="p1"><span class="Apple-converted-space">        </span></p>
-<p class="p2"><span class="Apple-converted-space">        </span>&lt;div class="results" id="results" style="display: none;"&gt;</p>
-<p class="p2"><span class="Apple-converted-space">            </span>&lt;h3&gt;🎓 Your College Matches&lt;/h3&gt;</p>
-<p class="p2"><span class="Apple-converted-space">            </span>&lt;div id="collegeMatches"&gt;&lt;/div&gt;</p>
-<p class="p2"><span class="Apple-converted-space">        </span>&lt;/div&gt;</p>
-<p class="p2"><span class="Apple-converted-space">    </span>&lt;/div&gt;</p>
-<p class="p1"><br></p>
-<p class="p2"><span class="Apple-converted-space">    </span>&lt;script&gt;</p>
-<p class="p2"><span class="Apple-converted-space">        </span>const californiaColleges = {</p>
-<p class="p2"><span class="Apple-converted-space">            </span>uc: [</p>
-<p class="p2"><span class="Apple-converted-space">                </span>{ name: 'UC Berkeley', avgGPA: 4.25, avgSAT: 1450, acceptance: 14, location: 'norcal', size: 'large' },</p>
-<p class="p2"><span class="Apple-converted-space">                </span>{ name: 'UCLA', avgGPA: 4.23, avgSAT: 1440, acceptance: 11, location: 'socal', size: 'large' },</p>
-<p class="p2"><span class="Apple-converted-space">                </span>{ name: 'UC San Diego', avgGPA: 4.15, avgSAT: 1420, acceptance: 32, location: 'socal', size: 'large' },</p>
-<p class="p2"><span class="Apple-converted-space">                </span>{ name: 'UC Davis', avgGPA: 4.05, avgSAT: 1370, acceptance: 39, location: 'norcal', size: 'large' },</p>
-<p class="p2"><span class="Apple-converted-space">                </span>{ name: 'UC Irvine', avgGPA: 4.08, avgSAT: 1380, acceptance: 27, location: 'socal', size: 'large' },</p>
-<p class="p2"><span class="Apple-converted-space">                </span>{ name: 'UC Santa Barbara', avgGPA: 4.12, avgSAT: 1390, acceptance: 26, location: 'socal', size: 'large' },</p>
-<p class="p2"><span class="Apple-converted-space">                </span>{ name: 'UC Santa Cruz', avgGPA: 3.85, avgSAT: 1290, acceptance: 47, location: 'norcal', size: 'medium' },</p>
-<p class="p2"><span class="Apple-converted-space">                </span>{ name: 'UC Riverside', avgGPA: 3.75, avgSAT: 1250, acceptance: 57, location: 'socal', size: 'large' },</p>
-<p class="p2"><span class="Apple-converted-space">                </span>{ name: 'UC Merced', avgGPA: 3.65, avgSAT: 1200, acceptance: 72, location: 'central', size: 'medium' }</p>
-<p class="p2"><span class="Apple-converted-space">            </span>],</p>
-<p class="p2"><span class="Apple-converted-space">            </span>csu: [</p>
-<p class="p2"><span class="Apple-converted-space">                </span>{ name: 'San Diego State', avgGPA: 3.85, avgSAT: 1250, acceptance: 34, location: 'socal', size: 'large' },</p>
-<p class="p2"><span class="Apple-converted-space">                </span>{ name: 'Cal Poly San Luis Obispo', avgGPA: 4.05, avgSAT: 1350, acceptance: 25, location: 'central', size: 'medium' },</p>
-<p class="p2"><span class="Apple-converted-space">                </span>{ name: 'CSU Long Beach', avgGPA: 3.75, avgSAT: 1200, acceptance: 31, location: 'socal', size: 'large' },</p>
-<p class="p2"><span class="Apple-converted-space">                </span>{ name: 'SF State', avgGPA: 3.45, avgSAT: 1150, acceptance: 67, location: 'norcal', size: 'large' },</p>
-<p class="p2"><span class="Apple-converted-space">                </span>{ name: 'Cal State Fullerton', avgGPA: 3.65, avgSAT: 1180, acceptance: 43, location: 'socal', size: 'large' }</p>
-<p class="p2"><span class="Apple-converted-space">            </span>],</p>
-<p class="p2"><span class="Apple-converted-space">            </span>private: [</p>
-<p class="p2"><span class="Apple-converted-space">                </span>{ name: 'Stanford University', avgGPA: 4.40, avgSAT: 1520, acceptance: 4, location: 'norcal', size: 'medium' },</p>
-<p class="p2"><span class="Apple-converted-space">                </span>{ name: 'USC', avgGPA: 4.10, avgSAT: 1460, acceptance: 11, location: 'socal', size: 'large' },</p>
-<p class="p2"><span class="Apple-converted-space">                </span>{ name: 'Pomona College', avgGPA: 4.15, avgSAT: 1480, acceptance: 7, location: 'socal', size: 'small' },</p>
-<p class="p2"><span class="Apple-converted-space">                </span>{ name: 'Claremont McKenna', avgGPA: 4.05, avgSAT: 1450, acceptance: 9, location: 'socal', size: 'small' }</p>
-<p class="p2"><span class="Apple-converted-space">            </span>]</p>
-<p class="p2"><span class="Apple-converted-space">        </span>};</p>
-<p class="p1"><br></p>
-<p class="p2"><span class="Apple-converted-space">        </span>function calculateAdmissions() {</p>
-<p class="p2"><span class="Apple-converted-space">            </span>const gpa = parseFloat(document.getElementById('gpa').value) || 0;</p>
-<p class="p2"><span class="Apple-converted-space">            </span>const sat = parseInt(document.getElementById('sat').value) || 0;</p>
-<p class="p2"><span class="Apple-converted-space">            </span>const location = document.getElementById('location').value;</p>
-<p class="p2"><span class="Apple-converted-space">            </span>const schoolType = document.getElementById('schoolType').value;</p>
-<p class="p1"><span class="Apple-converted-space">            </span></p>
-<p class="p2"><span class="Apple-converted-space">            </span>if (gpa === 0) {</p>
-<p class="p2"><span class="Apple-converted-space">                </span>alert('Please enter your GPA to continue');</p>
-<p class="p2"><span class="Apple-converted-space">                </span>return;</p>
-<p class="p2"><span class="Apple-converted-space">            </span>}</p>
-<p class="p1"><span class="Apple-converted-space">            </span></p>
-<p class="p2"><span class="Apple-converted-space">            </span>let colleges = [];</p>
-<p class="p2"><span class="Apple-converted-space">            </span>if (schoolType === 'all') {</p>
-<p class="p2"><span class="Apple-converted-space">                </span>colleges = [...californiaColleges.uc, ...californiaColleges.csu, ...californiaColleges.private];</p>
-<p class="p2"><span class="Apple-converted-space">            </span>} else if (schoolType === 'uc') {</p>
-<p class="p2"><span class="Apple-converted-space">                </span>colleges = californiaColleges.uc;</p>
-<p class="p2"><span class="Apple-converted-space">            </span>} else if (schoolType === 'csu') {</p>
-<p class="p2"><span class="Apple-converted-space">                </span>colleges = californiaColleges.csu;</p>
-<p class="p2"><span class="Apple-converted-space">            </span>} else if (schoolType === 'private') {</p>
-<p class="p2"><span class="Apple-converted-space">                </span>colleges = californiaColleges.private;</p>
-<p class="p2"><span class="Apple-converted-space">            </span>}</p>
-<p class="p1"><span class="Apple-converted-space">            </span></p>
-<p class="p2"><span class="Apple-converted-space">            </span>// Filter by location</p>
-<p class="p2"><span class="Apple-converted-space">            </span>if (location !== 'anywhere') {</p>
-<p class="p2"><span class="Apple-converted-space">                </span>colleges = colleges.filter(college =&gt; college.location === location);</p>
-<p class="p2"><span class="Apple-converted-space">            </span>}</p>
-<p class="p1"><span class="Apple-converted-space">            </span></p>
-<p class="p2"><span class="Apple-converted-space">            </span>// Calculate admission probability</p>
-<p class="p2"><span class="Apple-converted-space">            </span>colleges.forEach(college =&gt; {</p>
-<p class="p2"><span class="Apple-converted-space">                </span>let probability = 50; // Base probability</p>
-<p class="p1"><span class="Apple-converted-space">                </span></p>
-<p class="p2"><span class="Apple-converted-space">                </span>// GPA factor</p>
-<p class="p2"><span class="Apple-converted-space">                </span>if (gpa &gt;= college.avgGPA + 0.2) probability += 30;</p>
-<p class="p2"><span class="Apple-converted-space">                </span>else if (gpa &gt;= college.avgGPA) probability += 15;</p>
-<p class="p2"><span class="Apple-converted-space">                </span>else if (gpa &gt;= college.avgGPA - 0.2) probability -= 10;</p>
-<p class="p2"><span class="Apple-converted-space">                </span>else probability -= 25;</p>
-<p class="p1"><span class="Apple-converted-space">                </span></p>
-<p class="p2"><span class="Apple-converted-space">                </span>// SAT factor (if provided)</p>
-<p class="p2"><span class="Apple-converted-space">                </span>if (sat &gt; 0) {</p>
-<p class="p2"><span class="Apple-converted-space">                    </span>if (sat &gt;= college.avgSAT + 50) probability += 20;</p>
-<p class="p2"><span class="Apple-converted-space">                    </span>else if (sat &gt;= college.avgSAT) probability += 10;</p>
-<p class="p2"><span class="Apple-converted-space">                    </span>else if (sat &gt;= college.avgSAT - 50) probability -= 5;</p>
-<p class="p2"><span class="Apple-converted-space">                    </span>else probability -= 15;</p>
-<p class="p2"><span class="Apple-converted-space">                </span>}</p>
-<p class="p1"><span class="Apple-converted-space">                </span></p>
-<p class="p2"><span class="Apple-converted-space">                </span>// Acceptance rate factor</p>
-<p class="p2"><span class="Apple-converted-space">                </span>probability += (college.acceptance - 30);</p>
-<p class="p1"><span class="Apple-converted-space">                </span></p>
-<p class="p2"><span class="Apple-converted-space">                </span>college.probability = Math.max(5, Math.min(95, probability));</p>
-<p class="p2"><span class="Apple-converted-space">            </span>});</p>
-<p class="p1"><span class="Apple-converted-space">            </span></p>
-<p class="p2"><span class="Apple-converted-space">            </span>displayResults(colleges);</p>
-<p class="p2"><span class="Apple-converted-space">        </span>}</p>
-<p class="p1"><span class="Apple-converted-space">        </span></p>
-<p class="p2"><span class="Apple-converted-space">        </span>function findColleges() {</p>
-<p class="p2"><span class="Apple-converted-space">            </span>calculateAdmissions();</p>
-<p class="p2"><span class="Apple-converted-space">        </span>}</p>
-<p class="p1"><span class="Apple-converted-space">        </span></p>
-<p class="p2"><span class="Apple-converted-space">        </span>function displayResults(colleges) {</p>
-<p class="p2"><span class="Apple-converted-space">            </span>const resultsDiv = document.getElementById('results');</p>
-<p class="p2"><span class="Apple-converted-space">            </span>const matchesDiv = document.getElementById('collegeMatches');</p>
-<p class="p1"><span class="Apple-converted-space">            </span></p>
-<p class="p2"><span class="Apple-converted-space">            </span>// Sort by probability</p>
-<p class="p2"><span class="Apple-converted-space">            </span>colleges.sort((a, b) =&gt; b.probability - a.probability);</p>
-<p class="p1"><span class="Apple-converted-space">            </span></p>
-<p class="p2"><span class="Apple-converted-space">            </span>let html = '';</p>
-<p class="p2"><span class="Apple-converted-space">            </span>colleges.forEach(college =&gt; {</p>
-<p class="p2"><span class="Apple-converted-space">                </span>let category = 'safety';</p>
-<p class="p2"><span class="Apple-converted-space">                </span>if (college.probability &lt; 30) category = 'reach';</p>
-<p class="p2"><span class="Apple-converted-space">                </span>else if (college.probability &lt; 60) category = 'target';</p>
-<p class="p1"><span class="Apple-converted-space">                </span></p>
-<p class="p2"><span class="Apple-converted-space">                </span>html += `</p>
-<p class="p2"><span class="Apple-converted-space">                    </span>&lt;div class="college-match ${category}"&gt;</p>
-<p class="p2"><span class="Apple-converted-space">                        </span>&lt;div&gt;</p>
-<p class="p2"><span class="Apple-converted-space">                            </span>&lt;strong&gt;${college.name}&lt;/strong&gt;&lt;br&gt;</p>
-<p class="p2"><span class="Apple-converted-space">                            </span>&lt;small&gt;Avg GPA: ${college.avgGPA} | Avg SAT: ${college.avgSAT} | Acceptance: ${college.acceptance}%&lt;/small&gt;</p>
-<p class="p2"><span class="Apple-converted-space">                        </span>&lt;/div&gt;</p>
-<p class="p2"><span class="Apple-converted-space">                        </span>&lt;div class="probability"&gt;${college.probability}%&lt;/div&gt;</p>
-<p class="p2"><span class="Apple-converted-space">                    </span>&lt;/div&gt;</p>
-<p class="p2"><span class="Apple-converted-space">                </span>`;</p>
-<p class="p2"><span class="Apple-converted-space">            </span>});</p>
-<p class="p1"><span class="Apple-converted-space">            </span></p>
-<p class="p2"><span class="Apple-converted-space">            </span>matchesDiv.innerHTML = html;</p>
-<p class="p2"><span class="Apple-converted-space">            </span>resultsDiv.style.display = 'block';</p>
-<p class="p2"><span class="Apple-converted-space">            </span>resultsDiv.scrollIntoView({ behavior: 'smooth' });</p>
-<p class="p2"><span class="Apple-converted-space">        </span>}</p>
-<p class="p1"><span class="Apple-converted-space">        </span></p>
-<p class="p2"><span class="Apple-converted-space">        </span>// Initialize with sample calculation</p>
-<p class="p2"><span class="Apple-converted-space">        </span>document.getElementById('gpa').value = '3.85';</p>
-<p class="p2"><span class="Apple-converted-space">        </span>document.getElementById('sat').value = '1320';</p>
-<p class="p2"><span class="Apple-converted-space">    </span>&lt;/script&gt;</p>
-<p class="p2">&lt;/body&gt;</p>
-<p class="p2">&lt;/html&gt;</p>
+    <div class="container">
+        <div class="header">
+            <h1>🌟 California College Prep</h1>
+            <p>Your personalized path to UC & CSU success</p>
+        </div>
+        
+        <div class="dashboard">
+            <div class="card">
+                <h3>📊 GPA & Admission Calculator</h3>
+                <div class="input-group">
+                    <label>Weighted GPA (A-G Courses)</label>
+                    <input type="number" id="gpa" step="0.01" min="0" max="5" placeholder="4.0">
+                </div>
+                <div class="input-group">
+                    <label>SAT Score (optional)</label>
+                    <input type="number" id="sat" min="400" max="1600" placeholder="1400">
+                </div>
+                <div class="input-group">
+                    <label>Intended Major</label>
+                    <select id="major">
+                        <option value="undeclared">Undeclared</option>
+                        <option value="engineering">Engineering</option>
+                        <option value="business">Business</option>
+                        <option value="computer-science">Computer Science</option>
+                        <option value="biology">Biology</option>
+                        <option value="psychology">Psychology</option>
+                        <option value="english">English</option>
+                        <option value="history">History</option>
+                    </select>
+                </div>
+                <button class="btn" onclick="calculateAdmissions()">Calculate My Chances</button>
+            </div>
+            
+            <div class="card">
+                <h3>🎯 College Finder</h3>
+                <div class="input-group">
+                    <label>Preferred Location</label>
+                    <select id="location">
+                        <option value="anywhere">Anywhere in CA</option>
+                        <option value="norcal">Northern California</option>
+                        <option value="socal">Southern California</option>
+                        <option value="central">Central California</option>
+                    </select>
+                </div>
+                <div class="input-group">
+                    <label>School Type</label>
+                    <select id="schoolType">
+                        <option value="all">All Schools</option>
+                        <option value="uc">UC System</option>
+                        <option value="csu">CSU System</option>
+                        <option value="private">Private Universities</option>
+                        <option value="community">Community Colleges</option>
+                    </select>
+                </div>
+                <div class="input-group">
+                    <label>Campus Size Preference</label>
+                    <select id="size">
+                        <option value="any">Any Size</option>
+                        <option value="small">Small (< 10k students)</option>
+                        <option value="medium">Medium (10k-30k students)</option>
+                        <option value="large">Large (> 30k students)</option>
+                    </select>
+                </div>
+                <button class="btn" onclick="findColleges()">Find My Matches</button>
+            </div>
+        </div>
+        
+        <div class="card course-tracker">
+            <h3>📚 A-G Course Requirements Tracker</h3>
+            <p>Track your progress toward UC/CSU eligibility requirements</p>
+            <div class="course-grid">
+                <div class="course-category incomplete" id="english">
+                    <h4>A - English (4 years)</h4>
+                    <div class="progress-bar">
+                        <div class="progress-fill" style="width: 75%"></div>
+                    </div>
+                    <small>3 of 4 years completed</small>
+                </div>
+                <div class="course-category complete" id="math">
+                    <h4>B - Math (3 years)</h4>
+                    <div class="progress-bar">
+                        <div class="progress-fill" style="width: 100%"></div>
+                    </div>
+                    <small>4 of 3 years completed ✓</small>
+                </div>
+                <div class="course-category incomplete" id="history">
+                    <h4>C - History/Social Science (2 years)</h4>
+                    <div class="progress-bar">
+                        <div class="progress-fill" style="width: 50%"></div>
+                    </div>
+                    <small>1 of 2 years completed</small>
+                </div>
+                <div class="course-category complete" id="science">
+                    <h4>D - Laboratory Science (2 years)</h4>
+                    <div class="progress-bar">
+                        <div class="progress-fill" style="width: 100%"></div>
+                    </div>
+                    <small>3 of 2 years completed ✓</small>
+                </div>
+                <div class="course-category incomplete" id="language">
+                    <h4>E - Language Other Than English (2 years)</h4>
+                    <div class="progress-bar">
+                        <div class="progress-fill" style="width: 50%"></div>
+                    </div>
+                    <small>1 of 2 years completed</small>
+                </div>
+                <div class="course-category complete" id="arts">
+                    <h4>F - Visual/Performing Arts (1 year)</h4>
+                    <div class="progress-bar">
+                        <div class="progress-fill" style="width: 100%"></div>
+                    </div>
+                    <small>1 of 1 year completed ✓</small>
+                </div>
+                <div class="course-category incomplete" id="elective">
+                    <h4>G - College Prep Elective (1 year)</h4>
+                    <div class="progress-bar">
+                        <div class="progress-fill" style="width: 0%"></div>
+                    </div>
+                    <small>0 of 1 year completed</small>
+                </div>
+            </div>
+        </div>
+        
+        <div class="results" id="results" style="display: none;">
+            <h3>🎓 Your College Matches</h3>
+            <div id="collegeMatches"></div>
+        </div>
+    </div>
+
+    <script>
+        const californiaColleges = {
+            uc: [
+                { name: 'UC Berkeley', avgGPA: 4.25, avgSAT: 1450, acceptance: 14, location: 'norcal', size: 'large' },
+                { name: 'UCLA', avgGPA: 4.23, avgSAT: 1440, acceptance: 11, location: 'socal', size: 'large' },
+                { name: 'UC San Diego', avgGPA: 4.15, avgSAT: 1420, acceptance: 32, location: 'socal', size: 'large' },
+                { name: 'UC Davis', avgGPA: 4.05, avgSAT: 1370, acceptance: 39, location: 'norcal', size: 'large' },
+                { name: 'UC Irvine', avgGPA: 4.08, avgSAT: 1380, acceptance: 27, location: 'socal', size: 'large' },
+                { name: 'UC Santa Barbara', avgGPA: 4.12, avgSAT: 1390, acceptance: 26, location: 'socal', size: 'large' },
+                { name: 'UC Santa Cruz', avgGPA: 3.85, avgSAT: 1290, acceptance: 47, location: 'norcal', size: 'medium' },
+                { name: 'UC Riverside', avgGPA: 3.75, avgSAT: 1250, acceptance: 57, location: 'socal', size: 'large' },
+                { name: 'UC Merced', avgGPA: 3.65, avgSAT: 1200, acceptance: 72, location: 'central', size: 'medium' }
+            ],
+            csu: [
+                { name: 'San Diego State', avgGPA: 3.85, avgSAT: 1250, acceptance: 34, location: 'socal', size: 'large' },
+                { name: 'Cal Poly San Luis Obispo', avgGPA: 4.05, avgSAT: 1350, acceptance: 25, location: 'central', size: 'medium' },
+                { name: 'CSU Long Beach', avgGPA: 3.75, avgSAT: 1200, acceptance: 31, location: 'socal', size: 'large' },
+                { name: 'SF State', avgGPA: 3.45, avgSAT: 1150, acceptance: 67, location: 'norcal', size: 'large' },
+                { name: 'Cal State Fullerton', avgGPA: 3.65, avgSAT: 1180, acceptance: 43, location: 'socal', size: 'large' }
+            ],
+            private: [
+                { name: 'Stanford University', avgGPA: 4.40, avgSAT: 1520, acceptance: 4, location: 'norcal', size: 'medium' },
+                { name: 'USC', avgGPA: 4.10, avgSAT: 1460, acceptance: 11, location: 'socal', size: 'large' },
+                { name: 'Pomona College', avgGPA: 4.15, avgSAT: 1480, acceptance: 7, location: 'socal', size: 'small' },
+                { name: 'Claremont McKenna', avgGPA: 4.05, avgSAT: 1450, acceptance: 9, location: 'socal', size: 'small' }
+            ]
+        };
+
+        function calculateAdmissions() {
+            const gpa = parseFloat(document.getElementById('gpa').value) || 0;
+            const sat = parseInt(document.getElementById('sat').value) || 0;
+            const location = document.getElementById('location').value;
+            const schoolType = document.getElementById('schoolType').value;
+            
+            if (gpa === 0) {
+                alert('Please enter your GPA to continue');
+                return;
+            }
+            
+            let colleges = [];
+            if (schoolType === 'all') {
+                colleges = [...californiaColleges.uc, ...californiaColleges.csu, ...californiaColleges.private];
+            } else if (schoolType === 'uc') {
+                colleges = californiaColleges.uc;
+            } else if (schoolType === 'csu') {
+                colleges = californiaColleges.csu;
+            } else if (schoolType === 'private') {
+                colleges = californiaColleges.private;
+            }
+            
+            // Filter by location
+            if (location !== 'anywhere') {
+                colleges = colleges.filter(college => college.location === location);
+            }
+            
+            // Calculate admission probability
+            colleges.forEach(college => {
+                let probability = 50; // Base probability
+                
+                // GPA factor
+                if (gpa >= college.avgGPA + 0.2) probability += 30;
+                else if (gpa >= college.avgGPA) probability += 15;
+                else if (gpa >= college.avgGPA - 0.2) probability -= 10;
+                else probability -= 25;
+                
+                // SAT factor (if provided)
+                if (sat > 0) {
+                    if (sat >= college.avgSAT + 50) probability += 20;
+                    else if (sat >= college.avgSAT) probability += 10;
+                    else if (sat >= college.avgSAT - 50) probability -= 5;
+                    else probability -= 15;
+                }
+                
+                // Acceptance rate factor
+                probability += (college.acceptance - 30);
+                
+                college.probability = Math.max(5, Math.min(95, probability));
+            });
+            
+            displayResults(colleges);
+        }
+        
+        function findColleges() {
+            calculateAdmissions();
+        }
+        
+        function displayResults(colleges) {
+            const resultsDiv = document.getElementById('results');
+            const matchesDiv = document.getElementById('collegeMatches');
+            
+            // Sort by probability
+            colleges.sort((a, b) => b.probability - a.probability);
+            
+            let html = '';
+            colleges.forEach(college => {
+                let category = 'safety';
+                if (college.probability < 30) category = 'reach';
+                else if (college.probability < 60) category = 'target';
+                
+                html += `
+                    <div class="college-match ${category}">
+                        <div>
+                            <strong>${college.name}</strong><br>
+                            <small>Avg GPA: ${college.avgGPA} | Avg SAT: ${college.avgSAT} | Acceptance: ${college.acceptance}%</small>
+                        </div>
+                        <div class="probability">${college.probability}%</div>
+                    </div>
+                `;
+            });
+            
+            matchesDiv.innerHTML = html;
+            resultsDiv.style.display = 'block';
+            resultsDiv.scrollIntoView({ behavior: 'smooth' });
+        }
+        
+        // Initialize with sample calculation
+        document.getElementById('gpa').value = '3.85';
+        document.getElementById('sat').value = '1320';
+    </script>
 </body>
 </html>
