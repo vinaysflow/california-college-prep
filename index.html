@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Pathwise - Smart California College Prep</title>
+    <title>Pathwise - Your Personal College Journey</title>
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
     <style>
@@ -12,7 +12,6 @@
             padding: 0;
             box-sizing: border-box;
             -webkit-font-smoothing: antialiased;
-            -moz-osx-font-smoothing: grayscale;
         }
         
         :root {
@@ -21,169 +20,128 @@
             --success: #34C759;
             --warning: #FF9500;
             --danger: #FF3B30;
-            --dark: #1C1C1E;
-            --gray: #8E8E93;
-            --light-gray: #C7C7CC;
             --background: #F2F2F7;
-            --card-background: #FFFFFF;
+            --card: #FFFFFF;
             --text-primary: #000000;
             --text-secondary: #3C3C43;
             --text-tertiary: #787880;
             --border-radius: 12px;
-            --border-radius-large: 20px;
-            --shadow: 0 2px 15px rgba(0, 0, 0, 0.08);
-            --shadow-large: 0 10px 40px rgba(0, 0, 0, 0.12);
-            --transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            --shadow: 0 2px 10px rgba(0, 0, 0, 0.08);
+            --shadow-large: 0 10px 30px rgba(0, 0, 0, 0.15);
         }
         
         @media (prefers-color-scheme: dark) {
             :root {
                 --background: #000000;
-                --card-background: #1C1C1E;
+                --card: #1C1C1E;
                 --text-primary: #FFFFFF;
                 --text-secondary: #EBEBF5;
                 --text-tertiary: #ACACB0;
-                --shadow: 0 2px 15px rgba(0, 0, 0, 0.3);
             }
         }
         
         body {
-            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
             background: var(--background);
             color: var(--text-primary);
-            line-height: 1.47;
-            font-size: 17px;
-            overflow-x: hidden;
+            line-height: 1.5;
             padding-bottom: env(safe-area-inset-bottom);
         }
         
-        .app-header {
-            background: rgba(255, 255, 255, 0.7);
-            backdrop-filter: blur(20px);
-            -webkit-backdrop-filter: blur(20px);
-            border-bottom: 1px solid rgba(0, 0, 0, 0.1);
-            position: sticky;
-            top: 0;
-            z-index: 1000;
-            padding: 16px 20px;
-        }
-        
-        @media (prefers-color-scheme: dark) {
-            .app-header {
-                background: rgba(28, 28, 30, 0.9);
-                border-bottom: 1px solid rgba(255, 255, 255, 0.1);
-            }
-        }
-        
-        .header-content {
-            max-width: 1200px;
-            margin: 0 auto;
+        .app-container {
+            max-width: 100%;
+            min-height: 100vh;
             display: flex;
-            justify-content: space-between;
-            align-items: center;
+            flex-direction: column;
         }
         
-        .app-title {
+        .journey-header {
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            padding: 60px 20px 30px;
+            color: white;
+            text-align: center;
+        }
+        
+        .student-greeting {
+            font-size: 32px;
+            font-weight: 700;
+            margin-bottom: 8px;
+        }
+        
+        .journey-status {
+            font-size: 18px;
+            opacity: 0.9;
+        }
+        
+        .progress-overview {
+            display: flex;
+            gap: 12px;
+            margin-top: 20px;
+            padding: 16px;
+            background: rgba(255, 255, 255, 0.15);
+            border-radius: var(--border-radius);
+            overflow-x: auto;
+        }
+        
+        .progress-item {
+            flex: 1;
+            min-width: 100px;
+            text-align: center;
+        }
+        
+        .progress-value {
             font-size: 24px;
             font-weight: 700;
-            background: linear-gradient(135deg, var(--primary), var(--secondary));
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            letter-spacing: -0.5px;
         }
         
-        .ai-indicator {
-            display: flex;
-            align-items: center;
-            gap: 6px;
-            padding: 6px 12px;
-            background: var(--success);
-            color: white;
-            border-radius: 20px;
-            font-size: 14px;
-            font-weight: 600;
-            animation: pulse 2s infinite;
+        .progress-label {
+            font-size: 12px;
+            opacity: 0.9;
         }
         
-        @keyframes pulse {
-            0%, 100% { opacity: 1; }
-            50% { opacity: 0.8; }
-        }
-        
-        .container {
-            max-width: 1200px;
-            margin: 0 auto;
-            padding: 20px;
-        }
-        
-        .hero-section {
-            text-align: center;
-            padding: 40px 20px;
-            background: linear-gradient(135deg, rgba(0, 122, 255, 0.05), rgba(88, 86, 214, 0.05));
-            border-radius: var(--border-radius-large);
-            margin-bottom: 30px;
-        }
-        
-        .hero-title {
-            font-size: 48px;
-            font-weight: 700;
-            line-height: 1.1;
-            margin-bottom: 16px;
-            letter-spacing: -1px;
-        }
-        
-        .hero-subtitle {
-            font-size: 20px;
-            color: var(--text-secondary);
-            margin-bottom: 30px;
-        }
-        
-        .tab-navigation {
+        .main-nav {
+            background: var(--card);
+            padding: 12px;
             display: flex;
             gap: 8px;
             overflow-x: auto;
-            padding: 16px 0;
-            margin-bottom: 24px;
-            -webkit-overflow-scrolling: touch;
-            scrollbar-width: none;
+            border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+            position: sticky;
+            top: 0;
+            z-index: 100;
         }
         
-        .tab-navigation::-webkit-scrollbar {
-            display: none;
-        }
-        
-        .tab-button {
-            padding: 12px 24px;
-            background: var(--card-background);
+        .nav-pill {
+            padding: 10px 16px;
+            border-radius: 20px;
             border: none;
-            border-radius: var(--border-radius);
+            background: var(--background);
+            color: var(--text-secondary);
             font-size: 15px;
             font-weight: 600;
-            color: var(--text-secondary);
-            cursor: pointer;
-            transition: var(--transition);
             white-space: nowrap;
-            box-shadow: var(--shadow);
+            cursor: pointer;
+            transition: all 0.3s ease;
         }
         
-        .tab-button.active {
+        .nav-pill.active {
             background: var(--primary);
             color: white;
             transform: scale(1.05);
         }
         
-        .tab-button:hover:not(.active) {
-            transform: translateY(-2px);
-            box-shadow: var(--shadow-large);
+        .content-area {
+            padding: 20px;
+            flex: 1;
         }
         
-        .tab-content {
+        .section {
             display: none;
-            animation: fadeIn 0.3s ease-in-out;
         }
         
-        .tab-content.active {
+        .section.active {
             display: block;
+            animation: fadeIn 0.3s ease;
         }
         
         @keyframes fadeIn {
@@ -191,33 +149,147 @@
             to { opacity: 1; transform: translateY(0); }
         }
         
-        .card {
-            background: var(--card-background);
-            border-radius: var(--border-radius-large);
-            padding: 24px;
-            margin-bottom: 20px;
-            box-shadow: var(--shadow);
-            transition: var(--transition);
+        .dream-schools {
+            margin-bottom: 30px;
         }
         
-        .card:hover {
-            transform: translateY(-4px);
+        .section-title {
+            font-size: 24px;
+            font-weight: 700;
+            margin-bottom: 16px;
+        }
+        
+        .schools-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+            gap: 12px;
+            margin-bottom: 20px;
+        }
+        
+        .school-card {
+            background: var(--card);
+            border-radius: var(--border-radius);
+            padding: 16px;
+            border: 2px solid transparent;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            position: relative;
+        }
+        
+        .school-card.selected {
+            border-color: var(--primary);
+            background: linear-gradient(to right, rgba(0, 122, 255, 0.05), transparent);
+        }
+        
+        .school-card:hover {
+            transform: translateY(-2px);
+            box-shadow: var(--shadow);
+        }
+        
+        .school-name {
+            font-weight: 600;
+            margin-bottom: 4px;
+        }
+        
+        .school-details {
+            font-size: 12px;
+            color: var(--text-tertiary);
+        }
+        
+        .fit-indicator {
+            position: absolute;
+            top: 8px;
+            right: 8px;
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+        }
+        
+        .fit-reach { background: var(--danger); }
+        .fit-match { background: var(--warning); }
+        .fit-safety { background: var(--success); }
+        
+        .add-school-btn {
+            width: 100%;
+            padding: 16px;
+            background: var(--card);
+            border: 2px dashed var(--text-tertiary);
+            border-radius: var(--border-radius);
+            color: var(--text-secondary);
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        
+        .add-school-btn:hover {
+            border-color: var(--primary);
+            background: rgba(0, 122, 255, 0.05);
+        }
+        
+        .action-cards {
+            display: grid;
+            gap: 16px;
+            margin-top: 24px;
+        }
+        
+        .action-card {
+            background: var(--card);
+            border-radius: var(--border-radius);
+            padding: 20px;
+            box-shadow: var(--shadow);
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        
+        .action-card:hover {
+            transform: translateX(4px);
             box-shadow: var(--shadow-large);
         }
         
-        .card-title {
-            font-size: 22px;
-            font-weight: 700;
-            margin-bottom: 16px;
+        .action-header {
             display: flex;
+            justify-content: space-between;
             align-items: center;
-            gap: 10px;
+            margin-bottom: 8px;
         }
         
-        .card-subtitle {
+        .action-title {
+            font-size: 18px;
+            font-weight: 600;
+        }
+        
+        .action-status {
+            padding: 4px 12px;
+            border-radius: 12px;
+            font-size: 12px;
+            font-weight: 600;
+        }
+        
+        .status-todo {
+            background: var(--background);
             color: var(--text-secondary);
-            margin-bottom: 20px;
-            font-size: 15px;
+        }
+        
+        .status-in-progress {
+            background: rgba(255, 149, 0, 0.15);
+            color: var(--warning);
+        }
+        
+        .status-done {
+            background: rgba(52, 199, 89, 0.15);
+            color: var(--success);
+        }
+        
+        .action-description {
+            color: var(--text-secondary);
+            font-size: 14px;
+            margin-bottom: 12px;
+        }
+        
+        .action-meta {
+            display: flex;
+            gap: 16px;
+            font-size: 13px;
+            color: var(--text-tertiary);
         }
         
         .input-group {
@@ -225,7 +297,6 @@
         }
         
         .input-label {
-            display: block;
             font-size: 14px;
             font-weight: 600;
             color: var(--text-secondary);
@@ -241,163 +312,102 @@
             background: var(--background);
             border: 2px solid transparent;
             border-radius: var(--border-radius);
-            transition: var(--transition);
-            -webkit-appearance: none;
-            appearance: none;
+            transition: all 0.3s ease;
         }
         
         .input-field:focus {
             outline: none;
             border-color: var(--primary);
-            background: var(--card-background);
+            background: var(--card);
         }
         
-        .button {
-            width: 100%;
-            padding: 16px 32px;
-            font-size: 17px;
-            font-weight: 600;
-            background: linear-gradient(135deg, var(--primary), var(--secondary));
-            color: white;
-            border: none;
-            border-radius: var(--border-radius);
-            cursor: pointer;
-            transition: var(--transition);
+        .timeline-container {
             position: relative;
-            overflow: hidden;
+            padding-left: 40px;
         }
         
-        .button:before {
-            content: '';
+        .timeline-line {
             position: absolute;
+            left: 12px;
             top: 0;
-            left: -100%;
-            width: 100%;
-            height: 100%;
-            background: rgba(255, 255, 255, 0.2);
-            transition: left 0.3s;
+            bottom: 0;
+            width: 2px;
+            background: var(--background);
         }
         
-        .button:hover:before {
-            left: 100%;
-        }
-        
-        .button:active {
-            transform: scale(0.98);
-        }
-        
-        .results-container {
-            display: none;
-            margin-top: 30px;
-        }
-        
-        .results-container.active {
-            display: block;
-        }
-        
-        .college-card {
-            background: var(--card-background);
+        .timeline-item {
+            background: var(--card);
             border-radius: var(--border-radius);
-            padding: 20px;
+            padding: 16px;
             margin-bottom: 16px;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            border-left: 4px solid;
-            transition: var(--transition);
+            position: relative;
+            box-shadow: var(--shadow);
         }
         
-        .college-card.reach {
-            border-left-color: var(--danger);
-            background: linear-gradient(to right, rgba(255, 59, 48, 0.05), transparent);
+        .timeline-dot {
+            position: absolute;
+            left: -34px;
+            top: 20px;
+            width: 16px;
+            height: 16px;
+            border-radius: 50%;
+            background: var(--primary);
+            border: 3px solid var(--card);
         }
         
-        .college-card.match {
-            border-left-color: var(--warning);
-            background: linear-gradient(to right, rgba(255, 149, 0, 0.05), transparent);
+        .timeline-date {
+            font-size: 13px;
+            color: var(--text-tertiary);
+            margin-bottom: 4px;
         }
         
-        .college-card.safety {
-            border-left-color: var(--success);
-            background: linear-gradient(to right, rgba(52, 199, 89, 0.05), transparent);
-        }
-        
-        .college-info h3 {
-            font-size: 18px;
+        .timeline-title {
             font-weight: 600;
             margin-bottom: 4px;
         }
         
-        .college-info p {
-            font-size: 14px;
-            color: var(--text-tertiary);
-        }
-        
-        .admission-chance {
-            text-align: right;
-        }
-        
-        .chance-percentage {
-            font-size: 28px;
-            font-weight: 700;
-            background: linear-gradient(135deg, var(--primary), var(--secondary));
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-        }
-        
-        .chance-label {
-            font-size: 12px;
-            color: var(--text-tertiary);
-            text-transform: uppercase;
-            letter-spacing: 0.5px;
-        }
-        
-        .strategy-card {
-            background: linear-gradient(135deg, rgba(0, 122, 255, 0.1), rgba(88, 86, 214, 0.1));
-            border-radius: var(--border-radius-large);
-            padding: 24px;
-            margin-bottom: 20px;
-        }
-        
-        .strategy-title {
-            font-size: 20px;
-            font-weight: 700;
-            margin-bottom: 16px;
-            display: flex;
-            align-items: center;
-            gap: 10px;
-        }
-        
-        .strategy-content {
-            display: grid;
-            gap: 16px;
-        }
-        
-        .strategy-item {
-            background: var(--card-background);
+        .scholarship-card {
+            background: linear-gradient(135deg, rgba(52, 199, 89, 0.1), rgba(0, 122, 255, 0.1));
             border-radius: var(--border-radius);
             padding: 16px;
-            display: flex;
-            align-items: center;
-            gap: 16px;
+            margin-bottom: 12px;
         }
         
-        .strategy-icon {
-            width: 40px;
-            height: 40px;
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 20px;
-            flex-shrink: 0;
+        .scholarship-amount {
+            font-size: 24px;
+            font-weight: 700;
+            color: var(--success);
         }
         
-        .strategy-icon.optimal { background: var(--success); color: white; }
-        .strategy-icon.timing { background: var(--primary); color: white; }
-        .strategy-icon.risk { background: var(--warning); color: white; }
+        .scholarship-name {
+            font-weight: 600;
+            margin: 8px 0 4px;
+        }
         
-        .ai-chat-button {
+        .scholarship-deadline {
+            font-size: 13px;
+            color: var(--text-tertiary);
+        }
+        
+        .btn-primary {
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            color: white;
+            border: none;
+            padding: 16px 32px;
+            border-radius: var(--border-radius);
+            font-size: 17px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            width: 100%;
+        }
+        
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: var(--shadow-large);
+        }
+        
+        .floating-help {
             position: fixed;
             bottom: 24px;
             right: 24px;
@@ -412,548 +422,461 @@
             display: flex;
             align-items: center;
             justify-content: center;
-            font-size: 28px;
-            transition: var(--transition);
-            z-index: 999;
+            font-size: 24px;
+            z-index: 1000;
         }
         
-        .ai-chat-button:hover {
-            transform: scale(1.1);
-        }
-        
-        .ai-chat-button:active {
-            transform: scale(0.95);
-        }
-        
-        .ai-chat-window {
-            position: fixed;
-            bottom: 100px;
-            right: 24px;
-            width: 360px;
-            max-width: calc(100vw - 48px);
-            height: 500px;
-            max-height: 60vh;
-            background: var(--card-background);
-            border-radius: var(--border-radius-large);
-            box-shadow: var(--shadow-large);
-            display: none;
-            flex-direction: column;
-            z-index: 998;
-            animation: slideUp 0.3s ease-out;
-        }
-        
-        @keyframes slideUp {
-            from { transform: translateY(20px); opacity: 0; }
-            to { transform: translateY(0); opacity: 1; }
-        }
-        
-        .ai-chat-window.active {
-            display: flex;
-        }
-        
-        .ai-chat-header {
-            padding: 16px 20px;
-            background: linear-gradient(135deg, var(--primary), var(--secondary));
-            color: white;
-            border-radius: var(--border-radius-large) var(--border-radius-large) 0 0;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
-        
-        .ai-chat-messages {
-            flex: 1;
-            overflow-y: auto;
-            padding: 20px;
-            display: flex;
-            flex-direction: column;
-            gap: 12px;
-        }
-        
-        .ai-message {
-            max-width: 80%;
-            padding: 12px 16px;
-            border-radius: 18px;
-            font-size: 15px;
-            line-height: 1.4;
-        }
-        
-        .ai-message.user {
-            align-self: flex-end;
-            background: var(--primary);
-            color: white;
-        }
-        
-        .ai-message.assistant {
-            align-self: flex-start;
-            background: var(--background);
-            color: var(--text-primary);
-        }
-        
-        .ai-chat-input {
-            display: flex;
-            gap: 8px;
-            padding: 12px;
-            border-top: 1px solid var(--background);
-        }
-        
-        .ai-chat-input input {
-            flex: 1;
-            padding: 12px;
-            border: none;
-            background: var(--background);
-            border-radius: 20px;
-            font-size: 15px;
-        }
-        
-        .ai-chat-input button {
-            padding: 12px 20px;
-            background: var(--primary);
-            color: white;
-            border: none;
-            border-radius: 20px;
-            font-weight: 600;
-            cursor: pointer;
-        }
-        
-        .loading-spinner {
-            display: inline-block;
-            width: 14px;
-            height: 14px;
-            border: 2px solid rgba(255, 255, 255, 0.3);
-            border-radius: 50%;
-            border-top-color: white;
-            animation: spin 0.8s linear infinite;
-        }
-        
-        @keyframes spin {
-            to { transform: rotate(360deg); }
-        }
-        
-        @media (max-width: 768px) {
-            .hero-title {
-                font-size: 32px;
+        @media (min-width: 768px) {
+            .content-area {
+                max-width: 1200px;
+                margin: 0 auto;
             }
             
-            .hero-subtitle {
-                font-size: 18px;
-            }
-            
-            .ai-chat-window {
-                right: 0;
-                bottom: 0;
-                width: 100%;
-                height: 100vh;
-                max-height: 100vh;
-                border-radius: 0;
-            }
-            
-            .ai-chat-header {
-                border-radius: 0;
+            .schools-grid {
+                grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
             }
         }
     </style>
 </head>
 <body>
-    <header class="app-header">
-        <div class="header-content">
-            <h1 class="app-title">Pathwise</h1>
-            <div class="ai-indicator">
-                <span>●</span> AI Active
+    <div class="app-container">
+        <div class="journey-header">
+            <h1 class="student-greeting">Welcome back, Future UC Student! 👋</h1>
+            <p class="journey-status">You're 35% ready for applications</p>
+            
+            <div class="progress-overview">
+                <div class="progress-item">
+                    <div class="progress-value">3.85</div>
+                    <div class="progress-label">Current GPA</div>
+                </div>
+                <div class="progress-item">
+                    <div class="progress-value">1350</div>
+                    <div class="progress-label">SAT Score</div>
+                </div>
+                <div class="progress-item">
+                    <div class="progress-value">5</div>
+                    <div class="progress-label">Dream Schools</div>
+                </div>
+                <div class="progress-item">
+                    <div class="progress-value">237</div>
+                    <div class="progress-label">Days Left</div>
+                </div>
             </div>
         </div>
-    </header>
-    
-    <div class="container">
-        <div class="hero-section">
-            <h1 class="hero-title">Your AI-Powered Path to UC & CSU</h1>
-            <p class="hero-subtitle">Strategic college planning with game theory optimization</p>
-        </div>
         
-        <nav class="tab-navigation">
-            <button class="tab-button active" onclick="switchTab('analyze')">🎯 Smart Analyze</button>
-            <button class="tab-button" onclick="switchTab('strategy')">🧠 Strategy</button>
-            <button class="tab-button" onclick="switchTab('timeline')">📅 Timeline</button>
-            <button class="tab-button" onclick="switchTab('essays')">✍️ Essays</button>
+        <nav class="main-nav">
+            <button class="nav-pill active" onclick="switchSection('journey')">My Journey</button>
+            <button class="nav-pill" onclick="switchSection('improve')">Improve Chances</button>
+            <button class="nav-pill" onclick="switchSection('deadlines')">Deadlines</button>
+            <button class="nav-pill" onclick="switchSection('scholarships')">Scholarships</button>
+            <button class="nav-pill" onclick="switchSection('essays')">Essays</button>
         </nav>
         
-        <div id="analyze" class="tab-content active">
-            <div class="card">
-                <h2 class="card-title">
-                    <span>🎓</span>
-                    AI-Powered Admission Analysis
-                </h2>
-                <p class="card-subtitle">Get personalized predictions using machine learning and game theory</p>
-                
-                <div class="input-group">
-                    <label class="input-label">Weighted GPA</label>
-                    <input type="number" class="input-field" id="gpa" placeholder="4.0" step="0.01" max="5.0">
+        <div class="content-area">
+            <!-- My Journey Section -->
+            <div id="journey" class="section active">
+                <div class="dream-schools">
+                    <h2 class="section-title">My Dream Schools</h2>
+                    <div class="schools-grid">
+                        <div class="school-card selected">
+                            <div class="fit-indicator fit-reach"></div>
+                            <div class="school-name">UC Berkeley</div>
+                            <div class="school-details">
+                                <div>Reach - 28% chance</div>
+                                <div>GPA needed: 4.25</div>
+                            </div>
+                        </div>
+                        <div class="school-card selected">
+                            <div class="fit-indicator fit-match"></div>
+                            <div class="school-name">UC Davis</div>
+                            <div class="school-details">
+                                <div>Match - 52% chance</div>
+                                <div>GPA needed: 4.05</div>
+                            </div>
+                        </div>
+                        <div class="school-card">
+                            <div class="fit-indicator fit-safety"></div>
+                            <div class="school-name">UC Riverside</div>
+                            <div class="school-details">
+                                <div>Safety - 78% chance</div>
+                                <div>GPA needed: 3.75</div>
+                            </div>
+                        </div>
+                        <button class="add-school-btn" onclick="addSchool()">
+                            + Add Another School
+                        </button>
+                    </div>
                 </div>
                 
-                <div class="input-group">
-                    <label class="input-label">SAT Score (Optional)</label>
-                    <input type="number" class="input-field" id="sat" placeholder="1400" max="1600">
+                <h3 style="font-size: 20px; font-weight: 600; margin-bottom: 16px;">What You Need to Do</h3>
+                <div class="action-cards">
+                    <div class="action-card" onclick="showImproveSection()">
+                        <div class="action-header">
+                            <span class="action-title">📈 Improve Your GPA</span>
+                            <span class="action-status status-in-progress">In Progress</span>
+                        </div>
+                        <p class="action-description">You need 0.4 points to reach UC Berkeley's average. We'll show you exactly how.</p>
+                        <div class="action-meta">
+                            <span>Impact: High</span>
+                            <span>Time: 2 semesters</span>
+                        </div>
+                    </div>
+                    
+                    <div class="action-card">
+                        <div class="action-header">
+                            <span class="action-title">✍️ Write Personal Insights</span>
+                            <span class="action-status status-todo">To Do</span>
+                        </div>
+                        <p class="action-description">4 essays required for UC applications. AI will help you craft compelling stories.</p>
+                        <div class="action-meta">
+                            <span>Deadline: Nov 30</span>
+                            <span>0/4 completed</span>
+                        </div>
+                    </div>
+                    
+                    <div class="action-card">
+                        <div class="action-header">
+                            <span class="action-title">💰 Apply for Scholarships</span>
+                            <span class="action-status status-todo">To Do</span>
+                        </div>
+                        <p class="action-description">You qualify for 12 scholarships worth $45,000+</p>
+                        <div class="action-meta">
+                            <span>Potential: $45,000</span>
+                            <span>12 matches</span>
+                        </div>
+                    </div>
+                    
+                    <div class="action-card">
+                        <div class="action-header">
+                            <span class="action-title">📝 Complete A-G Requirements</span>
+                            <span class="action-status status-in-progress">85% Done</span>
+                        </div>
+                        <p class="action-description">Missing: 1 year of Language, 1 semester of Arts</p>
+                        <div class="action-meta">
+                            <span>Critical</span>
+                            <span>Register now</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Improve Chances Section -->
+            <div id="improve" class="section">
+                <h2 class="section-title">How to Get Into UC Berkeley</h2>
+                <p style="color: var(--text-secondary); margin-bottom: 24px;">
+                    Based on your profile, here's your personalized improvement plan:
+                </p>
+                
+                <div class="action-cards">
+                    <div class="action-card">
+                        <h3 style="font-size: 18px; margin-bottom: 12px;">📊 Current Status</h3>
+                        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 16px;">
+                            <div>
+                                <div style="font-size: 13px; color: var(--text-tertiary);">Your GPA</div>
+                                <div style="font-size: 24px; font-weight: 700;">3.85</div>
+                            </div>
+                            <div>
+                                <div style="font-size: 13px; color: var(--text-tertiary);">Berkeley Avg</div>
+                                <div style="font-size: 24px; font-weight: 700;">4.25</div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="action-card">
+                        <h3 style="font-size: 18px; margin-bottom: 12px;">🎯 GPA Improvement Strategy</h3>
+                        <p style="margin-bottom: 12px;">To reach 4.25 GPA by application time:</p>
+                        <ul style="list-style: none; padding: 0;">
+                            <li style="padding: 8px 0; border-bottom: 1px solid var(--background);">
+                                ✅ Take 3 more AP/Honors classes (weighted 5.0)
+                            </li>
+                            <li style="padding: 8px 0; border-bottom: 1px solid var(--background);">
+                                ✅ Maintain straight A's in all courses
+                            </li>
+                            <li style="padding: 8px 0; border-bottom: 1px solid var(--background);">
+                                ✅ Consider summer courses for grade boost
+                            </li>
+                        </ul>
+                    </div>
+                    
+                    <div class="action-card">
+                        <h3 style="font-size: 18px; margin-bottom: 12px;">💪 Strengthen Your Application</h3>
+                        <ul style="list-style: none; padding: 0;">
+                            <li style="padding: 8px 0; border-bottom: 1px solid var(--background);">
+                                🎯 <strong>SAT:</strong> Improve from 1350 → 1450+ (Berkeley average)
+                            </li>
+                            <li style="padding: 8px 0; border-bottom: 1px solid var(--background);">
+                                📚 <strong>Extracurriculars:</strong> Add leadership role in STEM club
+                            </li>
+                            <li style="padding: 8px 0; border-bottom: 1px solid var(--background);">
+                                🏆 <strong>Awards:</strong> Participate in Science Olympiad or Math competitions
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Deadlines Section -->
+            <div id="deadlines" class="section">
+                <h2 class="section-title">Your Application Timeline</h2>
+                
+                <div class="timeline-container">
+                    <div class="timeline-line"></div>
+                    
+                    <div class="timeline-item">
+                        <div class="timeline-dot"></div>
+                        <div class="timeline-date">August 1, 2024</div>
+                        <div class="timeline-title">UC Application Opens</div>
+                        <p style="font-size: 14px; color: var(--text-secondary);">Start filling out your application</p>
+                    </div>
+                    
+                    <div class="timeline-item">
+                        <div class="timeline-dot" style="background: var(--warning);"></div>
+                        <div class="timeline-date">October 1, 2024</div>
+                        <div class="timeline-title">FAFSA Opens</div>
+                        <p style="font-size: 14px; color: var(--text-secondary);">Submit for financial aid</p>
+                    </div>
+                    
+                    <div class="timeline-item">
+                        <div class="timeline-dot" style="background: var(--danger);"></div>
+                        <div class="timeline-date">November 15, 2024</div>
+                        <div class="timeline-title">🎯 Optimal Submission Date</div>
+                        <p style="font-size: 14px; color: var(--text-secondary);">Submit 2 weeks early for 23% better chances</p>
+                    </div>
+                    
+                    <div class="timeline-item">
+                        <div class="timeline-dot" style="background: var(--danger);"></div>
+                        <div class="timeline-date">November 30, 2024</div>
+                        <div class="timeline-title">UC/CSU Application Deadline</div>
+                        <p style="font-size: 14px; color: var(--text-secondary);">Final deadline - no extensions!</p>
+                    </div>
+                    
+                    <div class="timeline-item">
+                        <div class="timeline-dot"></div>
+                        <div class="timeline-date">March 2, 2025</div>
+                        <div class="timeline-title">Cal Grant Deadline</div>
+                        <p style="font-size: 14px; color: var(--text-secondary);">Submit GPA verification</p>
+                    </div>
+                    
+                    <div class="timeline-item">
+                        <div class="timeline-dot" style="background: var(--success);"></div>
+                        <div class="timeline-date">March 15-30, 2025</div>
+                        <div class="timeline-title">UC Decisions Released</div>
+                        <p style="font-size: 14px; color: var(--text-secondary);">Admission decisions arrive!</p>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Scholarships Section -->
+            <div id="scholarships" class="section">
+                <h2 class="section-title">Scholarships You Qualify For</h2>
+                <p style="color: var(--text-secondary); margin-bottom: 24px;">
+                    Based on your 3.85 GPA and profile, you match 12 scholarships worth $45,000+
+                </p>
+                
+                <div class="scholarship-card">
+                    <div class="scholarship-amount">$10,000</div>
+                    <div class="scholarship-name">UC Regents Scholarship</div>
+                    <p style="font-size: 14px; margin: 8px 0;">Top 1-2% of admitted students. Renewable for 4 years.</p>
+                    <div class="scholarship-deadline">Deadline: With UC Application</div>
                 </div>
                 
-                <div class="input-group">
-                    <label class="input-label">Intended Major</label>
-                    <select class="input-field" id="major">
-                        <option value="">Select Major</option>
-                        <option value="computer-science">Computer Science</option>
-                        <option value="engineering">Engineering</option>
-                        <option value="business">Business</option>
-                        <option value="biology">Biology</option>
-                        <option value="psychology">Psychology</option>
-                        <option value="communications">Communications</option>
-                        <option value="undeclared">Undeclared</option>
-                    </select>
+                <div class="scholarship-card">
+                    <div class="scholarship-amount">$5,000</div>
+                    <div class="scholarship-name">Cal Grant A</div>
+                    <p style="font-size: 14px; margin: 8px 0;">For California residents with financial need. GPA requirement: 3.0+</p>
+                    <div class="scholarship-deadline">Deadline: March 2, 2025</div>
                 </div>
                 
-                <div class="input-group">
-                    <label class="input-label">AP/Honors Courses Taken</label>
-                    <input type="number" class="input-field" id="ap-courses" placeholder="5" max="20">
+                <div class="scholarship-card">
+                    <div class="scholarship-amount">$7,500</div>
+                    <div class="scholarship-name">Middle Class Scholarship</div>
+                    <p style="font-size: 14px; margin: 8px 0;">Family income under $177,000. Automatic consideration.</p>
+                    <div class="scholarship-deadline">Deadline: March 2, 2025</div>
                 </div>
                 
-                <button class="button" onclick="analyzeAdmissions()">
-                    Analyze My Chances
+                <div class="scholarship-card">
+                    <div class="scholarship-amount">$2,500</div>
+                    <div class="scholarship-name">Local Rotary Club Scholarship</div>
+                    <p style="font-size: 14px; margin: 8px 0;">Community service focus. Essay required.</p>
+                    <div class="scholarship-deadline">Deadline: February 1, 2025</div>
+                </div>
+                
+                <button class="btn-primary" style="margin-top: 20px;">
+                    View All 12 Scholarships →
                 </button>
             </div>
             
-            <div id="results" class="results-container">
-                <div class="card">
-                    <h2 class="card-title">🎯 Your Personalized College Matches</h2>
-                    <div id="college-results"></div>
+            <!-- Essays Section -->
+            <div id="essays" class="section">
+                <h2 class="section-title">UC Personal Insight Questions</h2>
+                <p style="color: var(--text-secondary); margin-bottom: 24px;">
+                    Choose 4 out of 8 prompts. Each response: exactly 350 words.
+                </p>
+                
+                <div class="action-cards">
+                    <div class="action-card">
+                        <h3 style="font-size: 18px; margin-bottom: 8px;">1. Leadership Experience</h3>
+                        <p style="font-size: 14px; color: var(--text-secondary); margin-bottom: 12px;">
+                            Describe an example of your leadership experience...
+                        </p>
+                        <span class="action-status status-todo">Not Started</span>
+                    </div>
+                    
+                    <div class="action-card">
+                        <h3 style="font-size: 18px; margin-bottom: 8px;">2. Creative Side</h3>
+                        <p style="font-size: 14px; color: var(--text-secondary); margin-bottom: 12px;">
+                            Every person has a creative side...
+                        </p>
+                        <span class="action-status status-in-progress">Draft: 127 words</span>
+                    </div>
+                    
+                    <div class="action-card">
+                        <h3 style="font-size: 18px; margin-bottom: 8px;">3. Greatest Talent</h3>
+                        <p style="font-size: 14px; color: var(--text-secondary); margin-bottom: 12px;">
+                            What would you say is your greatest talent or skill?
+                        </p>
+                        <span class="action-status status-todo">Not Started</span>
+                    </div>
+                    
+                    <div class="action-card">
+                        <h3 style="font-size: 18px; margin-bottom: 8px;">4. Significant Challenge</h3>
+                        <p style="font-size: 14px; color: var(--text-secondary); margin-bottom: 12px;">
+                            Describe the most significant challenge you have faced...
+                        </p>
+                        <span class="action-status status-done">Complete: 350 words</span>
+                    </div>
                 </div>
+                
+                <button class="btn-primary" style="margin-top: 20px;">
+                    Get AI Essay Feedback →
+                </button>
             </div>
         </div>
         
-        <div id="strategy" class="tab-content">
-            <div class="strategy-card">
-                <h2 class="strategy-title">
-                    <span>🧠</span>
-                    Game Theory Optimization
-                </h2>
-                <div class="strategy-content">
-                    <div class="strategy-item">
-                        <div class="strategy-icon optimal">✓</div>
-                        <div>
-                            <h3>Nash Equilibrium Strategy</h3>
-                            <p>Apply to 2 reach, 4 match, 2 safety schools for optimal balance</p>
-                        </div>
-                    </div>
-                    <div class="strategy-item">
-                        <div class="strategy-icon timing">⏰</div>
-                        <div>
-                            <h3>Optimal Application Timing</h3>
-                            <p>Submit UC apps by November 15 for 23% higher acceptance rate</p>
-                        </div>
-                    </div>
-                    <div class="strategy-item">
-                        <div class="strategy-icon risk">📊</div>
-                        <div>
-                            <h3>Risk-Adjusted Portfolio</h3>
-                            <p>Your profile suggests 85% chance of UC acceptance with current strategy</p>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            
-            <div class="card">
-                <h2 class="card-title">📈 Competitive Analysis</h2>
-                <p class="card-subtitle">Based on 50,000+ California applicants</p>
-                <canvas id="strategyChart"></canvas>
-            </div>
-        </div>
-        
-        <div id="timeline" class="tab-content">
-            <div class="card">
-                <h2 class="card-title">📅 Your Strategic Timeline</h2>
-                <div id="timeline-content"></div>
-            </div>
-        </div>
-        
-        <div id="essays" class="tab-content">
-            <div class="card">
-                <h2 class="card-title">✍️ AI Essay Assistant</h2>
-                <p class="card-subtitle">Get real-time feedback on UC Personal Insight Questions</p>
-                <textarea class="input-field" rows="10" placeholder="Paste your essay here for AI analysis..."></textarea>
-                <button class="button" onclick="analyzeEssay()">Analyze Essay</button>
-            </div>
-        </div>
-    </div>
-    
-    <button class="ai-chat-button" onclick="toggleChat()">💬</button>
-    
-    <div class="ai-chat-window" id="chatWindow">
-        <div class="ai-chat-header">
-            <span>AI College Counselor</span>
-            <button onclick="toggleChat()" style="background: none; border: none; color: white; font-size: 20px; cursor: pointer;">×</button>
-        </div>
-        <div class="ai-chat-messages" id="chatMessages">
-            <div class="ai-message assistant">Hi! I'm your AI college counselor. I can help with UC/CSU applications, strategy, and planning. What would you like to know?</div>
-        </div>
-        <div class="ai-chat-input">
-            <input type="text" id="chatInput" placeholder="Ask anything about California colleges..." onkeypress="if(event.key==='Enter') sendMessage()">
-            <button onclick="sendMessage()">Send</button>
-        </div>
+        <button class="floating-help" onclick="openAIHelp()">💬</button>
     </div>
     
     <script>
-        // California College Data with Real 2024 Statistics
-        const colleges = {
-            uc: [
-                { name: 'UC Berkeley', gpa: 4.25, sat: 1450, acceptance: 14.5, majorFactor: 2.5 },
-                { name: 'UCLA', gpa: 4.23, sat: 1440, acceptance: 11.0, majorFactor: 2.3 },
-                { name: 'UC San Diego', gpa: 4.15, sat: 1420, acceptance: 31.5, majorFactor: 2.0 },
-                { name: 'UC Davis', gpa: 4.05, sat: 1370, acceptance: 39.0, majorFactor: 1.8 },
-                { name: 'UC Irvine', gpa: 4.08, sat: 1380, acceptance: 27.0, majorFactor: 2.0 },
-                { name: 'UC Santa Barbara', gpa: 4.12, sat: 1390, acceptance: 26.0, majorFactor: 1.9 },
-                { name: 'UC Santa Cruz', gpa: 3.85, sat: 1290, acceptance: 47.0, majorFactor: 1.5 },
-                { name: 'UC Riverside', gpa: 3.75, sat: 1250, acceptance: 57.0, majorFactor: 1.3 },
-                { name: 'UC Merced', gpa: 3.65, sat: 1200, acceptance: 72.0, majorFactor: 1.2 }
-            ],
-            csu: [
-                { name: 'Cal Poly SLO', gpa: 4.05, sat: 1350, acceptance: 25.0, majorFactor: 2.0 },
-                { name: 'San Diego State', gpa: 3.85, sat: 1250, acceptance: 34.0, majorFactor: 1.7 },
-                { name: 'CSU Long Beach', gpa: 3.75, sat: 1200, acceptance: 31.0, majorFactor: 1.5 }
-            ]
+        // Initialize student data
+        let studentProfile = {
+            name: 'Student',
+            gpa: 3.85,
+            sat: 1350,
+            targetSchools: ['UC Berkeley', 'UC Davis', 'UC Riverside'],
+            completedRequirements: {
+                english: 3,
+                math: 4,
+                history: 1,
+                science: 2,
+                language: 1,
+                arts: 0.5,
+                elective: 1
+            },
+            essays: {
+                leadership: { status: 'not-started', wordCount: 0 },
+                creative: { status: 'in-progress', wordCount: 127 },
+                talent: { status: 'not-started', wordCount: 0 },
+                challenge: { status: 'complete', wordCount: 350 }
+            }
         };
         
-        // Game Theory Optimization Engine
-        class AdmissionStrategy {
-            static calculateNashEquilibrium(profile) {
-                const gpa = parseFloat(profile.gpa) || 0;
-                const sat = parseInt(profile.sat) || 0;
-                const major = profile.major;
-                
-                // Nash Equilibrium for optimal school distribution
-                const optimalDistribution = {
-                    reach: Math.floor(2 + (gpa - 3.5) * 0.5),
-                    match: 4,
-                    safety: Math.floor(2 + (4.5 - gpa) * 0.5)
-                };
-                
-                return optimalDistribution;
-            }
-            
-            static calculateAdmissionProbability(studentProfile, college) {
-                const gpa = parseFloat(studentProfile.gpa) || 0;
-                const sat = parseInt(studentProfile.sat) || 0;
-                const apCourses = parseInt(studentProfile.apCourses) || 0;
-                const major = studentProfile.major;
-                
-                // Base probability from acceptance rate
-                let probability = college.acceptance;
-                
-                // GPA factor (most important)
-                const gpaGap = gpa - college.gpa;
-                probability += gpaGap * 20;
-                
-                // SAT factor (if provided)
-                if (sat > 0) {
-                    const satGap = sat - college.sat;
-                    probability += satGap * 0.05;
-                }
-                
-                // AP courses factor
-                probability += apCourses * 2;
-                
-                // Major competitiveness factor
-                if (major === 'computer-science' || major === 'engineering') {
-                    probability /= college.majorFactor;
-                }
-                
-                // Bayesian adjustment based on historical data
-                probability = Math.max(5, Math.min(95, probability));
-                
-                return Math.round(probability);
-            }
-            
-            static generateOptimalTiming() {
-                // Game theory optimal submission timing
-                return {
-                    ucDeadline: 'November 30, 2024',
-                    optimalSubmission: 'November 15, 2024',
-                    advantage: '23% higher acceptance rate for early submissions'
-                };
-            }
+        // Calculate days until deadline
+        function daysUntilDeadline() {
+            const deadline = new Date('2024-11-30');
+            const today = new Date();
+            const diff = deadline - today;
+            return Math.floor(diff / (1000 * 60 * 60 * 24));
         }
         
-        // AI Chat Simulation (would connect to real AI in production)
-        const aiResponses = {
-            'uc requirements': 'UC requires completion of A-G courses: 4 years English, 3 years Math (4 recommended), 2 years History, 2 years Lab Science, 2 years Foreign Language, 1 year Visual/Performing Arts, and 1 year College Prep Elective.',
-            'deadline': 'UC and CSU applications are due November 30, 2024. I recommend submitting by November 15 for optimal chances.',
-            'gpa': 'UC uses a weighted GPA for 10th and 11th grade A-G courses. Honors/AP courses get an extra point (A=5, B=4, etc).',
-            'essays': 'UC requires 4 Personal Insight Questions (350 words each) chosen from 8 prompts. Focus on unique experiences and specific details.',
-            default: 'I can help with UC/CSU requirements, deadlines, GPA calculations, essay tips, and strategic planning. What specific question do you have?'
-        };
-        
-        function switchTab(tabName) {
-            // Hide all tabs
-            document.querySelectorAll('.tab-content').forEach(tab => {
-                tab.classList.remove('active');
-            });
-            document.querySelectorAll('.tab-button').forEach(button => {
-                button.classList.remove('active');
-            });
-            
-            // Show selected tab
-            document.getElementById(tabName).classList.add('active');
-            event.target.classList.add('active');
-            
-            // Load timeline if switching to timeline tab
-            if (tabName === 'timeline') {
-                loadTimeline();
-            }
-        }
-        
-        function analyzeAdmissions() {
-            const profile = {
-                gpa: document.getElementById('gpa').value,
-                sat: document.getElementById('sat').value,
-                major: document.getElementById('major').value,
-                apCourses: document.getElementById('ap-courses').value
+        // Calculate admission chances based on profile
+        function calculateChances(school, profile) {
+            const schoolRequirements = {
+                'UC Berkeley': { gpa: 4.25, sat: 1450, acceptance: 14.5 },
+                'UCLA': { gpa: 4.23, sat: 1440, acceptance: 11.0 },
+                'UC San Diego': { gpa: 4.15, sat: 1420, acceptance: 31.5 },
+                'UC Davis': { gpa: 4.05, sat: 1370, acceptance: 39.0 },
+                'UC Irvine': { gpa: 4.08, sat: 1380, acceptance: 27.0 },
+                'UC Santa Barbara': { gpa: 4.12, sat: 1390, acceptance: 26.0 },
+                'UC Santa Cruz': { gpa: 3.85, sat: 1290, acceptance: 47.0 },
+                'UC Riverside': { gpa: 3.75, sat: 1250, acceptance: 57.0 },
+                'UC Merced': { gpa: 3.65, sat: 1200, acceptance: 72.0 }
             };
             
-            if (!profile.gpa) {
-                alert('Please enter your GPA to continue');
-                return;
+            const req = schoolRequirements[school];
+            if (!req) return 50;
+            
+            let chance = req.acceptance;
+            
+            // GPA impact
+            const gpaGap = profile.gpa - req.gpa;
+            chance += gpaGap * 20;
+            
+            // SAT impact
+            if (profile.sat) {
+                const satGap = profile.sat - req.sat;
+                chance += satGap * 0.05;
             }
             
-            // Calculate Nash Equilibrium distribution
-            const strategy = AdmissionStrategy.calculateNashEquilibrium(profile);
-            
-            // Generate college recommendations with probabilities
-            let results = [];
-            const allColleges = [...colleges.uc, ...colleges.csu];
-            
-            allColleges.forEach(college => {
-                const probability = AdmissionStrategy.calculateAdmissionProbability(profile, college);
-                results.push({
-                    name: college.name,
-                    probability: probability,
-                    category: probability < 30 ? 'reach' : probability < 60 ? 'match' : 'safety'
-                });
+            return Math.max(5, Math.min(95, Math.round(chance)));
+        }
+        
+        // Switch between sections
+        function switchSection(sectionId) {
+            document.querySelectorAll('.section').forEach(section => {
+                section.classList.remove('active');
+            });
+            document.querySelectorAll('.nav-pill').forEach(pill => {
+                pill.classList.remove('active');
             });
             
-            // Sort by probability
-            results.sort((a, b) => b.probability - a.probability);
-            
-            // Display results
-            displayResults(results, strategy);
+            document.getElementById(sectionId).classList.add('active');
+            event.target.classList.add('active');
         }
         
-        function displayResults(results, strategy) {
-            const resultsContainer = document.getElementById('results');
-            const collegeResults = document.getElementById('college-results');
-            
-            let html = `
-                <div class="strategy-card" style="margin-bottom: 20px;">
-                    <h3>🎯 Your Optimal Strategy (Nash Equilibrium)</h3>
-                    <p>Based on game theory, apply to: ${strategy.reach} reach schools, ${strategy.match} match schools, ${strategy.safety} safety schools</p>
-                </div>
-            `;
-            
-            results.forEach(college => {
-                html += `
-                    <div class="college-card ${college.category}">
-                        <div class="college-info">
-                            <h3>${college.name}</h3>
-                            <p>${college.category.charAt(0).toUpperCase() + college.category.slice(1)} School</p>
-                        </div>
-                        <div class="admission-chance">
-                            <div class="chance-percentage">${college.probability}%</div>
-                            <div class="chance-label">Admission Chance</div>
-                        </div>
-                    </div>
-                `;
-            });
-            
-            collegeResults.innerHTML = html;
-            resultsContainer.classList.add('active');
+        // Show improvement section for specific school
+        function showImproveSection() {
+            switchSection('improve');
+            document.querySelector('[onclick="switchSection(\'improve\')"]').classList.add('active');
+            document.querySelector('[onclick="switchSection(\'journey\')"]').classList.remove('active');
         }
         
-        function loadTimeline() {
-            const timeline = `
-                <div class="strategy-item">
-                    <div class="strategy-icon timing">📝</div>
-                    <div>
-                        <h3>October 1 - FAFSA Opens</h3>
-                        <p>Submit FAFSA for financial aid consideration</p>
-                    </div>
-                </div>
-                <div class="strategy-item">
-                    <div class="strategy-icon optimal">📚</div>
-                    <div>
-                        <h3>November 15 - Optimal UC/CSU Submission</h3>
-                        <p>Submit applications 2 weeks early for best chances</p>
-                    </div>
-                </div>
-                <div class="strategy-item">
-                    <div class="strategy-icon timing">⏰</div>
-                    <div>
-                        <h3>November 30 - UC/CSU Deadline</h3>
-                        <p>Final deadline for all UC and CSU applications</p>
-                    </div>
-                </div>
-                <div class="strategy-item">
-                    <div class="strategy-icon optimal">💰</div>
-                    <div>
-                        <h3>March 2 - Cal Grant Deadline</h3>
-                        <p>Submit GPA verification for Cal Grant eligibility</p>
-                    </div>
-                </div>
-            `;
-            document.getElementById('timeline-content').innerHTML = timeline;
-        }
-        
-        function toggleChat() {
-            const chatWindow = document.getElementById('chatWindow');
-            chatWindow.classList.toggle('active');
-        }
-        
-        function sendMessage() {
-            const input = document.getElementById('chatInput');
-            const message = input.value.trim();
-            
-            if (!message) return;
-            
-            const messagesDiv = document.getElementById('chatMessages');
-            
-            // Add user message
-            messagesDiv.innerHTML += `<div class="ai-message user">${message}</div>`;
-            
-            // Generate AI response
-            const response = getAIResponse(message.toLowerCase());
-            
-            // Add AI response with typing effect
-            setTimeout(() => {
-                messagesDiv.innerHTML += `<div class="ai-message assistant">${response}</div>`;
-                messagesDiv.scrollTop = messagesDiv.scrollHeight;
-            }, 500);
-            
-            input.value = '';
-        }
-        
-        function getAIResponse(message) {
-            // Simple keyword matching for demo (would use real AI in production)
-            for (const [key, response] of Object.entries(aiResponses)) {
-                if (message.includes(key)) {
-                    return response;
-                }
+        // Add new school to list
+        function addSchool() {
+            const schoolName = prompt('Enter school name (e.g., UCLA, UC San Diego):');
+            if (schoolName) {
+                studentProfile.targetSchools.push(schoolName);
+                updateSchoolsList();
             }
-            return aiResponses.default;
         }
         
-        function analyzeEssay() {
-            alert('Essay analysis would connect to AI backend for real-time feedback on structure, content, and UC-specific requirements.');
+        // Update schools display
+        function updateSchoolsList() {
+            // This would refresh the schools grid with new data
+            console.log('Schools updated:', studentProfile.targetSchools);
         }
         
-        // Initialize with sample data for demo
+        // Open AI help chat
+        function openAIHelp() {
+            alert('AI Assistant: How can I help you with your college journey? Try asking:\n\n' +
+                  '• "How can I improve my chances at UC Berkeley?"\n' +
+                  '• "What scholarships am I eligible for?"\n' +
+                  '• "Help me with my leadership essay"\n' +
+                  '• "What\'s my optimal application strategy?"');
+        }
+        
+        // Initialize on load
         document.addEventListener('DOMContentLoaded', () => {
-            document.getElementById('gpa').value = '3.85';
-            document.getElementById('sat').value = '1350';
-            document.getElementById('ap-courses').value = '5';
+            // Update days counter - find the element more carefully
+            const progressItems = document.querySelectorAll('.progress-value');
+            if (progressItems.length > 0) {
+                progressItems[progressItems.length - 1].textContent = daysUntilDeadline();
+            }
+            
+            // Update chances for each school
+            studentProfile.targetSchools.forEach(school => {
+                const chance = calculateChances(school, studentProfile);
+                console.log(`${school}: ${chance}% chance`);
+            });
         });
     </script>
 </body>
