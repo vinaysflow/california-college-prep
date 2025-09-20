@@ -3,8 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Pathwise - Discover Your College Path</title>
-    <meta name="apple-mobile-web-app-capable" content="yes">
+    <title>Pathwise - Your Personalized College Journey</title>
     <style>
         * {
             margin: 0;
@@ -36,7 +35,15 @@
             line-height: 1.5;
         }
         
-        /* Progress Bar */
+        /* Discovery Section Styles */
+        .discovery-container {
+            display: block;
+        }
+        
+        .discovery-container.hidden {
+            display: none;
+        }
+        
         .progress-container {
             background: white;
             padding: 20px;
@@ -49,8 +56,9 @@
         .progress-steps {
             display: flex;
             justify-content: space-between;
-            margin-bottom: 20px;
             position: relative;
+            max-width: 600px;
+            margin: 0 auto;
         }
         
         .progress-line {
@@ -79,7 +87,6 @@
             align-items: center;
             position: relative;
             z-index: 3;
-            cursor: pointer;
         }
         
         .progress-circle {
@@ -98,7 +105,6 @@
             border-color: var(--primary);
             background: var(--primary);
             color: white;
-            transform: scale(1.1);
         }
         
         .progress-step.completed .progress-circle {
@@ -111,22 +117,14 @@
             margin-top: 8px;
             font-size: 12px;
             color: var(--text-tertiary);
-            text-align: center;
         }
         
-        .progress-step.active .progress-label {
-            color: var(--primary);
-            font-weight: 600;
-        }
-        
-        /* Main Container */
         .main-container {
             max-width: 800px;
             margin: 0 auto;
             padding: 20px;
         }
         
-        /* Phase Containers */
         .phase {
             display: none;
             animation: fadeIn 0.3s ease;
@@ -157,24 +155,110 @@
             color: var(--text-secondary);
         }
         
-        /* Cards */
+        /* Full Platform Styles */
+        .platform-container {
+            display: none;
+        }
+        
+        .platform-container.active {
+            display: block;
+        }
+        
+        .app-header {
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            padding: 60px 20px 30px;
+            color: white;
+            text-align: center;
+        }
+        
+        .welcome-message {
+            font-size: 32px;
+            font-weight: 700;
+            margin-bottom: 8px;
+        }
+        
+        .status-message {
+            font-size: 18px;
+            opacity: 0.9;
+        }
+        
+        .stats-overview {
+            display: flex;
+            gap: 12px;
+            margin-top: 20px;
+            padding: 16px;
+            background: rgba(255, 255, 255, 0.15);
+            border-radius: var(--border-radius);
+            overflow-x: auto;
+            justify-content: center;
+        }
+        
+        .stat-item {
+            min-width: 100px;
+            text-align: center;
+        }
+        
+        .stat-value {
+            font-size: 24px;
+            font-weight: 700;
+        }
+        
+        .stat-label {
+            font-size: 12px;
+            opacity: 0.9;
+        }
+        
+        .main-nav {
+            background: var(--card);
+            padding: 12px;
+            display: flex;
+            gap: 8px;
+            overflow-x: auto;
+            border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+        
+        .nav-pill {
+            padding: 10px 16px;
+            border-radius: 20px;
+            border: none;
+            background: var(--background);
+            color: var(--text-secondary);
+            font-size: 15px;
+            font-weight: 600;
+            white-space: nowrap;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        
+        .nav-pill.active {
+            background: var(--primary);
+            color: white;
+        }
+        
+        .content-area {
+            padding: 20px;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        
+        .dashboard-section {
+            display: none;
+        }
+        
+        .dashboard-section.active {
+            display: block;
+        }
+        
+        /* Card Styles */
         .card {
             background: var(--card);
             border-radius: var(--border-radius);
             padding: 24px;
             margin-bottom: 20px;
             box-shadow: var(--shadow);
-        }
-        
-        .question-card {
-            text-align: center;
-            padding: 40px;
-        }
-        
-        .question-text {
-            font-size: 24px;
-            font-weight: 600;
-            margin-bottom: 32px;
         }
         
         .options-grid {
@@ -190,12 +274,12 @@
             border-radius: var(--border-radius);
             cursor: pointer;
             transition: all 0.3s ease;
+            text-align: center;
         }
         
         .option-card:hover {
             border-color: var(--primary);
             transform: translateY(-2px);
-            box-shadow: var(--shadow);
         }
         
         .option-card.selected {
@@ -213,12 +297,31 @@
             margin-bottom: 4px;
         }
         
-        .option-description {
-            font-size: 14px;
-            color: var(--text-tertiary);
+        .interest-tags {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 12px;
+            margin-bottom: 24px;
         }
         
-        /* Input Fields */
+        .interest-tag {
+            padding: 10px 20px;
+            background: var(--background);
+            border-radius: 20px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            border: 2px solid transparent;
+        }
+        
+        .interest-tag:hover {
+            border-color: var(--primary);
+        }
+        
+        .interest-tag.selected {
+            background: var(--primary);
+            color: white;
+        }
+        
         .input-group {
             margin-bottom: 20px;
         }
@@ -247,15 +350,6 @@
         .input-field:focus {
             outline: none;
             border-color: var(--primary);
-            background: white;
-        }
-        
-        /* Buttons */
-        .button-container {
-            display: flex;
-            gap: 12px;
-            justify-content: center;
-            margin-top: 32px;
         }
         
         .btn {
@@ -284,150 +378,14 @@
             border: 2px solid var(--primary);
         }
         
-        .btn-secondary:hover {
-            background: var(--primary);
-            color: white;
-        }
-        
-        .btn:disabled {
-            opacity: 0.5;
-            cursor: not-allowed;
-        }
-        
-        /* Interest Tags */
-        .interest-tags {
+        .button-container {
             display: flex;
-            flex-wrap: wrap;
             gap: 12px;
-            margin-bottom: 24px;
+            justify-content: center;
+            margin-top: 32px;
         }
         
-        .interest-tag {
-            padding: 10px 20px;
-            background: var(--background);
-            border-radius: 20px;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            border: 2px solid transparent;
-        }
-        
-        .interest-tag:hover {
-            border-color: var(--primary);
-        }
-        
-        .interest-tag.selected {
-            background: var(--primary);
-            color: white;
-        }
-        
-        /* Discovery Results */
-        .discovery-results {
-            padding: 24px;
-            background: linear-gradient(135deg, rgba(0, 122, 255, 0.05), rgba(88, 86, 214, 0.05));
-            border-radius: var(--border-radius);
-            margin-bottom: 24px;
-        }
-        
-        .result-item {
-            display: flex;
-            justify-content: space-between;
-            padding: 12px 0;
-            border-bottom: 1px solid rgba(0, 0, 0, 0.1);
-        }
-        
-        .result-item:last-child {
-            border-bottom: none;
-        }
-        
-        .result-label {
-            font-weight: 600;
-        }
-        
-        .result-value {
-            color: var(--primary);
-            font-weight: 600;
-        }
-        
-        /* Navigation Tabs (Hidden Initially) */
-        .main-nav {
-            background: var(--card);
-            padding: 12px;
-            display: none;
-            gap: 8px;
-            overflow-x: auto;
-            border-bottom: 1px solid rgba(0, 0, 0, 0.1);
-            position: sticky;
-            top: 60px;
-            z-index: 50;
-        }
-        
-        .main-nav.unlocked {
-            display: flex;
-        }
-        
-        .nav-pill {
-            padding: 10px 16px;
-            border-radius: 20px;
-            border: none;
-            background: var(--background);
-            color: var(--text-secondary);
-            font-size: 15px;
-            font-weight: 600;
-            white-space: nowrap;
-            cursor: pointer;
-            transition: all 0.3s ease;
-        }
-        
-        .nav-pill.active {
-            background: var(--primary);
-            color: white;
-        }
-        
-        .nav-pill:disabled {
-            opacity: 0.5;
-            cursor: not-allowed;
-        }
-        
-        /* Personality Quiz */
-        .personality-card {
-            padding: 24px;
-            background: var(--card);
-            border-radius: var(--border-radius);
-            margin-bottom: 20px;
-        }
-        
-        .slider-container {
-            margin: 24px 0;
-        }
-        
-        .slider-labels {
-            display: flex;
-            justify-content: space-between;
-            margin-bottom: 12px;
-            font-size: 14px;
-        }
-        
-        .slider {
-            width: 100%;
-            -webkit-appearance: none;
-            height: 6px;
-            border-radius: 3px;
-            background: #E5E5EA;
-            outline: none;
-        }
-        
-        .slider::-webkit-slider-thumb {
-            -webkit-appearance: none;
-            appearance: none;
-            width: 24px;
-            height: 24px;
-            border-radius: 50%;
-            background: var(--primary);
-            cursor: pointer;
-        }
-        
-        /* School Recommendations */
-        .school-rec-card {
+        .school-card {
             background: var(--card);
             border-radius: var(--border-radius);
             padding: 20px;
@@ -435,677 +393,833 @@
             display: flex;
             justify-content: space-between;
             align-items: center;
+            border-left: 4px solid;
             transition: all 0.3s ease;
         }
         
-        .school-rec-card:hover {
+        .school-card:hover {
             transform: translateX(4px);
             box-shadow: var(--shadow-large);
         }
+        
+        .school-card.reach { border-left-color: var(--danger); }
+        .school-card.match { border-left-color: var(--warning); }
+        .school-card.safety { border-left-color: var(--success); }
         
         .school-info h3 {
             font-size: 18px;
             margin-bottom: 4px;
         }
         
-        .school-match-reason {
+        .school-info p {
             font-size: 14px;
             color: var(--text-secondary);
         }
         
-        .match-score {
-            font-size: 24px;
+        .match-percentage {
+            font-size: 28px;
             font-weight: 700;
             color: var(--primary);
         }
         
-        @media (max-width: 768px) {
-            .options-grid {
-                grid-template-columns: 1fr;
-            }
-            
-            .progress-label {
-                font-size: 10px;
-                max-width: 60px;
-            }
-            
-            .phase-title {
-                font-size: 24px;
-            }
+        .action-item {
+            padding: 16px;
+            background: linear-gradient(to right, rgba(0, 122, 255, 0.05), transparent);
+            border-left: 3px solid var(--primary);
+            border-radius: 8px;
+            margin-bottom: 12px;
+        }
+        
+        .action-item h4 {
+            margin-bottom: 4px;
+        }
+        
+        .action-item p {
+            font-size: 14px;
+            color: var(--text-secondary);
+        }
+        
+        .timeline-item {
+            padding: 16px;
+            background: var(--card);
+            border-radius: var(--border-radius);
+            margin-bottom: 16px;
+            position: relative;
+            padding-left: 40px;
+        }
+        
+        .timeline-dot {
+            position: absolute;
+            left: 12px;
+            top: 24px;
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            background: var(--primary);
+        }
+        
+        .timeline-date {
+            font-size: 13px;
+            color: var(--text-tertiary);
+            margin-bottom: 4px;
+        }
+        
+        .timeline-title {
+            font-weight: 600;
+            margin-bottom: 4px;
+        }
+        
+        .aid-breakdown {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 16px;
+            margin-top: 20px;
+        }
+        
+        .aid-item {
+            padding: 12px;
+            background: var(--background);
+            border-radius: 8px;
+            text-align: center;
+        }
+        
+        .aid-value {
+            font-size: 20px;
+            font-weight: 600;
+            color: var(--success);
+        }
+        
+        .aid-label {
+            font-size: 12px;
+            color: var(--text-tertiary);
+            margin-top: 4px;
         }
     </style>
 </head>
 <body>
-    <!-- Progress Bar -->
-    <div class="progress-container">
-        <div class="progress-steps">
-            <div class="progress-line"></div>
-            <div class="progress-line-active" id="progressLine" style="width: 0%;"></div>
+    <!-- Discovery Flow -->
+    <div class="discovery-container" id="discoveryContainer">
+        <div class="progress-container">
+            <div class="progress-steps">
+                <div class="progress-line"></div>
+                <div class="progress-line-active" id="progressLine" style="width: 0%;"></div>
+                
+                <div class="progress-step active">
+                    <div class="progress-circle">1</div>
+                    <div class="progress-label">Start</div>
+                </div>
+                <div class="progress-step">
+                    <div class="progress-circle">2</div>
+                    <div class="progress-label">Interests</div>
+                </div>
+                <div class="progress-step">
+                    <div class="progress-circle">3</div>
+                    <div class="progress-label">Academic</div>
+                </div>
+                <div class="progress-step">
+                    <div class="progress-circle">4</div>
+                    <div class="progress-label">Preferences</div>
+                </div>
+                <div class="progress-step">
+                    <div class="progress-circle">5</div>
+                    <div class="progress-label">Ready!</div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="main-container">
+            <!-- Phase 0: Welcome -->
+            <div id="phase-0" class="phase active">
+                <div class="phase-header">
+                    <h1 class="phase-title">Welcome to Your College Journey</h1>
+                    <p class="phase-subtitle">Let's discover your perfect path together</p>
+                </div>
+                
+                <div class="card">
+                    <h3>How are you feeling about college?</h3>
+                    <div class="options-grid" style="margin-top: 20px;">
+                        <div class="option-card" onclick="selectFeeling(this, 'excited')">
+                            <div class="option-icon">😊</div>
+                            <div class="option-title">Excited</div>
+                        </div>
+                        <div class="option-card" onclick="selectFeeling(this, 'uncertain')">
+                            <div class="option-icon">🤔</div>
+                            <div class="option-title">Uncertain</div>
+                        </div>
+                        <div class="option-card" onclick="selectFeeling(this, 'overwhelmed')">
+                            <div class="option-icon">😰</div>
+                            <div class="option-title">Overwhelmed</div>
+                        </div>
+                        <div class="option-card" onclick="selectFeeling(this, 'curious')">
+                            <div class="option-icon">🔍</div>
+                            <div class="option-title">Curious</div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="card">
+                    <div class="input-group">
+                        <label class="input-label">What's your name? (Optional)</label>
+                        <input type="text" class="input-field" id="userName" placeholder="Just so we can personalize">
+                    </div>
+                    
+                    <div class="input-group">
+                        <label class="input-label">Current Grade</label>
+                        <select class="input-field" id="gradeLevel">
+                            <option value="">Select...</option>
+                            <option value="11">11th Grade</option>
+                            <option value="12">12th Grade</option>
+                            <option value="transfer">Transfer Student</option>
+                        </select>
+                    </div>
+                </div>
+                
+                <div class="button-container">
+                    <button class="btn btn-primary" onclick="nextPhase()">Continue →</button>
+                </div>
+            </div>
             
-            <div class="progress-step active" onclick="goToPhase(0)">
-                <div class="progress-circle">1</div>
-                <div class="progress-label">Discover</div>
+            <!-- Phase 1: Interests -->
+            <div id="phase-1" class="phase">
+                <div class="phase-header">
+                    <h1 class="phase-title">What Interests You?</h1>
+                    <p class="phase-subtitle">Select all that apply (you can change these later)</p>
+                </div>
+                
+                <div class="card">
+                    <h3>Academic Areas</h3>
+                    <div class="interest-tags" style="margin-top: 16px;">
+                        <div class="interest-tag" onclick="toggleInterest(this, 'stem')">🔬 Science & Tech</div>
+                        <div class="interest-tag" onclick="toggleInterest(this, 'arts')">🎨 Arts & Design</div>
+                        <div class="interest-tag" onclick="toggleInterest(this, 'business')">💼 Business</div>
+                        <div class="interest-tag" onclick="toggleInterest(this, 'health')">⚕️ Health</div>
+                        <div class="interest-tag" onclick="toggleInterest(this, 'social')">🤝 Social Sciences</div>
+                        <div class="interest-tag" onclick="toggleInterest(this, 'humanities')">📚 Humanities</div>
+                        <div class="interest-tag" onclick="toggleInterest(this, 'undecided')">❓ Not Sure Yet</div>
+                    </div>
+                </div>
+                
+                <div class="button-container">
+                    <button class="btn btn-secondary" onclick="previousPhase()">← Back</button>
+                    <button class="btn btn-primary" onclick="nextPhase()">Continue →</button>
+                </div>
             </div>
-            <div class="progress-step" onclick="goToPhase(1)">
-                <div class="progress-circle">2</div>
-                <div class="progress-label">Explore</div>
+            
+            <!-- Phase 2: Academic Profile -->
+            <div id="phase-2" class="phase">
+                <div class="phase-header">
+                    <h1 class="phase-title">Academic Snapshot</h1>
+                    <p class="phase-subtitle">This helps us find schools that match your profile</p>
+                </div>
+                
+                <div class="card">
+                    <div class="input-group">
+                        <label class="input-label">Current GPA (Optional)</label>
+                        <input type="number" class="input-field" id="userGPA" placeholder="3.5" step="0.01" max="5.0">
+                        <small style="color: var(--text-tertiary);">Leave blank if unsure</small>
+                    </div>
+                    
+                    <div class="input-group">
+                        <label class="input-label">SAT/ACT Status</label>
+                        <select class="input-field" id="testStatus">
+                            <option value="not-taken">Haven't taken yet</option>
+                            <option value="planning">Planning to take</option>
+                            <option value="taken">Have scores</option>
+                        </select>
+                    </div>
+                    
+                    <div class="input-group" id="satInput" style="display: none;">
+                        <label class="input-label">SAT Score</label>
+                        <input type="number" class="input-field" id="satScore" placeholder="1350" max="1600">
+                    </div>
+                </div>
+                
+                <div class="button-container">
+                    <button class="btn btn-secondary" onclick="previousPhase()">← Back</button>
+                    <button class="btn btn-primary" onclick="nextPhase()">Continue →</button>
+                </div>
             </div>
-            <div class="progress-step" onclick="goToPhase(2)">
-                <div class="progress-circle">3</div>
-                <div class="progress-label">Academic</div>
+            
+            <!-- Phase 3: Preferences -->
+            <div id="phase-3" class="phase">
+                <div class="phase-header">
+                    <h1 class="phase-title">What Matters to You?</h1>
+                    <p class="phase-subtitle">Help us understand your priorities</p>
+                </div>
+                
+                <div class="card">
+                    <h3>School Preferences</h3>
+                    <div class="options-grid" style="margin-top: 20px;">
+                        <div class="option-card" onclick="togglePreference(this, 'location')">
+                            <div class="option-icon">📍</div>
+                            <div class="option-title">Close to Home</div>
+                        </div>
+                        <div class="option-card" onclick="togglePreference(this, 'cost')">
+                            <div class="option-icon">💰</div>
+                            <div class="option-title">Affordability</div>
+                        </div>
+                        <div class="option-card" onclick="togglePreference(this, 'size')">
+                            <div class="option-icon">👥</div>
+                            <div class="option-title">School Size</div>
+                        </div>
+                        <div class="option-card" onclick="togglePreference(this, 'prestige')">
+                            <div class="option-icon">🏆</div>
+                            <div class="option-title">Reputation</div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="button-container">
+                    <button class="btn btn-secondary" onclick="previousPhase()">← Back</button>
+                    <button class="btn btn-primary" onclick="completeDiscovery()">Build My Plan →</button>
+                </div>
             </div>
-            <div class="progress-step" onclick="goToPhase(3)">
-                <div class="progress-circle">4</div>
-                <div class="progress-label">Match</div>
-            </div>
-            <div class="progress-step" onclick="goToPhase(4)">
-                <div class="progress-circle">5</div>
-                <div class="progress-label">Plan</div>
+            
+            <!-- Phase 4: Summary -->
+            <div id="phase-4" class="phase">
+                <div class="phase-header">
+                    <h1 class="phase-title">Your Personalized Plan is Ready!</h1>
+                    <p class="phase-subtitle">We've created a custom roadmap just for you</p>
+                </div>
+                
+                <div class="card">
+                    <h3>What We've Learned About You</h3>
+                    <div id="discoverySummary" style="margin-top: 16px;">
+                        <!-- Populated by JavaScript -->
+                    </div>
+                </div>
+                
+                <div class="button-container">
+                    <button class="btn btn-secondary" onclick="previousPhase()">← Adjust</button>
+                    <button class="btn btn-primary" onclick="enterPlatform()">Go to Dashboard →</button>
+                </div>
             </div>
         </div>
     </div>
     
-    <!-- Navigation (Initially Hidden) -->
-    <nav class="main-nav" id="mainNav">
-        <button class="nav-pill" onclick="showDashboard()">🏠 Dashboard</button>
-        <button class="nav-pill" onclick="showSchools()">🎯 Schools</button>
-        <button class="nav-pill" onclick="showFinancial()">💰 Financial</button>
-        <button class="nav-pill" onclick="showDocuments()">📄 Documents</button>
-        <button class="nav-pill" onclick="showTimeline()">📅 Timeline</button>
-    </nav>
-    
-    <div class="main-container">
-        <!-- Phase 1: Discovery -->
-        <div id="phase-0" class="phase active">
-            <div class="phase-header">
-                <h1 class="phase-title">Let's Start Your Journey 🚀</h1>
-                <p class="phase-subtitle">No pressure - we'll discover your path together</p>
-            </div>
+    <!-- Full Platform -->
+    <div class="platform-container" id="platformContainer">
+        <div class="app-header">
+            <h1 class="welcome-message" id="welcomeMessage">Welcome back!</h1>
+            <p class="status-message" id="statusMessage">Your personalized college journey</p>
             
-            <div class="card question-card">
-                <div class="question-text">How are you feeling about college?</div>
-                <div class="options-grid">
-                    <div class="option-card" onclick="selectFeeling('excited')">
-                        <div class="option-icon">😊</div>
-                        <div class="option-title">Excited</div>
-                        <div class="option-description">Ready to explore possibilities</div>
-                    </div>
-                    <div class="option-card" onclick="selectFeeling('uncertain')">
-                        <div class="option-icon">🤔</div>
-                        <div class="option-title">Uncertain</div>
-                        <div class="option-description">Not sure what I want yet</div>
-                    </div>
-                    <div class="option-card" onclick="selectFeeling('overwhelmed')">
-                        <div class="option-icon">😰</div>
-                        <div class="option-title">Overwhelmed</div>
-                        <div class="option-description">It feels like a lot</div>
-                    </div>
-                    <div class="option-card" onclick="selectFeeling('curious')">
-                        <div class="option-icon">🔍</div>
-                        <div class="option-title">Curious</div>
-                        <div class="option-description">Want to learn more</div>
-                    </div>
+            <div class="stats-overview">
+                <div class="stat-item">
+                    <div class="stat-value" id="statGPA">--</div>
+                    <div class="stat-label">GPA</div>
                 </div>
-            </div>
-            
-            <div class="card">
-                <h3 style="margin-bottom: 16px;">Quick Check-In</h3>
-                <div class="input-group">
-                    <label class="input-label">What grade are you in?</label>
-                    <select class="input-field" id="gradeLevel">
-                        <option value="">Select...</option>
-                        <option value="9">9th Grade</option>
-                        <option value="10">10th Grade</option>
-                        <option value="11">11th Grade</option>
-                        <option value="12">12th Grade</option>
-                        <option value="transfer">Transfer Student</option>
-                    </select>
+                <div class="stat-item">
+                    <div class="stat-value" id="statSchools">--</div>
+                    <div class="stat-label">Matches</div>
                 </div>
-                
-                <div class="input-group">
-                    <label class="input-label">What's your first name? (Optional)</label>
-                    <input type="text" class="input-field" id="firstName" placeholder="Just so we can personalize your experience">
+                <div class="stat-item">
+                    <div class="stat-value" id="statAid">--</div>
+                    <div class="stat-label">Est. Aid</div>
                 </div>
-            </div>
-            
-            <div class="button-container">
-                <button class="btn btn-primary" onclick="nextPhase()" id="phase0Next">Continue →</button>
+                <div class="stat-item">
+                    <div class="stat-value" id="statDays">--</div>
+                    <div class="stat-label">Days Left</div>
+                </div>
             </div>
         </div>
         
-        <!-- Phase 2: Interest Discovery -->
-        <div id="phase-1" class="phase">
-            <div class="phase-header">
-                <h1 class="phase-title">What Interests You? 💭</h1>
-                <p class="phase-subtitle">Select all that spark your curiosity (you can change these later)</p>
-            </div>
-            
-            <div class="card">
-                <h3 style="margin-bottom: 16px;">Academic Interests</h3>
-                <div class="interest-tags" id="academicInterests">
-                    <div class="interest-tag" onclick="toggleInterest(this, 'stem')">🔬 Science & Tech</div>
-                    <div class="interest-tag" onclick="toggleInterest(this, 'arts')">🎨 Arts & Design</div>
-                    <div class="interest-tag" onclick="toggleInterest(this, 'business')">💼 Business</div>
-                    <div class="interest-tag" onclick="toggleInterest(this, 'health')">⚕️ Health & Medicine</div>
-                    <div class="interest-tag" onclick="toggleInterest(this, 'social')">🤝 Social Sciences</div>
-                    <div class="interest-tag" onclick="toggleInterest(this, 'humanities')">📚 Humanities</div>
-                    <div class="interest-tag" onclick="toggleInterest(this, 'environment')">🌱 Environment</div>
-                    <div class="interest-tag" onclick="toggleInterest(this, 'education')">👩‍🏫 Education</div>
-                </div>
-            </div>
-            
-            <div class="card">
-                <h3 style="margin-bottom: 16px;">Activities You Enjoy</h3>
-                <div class="interest-tags" id="activityInterests">
-                    <div class="interest-tag" onclick="toggleInterest(this, 'sports')">⚽ Sports</div>
-                    <div class="interest-tag" onclick="toggleInterest(this, 'music')">🎵 Music</div>
-                    <div class="interest-tag" onclick="toggleInterest(this, 'leadership')">👥 Leadership</div>
-                    <div class="interest-tag" onclick="toggleInterest(this, 'volunteer')">💝 Volunteering</div>
-                    <div class="interest-tag" onclick="toggleInterest(this, 'debate')">💬 Debate</div>
-                    <div class="interest-tag" onclick="toggleInterest(this, 'creative')">✨ Creating Things</div>
-                    <div class="interest-tag" onclick="toggleInterest(this, 'research')">🔍 Research</div>
-                    <div class="interest-tag" onclick="toggleInterest(this, 'travel')">✈️ Travel</div>
-                </div>
-            </div>
-            
-            <div class="card personality-card">
-                <h3 style="margin-bottom: 16px;">How Do You Learn Best?</h3>
-                
-                <div class="slider-container">
-                    <div class="slider-labels">
-                        <span>Small Classes</span>
-                        <span>Large Lectures</span>
-                    </div>
-                    <input type="range" class="slider" id="classSize" min="0" max="100" value="50">
-                </div>
-                
-                <div class="slider-container">
-                    <div class="slider-labels">
-                        <span>Theory & Concepts</span>
-                        <span>Hands-On Practice</span>
-                    </div>
-                    <input type="range" class="slider" id="learningStyle" min="0" max="100" value="50">
-                </div>
-                
-                <div class="slider-container">
-                    <div class="slider-labels">
-                        <span>Independent Study</span>
-                        <span>Group Projects</span>
-                    </div>
-                    <input type="range" class="slider" id="collaborationStyle" min="0" max="100" value="50">
-                </div>
-            </div>
-            
-            <div class="button-container">
-                <button class="btn btn-secondary" onclick="previousPhase()">← Back</button>
-                <button class="btn btn-primary" onclick="nextPhase()">Continue →</button>
-            </div>
-        </div>
+        <nav class="main-nav">
+            <button class="nav-pill active" onclick="showSection('dashboard')">🏠 Dashboard</button>
+            <button class="nav-pill" onclick="showSection('schools')">🎯 Schools</button>
+            <button class="nav-pill" onclick="showSection('improve')">📈 Improve</button>
+            <button class="nav-pill" onclick="showSection('financial')">💰 Financial</button>
+            <button class="nav-pill" onclick="showSection('timeline')">📅 Timeline</button>
+        </nav>
         
-        <!-- Phase 3: Academic Profile -->
-        <div id="phase-2" class="phase">
-            <div class="phase-header">
-                <h1 class="phase-title">Academic Snapshot 📚</h1>
-                <p class="phase-subtitle">Just the basics - we'll help you improve where needed</p>
-            </div>
-            
-            <div class="card">
-                <h3 style="margin-bottom: 16px;">Current Academic Standing</h3>
-                <p style="color: var(--text-secondary); margin-bottom: 16px;">Don't worry about being perfect - we'll show you realistic options</p>
+        <div class="content-area">
+            <!-- Dashboard -->
+            <div id="dashboard" class="dashboard-section active">
+                <h2>Your Personalized Dashboard</h2>
                 
-                <div class="input-group">
-                    <label class="input-label">Approximate GPA (Optional)</label>
-                    <input type="number" class="input-field" id="gpa" placeholder="3.5" step="0.1" max="5.0">
-                    <small style="color: var(--text-tertiary);">Leave blank if you're not sure</small>
-                </div>
-                
-                <div class="input-group">
-                    <label class="input-label">Have you taken the SAT/ACT?</label>
-                    <select class="input-field" id="testStatus">
-                        <option value="not-taken">Not yet</option>
-                        <option value="planning">Planning to take it</option>
-                        <option value="taken">Yes, I have scores</option>
-                        <option value="not-taking">Not planning to take it</option>
-                    </select>
-                </div>
-                
-                <div class="input-group" id="satScoreInput" style="display: none;">
-                    <label class="input-label">SAT Score (Optional)</label>
-                    <input type="number" class="input-field" id="satScore" placeholder="1200" max="1600">
-                </div>
-                
-                <div class="input-group">
-                    <label class="input-label">Challenging Courses</label>
-                    <select class="input-field" id="challengingCourses">
-                        <option value="0">Haven't taken any yet</option>
-                        <option value="1-2">1-2 AP/Honors courses</option>
-                        <option value="3-5">3-5 AP/Honors courses</option>
-                        <option value="6+">6+ AP/Honors courses</option>
-                    </select>
-                </div>
-            </div>
-            
-            <div class="card">
-                <h3 style="margin-bottom: 16px;">What Matters to You?</h3>
-                <div class="options-grid">
-                    <div class="option-card" onclick="togglePreference(this, 'location')">
-                        <div class="option-icon">📍</div>
-                        <div class="option-title">Location</div>
+                <div class="card">
+                    <h3>Your Matched Schools</h3>
+                    <div id="matchedSchools" style="margin-top: 16px;">
+                        <!-- Populated by JavaScript -->
                     </div>
-                    <div class="option-card" onclick="togglePreference(this, 'cost')">
-                        <div class="option-icon">💰</div>
-                        <div class="option-title">Affordability</div>
-                    </div>
-                    <div class="option-card" onclick="togglePreference(this, 'size')">
-                        <div class="option-icon">👥</div>
-                        <div class="option-title">School Size</div>
-                    </div>
-                    <div class="option-card" onclick="togglePreference(this, 'diversity')">
-                        <div class="option-icon">🌈</div>
-                        <div class="option-title">Diversity</div>
+                </div>
+                
+                <div class="card">
+                    <h3>Priority Actions</h3>
+                    <div id="priorityActions" style="margin-top: 16px;">
+                        <!-- Populated by JavaScript -->
                     </div>
                 </div>
             </div>
             
-            <div class="button-container">
-                <button class="btn btn-secondary" onclick="previousPhase()">← Back</button>
-                <button class="btn btn-primary" onclick="nextPhase()">See My Matches →</button>
-            </div>
-        </div>
-        
-        <!-- Phase 4: Initial Matches -->
-        <div id="phase-3" class="phase">
-            <div class="phase-header">
-                <h1 class="phase-title">Your Personalized Matches 🎯</h1>
-                <p class="phase-subtitle">Based on your interests and profile</p>
-            </div>
-            
-            <div class="discovery-results">
-                <h3 style="margin-bottom: 16px;">Your Discovery Summary</h3>
-                <div class="result-item">
-                    <span class="result-label">Top Interests:</span>
-                    <span class="result-value" id="topInterests">Science & Tech, Arts</span>
-                </div>
-                <div class="result-item">
-                    <span class="result-label">Learning Style:</span>
-                    <span class="result-value" id="learningStyleResult">Hands-on, Collaborative</span>
-                </div>
-                <div class="result-item">
-                    <span class="result-label">Academic Level:</span>
-                    <span class="result-value" id="academicLevel">Strong (3.5+ GPA)</span>
+            <!-- Schools -->
+            <div id="schools" class="dashboard-section">
+                <h2>Your School Matches</h2>
+                
+                <div class="card">
+                    <h3>Based on Your Profile</h3>
+                    <div id="schoolsDetail" style="margin-top: 16px;">
+                        <!-- Populated by JavaScript -->
+                    </div>
                 </div>
             </div>
             
-            <div class="card">
-                <h3 style="margin-bottom: 16px;">🎯 Schools That Fit You</h3>
-                <div id="schoolRecommendations">
-                    <!-- Will be populated dynamically -->
+            <!-- Improve -->
+            <div id="improve" class="dashboard-section">
+                <h2>Improvement Plan</h2>
+                
+                <div class="card">
+                    <h3>Steps to Strengthen Your Application</h3>
+                    <div id="improvementSteps" style="margin-top: 16px;">
+                        <!-- Populated by JavaScript -->
+                    </div>
                 </div>
             </div>
             
-            <div class="card">
-                <h3 style="margin-bottom: 16px;">📚 Suggested Majors</h3>
-                <div id="majorRecommendations">
-                    <!-- Will be populated dynamically -->
+            <!-- Financial -->
+            <div id="financial" class="dashboard-section">
+                <h2>Financial Aid Estimate</h2>
+                
+                <div class="card">
+                    <h3>Your Potential Aid</h3>
+                    <div id="aidEstimate" style="margin-top: 16px;">
+                        <!-- Populated by JavaScript -->
+                    </div>
                 </div>
             </div>
             
-            <div class="button-container">
-                <button class="btn btn-secondary" onclick="previousPhase()">← Adjust My Preferences</button>
-                <button class="btn btn-primary" onclick="nextPhase()">Build My Plan →</button>
-            </div>
-        </div>
-        
-        <!-- Phase 5: Action Plan -->
-        <div id="phase-4" class="phase">
-            <div class="phase-header">
-                <h1 class="phase-title">Your Personalized Action Plan 🚀</h1>
-                <p class="phase-subtitle">Let's turn your discoveries into action</p>
-            </div>
-            
-            <div class="card">
-                <h3 style="margin-bottom: 16px;">🎉 Congratulations!</h3>
-                <p>You've completed the discovery process. Based on your responses, we've unlocked your personalized college planning tools.</p>
-            </div>
-            
-            <div class="card">
-                <h3 style="margin-bottom: 16px;">Your Next Steps</h3>
-                <ol style="line-height: 2; padding-left: 20px;">
-                    <li><strong>Explore Your Matches:</strong> Review the schools we've identified for you</li>
-                    <li><strong>Financial Planning:</strong> Calculate your expected costs and aid</li>
-                    <li><strong>Academic Improvement:</strong> See specific steps to strengthen your profile</li>
-                    <li><strong>Timeline:</strong> Get your personalized application schedule</li>
-                    <li><strong>Documents:</strong> Track everything you need to submit</li>
-                </ol>
-            </div>
-            
-            <div class="card">
-                <h3 style="margin-bottom: 16px;">🔓 Full Platform Unlocked!</h3>
-                <p>You now have access to all features. Use the navigation menu above to explore:</p>
-                <ul style="line-height: 2; padding-left: 20px; margin-top: 12px;">
-                    <li>Dashboard - Your personalized overview</li>
-                    <li>Schools - Detailed information about your matches</li>
-                    <li>Financial - Calculate costs and aid</li>
-                    <li>Documents - Track application materials</li>
-                    <li>Timeline - See all important dates</li>
-                </ul>
-            </div>
-            
-            <div class="button-container">
-                <button class="btn btn-secondary" onclick="previousPhase()">← Review My Matches</button>
-                <button class="btn btn-primary" onclick="unlockFullPlatform()">Go to Dashboard →</button>
+            <!-- Timeline -->
+            <div id="timeline" class="dashboard-section">
+                <h2>Your Application Timeline</h2>
+                
+                <div class="card">
+                    <div id="timelineItems" style="margin-top: 16px;">
+                        <!-- Populated by JavaScript -->
+                    </div>
+                </div>
             </div>
         </div>
     </div>
     
     <script>
-        // User journey data
-        let userJourney = {
-            currentPhase: 0,
-            feeling: '',
-            grade: '',
+        // User profile built from discovery
+        let userProfile = {
             name: '',
-            interests: {
-                academic: [],
-                activities: []
-            },
-            learningPreferences: {
-                classSize: 50,
-                style: 50,
-                collaboration: 50
-            },
-            academicProfile: {
-                gpa: null,
-                testStatus: '',
-                satScore: null,
-                apCourses: ''
-            },
+            grade: '',
+            feeling: '',
+            interests: [],
+            gpa: null,
+            sat: null,
+            testStatus: '',
             preferences: [],
-            completedPhases: []
+            currentPhase: 0,
+            completedDiscovery: false
         };
         
-        // Phase navigation
+        // California colleges database
+        const collegeDB = {
+            'UC Berkeley': { gpa: 4.25, sat: 1450, acceptance: 14.5, type: 'reach', cost: 36000 },
+            'UCLA': { gpa: 4.23, sat: 1440, acceptance: 11.0, type: 'reach', cost: 34000 },
+            'UC San Diego': { gpa: 4.15, sat: 1420, acceptance: 31.5, type: 'reach', cost: 33000 },
+            'UC Davis': { gpa: 4.05, sat: 1370, acceptance: 39.0, type: 'match', cost: 34500 },
+            'UC Irvine': { gpa: 4.08, sat: 1380, acceptance: 27.0, type: 'match', cost: 32500 },
+            'UC Santa Barbara': { gpa: 4.12, sat: 1390, acceptance: 26.0, type: 'match', cost: 34000 },
+            'UC Santa Cruz': { gpa: 3.85, sat: 1290, acceptance: 47.0, type: 'match', cost: 33000 },
+            'UC Riverside': { gpa: 3.75, sat: 1250, acceptance: 57.0, type: 'safety', cost: 32000 },
+            'UC Merced': { gpa: 3.65, sat: 1200, acceptance: 72.0, type: 'safety', cost: 31000 }
+        };
+        
+        // Navigation
         function nextPhase() {
-            if (validateCurrentPhase()) {
-                userJourney.completedPhases.push(userJourney.currentPhase);
-                userJourney.currentPhase++;
+            if (validatePhase()) {
+                userProfile.currentPhase++;
                 updateProgress();
-                showPhase(userJourney.currentPhase);
-                
-                // Generate recommendations when reaching phase 3
-                if (userJourney.currentPhase === 3) {
-                    generateRecommendations();
-                }
+                showPhase();
             }
         }
         
         function previousPhase() {
-            if (userJourney.currentPhase > 0) {
-                userJourney.currentPhase--;
+            if (userProfile.currentPhase > 0) {
+                userProfile.currentPhase--;
                 updateProgress();
-                showPhase(userJourney.currentPhase);
+                showPhase();
             }
         }
         
-        function goToPhase(phase) {
-            // Only allow going to completed phases or current phase
-            if (phase <= userJourney.currentPhase) {
-                showPhase(phase);
-            }
-        }
-        
-        function showPhase(phase) {
+        function showPhase() {
             document.querySelectorAll('.phase').forEach(p => p.classList.remove('active'));
-            document.getElementById(`phase-${phase}`).classList.add('active');
+            document.getElementById(`phase-${userProfile.currentPhase}`).classList.add('active');
             
-            // Update progress indicators
-            document.querySelectorAll('.progress-step').forEach((step, index) => {
+            // Update progress steps
+            document.querySelectorAll('.progress-step').forEach((step, i) => {
                 step.classList.remove('active', 'completed');
-                if (index < phase) {
-                    step.classList.add('completed');
-                } else if (index === phase) {
-                    step.classList.add('active');
-                }
+                if (i < userProfile.currentPhase) step.classList.add('completed');
+                if (i === userProfile.currentPhase) step.classList.add('active');
             });
         }
         
         function updateProgress() {
-            const progress = (userJourney.currentPhase / 4) * 100;
+            const progress = (userProfile.currentPhase / 4) * 100;
             document.getElementById('progressLine').style.width = `${progress}%`;
         }
         
-        function validateCurrentPhase() {
-            switch(userJourney.currentPhase) {
+        function validatePhase() {
+            switch(userProfile.currentPhase) {
                 case 0:
-                    // Validate phase 1 - at least grade selected
                     const grade = document.getElementById('gradeLevel').value;
                     if (!grade) {
                         alert('Please select your grade level');
                         return false;
                     }
-                    userJourney.grade = grade;
-                    userJourney.name = document.getElementById('firstName').value || 'Student';
+                    userProfile.grade = grade;
+                    userProfile.name = document.getElementById('userName').value || 'Student';
                     return true;
-                    
+                
                 case 1:
-                    // Validate phase 2 - at least some interests selected
-                    if (userJourney.interests.academic.length === 0 && userJourney.interests.activities.length === 0) {
+                    if (userProfile.interests.length === 0) {
                         alert('Please select at least one interest');
                         return false;
                     }
-                    // Save learning preferences
-                    userJourney.learningPreferences = {
-                        classSize: document.getElementById('classSize').value,
-                        style: document.getElementById('learningStyle').value,
-                        collaboration: document.getElementById('collaborationStyle').value
-                    };
                     return true;
-                    
+                
                 case 2:
-                    // Save academic profile
-                    userJourney.academicProfile = {
-                        gpa: document.getElementById('gpa').value || null,
-                        testStatus: document.getElementById('testStatus').value,
-                        satScore: document.getElementById('satScore').value || null,
-                        apCourses: document.getElementById('challengingCourses').value
-                    };
+                    userProfile.gpa = parseFloat(document.getElementById('userGPA').value) || null;
+                    userProfile.testStatus = document.getElementById('testStatus').value;
+                    if (userProfile.testStatus === 'taken') {
+                        userProfile.sat = parseInt(document.getElementById('satScore').value) || null;
+                    }
                     return true;
-                    
-                default:
+                
+                case 3:
                     return true;
             }
+            return true;
         }
         
         // Selection handlers
-        function selectFeeling(feeling) {
-            document.querySelectorAll('.option-card').forEach(card => card.classList.remove('selected'));
-            event.target.closest('.option-card').classList.add('selected');
-            userJourney.feeling = feeling;
+        function selectFeeling(element, feeling) {
+            document.querySelectorAll('#phase-0 .option-card').forEach(c => c.classList.remove('selected'));
+            element.classList.add('selected');
+            userProfile.feeling = feeling;
         }
         
         function toggleInterest(element, interest) {
             element.classList.toggle('selected');
-            const type = element.parentElement.id === 'academicInterests' ? 'academic' : 'activities';
-            const index = userJourney.interests[type].indexOf(interest);
-            
+            const index = userProfile.interests.indexOf(interest);
             if (index > -1) {
-                userJourney.interests[type].splice(index, 1);
+                userProfile.interests.splice(index, 1);
             } else {
-                userJourney.interests[type].push(interest);
+                userProfile.interests.push(interest);
             }
         }
         
-        function togglePreference(element, preference) {
+        function togglePreference(element, pref) {
             element.classList.toggle('selected');
-            const index = userJourney.preferences.indexOf(preference);
-            
+            const index = userProfile.preferences.indexOf(pref);
             if (index > -1) {
-                userJourney.preferences.splice(index, 1);
+                userProfile.preferences.splice(index, 1);
             } else {
-                userJourney.preferences.push(preference);
+                userProfile.preferences.push(pref);
             }
         }
         
-        // Show/hide SAT score input
-        document.getElementById('testStatus')?.addEventListener('change', function() {
-            const satInput = document.getElementById('satScoreInput');
-            if (this.value === 'taken') {
-                satInput.style.display = 'block';
-            } else {
-                satInput.style.display = 'none';
+        // Complete discovery and show summary
+        function completeDiscovery() {
+            if (validatePhase()) {
+                userProfile.currentPhase = 4;
+                updateProgress();
+                showPhase();
+                
+                // Generate summary
+                const summary = `
+                    <p><strong>Interests:</strong> ${userProfile.interests.join(', ') || 'Exploring'}</p>
+                    <p><strong>Academic Level:</strong> ${userProfile.gpa ? `${userProfile.gpa} GPA` : 'Not specified'}</p>
+                    <p><strong>Preferences:</strong> ${userProfile.preferences.join(', ') || 'Flexible'}</p>
+                    <p><strong>Feeling:</strong> ${userProfile.feeling}</p>
+                `;
+                document.getElementById('discoverySummary').innerHTML = summary;
             }
-        });
-        
-        // Generate personalized recommendations
-        function generateRecommendations() {
-            // Update summary
-            const interests = [...userJourney.interests.academic, ...userJourney.interests.activities];
-            document.getElementById('topInterests').textContent = interests.slice(0, 3).join(', ') || 'Exploring options';
-            
-            // Learning style
-            const style = userJourney.learningPreferences.style > 50 ? 'Hands-on' : 'Theoretical';
-            const collab = userJourney.learningPreferences.collaboration > 50 ? 'Collaborative' : 'Independent';
-            document.getElementById('learningStyleResult').textContent = `${style}, ${collab}`;
-            
-            // Academic level
-            const gpa = userJourney.academicProfile.gpa;
-            let level = 'Developing';
-            if (gpa >= 4.0) level = 'Excellent (4.0+ GPA)';
-            else if (gpa >= 3.5) level = 'Strong (3.5+ GPA)';
-            else if (gpa >= 3.0) level = 'Good (3.0+ GPA)';
-            document.getElementById('academicLevel').textContent = level;
-            
-            // Generate school recommendations
-            const schools = generateSchoolMatches();
-            const schoolsHtml = schools.map(school => `
-                <div class="school-rec-card">
-                    <div class="school-info">
-                        <h3>${school.name}</h3>
-                        <div class="school-match-reason">${school.reason}</div>
-                    </div>
-                    <div class="match-score">${school.match}%</div>
-                </div>
-            `).join('');
-            document.getElementById('schoolRecommendations').innerHTML = schoolsHtml;
-            
-            // Generate major recommendations
-            const majors = generateMajorMatches();
-            const majorsHtml = majors.map(major => `
-                <div class="interest-tag selected" style="cursor: default; margin: 8px;">
-                    ${major}
-                </div>
-            `).join('');
-            document.getElementById('majorRecommendations').innerHTML = majorsHtml;
         }
         
-        function generateSchoolMatches() {
-            const schools = [];
-            const hasSTEM = userJourney.interests.academic.includes('stem');
-            const hasArts = userJourney.interests.academic.includes('arts');
-            const gpa = userJourney.academicProfile.gpa || 3.5;
+        // Enter main platform
+        function enterPlatform() {
+            userProfile.completedDiscovery = true;
+            localStorage.setItem('userProfile', JSON.stringify(userProfile));
             
-            // Logic to match schools based on profile
-            if (gpa >= 4.0) {
-                schools.push(
-                    { name: 'UC Berkeley', match: 85, reason: 'Strong academics, matches your interests' },
-                    { name: 'UCLA', match: 82, reason: 'Diverse programs, great location' }
-                );
-            } else if (gpa >= 3.5) {
-                schools.push(
-                    { name: 'UC San Diego', match: 88, reason: 'Balanced academics, innovative programs' },
-                    { name: 'UC Davis', match: 90, reason: 'Supportive environment, strong programs' }
-                );
-            } else {
-                schools.push(
-                    { name: 'UC Santa Cruz', match: 92, reason: 'Alternative learning style, beautiful campus' },
-                    { name: 'UC Riverside', match: 94, reason: 'Growing programs, supportive community' }
-                );
-            }
+            // Hide discovery, show platform
+            document.getElementById('discoveryContainer').classList.add('hidden');
+            document.getElementById('platformContainer').classList.add('active');
             
-            if (hasSTEM) {
-                schools.push({ name: 'Cal Poly SLO', match: 87, reason: 'Hands-on engineering programs' });
-            }
-            
-            if (hasArts) {
-                schools.push({ name: 'UC Irvine', match: 85, reason: 'Strong arts programs' });
-            }
-            
-            return schools.slice(0, 5);
+            // Initialize platform with user data
+            initializePlatform();
         }
         
-        function generateMajorMatches() {
-            const majors = [];
-            const interests = userJourney.interests.academic;
+        // Initialize platform with personalized data
+        function initializePlatform() {
+            // Update welcome message
+            document.getElementById('welcomeMessage').textContent = 
+                `Welcome${userProfile.name ? ', ' + userProfile.name : ''}!`;
             
-            const majorMap = {
-                'stem': ['Computer Science', 'Engineering', 'Biology', 'Physics'],
-                'arts': ['Graphic Design', 'Fine Arts', 'Music', 'Theater'],
-                'business': ['Business Administration', 'Marketing', 'Finance', 'Entrepreneurship'],
-                'health': ['Pre-Med', 'Nursing', 'Public Health', 'Kinesiology'],
-                'social': ['Psychology', 'Sociology', 'Anthropology', 'Political Science'],
-                'humanities': ['English', 'History', 'Philosophy', 'Communications'],
-                'environment': ['Environmental Science', 'Sustainability', 'Marine Biology'],
-                'education': ['Education', 'Child Development', 'Special Education']
-            };
+            // Update stats
+            document.getElementById('statGPA').textContent = userProfile.gpa || '--';
+            document.getElementById('statSchools').textContent = calculateMatches().length;
+            document.getElementById('statAid').textContent = calculateAid();
+            document.getElementById('statDays').textContent = calculateDaysLeft();
             
-            interests.forEach(interest => {
-                if (majorMap[interest]) {
-                    majors.push(...majorMap[interest].slice(0, 2));
+            // Generate personalized content
+            generateSchoolMatches();
+            generateActionItems();
+            generateImprovementPlan();
+            generateTimeline();
+            generateFinancialAid();
+        }
+        
+        // Calculate school matches based on profile
+        function calculateMatches() {
+            const matches = [];
+            const gpa = userProfile.gpa || 3.5;
+            
+            Object.entries(collegeDB).forEach(([name, data]) => {
+                let matchScore = 50;
+                
+                // GPA matching
+                const gpaGap = gpa - data.gpa;
+                matchScore += gpaGap * 20;
+                
+                // SAT matching if available
+                if (userProfile.sat) {
+                    const satGap = userProfile.sat - data.sat;
+                    matchScore += satGap * 0.05;
+                }
+                
+                // Interest alignment
+                if (userProfile.interests.includes('stem') && name.includes('Berkeley')) {
+                    matchScore += 10;
+                }
+                
+                // Preference alignment
+                if (userProfile.preferences.includes('prestige') && data.acceptance < 30) {
+                    matchScore += 10;
+                }
+                
+                if (userProfile.preferences.includes('cost') && data.cost < 33000) {
+                    matchScore += 10;
+                }
+                
+                matchScore = Math.max(0, Math.min(100, matchScore));
+                
+                if (matchScore > 20) {
+                    matches.push({
+                        name: name,
+                        score: matchScore,
+                        type: matchScore < 40 ? 'reach' : matchScore < 70 ? 'match' : 'safety',
+                        data: data
+                    });
                 }
             });
             
-            // Add undecided if no clear path
-            if (majors.length === 0) {
-                majors.push('Undeclared/Exploratory', 'Liberal Arts', 'General Studies');
+            return matches.sort((a, b) => b.score - a.score);
+        }
+        
+        // Calculate financial aid
+        function calculateAid() {
+            const gpa = userProfile.gpa || 3.5;
+            let aid = 0;
+            
+            // Merit-based
+            if (gpa >= 3.5) aid += 5000;
+            if (gpa >= 4.0) aid += 5000;
+            
+            // Need-based estimate
+            aid += 10000; // Simplified estimate
+            
+            return `$${aid.toLocaleString()}`;
+        }
+        
+        // Calculate days until deadline
+        function calculateDaysLeft() {
+            const deadline = new Date('2025-11-30');
+            const today = new Date();
+            const days = Math.floor((deadline - today) / (1000 * 60 * 60 * 24));
+            return days > 0 ? days : '--';
+        }
+        
+        // Generate school matches display
+        function generateSchoolMatches() {
+            const matches = calculateMatches();
+            let html = '';
+            
+            matches.slice(0, 5).forEach(match => {
+                html += `
+                    <div class="school-card ${match.type}">
+                        <div class="school-info">
+                            <h3>${match.name}</h3>
+                            <p>${match.type.charAt(0).toUpperCase() + match.type.slice(1)} School • ${match.data.acceptance}% acceptance</p>
+                        </div>
+                        <div class="match-percentage">${match.score}%</div>
+                    </div>
+                `;
+            });
+            
+            document.getElementById('matchedSchools').innerHTML = html;
+            document.getElementById('schoolsDetail').innerHTML = html;
+        }
+        
+        // Generate action items
+        function generateActionItems() {
+            const gpa = userProfile.gpa || 3.5;
+            let actions = [];
+            
+            if (gpa < 4.0) {
+                actions.push({
+                    title: 'Improve Your GPA',
+                    desc: `Raise your GPA from ${gpa} to 4.0+ for better chances at top UCs`
+                });
             }
             
-            return majors.slice(0, 6);
-        }
-        
-        function unlockFullPlatform() {
-            // Show navigation
-            document.getElementById('mainNav').classList.add('unlocked');
+            if (!userProfile.sat) {
+                actions.push({
+                    title: 'Take the SAT',
+                    desc: 'Consider taking the SAT to strengthen your application'
+                });
+            }
             
-            // Store journey data
-            localStorage.setItem('userJourney', JSON.stringify(userJourney));
-            localStorage.setItem('platformUnlocked', 'true');
+            actions.push({
+                title: 'Write Personal Insight Questions',
+                desc: '4 essays required for UC applications'
+            });
             
-            // In production, this would transition to the full platform
-            alert('🎉 Congratulations! Your personalized college platform is now ready. The full dashboard with all features is now accessible.');
+            actions.push({
+                title: 'Complete FAFSA',
+                desc: 'Submit by March 2 for financial aid consideration'
+            });
             
-            // Could redirect to full platform or show additional sections
-            showDashboard();
+            let html = '';
+            actions.forEach(action => {
+                html += `
+                    <div class="action-item">
+                        <h4>${action.title}</h4>
+                        <p>${action.desc}</p>
+                    </div>
+                `;
+            });
+            
+            document.getElementById('priorityActions').innerHTML = html;
         }
         
-        // Placeholder functions for full platform navigation
-        function showDashboard() {
-            alert('Dashboard: View your personalized overview, top schools, and action items');
+        // Generate improvement plan
+        function generateImprovementPlan() {
+            const gpa = userProfile.gpa || 3.5;
+            let steps = [];
+            
+            if (gpa < 4.0) {
+                steps.push('Take 3 more AP/Honors classes for weighted GPA boost');
+                steps.push('Maintain straight As in remaining semesters');
+            }
+            
+            if (userProfile.interests.includes('stem')) {
+                steps.push('Join STEM clubs and competitions');
+                steps.push('Consider summer research programs');
+            }
+            
+            steps.push('Start UC Personal Insight Questions early');
+            steps.push('Build relationships with teachers for recommendations');
+            
+            let html = '<ol style="line-height: 2; padding-left: 20px;">';
+            steps.forEach(step => {
+                html += `<li>${step}</li>`;
+            });
+            html += '</ol>';
+            
+            document.getElementById('improvementSteps').innerHTML = html;
         }
         
-        function showSchools() {
-            alert('Schools: Explore your matched schools in detail with requirements and deadlines');
+        // Generate timeline
+        function generateTimeline() {
+            const timeline = [
+                { date: 'August 1', title: 'UC Application Opens', desc: 'Start your application' },
+                { date: 'October 1', title: 'FAFSA Opens', desc: 'Submit for financial aid' },
+                { date: 'November 15', title: 'Optimal Submission', desc: 'Submit early for best chances' },
+                { date: 'November 30', title: 'UC/CSU Deadline', desc: 'Final deadline' },
+                { date: 'March 2', title: 'Cal Grant Deadline', desc: 'Submit GPA verification' }
+            ];
+            
+            let html = '';
+            timeline.forEach(item => {
+                html += `
+                    <div class="timeline-item">
+                        <div class="timeline-dot"></div>
+                        <div class="timeline-date">${item.date}</div>
+                        <div class="timeline-title">${item.title}</div>
+                        <p style="font-size: 14px; color: var(--text-secondary);">${item.desc}</p>
+                    </div>
+                `;
+            });
+            
+            document.getElementById('timelineItems').innerHTML = html;
         }
         
-        function showFinancial() {
-            alert('Financial Aid: Calculate your expected costs and available aid');
+        // Generate financial aid estimate
+        function generateFinancialAid() {
+            const gpa = userProfile.gpa || 3.5;
+            
+            const aid = {
+                pell: gpa >= 3.0 ? 5000 : 0,
+                calGrant: gpa >= 3.0 ? 12570 : 0,
+                merit: gpa >= 3.5 ? 5000 : 0,
+                ucGrant: 5000
+            };
+            
+            const total = Object.values(aid).reduce((a, b) => a + b, 0);
+            
+            let html = `
+                <h4 style="margin-bottom: 16px;">Total Estimated Aid: $${total.toLocaleString()}/year</h4>
+                <div class="aid-breakdown">
+                    <div class="aid-item">
+                        <div class="aid-value">$${aid.pell.toLocaleString()}</div>
+                        <div class="aid-label">Pell Grant</div>
+                    </div>
+                    <div class="aid-item">
+                        <div class="aid-value">$${aid.calGrant.toLocaleString()}</div>
+                        <div class="aid-label">Cal Grant</div>
+                    </div>
+                    <div class="aid-item">
+                        <div class="aid-value">$${aid.merit.toLocaleString()}</div>
+                        <div class="aid-label">Merit Aid</div>
+                    </div>
+                    <div class="aid-item">
+                        <div class="aid-value">$${aid.ucGrant.toLocaleString()}</div>
+                        <div class="aid-label">UC Grant</div>
+                    </div>
+                </div>
+            `;
+            
+            document.getElementById('aidEstimate').innerHTML = html;
         }
         
-        function showDocuments() {
-            alert('Documents: Track all required application materials');
+        // Show dashboard section
+        function showSection(section) {
+            document.querySelectorAll('.dashboard-section').forEach(s => s.classList.remove('active'));
+            document.getElementById(section).classList.add('active');
+            
+            document.querySelectorAll('.nav-pill').forEach(p => p.classList.remove('active'));
+            event.target.classList.add('active');
         }
         
-        function showTimeline() {
-            alert('Timeline: See your personalized application schedule');
-        }
+        // Test status change handler
+        document.getElementById('testStatus')?.addEventListener('change', function() {
+            document.getElementById('satInput').style.display = 
+                this.value === 'taken' ? 'block' : 'none';
+        });
         
-        // Initialize
-        document.addEventListener('DOMContentLoaded', () => {
-            // Check if user has already completed discovery
-            const savedJourney = localStorage.getItem('userJourney');
-            if (savedJourney) {
-                const saved = JSON.parse(savedJourney);
-                if (saved.completedPhases.length === 5) {
-                    document.getElementById('mainNav').classList.add('unlocked');
+        // Check for existing profile on load
+        window.addEventListener('DOMContentLoaded', () => {
+            const saved = localStorage.getItem('userProfile');
+            if (saved) {
+                userProfile = JSON.parse(saved);
+                if (userProfile.completedDiscovery) {
+                    document.getElementById('discoveryContainer').classList.add('hidden');
+                    document.getElementById('platformContainer').classList.add('active');
+                    initializePlatform();
                 }
             }
         });
