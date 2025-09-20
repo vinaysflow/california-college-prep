@@ -1,1125 +1,180 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta
-    name="viewport"
-    content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"
-  />
-  <meta name="apple-mobile-web-app-capable" content="yes" />
-  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
-  <title>Pathwise - Your College Journey</title>
-  <style>
-    /* ---------- RESET & TOKENS ---------- */
-    * { margin:0; padding:0; box-sizing:border-box; }
-    :root{
-      --primary:#007AFF; --secondary:#5856D6; --success:#34C759; --warning:#FF9500; --danger:#FF3B30;
-      --dark:#1C1C1E; --gray:#8E8E93; --light-gray:#C7C7CC;
-      --background:#F2F2F7; --card:#FFFFFF;
-      --radius:14px; --radius-lg:20px;
-      --shadow:0 2px 10px rgba(0,0,0,.08); --shadow-lg:0 10px 40px rgba(0,0,0,.12);
-      --easing:cubic-bezier(0.4,0,0.2,1);
-      --t: all .3s var(--easing);
-    }
-    [data-theme="dark"]{
-      --dark:#F2F2F7; --background:#000; --card:#1C1C1E; --gray:#98989D; --light-gray:#48484A;
-    }
-    body{
-      font-family:-apple-system,BlinkMacSystemFont,"SF Pro Display","SF Pro Text","Helvetica Neue",sans-serif;
-      background:var(--background); color:var(--dark); -webkit-font-smoothing:antialiased; overflow-x:hidden; line-height:1.5; transition:var(--t);
-    }
-
-    /* ---------- ANIMS ---------- */
-    @keyframes slideIn{from{transform:translateX(20px);opacity:0}to{transform:none;opacity:1}}
-    @keyframes fadeIn{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}
-    @keyframes pulse{0%{transform:scale(1)}50%{transform:scale(1.04)}100%{transform:scale(1)}}
-    @keyframes spin{to{transform:rotate(360deg)}}
-
-    /* ---------- NAV ---------- */
-    .nav-header{
-      position:fixed; top:0; left:0; right:0; height:60px; z-index:1000;
-      background:rgba(255,255,255,.9); backdrop-filter:blur(20px); -webkit-backdrop-filter:blur(20px);
-      border-bottom:.5px solid rgba(0,0,0,.1);
-      display:flex; align-items:center; justify-content:space-between; padding:0 16px; transition:var(--t);
-    }
-    [data-theme="dark"] .nav-header{ background:rgba(28,28,30,.9); border-bottom-color:rgba(255,255,255,.1); }
-    .nav-title{ font-size:17px; font-weight:700; letter-spacing:.2px; }
-    .nav-icon{
-      width:36px; height:36px; border-radius:50%; background:var(--background); color:var(--primary);
-      display:flex; align-items:center; justify-content:center; border:none; cursor:pointer; transition:var(--t);
-    }
-    .nav-icon:hover{ transform:scale(1.08); }
-    .nav-actions{ display:flex; gap:8px; }
-
-    /* ---------- LAYOUT ---------- */
-    .container{ padding-top:60px; min-height:100vh; }
-
-    /* ---------- PROGRESS ---------- */
-    .progress-wrap{ max-width:680px; margin:0 auto; padding:16px; }
-    .progress-bar{ height:6px; background:var(--light-gray); border-radius:3px; overflow:hidden; }
-    .progress-fill{ height:100%; width:0; background:linear-gradient(90deg,var(--primary),var(--secondary)); box-shadow:0 2px 8px rgba(0,122,255,.3); transition:width .4s var(--easing); }
-    .progress-text{ margin-top:10px; text-align:center; font-size:14px; color:var(--gray); }
-
-    /* ---------- CARDS ---------- */
-    .card{
-      background:var(--card); border-radius:var(--radius-lg); box-shadow:var(--shadow);
-      padding:24px; margin:16px auto; max-width:680px; animation:fadeIn .4s ease;
-    }
-    .title{ font-size:26px; font-weight:800; margin-bottom:6px; background:linear-gradient(135deg,var(--primary),var(--secondary));
-      -webkit-background-clip:text; -webkit-text-fill-color:transparent; }
-    .subtitle{ font-size:16px; color:var(--gray); margin-bottom:20px; }
-
-    /* ---------- FORMS ---------- */
-    .group{ margin-bottom:18px; }
-    .label{ font-size:12px; color:var(--gray); text-transform:uppercase; letter-spacing:.4px; margin-bottom:6px; display:flex; gap:8px; align-items:center;}
-    .opt{ font-size:11px; background:var(--light-gray); color:var(--gray); border-radius:10px; padding:1px 8px; }
-    .req{ color:var(--danger); }
-    .input, select.input{
-      width:100%; font-size:16px; padding:14px 14px; border-radius:var(--radius);
-      border:2px solid var(--light-gray); background:var(--background); transition:var(--t);
-    }
-    .input:focus{ outline:none; border-color:var(--primary); background:var(--card); transform:translateY(-1px); box-shadow:0 6px 14px rgba(0,122,255,.15); }
-    .error{ border-color:var(--danger) !important; }
-    .error-msg{ color:var(--danger); font-size:13px; margin-top:4px; }
-
-    .btn{
-      display:inline-flex; align-items:center; justify-content:center; gap:8px;
-      padding:14px 22px; border-radius:14px; border:none; cursor:pointer; font-size:16px; font-weight:700; transition:var(--t); min-height:48px;
-    }
-    .btn:disabled{ opacity:.6; cursor:not-allowed; }
-    .primary{ color:#fff; background:linear-gradient(135deg,var(--primary),var(--secondary)); }
-    .primary:hover{ transform:translateY(-1px); box-shadow:0 10px 20px rgba(0,122,255,.25); }
-    .secondary{ color:var(--primary); background:var(--background); }
-    .secondary:hover{ background:var(--light-gray); }
-
-    /* ---------- INTERESTS / PREFS ---------- */
-    .grid{ display:grid; gap:12px; }
-    .grid.auto{ grid-template-columns: repeat(auto-fit, minmax(140px,1fr)); }
-    .pill{
-      display:flex; align-items:center; justify-content:center; gap:8px; min-height:48px;
-      border-radius:999px; border:2px solid var(--light-gray); background:var(--background); cursor:pointer; transition:var(--t);
-      font-weight:600; font-size:15px;
-    }
-    .pill:hover{ transform:translateY(-2px); border-color:var(--primary); box-shadow:0 6px 14px rgba(0,0,0,.08); }
-    .pill.selected{ color:#fff; background:linear-gradient(135deg,var(--primary),var(--secondary)); border-color:transparent; animation:pulse .25s ease; }
-
-    .pref{ display:flex; gap:14px; align-items:center; border:2px solid var(--light-gray); background:var(--background); border-radius:14px; padding:16px; cursor:pointer; transition:var(--t); }
-    .pref:hover{ border-color:var(--primary); transform:translateX(3px); }
-    .pref.selected{ border-color:var(--primary); background:linear-gradient(135deg,rgba(0,122,255,.06),rgba(88,86,214,.06)); }
-    .pref-ic{ width:40px; height:40px; border-radius:12px; background:var(--card); display:flex; align-items:center; justify-content:center; font-size:20px; }
-    .pref-tt{ font-weight:700; }
-    .pref-ds{ font-size:14px; color:var(--gray); }
-
-    /* ---------- DASHBOARD ---------- */
-    .dash{ max-width:1200px; margin:0 auto; padding:16px; }
-    .hero{
-      background:linear-gradient(135deg,var(--primary),var(--secondary)); color:#fff; border-radius:20px; padding:28px; margin:16px 0; position:relative; overflow:hidden;
-    }
-    .hero::before{ content:""; position:absolute; top:-40%; right:-40%; width:200%; height:200%; background:radial-gradient(circle, rgba(255,255,255,.12) 0%, transparent 70%); animation:pulse 3s infinite; }
-    .hero h1{ font-size:28px; margin-bottom:4px; }
-    .kpis{ display:grid; grid-template-columns:repeat(auto-fit,minmax(220px,1fr)); gap:16px; margin:16px 0 24px; }
-    .kpi{ background:var(--card); border-radius:14px; box-shadow:var(--shadow); padding:16px; }
-    .kpi .lbl{ font-size:12px; color:var(--gray); text-transform:uppercase; letter-spacing:.4px; margin-bottom:4px; }
-    .kpi .val{ font-size:28px; font-weight:800; }
-
-    /* ---------- TABS ---------- */
-    .tabs{ display:flex; gap:8px; overflow-x:auto; -webkit-overflow-scrolling:touch; padding:8px 0 16px; }
-    .tabs::-webkit-scrollbar{ height:0; }
-    .tab{ white-space:nowrap; border:none; border-radius:20px; padding:10px 18px; background:var(--background); font-weight:700; cursor:pointer; transition:var(--t); }
-    .tab:hover{ background:var(--light-gray); }
-    .tab.active{ background:var(--primary); color:#fff; position:relative; }
-    .tab.active::after{ content:""; position:absolute; bottom:-4px; left:50%; transform:translateX(-50%); width:30px; height:3px; border-radius:2px; background:var(--primary); }
-
-    /* ---------- SCHOOL CARDS ---------- */
-    .cat{ margin:18px 0; }
-    .cat-h{ display:flex; align-items:center; gap:10px; margin-bottom:10px; }
-    .cat-tt{ font-size:18px; font-weight:800; display:flex; align-items:center; gap:8px; }
-    .badge{ font-size:12px; padding:6px 10px; border-radius:999px; font-weight:800; }
-    .reach{ color:var(--danger); background:linear-gradient(135deg, rgba(255,59,48,.1), rgba(255,149,0,.1)); }
-    .match{ color:var(--success); background:linear-gradient(135deg, rgba(52,199,89,.12), rgba(0,122,255,.12)); }
-    .safety{ color:var(--primary); background:linear-gradient(135deg, rgba(0,122,255,.12), rgba(88,86,214,.12)); }
-
-    .grid-schools{ display:grid; grid-template-columns:repeat(auto-fit, minmax(280px,1fr)); gap:16px; }
-    .school{
-      position:relative; background:var(--card); border-radius:14px; box-shadow:var(--shadow); padding:16px; transition:var(--t); animation:fadeIn .35s ease;
-      border:2px solid transparent;
-    }
-    .school:hover{ transform:translateY(-3px); box-shadow:var(--shadow-lg); }
-    .rm{
-      position:absolute; top:10px; right:10px; width:28px; height:28px; border-radius:50%; background:var(--danger); color:#fff;
-      display:flex; align-items:center; justify-content:center; cursor:pointer; opacity:.9; transition:var(--t);
-    }
-    .rm:hover{ transform:scale(1.06); opacity:1; }
-    .s-h{ display:flex; align-items:center; justify-content:space-between; gap:10px; margin-bottom:6px; }
-    .s-name{ font-weight:800; }
-    .badge-match{ font-size:12px; font-weight:800; padding:6px 10px; border-radius:999px; }
-    .m-high{ background:rgba(52,199,89,.15); color:var(--success); }
-    .m-med{ background:rgba(0,122,255,.15); color:var(--primary); }
-    .m-low{ background:rgba(255,149,0,.18); color:var(--warning); }
-    .s-meta{ font-size:13px; color:var(--gray); }
-
-    /* ---------- CONSENT MODAL ---------- */
-    .modal-backdrop, .overlay{
-      position:fixed; inset:0; background:rgba(0,0,0,.6); z-index:2000; display:none; align-items:center; justify-content:center;
-      animation:fadeIn .3s ease;
-    }
-    .modal{ background:var(--card); border-radius:20px; box-shadow:var(--shadow-lg); width:min(540px,92vw); padding:22px; animation:slideIn .35s ease; }
-    .modal-h{ display:flex; align-items:center; gap:10px; margin-bottom:12px; }
-    .modal-title{ font-size:22px; font-weight:800; }
-    .info-ic{ width:22px; height:22px; border-radius:50%; background:var(--light-gray); color:var(--gray); display:flex; align-items:center; justify-content:center; position:relative; font-weight:800; }
-    .tooltip{ position:absolute; bottom:28px; right:0; width:240px; background:#000; color:#fff; font-size:12px; padding:10px; border-radius:10px; opacity:0; visibility:hidden; transition:var(--t); }
-    .info-ic:hover .tooltip{ opacity:1; visibility:visible; }
-
-    /* ---------- AI BUBBLE ---------- */
-    .ai{ position:fixed; right:18px; bottom:78px; z-index:1500; display:none; }
-    .ai-bubble{
-      position:relative; background:linear-gradient(135deg,var(--primary),var(--secondary)); color:#fff; border-radius:20px; padding:14px 18px; box-shadow:var(--shadow-lg); max-width:280px;
-      animation:slideIn .35s ease; cursor:pointer;
-    }
-    .ai-x{
-      position:absolute; top:-8px; right:-8px; width:22px; height:22px; border-radius:50%; display:flex; align-items:center; justify-content:center; background:var(--dark); color:#fff; font-size:12px;
-    }
-
-    /* ---------- THEME TOGGLE ---------- */
-    .theme{ position:fixed; left:18px; bottom:18px; width:48px; height:48px; border-radius:50%; background:var(--card); box-shadow:var(--shadow); display:flex; align-items:center; justify-content:center; cursor:pointer; z-index:1100; transition:var(--t); }
-    .theme:hover{ transform:scale(1.06); }
-
-    /* ---------- SHARE ---------- */
-    .share-modal{ display:none; position:fixed; inset:0; z-index:2100; align-items:center; justify-content:center; }
-    .share-card{ background:var(--card); border-radius:20px; padding:22px; width:min(520px,92vw); box-shadow:var(--shadow-lg); animation:slideIn .35s ease; }
-    .share-grid{ display:grid; grid-template-columns:repeat(4,1fr); gap:16px; }
-    .share-op{ display:flex; flex-direction:column; align-items:center; gap:6px; cursor:pointer; }
-    .share-ic{ width:60px; height:60px; border-radius:12px; display:flex; align-items:center; justify-content:center; font-size:24px; }
-
-    /* ---------- ADD SCHOOL ---------- */
-    .add-row{ display:flex; gap:8px; align-items:center; }
-    .add-btn{ border:2px dashed var(--light-gray); padding:10px 14px; border-radius:12px; background:var(--background); font-weight:700; cursor:pointer; }
-    .add-btn:hover{ border-color:var(--primary); }
-
-    /* ---------- UTIL ---------- */
-    .row{ display:flex; gap:12px; }
-    .hidden{ display:none !important; }
-
-    /* ---------- MOBILE ---------- */
-    @media (max-width:768px){
-      .grid.auto{ grid-template-columns:repeat(2,1fr); }
-      .kpis{ grid-template-columns:1fr; }
-      .grid-schools{ grid-template-columns:1fr; }
-      .row{ flex-direction:column; }
-      .share-grid{ grid-template-columns:repeat(2,1fr); }
-    }
-  </style>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Pathwise – Your College Journey</title>
+  <link rel="stylesheet" href="style.css">
 </head>
 <body>
   <!-- Consent Modal -->
-  <div id="consentBackdrop" class="modal-backdrop">
-    <div class="modal" role="dialog" aria-labelledby="consentTitle" aria-modal="true">
-      <div class="modal-h">
-        <div id="consentTitle" class="modal-title">Welcome to Pathwise!</div>
-        <div class="info-ic">i
-          <div class="tooltip">We store your data locally on your device. Email is only used for deadline reminders. We never sell your info.</div>
-        </div>
-      </div>
-      <p class="subtitle" style="margin-bottom:14px;">We'll personalize your California college journey. Want to save your progress & reminders?</p>
-      <div class="group">
-        <label class="label">Email for Reminders <span class="opt">Optional</span></label>
-        <input id="emailInput" class="input" type="email" placeholder="your.email@example.com" />
-      </div>
-      <div class="row">
-        <button class="btn secondary" style="flex:1" id="consentNo">No Thanks</button>
-        <button class="btn primary" style="flex:1" id="consentYes">Yes, Let’s Go!</button>
-      </div>
-    </div>
+  <div id="consentModal" class="modal">
+    <!-- ... content ... -->
   </div>
 
-  <!-- NAV -->
-  <div class="nav-header">
-    <button id="backBtn" class="nav-icon" title="Back">
-      <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><path d="M19 11H7.83l5.59-5.59L12 4l-8 8 8 8 1.41-1.41L7.83 13H19v-2z"/></svg>
-    </button>
-    <div class="nav-title">Pathwise</div>
-    <div class="nav-actions">
-      <button class="nav-icon" id="shareBtn" title="Share">
-        <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><path d="M18 16.08c-.76 0-1.44.3-1.96.77L8.91 12.7c.05-.23.09-.46.09-.7s-.04-.47-.09-.7l7.05-4.11c.54.5 1.25.81 2.04.81 1.66 0 3-1.34 3-3s-1.34-3-3-3-3 1.34-3 3c0 .24.04.47.09.7L8.04 9.81C7.5 9.31 6.79 9 6 9c-1.66 0-3 1.34-3 3s1.34 3 3 3c.79 0 1.5-.31 2.04-.81l7.12 4.16c-.05.21-.08.43-.08.65 0 1.61 1.31 2.92 2.92 2.92s2.92-1.31 2.92-2.92-1.31-2.92-2.92-2.92z"/></svg>
-      </button>
-      <button class="nav-icon" id="resetBtn" title="Reset">
-        <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><path d="M12 5V1L7 6l5 5V7c3.31 0 6 2.69 6 6s-2.69 6-6 6-6-2.69-6-6H4c0 4.42 3.58 8 8 8s8-3.58 8-8-3.58-8-8-8z"/></svg>
-      </button>
-    </div>
-  </div>
+  <!-- Navigation -->
+  <header class="nav-header">
+    <h1>Pathwise</h1>
+    <nav>
+      <button class="tab-button active" data-tab="dashboard">🏠 Dashboard</button>
+      <button class="tab-button" data-tab="planning">📝 Planning</button>
+      <button class="tab-button" data-tab="documents">📑 Documents</button>
+      <button class="tab-button" data-tab="timeline">📅 Timeline</button>
+      <button class="tab-button" data-tab="financial">💰 Financial Aid</button>
+    </nav>
+  </header>
 
-  <!-- MAIN -->
-  <div class="container">
-    <!-- DISCOVERY -->
-    <section id="discovery">
-      <div class="progress-wrap">
-        <div class="progress-bar"><div id="progressFill" class="progress-fill" style="width:20%"></div></div>
-        <div id="progressText" class="progress-text">Getting Started - 20% Complete</div>
-      </div>
-
-      <!-- Step 1: Basic Info -->
-      <div id="step1" class="card">
-        <div class="title">Let’s Get Started</div>
-        <div class="subtitle">Tell us a bit about you</div>
-
-        <div class="group">
-          <label class="label">First Name <span class="req">*</span></label>
-          <input id="firstName" class="input" type="text" placeholder="What should we call you?" />
-          <div id="nameErr" class="error-msg hidden">Please enter your name</div>
-        </div>
-
-        <div class="group">
-          <label class="label">Current Grade <span class="req">*</span></label>
-          <select id="gradeLevel" class="input">
-            <option value="">Select your grade</option>
-            <option value="9">Freshman (9th)</option>
-            <option value="10">Sophomore (10th)</option>
-            <option value="11">Junior (11th)</option>
-            <option value="12">Senior (12th)</option>
-            <option value="transfer">Transfer Student</option>
-          </select>
-          <div id="gradeErr" class="error-msg hidden">Please select your grade</div>
-        </div>
-
-        <button class="btn primary" id="step1Next">Continue ➜</button>
-      </div>
-
-      <!-- Step 2: Interests -->
-      <div id="step2" class="card hidden">
-        <div class="title">What’s Your Vibe?</div>
-        <div class="subtitle">Pick as many as you want</div>
-
-        <div id="interestGrid" class="grid auto" style="margin-bottom:16px;">
-          <button class="pill" data-interest="stem">🔬 STEM</button>
-          <button class="pill" data-interest="arts">🎨 Arts</button>
-          <button class="pill" data-interest="business">💼 Business</button>
-          <button class="pill" data-interest="health">🏥 Health</button>
-          <button class="pill" data-interest="social">🤝 Social</button>
-          <button class="pill" data-interest="humanities">📚 Humanities</button>
-          <button class="pill" data-interest="education">🎓 Education</button>
-          <button class="pill" data-interest="unsure">🤔 Not Sure</button>
-        </div>
-
-        <div class="row">
-          <button class="btn secondary" id="step2Back">Back</button>
-          <button class="btn primary" id="step2Next" style="flex:1;">Continue</button>
-        </div>
-      </div>
-
-      <!-- Step 3: Preferences -->
-      <div id="step3" class="card hidden">
-        <div class="title">What Matters Most?</div>
-        <div class="subtitle">Help us understand your priorities</div>
-
-        <div id="prefGrid" class="grid" style="margin-bottom:16px;">
-          <div class="pref" data-preference="reputation">
-            <div class="pref-ic">🏆</div>
-            <div>
-              <div class="pref-tt">School Reputation</div>
-              <div class="pref-ds">Prestige & rankings matter</div>
-            </div>
-          </div>
-          <div class="pref" data-preference="cost">
-            <div class="pref-ic">💰</div>
-            <div>
-              <div class="pref-tt">Affordability</div>
-              <div class="pref-ds">Minimize loans, maximize aid</div>
-            </div>
-          </div>
-          <div class="pref" data-preference="location">
-            <div class="pref-ic">📍</div>
-            <div>
-              <div class="pref-tt">Location</div>
-              <div class="pref-ds">Close to home or new adventure</div>
-            </div>
-          </div>
-          <div class="pref" data-preference="size">
-            <div class="pref-ic">👥</div>
-            <div>
-              <div class="pref-tt">Campus Size</div>
-              <div class="pref-ds">Large U vs. small college</div>
-            </div>
-          </div>
-        </div>
-
-        <div class="row">
-          <button class="btn secondary" id="step3Back">Back</button>
-          <button class="btn primary" id="step3Next" style="flex:1;">Continue</button>
-        </div>
-      </div>
-
-      <!-- Step 4: Academics -->
-      <div id="step4" class="card hidden">
-        <div class="title">Academic Snapshot</div>
-        <div class="subtitle">This helps match you right</div>
-
-        <div class="group">
-          <label class="label">Current GPA <span class="opt">Optional</span></label>
-          <input id="gpa" class="input" type="number" min="0" max="5" step="0.01" placeholder="e.g., 3.75" />
-          <div id="gpaErr" class="error-msg hidden">Enter a valid GPA between 0.00 and 5.00</div>
-        </div>
-
-        <div class="group">
-          <label class="label">SAT Score <span class="opt">Optional</span></label>
-          <input id="sat" class="input" type="number" min="400" max="1600" step="10" placeholder="e.g., 1400" />
-          <div id="satErr" class="error-msg hidden">SAT must be between 400–1600</div>
-        </div>
-
-        <div class="group">
-          <label class="label">AP/Honors Courses <span class="opt">Optional</span></label>
-          <input id="ap" class="input" type="number" min="0" max="20" step="1" placeholder="How many?" />
-        </div>
-
-        <div class="row">
-          <button class="btn secondary" id="step4Back">Back</button>
-          <button class="btn primary" id="finishBtn" style="flex:1;">See My Matches <span id="matchPreview" style="font-weight:800;"></span></button>
-        </div>
-      </div>
+  <!-- Main Content -->
+  <main>
+    <section id="dashboard" class="tab active">
+      <h2>Welcome back, <span id="userName">Student</span>!</h2>
+      <div id="statsGrid"></div>
+      <div id="achievements"></div>
     </section>
 
-    <!-- DASHBOARD -->
-    <section id="dashboard" class="dash hidden">
-      <div class="hero">
-        <h1>Welcome back, <span id="userName">Student</span> 👋</h1>
-        <div>We built your personalized roadmap. No cap — you got this! 💪</div>
-      </div>
-
-      <div class="kpis">
-        <div class="kpi">
-          <div class="lbl">Your GPA</div>
-          <div id="gpaStat" class="val">3.75</div>
-        </div>
-        <div class="kpi">
-          <div class="lbl">Target Schools</div>
-          <div id="schoolCount" class="val">0</div>
-        </div>
-        <div class="kpi">
-          <div class="lbl">Days Until UC/CSU Deadline</div>
-          <div id="daysLeft" class="val">0</div>
-        </div>
-      </div>
-
-      <div class="tabs" role="tablist">
-        <button class="tab active" data-tab="schools">Schools</button>
-        <button class="tab" data-tab="financial">Financial Aid</button>
-        <button class="tab" data-tab="documents">Documents</button>
-        <button class="tab" data-tab="timeline">Timeline</button>
-      </div>
-
-      <!-- SCHOOLS TAB -->
-      <div id="tab-schools">
-        <div class="card" style="padding:18px;">
-          <div class="add-row" style="justify-content:space-between;">
-            <div style="font-weight:800;">Your Recommendations</div>
-            <button id="addSchoolBtn" class="add-btn">＋ Add Schools</button>
-          </div>
-        </div>
-        <div id="schoolsWrap"></div>
-      </div>
-
-      <!-- FINANCIAL TAB -->
-      <div id="tab-financial" class="hidden">
-        <div class="card">
-          <div class="title">Your Financial Aid Estimate</div>
-          <div class="subtitle">Based on 2024–2025 CA resident rates. Actual aid depends on FAFSA.</div>
-
-          <div class="group">
-            <label class="label">Family Income (Annual)</label>
-            <input id="income" class="input" type="number" min="0" step="500" value="75000" />
-          </div>
-
-          <div class="group">
-            <label class="label">GPA (for Cal Grant)</label>
-            <input id="faGpa" class="input" type="number" min="0" max="5" step="0.01" />
-          </div>
-
-          <button id="calcAid" class="btn primary">Recalculate Aid</button>
-
-          <div id="aidResult" style="margin-top:18px;"></div>
-        </div>
-      </div>
-
-      <!-- DOCUMENTS TAB -->
-      <div id="tab-documents" class="hidden">
-        <div class="card">
-          <div class="title">Application Checklist</div>
-          <div class="subtitle">Stay on track — secure that W ✅</div>
-
-          <div id="docList" class="grid" style="margin-top:14px;"></div>
-
-          <div style="margin-top:18px; padding:14px; border-radius:12px; background:linear-gradient(135deg, rgba(255,149,0,.12), rgba(255,59,48,.12));">
-            <div style="font-weight:800; margin-bottom:8px;">📊 Your Progress: <span id="docPct">0%</span></div>
-            <div style="height:8px; background:var(--light-gray); border-radius:4px; overflow:hidden;">
-              <div id="docBar" style="height:100%; width:0%; background:linear-gradient(90deg,var(--warning),var(--danger));"></div>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      <!-- TIMELINE TAB -->
-      <div id="tab-timeline" class="hidden">
-        <div class="card">
-          <div class="title">Your Application Timeline</div>
-          <div class="subtitle">Key dates & best-time moves</div>
-          <div id="timelineList" style="margin-top:10px;"></div>
-        </div>
-      </div>
+    <section id="planning" class="tab">
+      <h2>Planning</h2>
+      <ul id="todoList"></ul>
+      <input id="newTask" placeholder="Add a task...">
+      <button onclick="addTask()">Add</button>
     </section>
-  </div>
 
-  <!-- AI Bubble -->
-  <div id="ai" class="ai">
-    <div class="ai-bubble" id="aiBubble">
-      <div class="ai-x" id="aiClose">×</div>
-      <div style="font-weight:800; margin-bottom:6px;">Need a hand?</div>
-      <div id="aiMsg">I noticed you’re still vibing on this step. Want a quick walkthrough?</div>
-    </div>
-  </div>
+    <section id="documents" class="tab">
+      <h2>Documents Checklist</h2>
+      <div id="documentChecklist"></div>
+    </section>
 
-  <!-- THEME TOGGLE -->
-  <button id="themeToggle" class="theme"><span id="themeIcon">🌙</span></button>
+    <section id="timeline" class="tab">
+      <h2>Timeline</h2>
+      <div id="timelineItems"></div>
+    </section>
 
-  <!-- SHARE MODAL -->
-  <div id="shareModal" class="share-modal">
-    <div class="modal-backdrop" id="shareBackdrop"></div>
-    <div class="share-card">
-      <div style="font-size:20px; font-weight:800; margin-bottom:12px;">Share Pathwise</div>
-      <div class="share-grid">
-        <div class="share-op" data-share="message">
-          <div class="share-ic" style="background:#34C759;">💬</div><span>Message</span>
-        </div>
-        <div class="share-op" data-share="whatsapp">
-          <div class="share-ic" style="background:#25D366;">📱</div><span>WhatsApp</span>
-        </div>
-        <div class="share-op" data-share="copy">
-          <div class="share-ic" style="background:#007AFF;">📋</div><span>Copy Link</span>
-        </div>
-        <div class="share-op" data-share="email">
-          <div class="share-ic" style="background:#FF9500;">✉️</div><span>Email</span>
-        </div>
-      </div>
-      <button id="shareCancel" class="btn secondary" style="width:100%; margin-top:16px;">Cancel</button>
-    </div>
-  </div>
+    <section id="financial" class="tab">
+      <h2>Financial Aid Estimate</h2>
+      <div id="financialAid"></div>
+    </section>
+  </main>
 
-  <!-- ADD SCHOOL MODAL -->
-  <div id="addSchoolModal" class="share-modal">
-    <div class="modal-backdrop" id="addBackdrop"></div>
-    <div class="modal">
-      <div class="modal-h">
-        <div class="modal-title">Add Schools</div>
-      </div>
-      <div class="group">
-        <label class="label">Choose a school</label>
-        <select id="addSchoolSelect" class="input"></select>
-      </div>
-      <div class="row">
-        <button id="addCancel" class="btn secondary" style="flex:1;">Cancel</button>
-        <button id="addConfirm" class="btn primary" style="flex:1;">Add</button>
-      </div>
-    </div>
-  </div>
+  <!-- Theme Toggle + AI Helper -->
+  <div id="themeToggle">🌙</div>
+  <div id="aiHelper" class="hidden">Need help? 👋</div>
 
-  <!-- ACHIEVEMENT TOAST -->
-  <div id="toast" class="hidden" style="position:fixed; top:80px; right:18px; z-index:1200;">
-    <div style="background:var(--card); border-radius:14px; box-shadow:var(--shadow-lg); padding:12px 16px; display:flex; gap:10px; align-items:center; animation:slideIn .35s ease;">
-      <div id="toastEmoji" style="font-size:22px;">🏆</div>
-      <div>
-        <div id="toastTitle" style="font-weight:800;">Achievement</div>
-        <div id="toastDesc" style="font-size:12px; color:var(--gray);">Nice move!</div>
-      </div>
-    </div>
-  </div>
-
-  <script>
-    /* =========================
-       STATE
-    ========================== */
-    let step = 1, totalSteps = 4, idleTimer = null, aiShown = false;
-
-    const schoolData = [
-      { id:1, name:'UC Berkeley', avgGPA:4.25, avgSAT:1450, acceptanceRate:14.5, tuition:14226 },
-      { id:2, name:'UCLA', avgGPA:4.26, avgSAT:1445, acceptanceRate:12.3, tuition:13401 },
-      { id:3, name:'UC San Diego', avgGPA:4.16, avgSAT:1410, acceptanceRate:31.5, tuition:14616 },
-      { id:4, name:'UC Davis', avgGPA:4.13, avgSAT:1350, acceptanceRate:37.6, tuition:14597 },
-      { id:5, name:'UC Irvine', avgGPA:4.08, avgSAT:1360, acceptanceRate:26.5, tuition:13727 },
-      { id:6, name:'UC Santa Barbara', avgGPA:4.15, avgSAT:1380, acceptanceRate:29.6, tuition:14391 },
-      { id:7, name:'Cal Poly SLO', avgGPA:4.06, avgSAT:1395, acceptanceRate:32.5, tuition:10377 },
-      { id:8, name:'UC Santa Cruz', avgGPA:3.96, avgSAT:1295, acceptanceRate:51.3, tuition:13991 },
-      { id:9, name:'San Diego State', avgGPA:3.85, avgSAT:1270, acceptanceRate:37.8, tuition:7720 },
-      { id:10, name:'CSU Long Beach', avgGPA:3.78, avgSAT:1230, acceptanceRate:47.0, tuition:6946 },
-      { id:11, name:'UC Riverside', avgGPA:3.93, avgSAT:1280, acceptanceRate:57.0, tuition:14223 },
-      { id:12, name:'UC Merced', avgGPA:3.75, avgSAT:1190, acceptanceRate:85.0, tuition:14218 }
-    ];
-
-    let user = {
-      firstName: "", gradeLevel: "",
-      interests: [], preferences: [],
-      gpa: 3.75, sat: 1400, ap: 4,
-      email: "", consent: false,
-      selectedSchoolIds: []
-    };
-
-    /* =========================
-       INIT
-    ========================== */
-    const $ = (sel)=>document.querySelector(sel);
-    const $$ = (sel)=>document.querySelectorAll(sel);
-
-    function show(el){ el.classList.remove('hidden'); el.style.display = el.style.display === 'none' ? '' : ''; }
-    function hide(el){ el.classList.add('hidden'); el.style.display = 'none'; }
-
-    window.addEventListener('load', () => {
-      // Theme
-      const theme = localStorage.getItem('pathwiseTheme') || 'light';
-      document.documentElement.setAttribute('data-theme', theme);
-      $('#themeIcon').textContent = theme === 'dark' ? '☀️' : '🌙';
-
-      // Consent
-      const hasConsent = localStorage.getItem('pathwiseConsent');
-      if(!hasConsent){ show($('#consentBackdrop')); } else { hide($('#consentBackdrop')); }
-
-      // Restore user
-      const saved = localStorage.getItem('pathwiseUserData');
-      if(saved){
-        user = JSON.parse(saved);
-        $('#faGpa').value = user.gpa ?? 3.75;
-        showDashboard();
-      } else {
-        $('#backBtn').style.display = 'none';
-      }
-
-      bindConsent();
-      bindDiscovery();
-      bindNav();
-      bindShare();
-      bindAddSchool();
-      bindAIHelpers();
-      bindTheme();
-
-      updateProgress();
-      recalcPreview();
-    });
-
-    /* =========================
-       CONSENT
-    ========================== */
-    function bindConsent(){
-      $('#consentYes').onclick = () => {
-        user.consent = true;
-        const email = $('#emailInput').value.trim();
-        user.email = email || "";
-        localStorage.setItem('pathwiseConsent', 'true');
-        if(email) localStorage.setItem('pathwiseEmail', email);
-        hide($('#consentBackdrop'));
-        toast('🎉 Journey Started', 'Welcome to Pathwise!');
-      };
-      $('#consentNo').onclick = () => {
-        hide($('#consentBackdrop'));
-        alert("You can use Pathwise without saving data, but your progress won't be saved.");
-      };
-    }
-
-    /* =========================
-       DISCOVERY
-    ========================== */
-    function bindDiscovery(){
-      // Step 1
-      $('#step1Next').onclick = () => {
-        const name = $('#firstName').value.trim();
-        const grade = $('#gradeLevel').value;
-        let ok = true;
-        if(!name){ $('#nameErr').classList.remove('hidden'); $('#firstName').classList.add('error'); ok=false; }
-        else{ $('#nameErr').classList.add('hidden'); $('#firstName').classList.remove('error'); user.firstName = name; }
-        if(!grade){ $('#gradeErr').classList.remove('hidden'); $('#gradeLevel').classList.add('error'); ok=false; }
-        else{ $('#gradeErr').classList.add('hidden'); $('#gradeLevel').classList.remove('error'); user.gradeLevel = grade; }
-        if(!ok) return;
-
-        nextStep();
-        toast('🏆 Profile Explorer', 'You completed your basic info!');
-      };
-
-      // Step 2
-      $$('#interestGrid .pill').forEach(p=>{
-        p.onclick = () => {
-          const key = p.dataset.interest;
-          p.classList.toggle('selected');
-          const on = p.classList.contains('selected');
-          if(on){
-            if(!user.interests.includes(key)) user.interests.push(key);
-            if(key !== 'unsure'){
-              // deselect unsure
-              const u = document.querySelector('.pill[data-interest="unsure"]');
-              if(u && u.classList.contains('selected')){
-                u.classList.remove('selected');
-                user.interests = user.interests.filter(v=>v!=='unsure');
-              }
-            }
-          } else {
-            user.interests = user.interests.filter(v=>v!==key);
-          }
-        };
-      });
-      $('#step2Back').onclick = prevStep;
-      $('#step2Next').onclick = () => {
-        if(user.interests.length===0){
-          showAI("I see you haven't picked interests yet. Totally fine — try 'Not Sure' to keep vibes chill.");
-          return;
-        }
-        nextStep();
-      };
-
-      // Step 3
-      $$('#prefGrid .pref').forEach(card=>{
-        card.onclick = () => {
-          card.classList.toggle('selected');
-          const pref = card.dataset.preference;
-          if(card.classList.contains('selected')){
-            if(!user.preferences.includes(pref)) user.preferences.push(pref);
-          } else {
-            user.preferences = user.preferences.filter(v=>v!==pref);
-          }
-        };
-      });
-      $('#step3Back').onclick = prevStep;
-      $('#step3Next').onclick = () => {
-        if(user.preferences.length===0){
-          showAI("No preferences yet? No worries — pick what matters most, or we’ll use a balanced plan.");
-          return;
-        }
-        nextStep();
-        toast('🌟 Dialed In', 'Your priorities will guide your matches.');
-      };
-
-      // Step 4
-      $('#gpa').oninput = recalcPreview;
-      $('#sat').oninput = recalcPreview;
-      $('#ap').oninput = recalcPreview;
-
-      $('#step4Back').onclick = prevStep;
-      $('#finishBtn').onclick = () => {
-        // Validate ranges if provided
-        const gpaVal = parseFloat($('#gpa').value);
-        const satVal = parseInt($('#sat').value,10);
-
-        let valid = true;
-        if($('#gpa').value && !(gpaVal>=0 && gpaVal<=5)){ $('#gpaErr').classList.remove('hidden'); valid=false; } else { $('#gpaErr').classList.add('hidden'); }
-        if($('#sat').value && !(satVal>=400 && satVal<=1600)){ $('#satErr').classList.remove('hidden'); valid=false; } else { $('#satErr').classList.add('hidden'); }
-        if(!valid) return;
-
-        user.gpa = $('#gpa').value ? gpaVal : 3.75;
-        user.sat = $('#sat').value ? satVal : 1400;
-        user.ap = $('#ap').value ? parseInt($('#ap').value,10) : 4;
-
-        localStorage.setItem('pathwiseUserData', JSON.stringify(user));
-        toast('🚀 Profile Complete', 'Your college journey begins!');
-        setTimeout(showDashboard, 700);
-      };
-    }
-
-    function nextStep(){
-      hide($('#step'+step));
-      step++;
-      show($('#step'+step));
-      $('#step'+step).style.animation = 'slideIn .35s ease';
-      updateProgress();
-    }
-    function prevStep(){
-      hide($('#step'+step));
-      step--;
-      show($('#step'+step));
-      updateProgress();
-    }
-    function updateProgress(){
-      const pct = Math.min(100, Math.round(step/totalSteps*100));
-      $('#progressFill').style.width = pct+'%';
-      const msgs = [
-        'Getting Started - 20% Complete',
-        'Building Your Profile - 40% Complete',
-        'Understanding Priorities - 60% Complete',
-        'Almost There - 80% Complete',
-        'Ready to Launch - 100% Complete'
-      ];
-      $('#progressText').textContent = msgs[Math.max(0, step-1)] || msgs[0];
-    }
-    function recalcPreview(){
-      const g = parseFloat($('#gpa').value)||0, s = parseInt($('#sat').value,10)||0;
-      if(g>0 || s>0){
-        let matches = 0;
-        schoolData.forEach(sc=>{
-          const m = matchScore(sc, g||user.gpa, s||user.sat);
-          if(m>30) matches++;
-        });
-        $('#matchPreview').textContent = `(${matches} matches)`;
-      } else {
-        $('#matchPreview').textContent = '';
-      }
-    }
-
-    /* =========================
-       DASHBOARD / SCHOOLS
-    ========================== */
-    function showDashboard(){
-      hide($('#discovery'));
-      show($('#dashboard'));
-      $('#backBtn').style.display = 'block';
-
-      $('#userName').textContent = user.firstName || 'Student';
-      $('#gpaStat').textContent = (user.gpa ?? 3.75).toFixed(2);
-
-      // Countdown
-      const deadline = new Date('Nov 30, 2025');
-      const today = new Date();
-      const days = Math.max(0, Math.floor((deadline - today) / (1000*60*60*24)));
-      $('#daysLeft').textContent = days;
-
-      // Default selection if none
-      if(user.selectedSchoolIds.length === 0){
-        // pick a balanced set by score
-        const scored = schoolData.map(sc => ({ sc, m: matchScore(sc, user.gpa, user.sat) }))
-                                 .sort((a,b)=>b.m-a.m);
-        // take top 6 diverse picks
-        user.selectedSchoolIds = scored.slice(0,6).map(x=>x.sc.id);
-      }
-      localStorage.setItem('pathwiseUserData', JSON.stringify(user));
-
-      renderSchools();
-      renderFinancial();
-      renderDocuments();
-      renderTimeline();
-      bindTabs();
-    }
-
-    function matchScore(sc, g=user.gpa, s=user.sat){
-      let score = 50;
-      if(g){ score += (g - sc.avgGPA) * 20; }
-      if(s){ score += (s - sc.avgSAT)/10; }
-      // interests: boost UC & SLO if STEM
-      if(user.interests.includes('stem') && (sc.name.includes('UC') || sc.name.includes('Cal Poly'))) score += 8;
-      // preferences
-      if(user.preferences.includes('reputation') && sc.acceptanceRate < 30) score += 8;
-      if(user.preferences.includes('cost') && sc.tuition < 12000) score += 10;
-      score += (user.ap||0) * 1.5;
-      return Math.max(0, Math.min(100, Math.round(score)));
-    }
-
-    function categoryOf(sc, score){
-      const diff = (user.gpa ?? 3.75) - sc.avgGPA;
-      if(diff < -0.3 || score < 40) return 'reach';
-      if(diff > 0.3 || score > 70) return 'safety';
-      return 'match';
-    }
-
-    function renderSchools(){
-      const selected = user.selectedSchoolIds.map(id => schoolData.find(s=>s.id===id)).filter(Boolean);
-      const reach=[], match=[], safety=[];
-      selected.forEach(sc=>{
-        const m = matchScore(sc);
-        const cat = categoryOf(sc, m);
-        (cat==='reach'?reach:cat==='match'?match:safety).push({sc,m});
-      });
-
-      const wrap = $('#schoolsWrap');
-      wrap.innerHTML = [
-        renderCat('🎯', 'Reach Schools', 'Aim High!', 'reach', reach),
-        renderCat('✅', 'Match Schools', 'Great Fit!', 'match', match),
-        renderCat('🛡️', 'Safety Schools', 'Solid Backup!', 'safety', safety)
-      ].join('');
-      $('#schoolCount').textContent = selected.length;
-    }
-
-    function renderCat(emoji, label, badgeText, kind, arr){
-      const cards = arr.map(({sc,m}) => schoolCard(sc,m)).join('');
-      return `
-        <div class="cat">
-          <div class="cat-h">
-            <div class="cat-tt">${emoji} ${label}</div>
-            <div class="badge ${kind}">${badgeText}</div>
-          </div>
-          <div class="grid-schools">${cards || emptyState()}</div>
-        </div>
-      `;
-    }
-    function emptyState(){
-      return `<div class="card" style="text-align:center;">No schools here yet. Click “＋ Add Schools” to add more.</div>`;
-    }
-    function schoolCard(sc, m){
-      const mm = m>70?'m-high':m>50?'m-med':'m-low';
-      return `
-        <div class="school">
-          <div class="rm" data-remove="${sc.id}">×</div>
-          <div class="s-h">
-            <div class="s-name">${sc.name}</div>
-            <div class="badge-match ${mm}">${m}% match</div>
-          </div>
-          <div class="s-meta">Avg GPA: ${sc.avgGPA.toFixed(2)} • SAT: ${sc.avgSAT}</div>
-          <div class="s-meta">Acceptance: ${sc.acceptanceRate}% • Tuition: $${sc.tuition.toLocaleString()}/yr</div>
-        </div>
-      `;
-    }
-
-    /* =========================
-       FINANCIAL
-    ========================== */
-    function renderFinancial(){
-      const g = (user.gpa ?? 3.75);
-      $('#faGpa').value = g.toFixed(2);
-      calcAid();
-      $('#calcAid').onclick = calcAid;
-      $('#income').oninput = ()=>{ $('#income').value = $('#income').value.replace(/[^\d]/g,''); };
-    }
-    function calcAid(){
-      const income = parseInt($('#income').value,10) || 0;
-      const gpa = parseFloat($('#faGpa').value) || (user.gpa ?? 3.75);
-
-      const pell = income < 50000 ? 7395 : (income < 70000 ? 3000 : 0);
-      const cal = (income < 80000 && gpa >= 3.0) ? 12570 : 0;
-      const mcsEligible = (income >= 80000 && income <= 177000);
-      const mcsTxt = mcsEligible ? 'Likely Eligible' : 'Not Eligible';
-      const total = pell + cal; // keeping MCS as advisory
-
-      $('#aidResult').innerHTML = `
-        <div style="background:linear-gradient(135deg, rgba(52,199,89,.12), rgba(0,122,255,.12)); padding:18px; border-radius:14px; margin:14px 0;">
-          <div style="font-size:13px; color:var(--gray); margin-bottom:6px;">Estimated Annual Aid</div>
-          <div style="font-size:32px; font-weight:800; color:var(--success);">$${total.toLocaleString()}</div>
-        </div>
-        <div style="display:grid; gap:10px;">
-          <div style="display:flex; justify-content:space-between; border-bottom:1px solid var(--light-gray); padding:10px 0;">
-            <span>Federal Pell Grant</span><strong>$${pell.toLocaleString()}</strong>
-          </div>
-          <div style="display:flex; justify-content:space-between; border-bottom:1px solid var(--light-gray); padding:10px 0;">
-            <span>Cal Grant (GPA ≥ 3.0)</span><strong>$${cal.toLocaleString()}</strong>
-          </div>
-          <div style="display:flex; justify-content:space-between; border-bottom:1px solid var(--light-gray); padding:10px 0;">
-            <span>Middle Class Scholarship</span><strong>${mcsTxt}</strong>
-          </div>
-        </div>
-        <div style="margin-top:12px; font-size:13px; color:var(--gray);">Estimates based on 2024–2025 CA guidelines. File FAFSA early for maximum aid.</div>
-      `;
-    }
-
-    /* =========================
-       DOCUMENTS
-    ========================== */
-    const docTemplate = [
-      { key:'profile', label:'Personal Information', status:'complete', note:'Profile completed' },
-      { key:'transcript', label:'Transcripts', status:'pending', note:'Request from counselor by Oct 15' },
-      { key:'recs', label:'Letters of Recommendation', status:'missing', note:'Need 2–3 teachers (for privates)' },
-      { key:'essays', label:'Personal Statements', status:'missing', note:'4 UC PIQs / CSU none' },
-      { key:'fa', label:'FAFSA', status:'missing', note:'Opens October 1, 2025' }
-    ];
-    function renderDocuments(){
-      const list = $('#docList');
-      list.innerHTML = docTemplate.map(d=>docRow(d)).join('');
-      updateDocProgress();
-      // Toggle status on click for quick demo
-      $$('#docList .doc-toggle').forEach(btn=>{
-        btn.onclick = ()=>{
-          const key = btn.dataset.key;
-          const item = docTemplate.find(x=>x.key===key);
-          item.status = item.status==='missing' ? 'pending' : item.status==='pending' ? 'complete' : 'missing';
-          renderDocuments();
-        };
-      });
-    }
-    function docRow(d){
-      const color = d.status==='complete'?'var(--success)':d.status==='pending'?'var(--warning)':'var(--danger)';
-      const icon = d.status==='complete'?'✓':d.status==='pending'?'!':'×';
-      return `
-        <div class="doc-toggle" data-key="${d.key}" style="display:flex; gap:12px; align-items:center; padding:14px; background:var(--background); border-radius:12px; cursor:pointer;">
-          <div style="width:32px;height:32px;border-radius:50%;background:${color};color:#fff;display:flex;align-items:center;justify-content:center;">${icon}</div>
-          <div style="flex:1;">
-            <div style="font-weight:800;">${d.label}</div>
-            <div style="font-size:13px; color:var(--gray)">${d.note}</div>
-          </div>
-          <div style="font-size:13px; font-weight:800; color:${color}; text-transform:capitalize;">${d.status}</div>
-        </div>
-      `;
-    }
-    function updateDocProgress(){
-      const total = docTemplate.length;
-      const done = docTemplate.filter(d=>d.status==='complete').length;
-      const pct = Math.round((done/total)*100);
-      $('#docPct').textContent = pct + '%';
-      $('#docBar').style.width = pct + '%';
-    }
-
-    /* =========================
-       TIMELINE
-    ========================== */
-    function renderTimeline(){
-      const items = [
-        { date:'Aug 1, 2025', title:'UC Application Opens', color:'var(--primary)', note:'Start your UC app & essays' },
-        { date:'Oct 1, 2025', title:'FAFSA Opens', color:'var(--success)', note:'Submit ASAP for maximum aid' },
-        { date:'Nov 15, 2025', title:'Priority Submission', color:'var(--warning)', note:'Submit early for best odds' },
-        { date:'Nov 30, 2025', title:'UC/CSU Deadline', color:'var(--danger)', note:'Final deadline — no extensions!' },
-        { date:'Mar 15–30, 2026', title:'Decisions Released', color:'var(--primary)', note:'Check your portals' }
-      ];
-      $('#timelineList').innerHTML = items.map(i=>`
-        <div style="padding:16px; background:var(--background); border-radius:12px; margin-bottom:12px; border-left:4px solid ${i.color}">
-          <div style="font-size:13px; color:var(--gray);">${i.date}</div>
-          <div style="font-weight:800; font-size:18px; margin:6px 0;">${i.title}</div>
-          <div style="color:var(--gray);">${i.note}</div>
-        </div>
-      `).join('');
-    }
-
-    /* =========================
-       TABS / NAV
-    ========================== */
-    function bindTabs(){
-      $$('.tab').forEach(btn=>{
-        btn.onclick = ()=>{
-          $$('.tab').forEach(b=>b.classList.remove('active'));
-          btn.classList.add('active');
-          const tab = btn.dataset.tab;
-          ['schools','financial','documents','timeline'].forEach(t=>{
-            const el = $('#tab-'+t);
-            if(t===tab) show(el); else hide(el);
-          });
-        };
-      });
-    }
-    function bindNav(){
-      $('#backBtn').onclick = ()=>{
-        // Back to discovery start
-        show($('#discovery'));
-        hide($('#dashboard'));
-        step = 1;
-        ['step1','step2','step3','step4'].forEach((id,i)=>{ if(i===0) show($('#'+id)); else hide($('#'+id)); });
-        updateProgress();
-        $('#backBtn').style.display = 'none';
-      };
-      $('#resetBtn').onclick = ()=>{
-        if(confirm('This will reset all your data and start over. Continue?')){
-          localStorage.removeItem('pathwiseUserData');
-          localStorage.removeItem('pathwiseConsent');
-          location.reload();
-        }
-      };
-    }
-
-    /* =========================
-       SHARE
-    ========================== */
-    function bindShare(){
-      const open = ()=>{ show($('#shareModal')); show($('#shareBackdrop')); };
-      const close = ()=>{ hide($('#shareModal')); hide($('#shareBackdrop')); };
-
-      $('#shareBtn').onclick = open;
-      $('#shareCancel').onclick = close;
-      $('#shareBackdrop').onclick = close;
-      $$('#shareModal .share-op').forEach(op=>{
-        op.onclick = ()=>{
-          const method = op.dataset.share;
-          const url = window.location.href;
-          const text = 'Check out Pathwise — smart college planning for California students!';
-          if(method==='message' && navigator.share){
-            navigator.share({ title:'Pathwise', text, url });
-          } else if(method==='whatsapp'){
-            window.open(`https://wa.me/?text=${encodeURIComponent(text + ' ' + url)}`);
-          } else if(method==='copy'){
-            navigator.clipboard.writeText(url);
-            toast('🔗 Link Copied', 'Share with friends!');
-          } else if(method==='email'){
-            window.location.href = `mailto:?subject=Check out Pathwise&body=${encodeURIComponent(text + ' ' + url)}`;
-          }
-          close();
-        };
-      });
-    }
-
-    /* =========================
-       ADD / REMOVE SCHOOLS
-    ========================== */
-    function bindAddSchool(){
-      const open = ()=>{ populateAddSelect(); show($('#addSchoolModal')); show($('#addBackdrop')); };
-      const close = ()=>{ hide($('#addSchoolModal')); hide($('#addBackdrop')); };
-      $('#addSchoolBtn').onclick = open;
-      $('#addCancel').onclick = close;
-      $('#addBackdrop').onclick = close;
-      $('#addConfirm').onclick = ()=>{
-        const val = parseInt($('#addSchoolSelect').value,10);
-        if(val && !user.selectedSchoolIds.includes(val)){
-          user.selectedSchoolIds.push(val);
-          localStorage.setItem('pathwiseUserData', JSON.stringify(user));
-          renderSchools();
-          toast('➕ School Added', 'Updated your list.');
-        }
-        close();
-      };
-
-      // Remove button delegation
-      document.addEventListener('click', (e)=>{
-        const btn = e.target.closest('.rm');
-        if(!btn) return;
-        const id = parseInt(btn.dataset.remove,10);
-        user.selectedSchoolIds = user.selectedSchoolIds.filter(sid=>sid!==id);
-        localStorage.setItem('pathwiseUserData', JSON.stringify(user));
-        renderSchools();
-        wiggle($('#schoolCount'));
-      });
-    }
-    function populateAddSelect(){
-      const select = $('#addSchoolSelect');
-      const remaining = schoolData.filter(sc=>!user.selectedSchoolIds.includes(sc.id));
-      select.innerHTML = remaining.map(r=>`<option value="${r.id}">${r.name}</option>`).join('') || '<option value="">No more schools</option>';
-    }
-
-    /* =========================
-       AI HELPERS
-    ========================== */
-    function bindAIHelpers(){
-      const resetIdle = ()=>{
-        if(idleTimer) clearTimeout(idleTimer);
-        idleTimer = setTimeout(()=>{
-          if(!aiShown){
-            showAI("Need help picking schools or finishing this step? I got you. 🤖");
-            aiShown = true;
-          }
-        }, 60000); // 60s idle
-      };
-      ['click','keydown','mousemove','touchstart'].forEach(evt=>document.addEventListener(evt, resetIdle));
-      resetIdle();
-      $('#aiClose').onclick = ()=> hideAI();
-      $('#aiBubble').onclick = ()=> hideAI();
-    }
-    function showAI(msg){
-      $('#aiMsg').textContent = msg || "Want me to guide you through this section?";
-      show($('#ai'));
-      setTimeout(()=> hideAI(), 8000);
-    }
-    function hideAI(){ hide($('#ai')); }
-
-    /* =========================
-       THEME
-    ========================== */
-    function bindTheme(){
-      $('#themeToggle').onclick = ()=>{
-        const cur = document.documentElement.getAttribute('data-theme');
-        const next = cur==='dark'?'light':'dark';
-        document.documentElement.setAttribute('data-theme', next);
-        localStorage.setItem('pathwiseTheme', next);
-        $('#themeIcon').textContent = next==='dark'?'☀️':'🌙';
-        document.body.style.transition = 'background .3s ease';
-      };
-    }
-
-    /* =========================
-       UTILS
-    ========================== */
-    function toast(title, desc){
-      $('#toastEmoji').textContent = title.match(/^[^\w\s]/)?.[0] || '🏆';
-      $('#toastTitle').textContent = title.replace(/^[^\w\s]/,'').trim();
-      $('#toastDesc').textContent = desc;
-      show($('#toast'));
-      setTimeout(()=> hide($('#toast')), 2600);
-    }
-    function wiggle(el){
-      el.parentElement.classList.add('updating');
-      el.parentElement.style.animation = 'pulse .5s ease';
-      setTimeout(()=>{ el.parentElement.style.animation=''; }, 500);
-    }
-  </script>
+  <script src="script.js"></script>
 </body>
 </html>
+:root {
+  --primary: #007AFF;
+  --secondary: #5856D6;
+  --background: #F2F2F7;
+  --card: #fff;
+  --text: #1C1C1E;
+}
+
+[data-theme="dark"] {
+  --background: #000;
+  --card: #1C1C1E;
+  --text: #F2F2F7;
+}
+
+body {
+  font-family: system-ui, sans-serif;
+  margin: 0;
+  background: var(--background);
+  color: var(--text);
+  transition: background 0.3s, color 0.3s;
+}
+
+.nav-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 1rem;
+  background: var(--card);
+  position: sticky;
+  top: 0;
+  z-index: 100;
+}
+
+.tab-button {
+  background: none;
+  border: none;
+  margin: 0 0.5rem;
+  padding: 0.5rem 1rem;
+  cursor: pointer;
+  border-radius: 8px;
+}
+
+.tab-button.active {
+  background: var(--primary);
+  color: #fff;
+}
+
+.tab {
+  display: none;
+  padding: 1rem;
+}
+
+.tab.active {
+  display: block;
+}
+
+#themeToggle {
+  position: fixed;
+  bottom: 1rem;
+  left: 1rem;
+  background: var(--card);
+  padding: 0.5rem;
+  border-radius: 50%;
+  cursor: pointer;
+}
+
+#aiHelper {
+  position: fixed;
+  bottom: 5rem;
+  right: 1rem;
+  background: var(--primary);
+  color: #fff;
+  padding: 1rem;
+  border-radius: 12px;
+}
+// Theme toggle
+const themeToggle = document.getElementById("themeToggle");
+themeToggle.addEventListener("click", () => {
+  const newTheme = document.documentElement.getAttribute("data-theme") === "dark" ? "light" : "dark";
+  document.documentElement.setAttribute("data-theme", newTheme);
+  themeToggle.textContent = newTheme === "dark" ? "☀️" : "🌙";
+  localStorage.setItem("theme", newTheme);
+});
+
+// Tab switching
+document.querySelectorAll(".tab-button").forEach(btn => {
+  btn.addEventListener("click", e => {
+    document.querySelectorAll(".tab, .tab-button").forEach(el => el.classList.remove("active"));
+    const tab = e.target.dataset.tab;
+    document.getElementById(tab).classList.add("active");
+    e.target.classList.add("active");
+  });
+});
+
+// Planning tasks
+function addTask() {
+  const input = document.getElementById("newTask");
+  const task = input.value.trim();
+  if (!task) return;
+  const li = document.createElement("li");
+  li.textContent = task;
+  document.getElementById("todoList").appendChild(li);
+  input.value = "";
+}
+
+// AI helper demo
+setTimeout(() => {
+  const aiHelper = document.getElementById("aiHelper");
+  aiHelper.classList.remove("hidden");
+  setTimeout(() => aiHelper.classList.add("hidden"), 6000);
+}, 5000);
+
+// Load theme on startup
+const savedTheme = localStorage.getItem("theme") || "light";
+document.documentElement.setAttribute("data-theme", savedTheme);
+themeToggle.textContent = savedTheme === "dark" ? "☀️" : "🌙";
