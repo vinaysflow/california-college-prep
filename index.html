@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-    <title>Pathwise - College Planning</title>
+    <title>Pathwise - Your College Journey</title>
     <style>
         * {
             margin: 0;
@@ -28,6 +28,16 @@
             --border-radius-large: 20px;
             --shadow: 0 2px 10px rgba(0,0,0,0.08);
             --shadow-large: 0 10px 40px rgba(0,0,0,0.12);
+            --transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        /* Dark Mode Variables */
+        [data-theme="dark"] {
+            --dark: #F2F2F7;
+            --background: #000000;
+            --card: #1C1C1E;
+            --gray: #98989D;
+            --light-gray: #48484A;
         }
 
         body {
@@ -37,6 +47,35 @@
             line-height: 1.5;
             -webkit-font-smoothing: antialiased;
             overflow-x: hidden;
+            transition: var(--transition);
+        }
+
+        /* Animations */
+        @keyframes slideIn {
+            from {
+                transform: translateX(100%);
+                opacity: 0;
+            }
+            to {
+                transform: translateX(0);
+                opacity: 1;
+            }
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        @keyframes pulse {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+            100% { transform: scale(1); }
+        }
+
+        @keyframes checkmark {
+            0% { stroke-dashoffset: 100; }
+            100% { stroke-dashoffset: 0; }
         }
 
         /* Navigation Header */
@@ -55,25 +94,35 @@
             align-items: center;
             justify-content: space-between;
             padding: 0 20px;
+            transition: var(--transition);
+        }
+
+        [data-theme="dark"] .nav-header {
+            background: rgba(28,28,30,0.9);
+            border-bottom-color: rgba(255,255,255,0.1);
         }
 
         .nav-back {
-            width: 32px;
-            height: 32px;
+            width: 36px;
+            height: 36px;
             border-radius: 50%;
             background: var(--background);
             display: flex;
             align-items: center;
             justify-content: center;
             cursor: pointer;
-            transition: all 0.2s;
+            transition: var(--transition);
             border: none;
             color: var(--primary);
         }
 
         .nav-back:hover {
             background: var(--light-gray);
-            transform: scale(1.05);
+            transform: scale(1.1);
+        }
+
+        .nav-back:active {
+            transform: scale(0.95);
         }
 
         .nav-title {
@@ -84,21 +133,25 @@
 
         .nav-actions {
             display: flex;
-            gap: 12px;
+            gap: 8px;
         }
 
         .nav-action {
-            width: 32px;
-            height: 32px;
+            width: 36px;
+            height: 36px;
             border-radius: 50%;
             background: var(--background);
             display: flex;
             align-items: center;
             justify-content: center;
             cursor: pointer;
-            transition: all 0.2s;
+            transition: var(--transition);
             border: none;
             color: var(--primary);
+        }
+
+        .nav-action:hover {
+            transform: scale(1.1);
         }
 
         /* Main Container */
@@ -109,26 +162,41 @@
             margin: 0 auto;
         }
 
-        /* Discovery Flow */
-        .discovery-container {
+        /* Progress Bar */
+        .progress-container {
             padding: 20px;
             max-width: 600px;
             margin: 0 auto;
         }
 
         .progress-bar {
-            height: 4px;
-            background: var(--background);
-            border-radius: 2px;
-            margin: 20px 0;
+            height: 6px;
+            background: var(--light-gray);
+            border-radius: 3px;
             overflow: hidden;
+            position: relative;
         }
 
         .progress-fill {
             height: 100%;
             background: linear-gradient(90deg, var(--primary), var(--secondary));
-            border-radius: 2px;
-            transition: width 0.3s ease;
+            border-radius: 3px;
+            transition: width 0.5s ease;
+            box-shadow: 0 2px 8px rgba(0,122,255,0.3);
+        }
+
+        .progress-text {
+            text-align: center;
+            margin-top: 12px;
+            font-size: 14px;
+            color: var(--gray);
+        }
+
+        /* Discovery Cards */
+        .discovery-container {
+            padding: 0 20px 20px;
+            max-width: 600px;
+            margin: 0 auto;
         }
 
         .discovery-card {
@@ -137,6 +205,13 @@
             padding: 30px;
             box-shadow: var(--shadow);
             margin-bottom: 20px;
+            animation: fadeIn 0.5s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .discovery-card.slide-in {
+            animation: slideIn 0.5s ease;
         }
 
         .discovery-title {
@@ -154,9 +229,10 @@
             margin-bottom: 30px;
         }
 
-        /* Clean Input Styles */
+        /* Input Styles */
         .input-group {
-            margin-bottom: 20px;
+            margin-bottom: 24px;
+            position: relative;
         }
 
         .input-label {
@@ -165,16 +241,31 @@
             text-transform: uppercase;
             letter-spacing: 0.5px;
             margin-bottom: 8px;
-            display: block;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .required-indicator {
+            color: var(--danger);
+            font-size: 16px;
+        }
+
+        .optional-badge {
+            background: var(--light-gray);
+            color: var(--gray);
+            padding: 2px 8px;
+            border-radius: 10px;
+            font-size: 11px;
         }
 
         .input-field {
             width: 100%;
             padding: 16px;
-            border: 1px solid var(--light-gray);
+            border: 2px solid var(--light-gray);
             border-radius: var(--border-radius);
             font-size: 17px;
-            transition: all 0.2s;
+            transition: var(--transition);
             background: var(--background);
         }
 
@@ -182,6 +273,18 @@
             outline: none;
             border-color: var(--primary);
             background: var(--card);
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(0,122,255,0.15);
+        }
+
+        .input-error {
+            border-color: var(--danger);
+        }
+
+        .error-message {
+            color: var(--danger);
+            font-size: 13px;
+            margin-top: 4px;
         }
 
         /* Button Styles */
@@ -191,15 +294,35 @@
             font-size: 17px;
             font-weight: 600;
             cursor: pointer;
-            transition: all 0.2s;
+            transition: var(--transition);
             border: none;
-            display: inline-block;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
             text-align: center;
+            min-height: 52px;
         }
 
         .button-primary {
             background: linear-gradient(135deg, var(--primary), var(--secondary));
             color: white;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .button-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 20px rgba(0,122,255,0.3);
+        }
+
+        .button-primary:active {
+            transform: translateY(0);
+        }
+
+        .button-primary:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
         }
 
         .button-secondary {
@@ -207,13 +330,8 @@
             color: var(--primary);
         }
 
-        .button:hover {
-            transform: translateY(-2px);
-            box-shadow: var(--shadow-large);
-        }
-
-        .button:active {
-            transform: translateY(0);
+        .button-secondary:hover {
+            background: var(--light-gray);
         }
 
         /* Interest Pills */
@@ -228,23 +346,30 @@
             padding: 14px 20px;
             border-radius: 25px;
             background: var(--background);
-            border: 2px solid transparent;
+            border: 2px solid var(--light-gray);
             cursor: pointer;
-            transition: all 0.2s;
+            transition: var(--transition);
             text-align: center;
             font-size: 15px;
             font-weight: 500;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            min-height: 52px;
         }
 
         .interest-pill:hover {
             border-color: var(--primary);
-            transform: scale(1.02);
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
         }
 
         .interest-pill.selected {
             background: linear-gradient(135deg, var(--primary), var(--secondary));
             color: white;
             border-color: transparent;
+            animation: pulse 0.3s ease;
         }
 
         /* Preference Cards */
@@ -258,9 +383,9 @@
             padding: 20px;
             border-radius: var(--border-radius);
             background: var(--background);
-            border: 2px solid transparent;
+            border: 2px solid var(--light-gray);
             cursor: pointer;
-            transition: all 0.2s;
+            transition: var(--transition);
             display: flex;
             align-items: center;
             gap: 16px;
@@ -273,11 +398,22 @@
 
         .preference-card.selected {
             border-color: var(--primary);
-            background: linear-gradient(135deg, rgba(0,122,255,0.1), rgba(88,86,214,0.1));
+            background: linear-gradient(135deg, rgba(0,122,255,0.05), rgba(88,86,214,0.05));
+        }
+
+        .preference-card.selected .preference-icon {
+            animation: pulse 0.3s ease;
         }
 
         .preference-icon {
-            font-size: 24px;
+            font-size: 28px;
+            width: 48px;
+            height: 48px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: var(--card);
+            border-radius: 12px;
         }
 
         .preference-text {
@@ -300,6 +436,7 @@
             padding: 20px;
             max-width: 1200px;
             margin: 0 auto;
+            animation: fadeIn 0.5s ease;
         }
 
         .welcome-card {
@@ -308,12 +445,26 @@
             border-radius: var(--border-radius-large);
             padding: 30px;
             margin-bottom: 30px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .welcome-card::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            right: -50%;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(circle, rgba(255,255,255,0.1) 0%, transparent 70%);
+            animation: pulse 3s infinite;
         }
 
         .welcome-title {
             font-size: 32px;
             font-weight: 700;
             margin-bottom: 10px;
+            position: relative;
         }
 
         .stats-grid {
@@ -328,6 +479,14 @@
             border-radius: var(--border-radius);
             padding: 20px;
             box-shadow: var(--shadow);
+            transition: var(--transition);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .stat-card:hover {
+            transform: translateY(-4px);
+            box-shadow: var(--shadow-large);
         }
 
         .stat-label {
@@ -338,9 +497,14 @@
         }
 
         .stat-value {
-            font-size: 28px;
+            font-size: 32px;
             font-weight: 700;
             color: var(--dark);
+            transition: var(--transition);
+        }
+
+        .stat-value.updating {
+            animation: pulse 0.5s ease;
         }
 
         /* School Categories */
@@ -358,27 +522,30 @@
         .category-title {
             font-size: 20px;
             font-weight: 600;
+            display: flex;
+            align-items: center;
+            gap: 8px;
         }
 
         .category-badge {
-            padding: 4px 12px;
-            border-radius: 12px;
+            padding: 6px 12px;
+            border-radius: 20px;
             font-size: 12px;
             font-weight: 600;
         }
 
         .badge-reach {
-            background: rgba(255, 59, 48, 0.1);
+            background: linear-gradient(135deg, rgba(255, 59, 48, 0.1), rgba(255, 149, 0, 0.1));
             color: var(--danger);
         }
 
         .badge-match {
-            background: rgba(52, 199, 89, 0.1);
+            background: linear-gradient(135deg, rgba(52, 199, 89, 0.1), rgba(0, 122, 255, 0.1));
             color: var(--success);
         }
 
         .badge-safety {
-            background: rgba(0, 122, 255, 0.1);
+            background: linear-gradient(135deg, rgba(0, 122, 255, 0.1), rgba(88, 86, 214, 0.1));
             color: var(--primary);
         }
 
@@ -396,8 +563,9 @@
             padding: 20px;
             box-shadow: var(--shadow);
             cursor: pointer;
-            transition: all 0.2s;
+            transition: var(--transition);
             position: relative;
+            animation: fadeIn 0.5s ease;
         }
 
         .school-card:hover {
@@ -413,8 +581,8 @@
             position: absolute;
             top: 12px;
             right: 12px;
-            width: 24px;
-            height: 24px;
+            width: 28px;
+            height: 28px;
             border-radius: 50%;
             background: var(--danger);
             color: white;
@@ -422,81 +590,58 @@
             align-items: center;
             justify-content: center;
             cursor: pointer;
-            font-size: 16px;
+            transition: var(--transition);
+            opacity: 0.8;
         }
 
-        .school-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 16px;
+        .school-remove:hover {
+            opacity: 1;
+            transform: scale(1.1);
         }
 
-        .school-name {
-            font-size: 20px;
-            font-weight: 600;
+        /* Loading States */
+        .loading-spinner {
+            width: 40px;
+            height: 40px;
+            border: 3px solid var(--light-gray);
+            border-top-color: var(--primary);
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+            margin: 20px auto;
         }
 
-        .match-badge {
-            padding: 6px 12px;
-            border-radius: 20px;
-            font-size: 13px;
-            font-weight: 600;
-        }
-
-        .match-high {
-            background: rgba(52, 199, 89, 0.1);
-            color: var(--success);
-        }
-
-        .match-medium {
-            background: rgba(255, 149, 0, 0.1);
-            color: var(--warning);
-        }
-
-        .match-low {
-            background: rgba(255, 59, 48, 0.1);
-            color: var(--danger);
-        }
-
-        /* Add School Button */
-        .add-school-btn {
-            width: 100%;
-            padding: 20px;
-            border: 2px dashed var(--light-gray);
-            border-radius: var(--border-radius);
-            background: transparent;
-            color: var(--primary);
-            font-size: 16px;
-            font-weight: 600;
-            cursor: pointer;
-            transition: all 0.2s;
-        }
-
-        .add-school-btn:hover {
-            border-color: var(--primary);
-            background: rgba(0, 122, 255, 0.05);
+        @keyframes spin {
+            to { transform: rotate(360deg); }
         }
 
         /* Tab Navigation */
         .tab-nav {
             display: flex;
             gap: 8px;
-            padding: 20px;
+            padding: 20px 0;
             overflow-x: auto;
             -webkit-overflow-scrolling: touch;
         }
 
+        .tab-nav::-webkit-scrollbar {
+            height: 0;
+        }
+
         .tab-button {
-            padding: 10px 20px;
+            padding: 12px 24px;
             border-radius: 20px;
             background: var(--background);
             border: none;
             font-size: 15px;
             font-weight: 500;
             cursor: pointer;
-            transition: all 0.2s;
+            transition: var(--transition);
             white-space: nowrap;
+            position: relative;
+        }
+
+        .tab-button:hover {
+            background: var(--light-gray);
         }
 
         .tab-button.active {
@@ -504,105 +649,16 @@
             color: white;
         }
 
-        /* Financial Aid Tab */
-        .aid-calculator {
-            background: var(--card);
-            border-radius: var(--border-radius);
-            padding: 30px;
-            margin-bottom: 20px;
-        }
-
-        .aid-result {
-            background: linear-gradient(135deg, rgba(52, 199, 89, 0.1), rgba(0, 122, 255, 0.1));
-            border-radius: var(--border-radius);
-            padding: 20px;
-            margin-top: 20px;
-        }
-
-        /* Document Tracker */
-        .document-list {
-            display: grid;
-            gap: 16px;
-        }
-
-        .document-item {
-            background: var(--card);
-            border-radius: var(--border-radius);
-            padding: 20px;
-            display: flex;
-            align-items: center;
-            gap: 16px;
-        }
-
-        .document-status {
-            width: 24px;
-            height: 24px;
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-        }
-
-        .status-complete {
-            background: var(--success);
-            color: white;
-        }
-
-        .status-pending {
-            background: var(--warning);
-            color: white;
-        }
-
-        .status-missing {
-            background: var(--danger);
-            color: white;
-        }
-
-        /* Timeline */
-        .timeline-item {
-            background: var(--card);
-            border-radius: var(--border-radius);
-            padding: 20px;
-            margin-bottom: 16px;
-            border-left: 4px solid var(--primary);
-        }
-
-        .timeline-date {
-            font-size: 14px;
-            color: var(--gray);
-            margin-bottom: 8px;
-        }
-
-        .timeline-title {
-            font-size: 18px;
-            font-weight: 600;
-            margin-bottom: 8px;
-        }
-
-        /* AI Assistant */
-        .ai-bubble {
-            position: fixed;
-            bottom: 80px;
-            right: 20px;
-            background: linear-gradient(135deg, var(--primary), var(--secondary));
-            color: white;
-            padding: 16px 20px;
-            border-radius: 20px;
-            box-shadow: var(--shadow-large);
-            max-width: 280px;
-            z-index: 999;
-            animation: slideIn 0.5s ease;
-        }
-
-        @keyframes slideIn {
-            from {
-                transform: translateX(400px);
-                opacity: 0;
-            }
-            to {
-                transform: translateX(0);
-                opacity: 1;
-            }
+        .tab-button.active::after {
+            content: '';
+            position: absolute;
+            bottom: -4px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 30px;
+            height: 3px;
+            background: var(--primary);
+            border-radius: 2px;
         }
 
         /* Consent Modal */
@@ -618,6 +674,7 @@
             justify-content: center;
             z-index: 3000;
             padding: 20px;
+            animation: fadeIn 0.3s ease;
         }
 
         .consent-content {
@@ -626,12 +683,55 @@
             padding: 30px;
             max-width: 500px;
             width: 100%;
+            animation: slideIn 0.5s ease;
+        }
+
+        .consent-header {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            margin-bottom: 20px;
         }
 
         .consent-title {
             font-size: 24px;
             font-weight: 700;
-            margin-bottom: 16px;
+            flex: 1;
+        }
+
+        .info-icon {
+            width: 24px;
+            height: 24px;
+            border-radius: 50%;
+            background: var(--light-gray);
+            color: var(--gray);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            font-size: 14px;
+            position: relative;
+        }
+
+        .info-tooltip {
+            position: absolute;
+            bottom: 32px;
+            right: 0;
+            background: var(--dark);
+            color: white;
+            padding: 12px;
+            border-radius: 12px;
+            width: 250px;
+            font-size: 13px;
+            opacity: 0;
+            visibility: hidden;
+            transition: var(--transition);
+            z-index: 10;
+        }
+
+        .info-icon:hover .info-tooltip {
+            opacity: 1;
+            visibility: visible;
         }
 
         .consent-text {
@@ -641,81 +741,126 @@
             line-height: 1.6;
         }
 
-        .consent-checkbox {
+        .consent-actions {
             display: flex;
-            align-items: flex-start;
             gap: 12px;
-            margin-bottom: 24px;
         }
 
-        .consent-checkbox input {
-            margin-top: 2px;
+        .consent-button {
+            flex: 1;
+            padding: 16px;
+            border-radius: var(--border-radius);
+            font-size: 16px;
+            font-weight: 600;
+            border: none;
+            cursor: pointer;
+            transition: var(--transition);
         }
 
-        /* Share Modal */
-        .share-modal {
+        .consent-yes {
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            color: white;
+        }
+
+        .consent-no {
+            background: var(--background);
+            color: var(--gray);
+        }
+
+        /* AI Assistant */
+        .ai-bubble {
             position: fixed;
-            bottom: 0;
-            left: 0;
-            right: 0;
-            background: var(--card);
-            border-radius: var(--border-radius-large) var(--border-radius-large) 0 0;
-            padding: 30px 20px;
-            transform: translateY(100%);
-            transition: transform 0.3s ease;
+            bottom: 80px;
+            right: 20px;
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            color: white;
+            padding: 16px 20px;
+            border-radius: 20px;
             box-shadow: var(--shadow-large);
-            z-index: 2000;
-        }
-
-        .share-modal.active {
-            transform: translateY(0);
-        }
-
-        .share-options {
-            display: grid;
-            grid-template-columns: repeat(4, 1fr);
-            gap: 20px;
-            margin-bottom: 20px;
-        }
-
-        .share-option {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            gap: 8px;
+            max-width: 280px;
+            z-index: 999;
+            animation: slideIn 0.5s ease;
             cursor: pointer;
         }
 
-        .share-icon {
-            width: 60px;
-            height: 60px;
-            border-radius: var(--border-radius);
+        .ai-bubble-close {
+            position: absolute;
+            top: -8px;
+            right: -8px;
+            width: 24px;
+            height: 24px;
+            border-radius: 50%;
+            background: var(--dark);
+            color: white;
             display: flex;
             align-items: center;
             justify-content: center;
-            font-size: 24px;
+            font-size: 12px;
+            cursor: pointer;
         }
 
-        .overlay {
+        /* Gamification Elements */
+        .achievement-badge {
             position: fixed;
-            top: 0;
-            left: 0;
-            right: 0;
-            bottom: 0;
-            background: rgba(0,0,0,0.5);
-            opacity: 0;
-            visibility: hidden;
-            transition: all 0.3s;
-            z-index: 1999;
+            top: 80px;
+            right: 20px;
+            background: var(--card);
+            border-radius: var(--border-radius);
+            padding: 16px 20px;
+            box-shadow: var(--shadow-large);
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            animation: slideIn 0.5s ease;
+            z-index: 900;
         }
 
-        .overlay.active {
-            opacity: 1;
-            visibility: visible;
+        .achievement-icon {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, var(--warning), var(--secondary));
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 20px;
         }
 
-        .hidden {
-            display: none !important;
+        .achievement-text {
+            flex: 1;
+        }
+
+        .achievement-title {
+            font-size: 14px;
+            font-weight: 600;
+            margin-bottom: 2px;
+        }
+
+        .achievement-desc {
+            font-size: 12px;
+            color: var(--gray);
+        }
+
+        /* Theme Toggle */
+        .theme-toggle {
+            position: fixed;
+            bottom: 20px;
+            left: 20px;
+            width: 48px;
+            height: 48px;
+            border-radius: 50%;
+            background: var(--card);
+            box-shadow: var(--shadow);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: var(--transition);
+            z-index: 100;
+        }
+
+        .theme-toggle:hover {
+            transform: scale(1.1);
         }
 
         /* Mobile Optimizations */
@@ -739,6 +884,14 @@
             .schools-grid {
                 grid-template-columns: 1fr;
             }
+
+            .consent-actions {
+                flex-direction: column;
+            }
+        }
+
+        .hidden {
+            display: none !important;
         }
     </style>
 </head>
@@ -746,24 +899,29 @@
     <!-- Consent Modal -->
     <div class="consent-modal" id="consentModal">
         <div class="consent-content">
-            <div class="consent-title">Welcome to Pathwise! 🎓</div>
-            <div class="consent-text">
-                We're here to help you navigate your college journey. Before we start, we need your permission to:
-                <br><br>
-                • Save your progress so you don't lose your work<br>
-                • Send you important deadline reminders<br>
-                • Provide personalized college recommendations<br>
-                • Keep your information secure and private
+            <div class="consent-header">
+                <div class="consent-title">Welcome to Pathwise!</div>
+                <div class="info-icon">
+                    i
+                    <div class="info-tooltip">
+                        We store your data locally on your device. We only use your email for sending deadline reminders. Your information is never sold or shared with third parties.
+                    </div>
+                </div>
             </div>
-            <div class="consent-checkbox">
-                <input type="checkbox" id="consentCheck">
-                <label for="consentCheck">I agree to let Pathwise help me with my college planning journey</label>
+            <div class="consent-text">
+                Let's build your personalized path to California colleges. We'll need to save your progress and send you important reminders. Ready to start?
             </div>
             <div class="input-group">
-                <label class="input-label">Email (for deadline reminders)</label>
+                <label class="input-label">
+                    Email for Reminders
+                    <span class="optional-badge">Optional</span>
+                </label>
                 <input type="email" class="input-field" id="userEmail" placeholder="your.email@example.com">
             </div>
-            <button class="button button-primary" style="width: 100%;" onclick="acceptConsent()">Let's Start!</button>
+            <div class="consent-actions">
+                <button class="consent-button consent-yes" onclick="acceptConsent()">Yes, Let's Go!</button>
+                <button class="consent-button consent-no" onclick="declineConsent()">No Thanks</button>
+            </div>
         </div>
     </div>
 
@@ -792,132 +950,185 @@
     <!-- Main Container -->
     <div class="container">
         <!-- Discovery Flow -->
-        <div id="discoverySection" class="discovery-container">
-            <div class="progress-bar">
-                <div class="progress-fill" id="progressBar" style="width: 20%"></div>
+        <div id="discoverySection">
+            <div class="progress-container">
+                <div class="progress-bar">
+                    <div class="progress-fill" id="progressBar" style="width: 20%"></div>
+                </div>
+                <div class="progress-text" id="progressText">Getting Started - 20% Complete</div>
             </div>
 
-            <!-- Step 1: Welcome -->
-            <div id="step1" class="discovery-card">
-                <div class="discovery-title">Let's Build Your Path 🚀</div>
-                <div class="discovery-subtitle">No cap, we're about to find your perfect college match</div>
-                
-                <div class="input-group">
-                    <label class="input-label">First Name</label>
-                    <input type="text" class="input-field" id="firstName" placeholder="What should we call you?">
+            <div class="discovery-container">
+                <!-- Step 1: Basic Info -->
+                <div id="step1" class="discovery-card">
+                    <div class="discovery-title">Let's Get Started</div>
+                    <div class="discovery-subtitle">First, tell us a bit about yourself</div>
+                    
+                    <div class="input-group">
+                        <label class="input-label">
+                            First Name
+                            <span class="required-indicator">*</span>
+                        </label>
+                        <input type="text" class="input-field" id="firstName" placeholder="What should we call you?">
+                        <div class="error-message hidden" id="nameError">Please enter your name</div>
+                    </div>
+
+                    <div class="input-group">
+                        <label class="input-label">
+                            Current Grade
+                            <span class="required-indicator">*</span>
+                        </label>
+                        <select class="input-field" id="gradeLevel">
+                            <option value="">Select your grade</option>
+                            <option value="9">Freshman (9th)</option>
+                            <option value="10">Sophomore (10th)</option>
+                            <option value="11">Junior (11th)</option>
+                            <option value="12">Senior (12th)</option>
+                            <option value="transfer">Transfer Student</option>
+                        </select>
+                        <div class="error-message hidden" id="gradeError">Please select your grade</div>
+                    </div>
+
+                    <button class="button button-primary" onclick="validateAndNext(1)">
+                        Continue
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
+                            <path d="M12 4l-1.41 1.41L16.17 11H4v2h12.17l-5.58 5.59L12 20l8-8z"/>
+                        </svg>
+                    </button>
                 </div>
 
-                <div class="input-group">
-                    <label class="input-label">Current Grade</label>
-                    <select class="input-field" id="gradeLevel">
-                        <option value="">Select grade</option>
-                        <option value="9">Freshman (9th)</option>
-                        <option value="10">Sophomore (10th)</option>
-                        <option value="11">Junior (11th)</option>
-                        <option value="12">Senior (12th)</option>
-                        <option value="transfer">Transfer Student</option>
-                    </select>
-                </div>
-
-                <button class="button button-primary" onclick="nextStep()">Let's Go →</button>
-            </div>
-
-            <!-- Step 2: Interests -->
-            <div id="step2" class="discovery-card hidden">
-                <div class="discovery-title">What's Your Vibe? ✨</div>
-                <div class="discovery-subtitle">Pick what hits different for you (or skip if you're still figuring it out)</div>
-                
-                <div class="interest-grid">
-                    <div class="interest-pill" data-interest="stem">🔬 STEM</div>
-                    <div class="interest-pill" data-interest="arts">🎨 Arts</div>
-                    <div class="interest-pill" data-interest="business">💼 Business</div>
-                    <div class="interest-pill" data-interest="health">🏥 Health</div>
-                    <div class="interest-pill" data-interest="social">🤝 Social Sciences</div>
-                    <div class="interest-pill" data-interest="humanities">📚 Humanities</div>
-                    <div class="interest-pill" data-interest="education">🎓 Education</div>
-                    <div class="interest-pill" data-interest="unsure">❓ Still Vibing</div>
-                </div>
-
-                <button class="button button-primary" onclick="nextStep()">Continue →</button>
-                <button class="button button-secondary" onclick="prevStep()">← Back</button>
-            </div>
-
-            <!-- Step 3: Preferences -->
-            <div id="step3" class="discovery-card hidden">
-                <div class="discovery-title">What Matters Most? 💭</div>
-                <div class="discovery-subtitle">Real talk - what's actually important to you?</div>
-                
-                <div class="preference-grid">
-                    <div class="preference-card" data-preference="reputation">
-                        <div class="preference-icon">🏆</div>
-                        <div class="preference-text">
-                            <div class="preference-title">School Clout</div>
-                            <div class="preference-desc">That prestigious name recognition</div>
+                <!-- Step 2: Interests -->
+                <div id="step2" class="discovery-card hidden">
+                    <div class="discovery-title">What's Your Vibe?</div>
+                    <div class="discovery-subtitle">Select what interests you (pick as many as you want)</div>
+                    
+                    <div class="interest-grid">
+                        <div class="interest-pill" data-interest="stem">
+                            <span>🔬</span>
+                            <span>STEM</span>
+                        </div>
+                        <div class="interest-pill" data-interest="arts">
+                            <span>🎨</span>
+                            <span>Arts</span>
+                        </div>
+                        <div class="interest-pill" data-interest="business">
+                            <span>💼</span>
+                            <span>Business</span>
+                        </div>
+                        <div class="interest-pill" data-interest="health">
+                            <span>🏥</span>
+                            <span>Health</span>
+                        </div>
+                        <div class="interest-pill" data-interest="social">
+                            <span>🤝</span>
+                            <span>Social</span>
+                        </div>
+                        <div class="interest-pill" data-interest="humanities">
+                            <span>📚</span>
+                            <span>Humanities</span>
+                        </div>
+                        <div class="interest-pill" data-interest="education">
+                            <span>🎓</span>
+                            <span>Education</span>
+                        </div>
+                        <div class="interest-pill" data-interest="unsure">
+                            <span>🤔</span>
+                            <span>Not Sure</span>
                         </div>
                     </div>
-                    <div class="preference-card" data-preference="cost">
-                        <div class="preference-icon">💰</div>
-                        <div class="preference-text">
-                            <div class="preference-title">Keep It Affordable</div>
-                            <div class="preference-desc">Not trying to be in debt forever</div>
-                        </div>
-                    </div>
-                    <div class="preference-card" data-preference="location">
-                        <div class="preference-icon">📍</div>
-                        <div class="preference-text">
-                            <div class="preference-title">Location Vibes</div>
-                            <div class="preference-desc">Close to home or new adventure</div>
-                        </div>
-                    </div>
-                    <div class="preference-card" data-preference="size">
-                        <div class="preference-icon">👥</div>
-                        <div class="preference-text">
-                            <div class="preference-title">Campus Size</div>
-                            <div class="preference-desc">Big energy or small community</div>
-                        </div>
-                    </div>
-                    <div class="preference-card" data-preference="sports">
-                        <div class="preference-icon">🏈</div>
-                        <div class="preference-text">
-                            <div class="preference-title">Sports & Spirit</div>
-                            <div class="preference-desc">Game days and campus culture</div>
-                        </div>
+
+                    <div style="display: flex; gap: 12px;">
+                        <button class="button button-secondary" onclick="prevStep()">Back</button>
+                        <button class="button button-primary" style="flex: 1;" onclick="validateAndNext(2)">Continue</button>
                     </div>
                 </div>
 
-                <button class="button button-primary" onclick="nextStep()">Continue →</button>
-                <button class="button button-secondary" onclick="prevStep()">← Back</button>
-            </div>
+                <!-- Step 3: Preferences -->
+                <div id="step3" class="discovery-card hidden">
+                    <div class="discovery-title">What Matters Most?</div>
+                    <div class="discovery-subtitle">Help us understand your priorities</div>
+                    
+                    <div class="preference-grid">
+                        <div class="preference-card" data-preference="reputation">
+                            <div class="preference-icon">🏆</div>
+                            <div class="preference-text">
+                                <div class="preference-title">School Reputation</div>
+                                <div class="preference-desc">Prestigious name and ranking</div>
+                            </div>
+                        </div>
+                        <div class="preference-card" data-preference="cost">
+                            <div class="preference-icon">💰</div>
+                            <div class="preference-text">
+                                <div class="preference-title">Affordability</div>
+                                <div class="preference-desc">Minimizing student debt</div>
+                            </div>
+                        </div>
+                        <div class="preference-card" data-preference="location">
+                            <div class="preference-icon">📍</div>
+                            <div class="preference-text">
+                                <div class="preference-title">Location</div>
+                                <div class="preference-desc">Close to home or new adventure</div>
+                            </div>
+                        </div>
+                        <div class="preference-card" data-preference="size">
+                            <div class="preference-icon">👥</div>
+                            <div class="preference-text">
+                                <div class="preference-title">Campus Size</div>
+                                <div class="preference-desc">Large university or small college</div>
+                            </div>
+                        </div>
+                    </div>
 
-            <!-- Step 4: Academics -->
-            <div id="step4" class="discovery-card hidden">
-                <div class="discovery-title">Academic Check 📊</div>
-                <div class="discovery-subtitle">Where you at? (It's okay if you're still grinding)</div>
-                
-                <div class="input-group">
-                    <label class="input-label">Current GPA (Optional)</label>
-                    <input type="number" class="input-field" id="gpa" placeholder="e.g., 3.75" min="0" max="5" step="0.01">
+                    <div style="display: flex; gap: 12px;">
+                        <button class="button button-secondary" onclick="prevStep()">Back</button>
+                        <button class="button button-primary" style="flex: 1;" onclick="validateAndNext(3)">Continue</button>
+                    </div>
                 </div>
 
-                <div class="input-group">
-                    <label class="input-label">SAT Score (Optional)</label>
-                    <input type="number" class="input-field" id="sat" placeholder="e.g., 1400" min="400" max="1600">
-                </div>
+                <!-- Step 4: Academics -->
+                <div id="step4" class="discovery-card hidden">
+                    <div class="discovery-title">Academic Snapshot</div>
+                    <div class="discovery-subtitle">This helps us match you with the right schools</div>
+                    
+                    <div class="input-group">
+                        <label class="input-label">
+                            Current GPA
+                            <span class="optional-badge">Optional</span>
+                        </label>
+                        <input type="number" class="input-field" id="gpa" placeholder="e.g., 3.75" min="0" max="5" step="0.01" onchange="recalculateMatches()">
+                    </div>
 
-                <div class="input-group">
-                    <label class="input-label">AP/Honors Classes</label>
-                    <input type="number" class="input-field" id="apCourses" placeholder="How many you taking?" min="0">
-                </div>
+                    <div class="input-group">
+                        <label class="input-label">
+                            SAT Score
+                            <span class="optional-badge">Optional</span>
+                        </label>
+                        <input type="number" class="input-field" id="sat" placeholder="e.g., 1400" min="400" max="1600" onchange="recalculateMatches()">
+                    </div>
 
-                <button class="button button-primary" onclick="completeDiscovery()">Show My Matches 🎯</button>
-                <button class="button button-secondary" onclick="prevStep()">← Back</button>
+                    <div class="input-group">
+                        <label class="input-label">
+                            AP/Honors Courses
+                            <span class="optional-badge">Optional</span>
+                        </label>
+                        <input type="number" class="input-field" id="apCourses" placeholder="How many?" min="0" onchange="recalculateMatches()">
+                    </div>
+
+                    <div style="display: flex; gap: 12px;">
+                        <button class="button button-secondary" onclick="prevStep()">Back</button>
+                        <button class="button button-primary" style="flex: 1;" onclick="completeDiscovery()">
+                            See My Matches
+                            <span id="matchPreview" style="margin-left: 8px;"></span>
+                        </button>
+                    </div>
+                </div>
             </div>
         </div>
 
         <!-- Dashboard -->
         <div id="dashboardSection" class="dashboard-container hidden">
             <div class="welcome-card">
-                <div class="welcome-title">Yo <span id="userName">Student</span>! Let's secure that bag 💯</div>
+                <div class="welcome-title">Welcome back, <span id="userName">Student</span>!</div>
                 <div style="font-size: 17px; opacity: 0.9;">Your personalized college roadmap is ready</div>
             </div>
 
@@ -925,15 +1136,15 @@
             <div class="stats-grid">
                 <div class="stat-card">
                     <div class="stat-label">Your GPA</div>
-                    <div class="stat-value" id="userGPA">--</div>
+                    <div class="stat-value" id="userGPA">3.75</div>
                 </div>
                 <div class="stat-card">
                     <div class="stat-label">Target Schools</div>
-                    <div class="stat-value" id="schoolCount">0</div>
+                    <div class="stat-value" id="schoolCount">9</div>
                 </div>
                 <div class="stat-card">
                     <div class="stat-label">Days Until Deadline</div>
-                    <div class="stat-value" id="daysLeft">--</div>
+                    <div class="stat-value" id="daysLeft">72</div>
                 </div>
             </div>
 
@@ -945,237 +1156,89 @@
                 <button class="tab-button" onclick="showTab('timeline')">Timeline</button>
             </div>
 
-            <!-- Schools Tab -->
+            <!-- Content Tabs -->
             <div id="schoolsTab">
-                <!-- Reach Schools -->
-                <div class="school-category">
-                    <div class="category-header">
-                        <div class="category-title">🎯 Reach Goals</div>
-                        <div class="category-badge badge-reach">Shoot your shot!</div>
-                    </div>
-                    <div class="schools-grid" id="reachSchools"></div>
-                </div>
-
-                <!-- Match Schools -->
-                <div class="school-category">
-                    <div class="category-header">
-                        <div class="category-title">✅ Perfect Matches</div>
-                        <div class="category-badge badge-match">You got this!</div>
-                    </div>
-                    <div class="schools-grid" id="matchSchools"></div>
-                </div>
-
-                <!-- Safety Schools -->
-                <div class="school-category">
-                    <div class="category-header">
-                        <div class="category-title">🛡️ Safety Net</div>
-                        <div class="category-badge badge-safety">Guaranteed W</div>
-                    </div>
-                    <div class="schools-grid" id="safetySchools"></div>
-                </div>
-
-                <button class="add-school-btn" onclick="addSchool()">+ Add Another School</button>
+                <!-- School categories populated dynamically -->
             </div>
 
-            <!-- Financial Aid Tab -->
             <div id="financialTab" class="hidden">
-                <div class="aid-calculator">
-                    <div class="discovery-title">Let's Talk Money 💰</div>
-                    <div class="discovery-subtitle">See how much aid you might get (no cap)</div>
-                    
-                    <div class="input-group">
-                        <label class="input-label">Family Income</label>
-                        <input type="number" class="input-field" id="familyIncome" placeholder="Annual household income" value="75000">
-                    </div>
-                    
-                    <div class="input-group">
-                        <label class="input-label">Family Size</label>
-                        <input type="number" class="input-field" id="familySize" placeholder="How many people?" value="4">
-                    </div>
-                    
-                    <button class="button button-primary" onclick="calculateAid()">Calculate My Aid</button>
-                    
-                    <div class="aid-result hidden" id="aidResult">
-                        <div style="font-size: 20px; font-weight: 600; margin-bottom: 16px;">Estimated Financial Aid</div>
-                        <div style="font-size: 32px; font-weight: 700; color: var(--success);" id="totalAid">$0</div>
-                        <div style="margin-top: 16px; color: var(--gray);">
-                            <div>Pell Grant: <span id="pellGrant">$0</span></div>
-                            <div>Cal Grant: <span id="calGrant">$0</span></div>
-                            <div>Middle Class Scholarship: <span id="middleClass">$0</span></div>
-                        </div>
-                    </div>
-                </div>
+                <!-- Financial aid content populated dynamically -->
             </div>
 
-            <!-- Documents Tab -->
             <div id="documentsTab" class="hidden">
-                <div class="discovery-card">
-                    <div class="discovery-title">Document Checklist 📄</div>
-                    <div class="discovery-subtitle">Keep track of everything (we got you)</div>
-                    
-                    <div class="document-list">
-                        <div class="document-item">
-                            <div class="document-status status-complete">✓</div>
-                            <div style="flex: 1;">
-                                <div style="font-weight: 600;">Personal Information</div>
-                                <div style="font-size: 14px; color: var(--gray);">Basic profile completed</div>
-                            </div>
-                        </div>
-                        
-                        <div class="document-item">
-                            <div class="document-status status-pending">!</div>
-                            <div style="flex: 1;">
-                                <div style="font-weight: 600;">Official Transcripts</div>
-                                <div style="font-size: 14px; color: var(--gray);">Request from your school</div>
-                            </div>
-                        </div>
-                        
-                        <div class="document-item">
-                            <div class="document-status status-missing">×</div>
-                            <div style="flex: 1;">
-                                <div style="font-weight: 600;">Letters of Recommendation</div>
-                                <div style="font-size: 14px; color: var(--gray);">Need 2-3 teachers</div>
-                            </div>
-                        </div>
-                        
-                        <div class="document-item">
-                            <div class="document-status status-missing">×</div>
-                            <div style="flex: 1;">
-                                <div style="font-weight: 600;">Personal Statement</div>
-                                <div style="font-size: 14px; color: var(--gray);">Main essay (650 words)</div>
-                            </div>
-                        </div>
-                        
-                        <div class="document-item">
-                            <div class="document-status status-missing">×</div>
-                            <div style="flex: 1;">
-                                <div style="font-weight: 600;">FAFSA</div>
-                                <div style="font-size: 14px; color: var(--gray);">Opens October 1st</div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
+                <!-- Documents content populated dynamically -->
             </div>
 
-            <!-- Timeline Tab -->
             <div id="timelineTab" class="hidden">
-                <div class="discovery-card">
-                    <div class="discovery-title">Your Timeline 📅</div>
-                    <div class="discovery-subtitle">Don't miss these dates (set those reminders!)</div>
-                    
-                    <div class="timeline-item">
-                        <div class="timeline-date">August 1, 2025</div>
-                        <div class="timeline-title">UC Application Opens</div>
-                        <div style="color: var(--gray);">Start working on those PIQs early</div>
-                    </div>
-                    
-                    <div class="timeline-item">
-                        <div class="timeline-date">October 1, 2025</div>
-                        <div class="timeline-title">FAFSA Opens</div>
-                        <div style="color: var(--gray);">File ASAP for maximum aid</div>
-                    </div>
-                    
-                    <div class="timeline-item">
-                        <div class="timeline-date">November 15, 2025</div>
-                        <div class="timeline-title">Priority Submission</div>
-                        <div style="color: var(--gray);">Submit early for 23% better chances</div>
-                    </div>
-                    
-                    <div class="timeline-item">
-                        <div class="timeline-date">November 30, 2025</div>
-                        <div class="timeline-title">UC/CSU Deadline</div>
-                        <div style="color: var(--gray);">Final deadline - no extensions!</div>
-                    </div>
-                    
-                    <div class="timeline-item">
-                        <div class="timeline-date">March 2, 2026</div>
-                        <div class="timeline-title">Cal Grant Deadline</div>
-                        <div style="color: var(--gray);">Don't miss out on free money</div>
-                    </div>
-                    
-                    <div class="timeline-item">
-                        <div class="timeline-date">March 15-30, 2026</div>
-                        <div class="timeline-title">Decisions Released</div>
-                        <div style="color: var(--gray);">Check your portals daily!</div>
-                    </div>
-                    
-                    <div class="timeline-item">
-                        <div class="timeline-date">May 1, 2026</div>
-                        <div class="timeline-title">Decision Day</div>
-                        <div style="color: var(--gray);">Submit your SIR to your chosen school</div>
-                    </div>
-                </div>
+                <!-- Timeline content populated dynamically -->
             </div>
         </div>
     </div>
 
-    <!-- AI Assistant Bubble -->
+    <!-- AI Assistant -->
     <div class="ai-bubble hidden" id="aiBubble">
-        <div style="font-weight: 600; margin-bottom: 8px;">Hey! Need help? 🤖</div>
-        <div>You've been here a while. Want me to explain anything or answer questions?</div>
+        <div class="ai-bubble-close" onclick="hideAI()">×</div>
+        <div style="font-weight: 600; margin-bottom: 8px;">Need Some Help?</div>
+        <div id="aiMessage">I noticed you haven't selected anything. Want me to guide you?</div>
+    </div>
+
+    <!-- Achievement Badge -->
+    <div class="achievement-badge hidden" id="achievementBadge">
+        <div class="achievement-icon">🏆</div>
+        <div class="achievement-text">
+            <div class="achievement-title" id="achievementTitle">Profile Explorer</div>
+            <div class="achievement-desc" id="achievementDesc">You've completed your profile!</div>
+        </div>
+    </div>
+
+    <!-- Theme Toggle -->
+    <div class="theme-toggle" onclick="toggleTheme()">
+        <span id="themeIcon">🌙</span>
     </div>
 
     <!-- Share Modal -->
-    <div class="overlay" id="overlay" onclick="hideShare()"></div>
-    <div class="share-modal" id="shareModal">
-        <div style="font-size: 20px; font-weight: 600; margin-bottom: 20px;">Share Pathwise</div>
-        <div class="share-options">
-            <div class="share-option" onclick="shareVia('message')">
-                <div class="share-icon" style="background: #34C759;">💬</div>
-                <span style="font-size: 13px;">Message</span>
-            </div>
-            <div class="share-option" onclick="shareVia('whatsapp')">
-                <div class="share-icon" style="background: #25D366;">📱</div>
-                <span style="font-size: 13px;">WhatsApp</span>
-            </div>
-            <div class="share-option" onclick="shareVia('copy')">
-                <div class="share-icon" style="background: #007AFF;">📋</div>
-                <span style="font-size: 13px;">Copy Link</span>
-            </div>
-            <div class="share-option" onclick="shareVia('email')">
-                <div class="share-icon" style="background: #FF9500;">✉️</div>
-                <span style="font-size: 13px;">Email</span>
-            </div>
-        </div>
-        <button class="button button-secondary" style="width: 100%;" onclick="hideShare()">Cancel</button>
+    <div class="overlay hidden" id="overlay" onclick="hideShare()"></div>
+    <div class="share-modal hidden" id="shareModal">
+        <!-- Share content -->
     </div>
 
     <script>
+        // Core application state
         let currentStep = 1;
+        const totalSteps = 4;
+        let aiAttempts = 0;
         let userData = {
             firstName: '',
             gradeLevel: '',
             interests: [],
             preferences: [],
-            gpa: null,
-            sat: null,
-            apCourses: 0,
+            gpa: 3.75,
+            sat: 1400,
+            apCourses: 4,
             email: '',
             consent: false,
             selectedSchools: []
         };
 
-        // California schools data
+        // California schools database with real data
         const californiaSchools = [
-            { id: 1, name: 'UC Berkeley', avgGPA: 4.25, avgSAT: 1450, type: 'reach', acceptanceRate: 14.5 },
-            { id: 2, name: 'UCLA', avgGPA: 4.26, avgSAT: 1445, type: 'reach', acceptanceRate: 12.3 },
-            { id: 3, name: 'UC San Diego', avgGPA: 4.16, avgSAT: 1410, type: 'reach', acceptanceRate: 31.5 },
-            { id: 4, name: 'UC Davis', avgGPA: 4.13, avgSAT: 1350, type: 'match', acceptanceRate: 37.6 },
-            { id: 5, name: 'UC Irvine', avgGPA: 4.08, avgSAT: 1360, type: 'match', acceptanceRate: 26.5 },
-            { id: 6, name: 'UC Santa Barbara', avgGPA: 4.15, avgSAT: 1380, type: 'match', acceptanceRate: 29.6 },
-            { id: 7, name: 'Cal Poly SLO', avgGPA: 4.06, avgSAT: 1395, type: 'match', acceptanceRate: 32.5 },
-            { id: 8, name: 'UC Santa Cruz', avgGPA: 3.96, avgSAT: 1295, type: 'safety', acceptanceRate: 51.3 },
-            { id: 9, name: 'San Diego State', avgGPA: 3.85, avgSAT: 1270, type: 'safety', acceptanceRate: 37.8 },
-            { id: 10, name: 'Cal State Long Beach', avgGPA: 3.75, avgSAT: 1200, type: 'safety', acceptanceRate: 42.0 }
+            { id: 1, name: 'UC Berkeley', avgGPA: 4.25, avgSAT: 1450, type: 'reach', acceptanceRate: 14.5, tuition: 14226 },
+            { id: 2, name: 'UCLA', avgGPA: 4.26, avgSAT: 1445, type: 'reach', acceptanceRate: 12.3, tuition: 13401 },
+            { id: 3, name: 'UC San Diego', avgGPA: 4.16, avgSAT: 1410, type: 'reach', acceptanceRate: 31.5, tuition: 14616 },
+            { id: 4, name: 'UC Davis', avgGPA: 4.13, avgSAT: 1350, type: 'match', acceptanceRate: 37.6, tuition: 14597 },
+            { id: 5, name: 'UC Irvine', avgGPA: 4.08, avgSAT: 1360, type: 'match', acceptanceRate: 26.5, tuition: 13727 },
+            { id: 6, name: 'UC Santa Barbara', avgGPA: 4.15, avgSAT: 1380, type: 'match', acceptanceRate: 29.6, tuition: 14391 },
+            { id: 7, name: 'Cal Poly SLO', avgGPA: 4.06, avgSAT: 1395, type: 'match', acceptanceRate: 32.5, tuition: 10377 },
+            { id: 8, name: 'UC Santa Cruz', avgGPA: 3.96, avgSAT: 1295, type: 'safety', acceptanceRate: 51.3, tuition: 13991 },
+            { id: 9, name: 'San Diego State', avgGPA: 3.85, avgSAT: 1270, type: 'safety', acceptanceRate: 37.8, tuition: 7720 }
         ];
 
-        let pageStartTime = Date.now();
-        let aiShown = false;
-
-        // Check for existing user data
+        // Initialize application
         window.onload = function() {
             const savedData = localStorage.getItem('pathwiseUserData');
             const hasConsent = localStorage.getItem('pathwiseConsent');
+            const theme = localStorage.getItem('pathwiseTheme') || 'light';
+            document.documentElement.setAttribute('data-theme', theme);
             
             if (!hasConsent) {
                 document.getElementById('consentModal').style.display = 'flex';
@@ -1189,209 +1252,178 @@
                 }
             }
 
-            // Start AI assistant timer
-            setInterval(checkTimeOnPage, 30000); // Check every 30 seconds
+            setupEventListeners();
+            updateProgressBar();
         };
+
+        // Event Listeners Setup
+        function setupEventListeners() {
+            // Interest pills
+            document.querySelectorAll('.interest-pill').forEach(pill => {
+                pill.addEventListener('click', function() {
+                    this.classList.toggle('selected');
+                    const interest = this.dataset.interest;
+                    
+                    if (this.classList.contains('selected')) {
+                        if (!userData.interests.includes(interest)) {
+                            userData.interests.push(interest);
+                        }
+                    } else {
+                        userData.interests = userData.interests.filter(i => i !== interest);
+                    }
+                    
+                    // Clear "not sure" if other interests selected
+                    if (interest !== 'unsure' && this.classList.contains('selected')) {
+                        const unsurePill = document.querySelector('[data-interest="unsure"]');
+                        if (unsurePill) {
+                            unsurePill.classList.remove('selected');
+                            userData.interests = userData.interests.filter(i => i !== 'unsure');
+                        }
+                    }
+                });
+            });
+
+            // Preference cards
+            document.querySelectorAll('.preference-card').forEach(card => {
+                card.addEventListener('click', function() {
+                    this.classList.toggle('selected');
+                    const preference = this.dataset.preference;
+                    
+                    if (this.classList.contains('selected')) {
+                        if (!userData.preferences.includes(preference)) {
+                            userData.preferences.push(preference);
+                        }
+                    } else {
+                        userData.preferences = userData.preferences.filter(p => p !== preference);
+                    }
+                });
+            });
+        }
 
         // Consent handling
         function acceptConsent() {
-            const checkbox = document.getElementById('consentCheck');
-            const email = document.getElementById('userEmail').value;
-            
-            if (!checkbox.checked) {
-                alert('Please check the box to continue');
-                return;
-            }
-            
             userData.consent = true;
-            userData.email = email;
+            userData.email = document.getElementById('userEmail').value;
             localStorage.setItem('pathwiseConsent', 'true');
-            if (email) {
-                localStorage.setItem('pathwiseEmail', email);
+            if (userData.email) {
+                localStorage.setItem('pathwiseEmail', userData.email);
             }
-            
             document.getElementById('consentModal').style.display = 'none';
+            document.getElementById('backBtn').style.display = 'none';
+            showAchievement('Journey Started', 'Welcome to Pathwise!');
+        }
+
+        function declineConsent() {
+            document.getElementById('consentModal').style.display = 'none';
+            alert('You can use Pathwise without saving data, but your progress won\'t be saved.');
             document.getElementById('backBtn').style.display = 'none';
         }
 
-        // Time tracking for AI assistant
-        function checkTimeOnPage() {
-            const timeOnPage = (Date.now() - pageStartTime) / 1000;
-            if (timeOnPage > 60 && !aiShown && !document.getElementById('discoverySection').classList.contains('hidden')) {
-                showAIAssistant();
-            }
-        }
-
-        function showAIAssistant() {
-            aiShown = true;
-            document.getElementById('aiBubble').classList.remove('hidden');
-            setTimeout(() => {
-                document.getElementById('aiBubble').classList.add('hidden');
-            }, 10000); // Hide after 10 seconds
-        }
-
-        // Interest selection
-        document.querySelectorAll('.interest-pill').forEach(pill => {
-            pill.addEventListener('click', function() {
-                this.classList.toggle('selected');
-                const interest = this.dataset.interest;
-                if (this.classList.contains('selected')) {
-                    if (!userData.interests.includes(interest)) {
-                        userData.interests.push(interest);
-                    }
+        // Validation and Navigation
+        function validateAndNext(step) {
+            let isValid = true;
+            
+            if (step === 1) {
+                const name = document.getElementById('firstName').value.trim();
+                const grade = document.getElementById('gradeLevel').value;
+                
+                if (!name) {
+                    document.getElementById('nameError').classList.remove('hidden');
+                    document.getElementById('firstName').classList.add('input-error');
+                    isValid = false;
                 } else {
-                    userData.interests = userData.interests.filter(i => i !== interest);
+                    document.getElementById('nameError').classList.add('hidden');
+                    document.getElementById('firstName').classList.remove('input-error');
+                    userData.firstName = name;
                 }
-            });
-        });
-
-        // Preference selection
-        document.querySelectorAll('.preference-card').forEach(card => {
-            card.addEventListener('click', function() {
-                this.classList.toggle('selected');
-                const preference = this.dataset.preference;
-                if (this.classList.contains('selected')) {
-                    if (!userData.preferences.includes(preference)) {
-                        userData.preferences.push(preference);
-                    }
+                
+                if (!grade) {
+                    document.getElementById('gradeError').classList.remove('hidden');
+                    document.getElementById('gradeLevel').classList.add('input-error');
+                    isValid = false;
                 } else {
-                    userData.preferences = userData.preferences.filter(p => p !== preference);
+                    document.getElementById('gradeError').classList.add('hidden');
+                    document.getElementById('gradeLevel').classList.remove('input-error');
+                    userData.gradeLevel = grade;
                 }
-            });
-        });
-
-        const totalSteps = 4;
-        
-        function nextStep() {
-            if (currentStep === 1) {
-                userData.firstName = document.getElementById('firstName').value || 'Student';
-                userData.gradeLevel = document.getElementById('gradeLevel').value;
+            } else if (step === 2) {
+                if (userData.interests.length === 0) {
+                    showAIAssistant('I see you haven\'t selected any interests. That\'s totally fine! You can select "Not Sure" or pick what sounds interesting.');
+                    return;
+                }
+            } else if (step === 3) {
+                if (userData.preferences.length === 0) {
+                    showAIAssistant('No preferences selected? No worries! Pick what matters most to you, or we can use balanced recommendations.');
+                    return;
+                }
             }
             
+            if (isValid) {
+                nextStep();
+            }
+        }
+
+        function nextStep() {
             document.getElementById(`step${currentStep}`).classList.add('hidden');
             currentStep++;
             document.getElementById(`step${currentStep}`).classList.remove('hidden');
-            updateProgress();
-            pageStartTime = Date.now(); // Reset timer for AI assistant
+            document.getElementById(`step${currentStep}`).classList.add('slide-in');
+            updateProgressBar();
+            
+            // Achievement for completing steps
+            if (currentStep === 3) {
+                showAchievement('Interest Explorer', 'You\'ve identified your interests!');
+            }
         }
 
         function prevStep() {
             document.getElementById(`step${currentStep}`).classList.add('hidden');
             currentStep--;
             document.getElementById(`step${currentStep}`).classList.remove('hidden');
-            updateProgress();
+            updateProgressBar();
         }
 
-        function updateProgress() {
+        function updateProgressBar() {
             const progress = (currentStep / totalSteps) * 100;
             document.getElementById('progressBar').style.width = progress + '%';
+            
+            const messages = [
+                'Getting Started - 20% Complete',
+                'Building Your Profile - 40% Complete',
+                'Understanding Priorities - 60% Complete',
+                'Almost There - 80% Complete',
+                'Ready to Launch - 100% Complete'
+            ];
+            
+            document.getElementById('progressText').textContent = messages[currentStep - 1] || messages[0];
         }
 
-        function completeDiscovery() {
-            userData.gpa = parseFloat(document.getElementById('gpa').value) || null;
-            userData.sat = parseInt(document.getElementById('sat').value) || null;
-            userData.apCourses = parseInt(document.getElementById('apCourses').value) || 0;
+        // Real-time recalculation
+        function recalculateMatches() {
+            const gpa = parseFloat(document.getElementById('gpa').value) || 0;
+            const sat = parseInt(document.getElementById('sat').value) || 0;
             
-            localStorage.setItem('pathwiseUserData', JSON.stringify(userData));
-            showDashboard();
-        }
-
-        function showDashboard() {
-            document.getElementById('discoverySection').classList.add('hidden');
-            document.getElementById('dashboardSection').classList.remove('hidden');
-            document.getElementById('backBtn').style.display = 'block';
-            
-            // Populate dashboard
-            document.getElementById('userName').textContent = userData.firstName;
-            document.getElementById('userGPA').textContent = userData.gpa ? userData.gpa.toFixed(2) : 'Not provided';
-            
-            // Calculate days until deadline
-            const deadline = new Date('November 30, 2025');
-            const today = new Date();
-            const days = Math.floor((deadline - today) / (1000 * 60 * 60 * 24));
-            document.getElementById('daysLeft').textContent = days > 0 ? days : 'Passed';
-            
-            // Generate school recommendations
-            generateSchoolRecommendations();
-        }
-
-        function generateSchoolRecommendations() {
-            const reachContainer = document.getElementById('reachSchools');
-            const matchContainer = document.getElementById('matchSchools');
-            const safetyContainer = document.getElementById('safetySchools');
-            
-            reachContainer.innerHTML = '';
-            matchContainer.innerHTML = '';
-            safetyContainer.innerHTML = '';
-            
-            let selectedCount = 0;
-            
-            californiaSchools.forEach(school => {
-                const matchScore = calculateMatchScore(school);
-                const category = categorizeSchool(school, matchScore);
+            if (gpa > 0) {
+                let matchCount = 0;
+                californiaSchools.forEach(school => {
+                    const score = calculateMatchScore(school, gpa, sat);
+                    if (score > 30) matchCount++;
+                });
                 
-                if (matchScore > 20 && selectedCount < 9) {
-                    selectedCount++;
-                    if (!userData.selectedSchools.includes(school.id)) {
-                        userData.selectedSchools.push(school.id);
-                    }
-                    
-                    const matchLevel = matchScore > 70 ? 'high' : matchScore > 50 ? 'medium' : 'low';
-                    const matchClass = matchScore > 70 ? 'match-high' : matchScore > 50 ? 'match-medium' : 'match-low';
-                    
-                    const schoolCard = `
-                        <div class="school-card" data-school-id="${school.id}">
-                            <div class="school-remove" onclick="removeSchool(${school.id})">×</div>
-                            <div class="school-header">
-                                <div class="school-name">${school.name}</div>
-                                <div class="match-badge ${matchClass}">${matchScore}% match</div>
-                            </div>
-                            <div style="color: var(--gray); margin-bottom: 12px;">
-                                Avg GPA: ${school.avgGPA} | SAT: ${school.avgSAT}
-                            </div>
-                            <div style="font-size: 14px; color: var(--gray);">
-                                Acceptance Rate: ${school.acceptanceRate}%
-                            </div>
-                        </div>
-                    `;
-                    
-                    if (category === 'reach') {
-                        reachContainer.innerHTML += schoolCard;
-                    } else if (category === 'match') {
-                        matchContainer.innerHTML += schoolCard;
-                    } else {
-                        safetyContainer.innerHTML += schoolCard;
-                    }
-                }
-            });
-            
-            document.getElementById('schoolCount').textContent = selectedCount;
-        }
-
-        function categorizeSchool(school, matchScore) {
-            if (!userData.gpa) return school.type;
-            
-            const gpaDiff = userData.gpa - school.avgGPA;
-            
-            if (gpaDiff < -0.3 || matchScore < 40) {
-                return 'reach';
-            } else if (gpaDiff > 0.3 || matchScore > 70) {
-                return 'safety';
-            } else {
-                return 'match';
+                document.getElementById('matchPreview').textContent = `(${matchCount} matches found)`;
             }
         }
 
-        function calculateMatchScore(school) {
+        function calculateMatchScore(school, gpa = userData.gpa, sat = userData.sat) {
             let score = 50;
             
-            if (userData.gpa) {
-                const gpaDiff = userData.gpa - school.avgGPA;
+            if (gpa) {
+                const gpaDiff = gpa - school.avgGPA;
                 score += gpaDiff * 20;
             }
             
-            if (userData.sat) {
-                const satDiff = (userData.sat - school.avgSAT) / 10;
+            if (sat) {
+                const satDiff = (sat - school.avgSAT) / 10;
                 score += satDiff;
             }
             
@@ -1401,77 +1433,288 @@
             }
             
             // Preference matching
-            if (userData.preferences.includes('reputation') && school.type === 'reach') {
+            if (userData.preferences.includes('reputation') && school.acceptanceRate < 30) {
                 score += 10;
             }
-            if (userData.preferences.includes('cost') && school.type === 'safety') {
-                score += 10;
+            if (userData.preferences.includes('cost') && school.tuition < 12000) {
+                score += 15;
             }
             
             // AP courses bonus
-            score += userData.apCourses * 2;
+            score += (userData.apCourses || 0) * 2;
             
             return Math.max(0, Math.min(100, Math.round(score)));
         }
 
-        function removeSchool(schoolId) {
-            userData.selectedSchools = userData.selectedSchools.filter(id => id !== schoolId);
+        function completeDiscovery() {
+            userData.gpa = parseFloat(document.getElementById('gpa').value) || 3.75;
+            userData.sat = parseInt(document.getElementById('sat').value) || 1400;
+            userData.apCourses = parseInt(document.getElementById('apCourses').value) || 4;
+            
             localStorage.setItem('pathwiseUserData', JSON.stringify(userData));
+            showAchievement('Profile Complete', 'Your college journey begins!');
+            
+            setTimeout(() => {
+                showDashboard();
+            }, 1000);
+        }
+
+        function showDashboard() {
+            document.getElementById('discoverySection').classList.add('hidden');
+            document.getElementById('dashboardSection').classList.remove('hidden');
+            document.getElementById('backBtn').style.display = 'block';
+            
+            populateDashboard();
+        }
+
+        function populateDashboard() {
+            // Update user info
+            document.getElementById('userName').textContent = userData.firstName || 'Student';
+            document.getElementById('userGPA').textContent = userData.gpa ? userData.gpa.toFixed(2) : '3.75';
+            
+            // Calculate deadline
+            const deadline = new Date('November 30, 2025');
+            const today = new Date();
+            const days = Math.floor((deadline - today) / (1000 * 60 * 60 * 24));
+            document.getElementById('daysLeft').textContent = days > 0 ? days : '0';
+            
+            // Generate schools
             generateSchoolRecommendations();
+            
+            // Populate other tabs
+            populateFinancialAid();
+            populateDocuments();
+            populateTimeline();
         }
 
-        function addSchool() {
-            const availableSchools = californiaSchools.filter(s => !userData.selectedSchools.includes(s.id));
-            if (availableSchools.length > 0) {
-                const schoolNames = availableSchools.map(s => s.name).join('\n');
-                const choice = prompt(`Available schools:\n${schoolNames}\n\nEnter school name:`);
+        function generateSchoolRecommendations() {
+            const schoolsTab = document.getElementById('schoolsTab');
+            
+            const reach = [];
+            const match = [];
+            const safety = [];
+            
+            californiaSchools.forEach(school => {
+                const score = calculateMatchScore(school);
+                const category = categorizeSchool(school, score);
                 
-                const school = availableSchools.find(s => s.name.toLowerCase().includes(choice?.toLowerCase()));
-                if (school) {
-                    userData.selectedSchools.push(school.id);
-                    localStorage.setItem('pathwiseUserData', JSON.stringify(userData));
-                    generateSchoolRecommendations();
-                }
+                const schoolCard = createSchoolCard(school, score);
+                
+                if (category === 'reach') reach.push(schoolCard);
+                else if (category === 'match') match.push(schoolCard);
+                else safety.push(schoolCard);
+            });
+            
+            schoolsTab.innerHTML = `
+                <div class="school-category">
+                    <div class="category-header">
+                        <div class="category-title">
+                            <span>🎯</span>
+                            <span>Reach Schools</span>
+                        </div>
+                        <div class="category-badge badge-reach">Aim High!</div>
+                    </div>
+                    <div class="schools-grid">${reach.join('')}</div>
+                </div>
+                
+                <div class="school-category">
+                    <div class="category-header">
+                        <div class="category-title">
+                            <span>✅</span>
+                            <span>Match Schools</span>
+                        </div>
+                        <div class="category-badge badge-match">Great Fit!</div>
+                    </div>
+                    <div class="schools-grid">${match.join('')}</div>
+                </div>
+                
+                <div class="school-category">
+                    <div class="category-header">
+                        <div class="category-title">
+                            <span>🛡️</span>
+                            <span>Safety Schools</span>
+                        </div>
+                        <div class="category-badge badge-safety">Solid Backup!</div>
+                    </div>
+                    <div class="schools-grid">${safety.join('')}</div>
+                </div>
+            `;
+            
+            document.getElementById('schoolCount').textContent = reach.length + match.length + safety.length;
+        }
+
+        function createSchoolCard(school, score) {
+            const matchLevel = score > 70 ? 'high' : score > 50 ? 'medium' : 'low';
+            const matchClass = score > 70 ? 'match-high' : score > 50 ? 'match-medium' : 'match-low';
+            
+            return `
+                <div class="school-card">
+                    <div class="school-remove" onclick="removeSchool(${school.id})">×</div>
+                    <div class="school-header">
+                        <div class="school-name">${school.name}</div>
+                        <div class="match-badge ${matchClass}">${score}% match</div>
+                    </div>
+                    <div style="color: var(--gray); margin-bottom: 8px;">
+                        Avg GPA: ${school.avgGPA} | SAT: ${school.avgSAT}
+                    </div>
+                    <div style="font-size: 14px; color: var(--gray);">
+                        Acceptance Rate: ${school.acceptanceRate}%<br>
+                        Tuition: $${school.tuition.toLocaleString()}/year
+                    </div>
+                </div>
+            `;
+        }
+
+        function categorizeSchool(school, score) {
+            if (!userData.gpa) return school.type;
+            
+            const gpaDiff = userData.gpa - school.avgGPA;
+            
+            if (gpaDiff < -0.3 || score < 40) {
+                return 'reach';
+            } else if (gpaDiff > 0.3 || score > 70) {
+                return 'safety';
             } else {
-                alert("You've added all available schools!");
+                return 'match';
             }
         }
 
-        function calculateAid() {
-            const income = parseInt(document.getElementById('familyIncome').value) || 75000;
-            const familySize = parseInt(document.getElementById('familySize').value) || 4;
+        function populateFinancialAid() {
+            const financialTab = document.getElementById('financialTab');
             
-            let pellGrant = 0;
-            let calGrant = 0;
-            let middleClass = 0;
+            // Calculate estimated aid
+            const familyIncome = 75000; // Default
+            let pellGrant = familyIncome < 50000 ? 7395 : familyIncome < 70000 ? 3000 : 0;
+            let calGrant = familyIncome < 80000 && userData.gpa >= 3.0 ? 12570 : 0;
+            let totalAid = pellGrant + calGrant;
             
-            // Simplified Pell Grant calculation
-            if (income < 30000) {
-                pellGrant = 7395;
-            } else if (income < 50000) {
-                pellGrant = 5000;
-            } else if (income < 70000) {
-                pellGrant = 2000;
-            }
+            financialTab.innerHTML = `
+                <div class="discovery-card">
+                    <div class="discovery-title">Your Financial Aid Estimate</div>
+                    <div class="discovery-subtitle">Based on typical California resident profile</div>
+                    
+                    <div style="background: linear-gradient(135deg, rgba(52, 199, 89, 0.1), rgba(0, 122, 255, 0.1)); padding: 24px; border-radius: 16px; margin: 24px 0;">
+                        <div style="font-size: 14px; color: var(--gray); margin-bottom: 8px;">Estimated Annual Aid</div>
+                        <div style="font-size: 36px; font-weight: 700; color: var(--success);">$${totalAid.toLocaleString()}</div>
+                    </div>
+                    
+                    <div style="display: grid; gap: 16px;">
+                        <div style="display: flex; justify-content: space-between; padding: 12px 0; border-bottom: 1px solid var(--light-gray);">
+                            <span>Federal Pell Grant</span>
+                            <span style="font-weight: 600;">$${pellGrant.toLocaleString()}</span>
+                        </div>
+                        <div style="display: flex; justify-content: space-between; padding: 12px 0; border-bottom: 1px solid var(--light-gray);">
+                            <span>Cal Grant</span>
+                            <span style="font-weight: 600;">$${calGrant.toLocaleString()}</span>
+                        </div>
+                        <div style="display: flex; justify-content: space-between; padding: 12px 0; border-bottom: 1px solid var(--light-gray);">
+                            <span>Middle Class Scholarship</span>
+                            <span style="font-weight: 600;">Check Eligibility</span>
+                        </div>
+                    </div>
+                    
+                    <div style="margin-top: 24px; padding: 16px; background: var(--background); border-radius: 12px;">
+                        <div style="font-size: 14px; color: var(--gray);">
+                            These are estimates based on 2024-2025 rates. Actual aid depends on your FAFSA application.
+                        </div>
+                    </div>
+                </div>
+            `;
+        }
+
+        function populateDocuments() {
+            const documentsTab = document.getElementById('documentsTab');
             
-            // Cal Grant calculation
-            if (income < 80000 && userData.gpa >= 3.0) {
-                calGrant = 12570;
-            }
+            documentsTab.innerHTML = `
+                <div class="discovery-card">
+                    <div class="discovery-title">Application Checklist</div>
+                    <div class="discovery-subtitle">Track your progress</div>
+                    
+                    <div class="document-list" style="display: grid; gap: 16px; margin-top: 24px;">
+                        <div class="document-item" style="display: flex; align-items: center; gap: 16px; padding: 16px; background: var(--background); border-radius: 12px;">
+                            <div style="width: 32px; height: 32px; border-radius: 50%; background: var(--success); color: white; display: flex; align-items: center; justify-content: center;">✓</div>
+                            <div style="flex: 1;">
+                                <div style="font-weight: 600;">Personal Information</div>
+                                <div style="font-size: 14px; color: var(--gray);">Profile completed</div>
+                            </div>
+                        </div>
+                        
+                        <div class="document-item" style="display: flex; align-items: center; gap: 16px; padding: 16px; background: var(--background); border-radius: 12px;">
+                            <div style="width: 32px; height: 32px; border-radius: 50%; background: var(--warning); color: white; display: flex; align-items: center; justify-content: center;">!</div>
+                            <div style="flex: 1;">
+                                <div style="font-weight: 600;">Transcripts</div>
+                                <div style="font-size: 14px; color: var(--gray);">Request from counselor by Oct 15</div>
+                            </div>
+                        </div>
+                        
+                        <div class="document-item" style="display: flex; align-items: center; gap: 16px; padding: 16px; background: var(--background); border-radius: 12px;">
+                            <div style="width: 32px; height: 32px; border-radius: 50%; background: var(--danger); color: white; display: flex; align-items: center; justify-content: center;">×</div>
+                            <div style="flex: 1;">
+                                <div style="font-weight: 600;">Letters of Recommendation</div>
+                                <div style="font-size: 14px; color: var(--gray);">Need 2-3 teachers</div>
+                            </div>
+                        </div>
+                        
+                        <div class="document-item" style="display: flex; align-items: center; gap: 16px; padding: 16px; background: var(--background); border-radius: 12px;">
+                            <div style="width: 32px; height: 32px; border-radius: 50%; background: var(--danger); color: white; display: flex; align-items: center; justify-content: center;">×</div>
+                            <div style="flex: 1;">
+                                <div style="font-weight: 600;">FAFSA</div>
+                                <div style="font-size: 14px; color: var(--gray);">Opens October 1, 2025</div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div style="margin-top: 24px; padding: 16px; background: linear-gradient(135deg, rgba(255, 149, 0, 0.1), rgba(255, 59, 48, 0.1)); border-radius: 12px;">
+                        <div style="font-weight: 600; margin-bottom: 8px;">📊 Your Progress: 17% Complete</div>
+                        <div style="height: 8px; background: var(--light-gray); border-radius: 4px; overflow: hidden;">
+                            <div style="width: 17%; height: 100%; background: linear-gradient(90deg, var(--warning), var(--danger));"></div>
+                        </div>
+                    </div>
+                </div>
+            `;
+        }
+
+        function populateTimeline() {
+            const timelineTab = document.getElementById('timelineTab');
             
-            // Middle Class Scholarship
-            if (income >= 80000 && income < 177000) {
-                const percentage = Math.max(0, 1 - ((income - 80000) / 97000));
-                middleClass = Math.round(13000 * percentage);
-            }
-            
-            const total = pellGrant + calGrant + middleClass;
-            
-            document.getElementById('pellGrant').textContent = `$${pellGrant.toLocaleString()}`;
-            document.getElementById('calGrant').textContent = `$${calGrant.toLocaleString()}`;
-            document.getElementById('middleClass').textContent = `$${middleClass.toLocaleString()}`;
-            document.getElementById('totalAid').textContent = `$${total.toLocaleString()}`;
-            document.getElementById('aidResult').classList.remove('hidden');
+            timelineTab.innerHTML = `
+                <div class="discovery-card">
+                    <div class="discovery-title">Your Application Timeline</div>
+                    <div class="discovery-subtitle">Key dates and deadlines</div>
+                    
+                    <div style="margin-top: 24px;">
+                        <div class="timeline-item" style="padding: 20px; background: var(--background); border-radius: 12px; margin-bottom: 16px; border-left: 4px solid var(--primary);">
+                            <div style="font-size: 14px; color: var(--gray);">August 1, 2025</div>
+                            <div style="font-size: 18px; font-weight: 600; margin: 8px 0;">UC Application Opens</div>
+                            <div style="color: var(--gray);">Start your UC application and essays</div>
+                        </div>
+                        
+                        <div class="timeline-item" style="padding: 20px; background: var(--background); border-radius: 12px; margin-bottom: 16px; border-left: 4px solid var(--success);">
+                            <div style="font-size: 14px; color: var(--gray);">October 1, 2025</div>
+                            <div style="font-size: 18px; font-weight: 600; margin: 8px 0;">FAFSA Opens</div>
+                            <div style="color: var(--gray);">Submit ASAP for maximum aid</div>
+                        </div>
+                        
+                        <div class="timeline-item" style="padding: 20px; background: var(--background); border-radius: 12px; margin-bottom: 16px; border-left: 4px solid var(--warning);">
+                            <div style="font-size: 14px; color: var(--gray);">November 15, 2025</div>
+                            <div style="font-size: 18px; font-weight: 600; margin: 8px 0;">Priority Submission</div>
+                            <div style="color: var(--gray);">Submit early for better chances</div>
+                        </div>
+                        
+                        <div class="timeline-item" style="padding: 20px; background: var(--background); border-radius: 12px; margin-bottom: 16px; border-left: 4px solid var(--danger);">
+                            <div style="font-size: 14px; color: var(--gray);">November 30, 2025</div>
+                            <div style="font-size: 18px; font-weight: 600; margin: 8px 0;">UC/CSU Deadline</div>
+                            <div style="color: var(--gray);">Final deadline - no extensions!</div>
+                        </div>
+                        
+                        <div class="timeline-item" style="padding: 20px; background: var(--background); border-radius: 12px; margin-bottom: 16px; border-left: 4px solid var(--primary);">
+                            <div style="font-size: 14px; color: var(--gray);">March 15-30, 2026</div>
+                            <div style="font-size: 18px; font-weight: 600; margin: 8px 0;">Decisions Released</div>
+                            <div style="color: var(--gray);">Check your portals!</div>
+                        </div>
+                    </div>
+                </div>
+            `;
         }
 
         function goBack() {
@@ -1482,32 +1725,135 @@
                 document.querySelectorAll('.discovery-card').forEach((card, index) => {
                     card.classList.toggle('hidden', index !== 0);
                 });
-                updateProgress();
+                updateProgressBar();
                 document.getElementById('backBtn').style.display = 'none';
             }
         }
 
         function resetApp() {
-            if (confirm('This will reset all your data. Are you sure?')) {
+            if (confirm('This will reset all your data and start over. Are you sure?')) {
                 localStorage.removeItem('pathwiseUserData');
                 localStorage.removeItem('pathwiseConsent');
                 location.reload();
             }
         }
 
+        function showTab(tabName) {
+            // Update active button
+            document.querySelectorAll('.tab-button').forEach(btn => {
+                btn.classList.remove('active');
+            });
+            event.target.classList.add('active');
+            
+            // Hide all tabs with animation
+            document.querySelectorAll('[id$="Tab"]').forEach(tab => {
+                tab.classList.add('hidden');
+            });
+            
+            // Show selected tab
+            setTimeout(() => {
+                document.getElementById(tabName + 'Tab').classList.remove('hidden');
+            }, 100);
+        }
+
+        function removeSchool(schoolId) {
+            userData.selectedSchools = userData.selectedSchools.filter(id => id !== schoolId);
+            localStorage.setItem('pathwiseUserData', JSON.stringify(userData));
+            generateSchoolRecommendations();
+            
+            // Animate the update
+            const statCard = document.getElementById('schoolCount').parentElement;
+            statCard.classList.add('updating');
+            setTimeout(() => statCard.classList.remove('updating'), 500);
+        }
+
+        // AI Assistant Functions
+        function showAIAssistant(message) {
+            const bubble = document.getElementById('aiBubble');
+            const aiMessage = document.getElementById('aiMessage');
+            
+            aiMessage.textContent = message || 'Need help? I noticed you might be stuck.';
+            bubble.classList.remove('hidden');
+            
+            setTimeout(() => {
+                if (!bubble.classList.contains('hidden')) {
+                    bubble.classList.add('hidden');
+                }
+            }, 8000);
+        }
+
+        function hideAI() {
+            document.getElementById('aiBubble').classList.add('hidden');
+        }
+
+        // Achievement System
+        function showAchievement(title, description) {
+            const badge = document.getElementById('achievementBadge');
+            document.getElementById('achievementTitle').textContent = title;
+            document.getElementById('achievementDesc').textContent = description;
+            
+            badge.classList.remove('hidden');
+            
+            setTimeout(() => {
+                badge.classList.add('hidden');
+            }, 3000);
+        }
+
+        // Theme Toggle
+        function toggleTheme() {
+            const currentTheme = document.documentElement.getAttribute('data-theme');
+            const newTheme = currentTheme === 'dark' ? 'light' : 'dark';
+            
+            document.documentElement.setAttribute('data-theme', newTheme);
+            localStorage.setItem('pathwiseTheme', newTheme);
+            
+            const icon = document.getElementById('themeIcon');
+            icon.textContent = newTheme === 'dark' ? '☀️' : '🌙';
+            
+            // Add transition animation
+            document.body.style.transition = 'background 0.3s ease';
+        }
+
+        // Share Functions
         function showShare() {
-            document.getElementById('overlay').classList.add('active');
-            document.getElementById('shareModal').classList.add('active');
+            const overlay = document.getElementById('overlay');
+            const modal = document.getElementById('shareModal');
+            
+            overlay.classList.remove('hidden');
+            modal.classList.remove('hidden');
+            
+            modal.innerHTML = `
+                <div style="font-size: 20px; font-weight: 600; margin-bottom: 20px;">Share Pathwise</div>
+                <div class="share-options" style="display: grid; grid-template-columns: repeat(4, 1fr); gap: 20px; margin-bottom: 20px;">
+                    <div class="share-option" onclick="shareVia('message')" style="display: flex; flex-direction: column; align-items: center; gap: 8px; cursor: pointer;">
+                        <div style="width: 60px; height: 60px; border-radius: 12px; background: #34C759; display: flex; align-items: center; justify-content: center; font-size: 24px;">💬</div>
+                        <span style="font-size: 13px;">Message</span>
+                    </div>
+                    <div class="share-option" onclick="shareVia('whatsapp')" style="display: flex; flex-direction: column; align-items: center; gap: 8px; cursor: pointer;">
+                        <div style="width: 60px; height: 60px; border-radius: 12px; background: #25D366; display: flex; align-items: center; justify-content: center; font-size: 24px;">📱</div>
+                        <span style="font-size: 13px;">WhatsApp</span>
+                    </div>
+                    <div class="share-option" onclick="shareVia('copy')" style="display: flex; flex-direction: column; align-items: center; gap: 8px; cursor: pointer;">
+                        <div style="width: 60px; height: 60px; border-radius: 12px; background: #007AFF; display: flex; align-items: center; justify-content: center; font-size: 24px;">📋</div>
+                        <span style="font-size: 13px;">Copy Link</span>
+                    </div>
+                    <div class="share-option" onclick="shareVia('email')" style="display: flex; flex-direction: column; align-items: center; gap: 8px; cursor: pointer;">
+                        <div style="width: 60px; height: 60px; border-radius: 12px; background: #FF9500; display: flex; align-items: center; justify-content: center; font-size: 24px;">✉️</div>
+                        <span style="font-size: 13px;">Email</span>
+                    </div>
+                </div>
+                <button class="button button-secondary" style="width: 100%;" onclick="hideShare()">Cancel</button>
+            `;
         }
 
         function hideShare() {
-            document.getElementById('overlay').classList.remove('active');
-            document.getElementById('shareModal').classList.remove('active');
+            document.getElementById('overlay').classList.add('hidden');
+            document.getElementById('shareModal').classList.add('hidden');
         }
 
         function shareVia(method) {
             const url = window.location.href;
-            const text = 'Yo check out Pathwise - it\'s literally the best way to plan for California colleges! No cap 🎓';
+            const text = 'Check out Pathwise - Smart college planning for California students!';
             
             switch(method) {
                 case 'message':
@@ -1520,27 +1866,19 @@
                     break;
                 case 'copy':
                     navigator.clipboard.writeText(url);
-                    alert('Link copied! Share it with your friends 📋');
+                    showAchievement('Link Copied!', 'Share with friends');
                     break;
                 case 'email':
-                    window.location.href = `mailto:?subject=Check out Pathwise!&body=${encodeURIComponent(text + ' ' + url)}`;
+                    window.location.href = `mailto:?subject=Check out Pathwise&body=${encodeURIComponent(text + ' ' + url)}`;
                     break;
             }
             hideShare();
-        }
-
-        function showTab(tabName) {
-            document.querySelectorAll('[id$="Tab"]').forEach(tab => {
-                tab.classList.add('hidden');
-            });
-            
-            document.querySelectorAll('.tab-button').forEach(btn => {
-                btn.classList.remove('active');
-            });
-            
-            document.getElementById(tabName + 'Tab').classList.remove('hidden');
-            event.target.classList.add('active');
-        }
-    </script>
-</body>
-</html>
+        } align-items: center; justify-content: center;">×</div>
+                            <div style="flex: 1;">
+                                <div style="font-weight: 600;">Personal Statement</div>
+                                <div style="font-size: 14px; color: var(--gray);">4 essays for UC applications</div>
+                            </div>
+                        </div>
+                        
+                        <div class="document-item" style="display: flex; align-items: center; gap: 16px; padding: 16px; background: var(--background); border-radius: 12px;">
+                            <div style="width: 32px; height: 32px; border-radius: 50%; background: var(--danger); color: white; display: flex;
