@@ -1,651 +1,696 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" data-theme="light">
 <head>
 <meta charset="utf-8" />
-<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover" />
-<title>Pathwise — California College Planner</title>
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+<title>Pathwise — Smart College Planner</title>
 <style>
-  :root{
-    --bg:#0b0f16; --card:#0f1420; --muted:#aab3c2; --text:#eaf0ff;
-    --primary:#4c8dff; --primary-2:#7a6cff; --ok:#19c37d; --warn:#ffb020; --danger:#ff5a5f;
-    --ring: rgba(76,141,255,.55);
-    --bord: #1c2434; --chip: #121a2a;
-    --pill:#0e1727; --pill-b:#263249;
-  }
-  *{box-sizing:border-box}
-  html,body{height:100%}
-  body{
-    margin:0; font:16px/1.45 system-ui,-apple-system,Segoe UI,Roboto,Inter,Helvetica,Arial,sans-serif;
-    background:radial-gradient(1200px 800px at 60% -10%, rgba(80,95,255,.18), transparent 45%), var(--bg);
-    color:var(--text);
-  }
-  a{color:var(--primary); text-decoration:none} a:hover{text-decoration:underline}
-  .app{max-width:1180px;margin:0 auto;padding:20px 16px 120px}
-  /* header */
-  .nav{
-    position:sticky;top:0;z-index:30;backdrop-filter:saturate(1.2) blur(14px);
-    background:linear-gradient(180deg, rgba(11,15,22,.85), rgba(11,15,22,.65) 60%, transparent);
-    border-bottom:1px solid var(--bord); padding:10px 16px; margin:0 -16px 14px;
-  }
-  .nav .row{display:flex;align-items:center;gap:10px}
-  .brand{font-weight:800;letter-spacing:.2px;font-size:22px;margin-right:8px}
-  .tabs{display:flex;gap:8px;flex-wrap:wrap}
-  .tab{
-    background:var(--pill); color:#e9f2ff; border:1px solid var(--pill-b);
-    padding:10px 14px;border-radius:999px; cursor:pointer; font-weight:700;
-  }
-  .tab.active{background:linear-gradient(90deg,var(--primary),var(--primary-2)); border-color:transparent;}
-  .grow{flex:1}
-  .btn{
-    background:#121a2a;border:1px solid #293449;color:#eaf0ff;border-radius:10px;padding:10px 12px;cursor:pointer;
-  }
-  .btn.primary{background:linear-gradient(90deg,var(--primary),var(--primary-2)); border-color:transparent; color:#fff}
-  .btn:hover{filter:brightness(1.04)}
-  .btn:active{transform:translateY(1px)}
-  .pill{background:#0f182b;border:1px solid #2b3a55;color:#cfe1ff;border-radius:999px;padding:8px 12px;cursor:pointer}
-  .pill.sel{background:linear-gradient(90deg,var(--primary),var(--primary-2));border-color:transparent;color:#fff}
-  /* cards */
-  .h1{font-size:28px;font-weight:800;margin:18px 0 8px}
-  .muted{color:var(--muted)}
-  .grid{display:grid;grid-template-columns:repeat(12,1fr);gap:14px}
-  .card{background:var(--card);border:1px solid var(--bord);border-radius:16px;padding:16px}
-  .k{grid-column:span 4}
-  .k2{grid-column:span 6}
-  .k3{grid-column:span 12}
-  @media (max-width:900px){.k{grid-column:span 12}.k2{grid-column:span 12}}
-  .stat .name{color:#9fb0c8;font-weight:700}
-  .stat .val{font-size:34px;font-weight:900;opacity:.94;margin-top:8px}
-  .row{display:flex;gap:10px;align-items:center}
-  .right{margin-left:auto}
-  .tag{background:#102037;border:1px solid #283a5d;border-radius:999px;padding:4px 10px;font-size:12px}
-  .tag.ok{border-color:#1a5f46;background:rgba(25,195,125,.1);color:#9af0c8}
-  .tag.danger{border-color:#78343a;background:rgba(255,90,95,.08);color:#ffb7ba}
-  .school .head{display:flex;align-items:center;gap:10px;margin-bottom:4px}
-  .flex{display:flex;gap:10px;align-items:center}
-  .input, select{
-    appearance:none;background:#0d1523;border:1px solid #293449;color:#e9f2ff;border-radius:10px;
-    padding:10px 12px;outline:none;min-height:42px
-  }
-  .input:focus,select:focus{box-shadow:0 0 0 3px var(--ring)}
-  .danger-dot,.ok-dot,.warn-dot{width:10px;height:10px;border-radius:999px;display:inline-block;margin-right:6px}
-  .danger-dot{background:var(--danger)} .ok-dot{background:var(--ok)} .warn-dot{background:var(--warn)}
-  /* tiny helpers */
-  .chx{display:flex;align-items:center;gap:10px}
-  .chx input[type=checkbox]{width:18px;height:18px}
-  .dot{width:10px;height:10px;border-radius:999px;display:inline-block}
-  .dot.red{background:var(--danger)} .dot.orange{background:var(--warn)} .dot.green{background:var(--ok)}
-  .badge.link{cursor:pointer;text-decoration:underline}
-  /* AI bubble */
-  #aiBox{position:fixed; right:18px; bottom:18px; z-index:40; display:none}
-  #aiBox .bubble{
-    background:linear-gradient(120deg, rgba(76,141,255,.22), rgba(122,108,255,.22));
-    border:1px solid #2b3a5c; border-radius:16px; padding:14px 16px; max-width:300px;
-    box-shadow:0 12px 40px rgba(0,0,0,.25); animation:float 6s ease-in-out infinite;
-  }
-  #aiBox .x{position:absolute; top:-8px; right:-8px; background:#0d1523;border:1px solid #25314a;color:#c9d9ff;
-    width:28px;height:28px;border-radius:999px;display:flex;align-items:center;justify-content:center; cursor:pointer}
-  @keyframes float{0%{transform:translateY(0)}50%{transform:translateY(-4px)}100%{transform:translateY(0)}}
+:root{
+  --bg:#F2F2F7; --card:#fff; --ink:#1c1c1e; --muted:#8e8e93; --line:rgba(0,0,0,.12);
+  --primary:#007AFF; --accent:#5856D6; --success:#34C759; --warn:#FF9500; --danger:#FF3B30;
+  --r:14px; --r2:18px; --shadow:0 8px 24px rgba(0,0,0,.10);
+}
+[data-theme="dark"]{
+  --bg:#000; --card:#1C1C1E; --ink:#F2F2F7; --muted:#9a9aa0; --line:rgba(255,255,255,.14);
+}
+*{box-sizing:border-box} html,body{height:100%}
+body{margin:0;font:15px/1.45 -apple-system,BlinkMacSystemFont,"SF Pro Text","Helvetica Neue",Arial,sans-serif;background:var(--bg);color:var(--ink);-webkit-font-smoothing:antialiased}
+a{color:var(--primary);text-decoration:none}
+button{font:600 14px -apple-system;cursor:pointer}
+.hidden{display:none !important}
+
+/* Header */
+.header{position:sticky;top:0;z-index:30;background:rgba(255,255,255,.7);backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);border-bottom:1px solid var(--line)}
+[data-theme="dark"] .header{background:rgba(28,28,30,.7)}
+.header__bar{max-width:1100px;margin:0 auto;padding:12px 16px;display:flex;align-items:center;gap:12px}
+.brand{font-weight:800;letter-spacing:.2px}
+.seg{margin-left:auto;display:inline-flex;padding:4px;background:rgba(0,0,0,.05);border-radius:12px}
+[data-theme="dark"] .seg{background:rgba(255,255,255,.08)}
+.seg__btn{border:0;background:transparent;padding:8px 12px;border-radius:10px;color:inherit}
+.seg__btn.is-active{background:var(--card);box-shadow:0 1px 4px rgba(0,0,0,.08)}
+/* Chips */
+.chips{max-width:1100px;margin:8px auto 0;padding:0 16px 8px;display:flex;gap:8px;overflow:auto}
+.chip{padding:8px 12px;border-radius:999px;border:1px solid var(--line);background:transparent;white-space:nowrap}
+.chip.is-on{border-color:transparent;background:rgba(0,122,255,.12);color:var(--primary)}
+/* Summary */
+.summary{max-width:1100px;margin:12px auto 0;padding:8px 16px;display:flex;align-items:center;gap:10px;color:var(--muted)}
+.summary__pill{border:1px solid var(--line);border-radius:999px;padding:6px 10px}
+.summary__edit{margin-left:auto}
+
+/* Layout */
+.main{max-width:1100px;margin:8px auto 80px;padding:0 16px;display:grid;gap:16px}
+.card{background:var(--card);border-radius:var(--r);box-shadow:var(--shadow);padding:16px}
+.card h3{margin:0 0 8px}
+.row{display:flex;align-items:center;justify-content:space-between;gap:12px}
+.sub{color:var(--muted);font-size:13px}
+.hr{height:1px;background:var(--line);margin:12px 0}
+
+/* Buttons */
+.btn{border:0;border-radius:12px;padding:12px 14px}
+.btn--primary{background:var(--primary);color:#fff}
+.btn--quiet{background:transparent;color:var(--primary)}
+.btn--ghost{background:transparent;border:1px solid var(--line);color:inherit}
+.btn--danger{background:var(--danger);color:#fff}
+
+/* School cards */
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:12px}
+.scard{background:var(--card);border-radius:14px;box-shadow:var(--shadow);padding:14px;display:flex;flex-direction:column;gap:8px}
+.scard .pill{border-radius:999px;padding:4px 8px;font-weight:700;font-size:12px}
+.pill--reach{background:rgba(255,59,48,.12);color:var(--danger)}
+.pill--match{background:rgba(52,199,89,.12);color:var(--success)}
+.pill--safe{background:rgba(0,122,255,.12);color:var(--primary)}
+.pill--res{background:rgba(0,122,255,.12);color:var(--primary)}
+.meta{color:var(--muted);font-size:12px}
+.scard footer{display:flex;gap:8px;justify-content:flex-end}
+
+/* Sheet (bottom) */
+.sheet{position:fixed;left:0;right:0;bottom:-100%;transform:translateY(100%);background:var(--card);border-radius:16px 16px 0 0;box-shadow:0 -20px 40px rgba(0,0,0,.25);transition:transform .26s cubic-bezier(.2,.8,.2,1);z-index:1000}
+.sheet.is-open{transform:translateY(0)}
+.sheet__grab{width:44px;height:5px;background:var(--line);border-radius:999px;margin:10px auto}
+.sheet__body{max-height:70vh;overflow:auto;padding:8px 16px 16px}
+
+/* Inputs */
+.label{font-size:12px;color:var(--muted);margin-bottom:6px}
+.input,.select{width:100%;padding:12px 12px;border:1px solid var(--line);border-radius:12px;background:transparent;color:inherit}
+.grid-2{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+@media (max-width:720px){.grid-2{grid-template-columns:1fr}}
+
+/* Docs checklist */
+.chk{display:flex;gap:10px;align-items:center;padding:10px;border-radius:10px;border:1px solid var(--line);margin-bottom:8px}
+.chk input{width:18px;height:18px}
+.tag{border:1px solid var(--line);border-radius:999px;padding:2px 8px;font-size:12px;color:var(--muted)}
+/* Timeline */
+.tline{display:grid;gap:8px}
+.titem{border-left:4px solid var(--primary);padding:8px 12px;border-radius:8px;background:rgba(0,122,255,.08)}
+.titem--warn{border-color:var(--warn);background:rgba(255,149,0,.12)}
+.titem--danger{border-color:var(--danger);background:rgba(255,59,48,.12)}
+
+/* AI bubble */
+.ai{position:fixed;right:16px;bottom:16px;width:56px;height:56px;border-radius:50%;border:0;background:var(--primary);color:#fff;box-shadow:0 10px 28px rgba(0,122,255,.35);animation:breath 2.8s ease-in-out infinite;z-index:1200}
+@keyframes breath{0%{transform:scale(1)}50%{transform:scale(1.06)}100%{transform:scale(1)}}
+
+/* Tiny states */
+.muted{color:var(--muted)}
+.small{font-size:12px}
 </style>
 </head>
 <body>
-  <div class="nav">
-    <div class="row">
-      <div class="brand">Pathwise</div>
-      <div class="tabs">
-        <button class="tab active" data-tab="dashboard">🏠 Dashboard</button>
-        <button class="tab" data-tab="planning">📝 Planning</button>
-        <button class="tab" data-tab="documents">📄 Documents</button>
-        <button class="tab" data-tab="timeline">📆 Timeline</button>
-        <button class="tab" data-tab="aid">💰 Financial Aid</button>
-      </div>
-      <div class="grow"></div>
-      <button id="themeBtn" class="btn">Toggle theme</button>
-      <button class="btn" onclick="resetAll()">Reset all</button>
+
+<!-- Header -->
+<div class="header">
+  <div class="header__bar">
+    <div class="brand">Pathwise</div>
+    <div class="seg" id="seg">
+      <button class="seg__btn is-active" data-tab="dash">Dashboard</button>
+      <button class="seg__btn" data-tab="schools">Schools</button>
+      <button class="seg__btn" data-tab="aid">Aid</button>
+      <button class="seg__btn" data-tab="docs">Docs</button>
     </div>
+    <button class="btn btn--ghost" id="themeBtn">Theme</button>
   </div>
+  <!-- filters (only visible on Schools) -->
+  <div class="chips" id="chips" style="display:none">
+    <button class="chip is-on" data-filter="all">All</button>
+    <button class="chip" data-filter="instate">In-State</button>
+    <button class="chip" data-filter="public">Public</button>
+    <button class="chip" data-filter="private">Private</button>
+    <button class="chip" data-filter="cost">Lower Cost</button>
+    <button class="chip" data-filter="rep">Reputation</button>
+  </div>
+</div>
 
-  <div class="app">
-    <!-- DASHBOARD -->
-    <section id="dashboard">
-      <div class="h1">Welcome back, <span id="uName">Student</span>!</div>
-      <div class="muted">Your personalized California college roadmap is ready.</div>
+<!-- Planning summary -->
+<div class="summary" id="summary">
+  <span class="summary__pill" id="sumHome">Home: —</span>
+  <span class="summary__pill" id="sumFocus">Focus: —</span>
+  <span class="summary__pill" id="sumGPA">GPA: —</span>
+  <button class="btn btn--quiet summary__edit" id="editPlanBtn">Edit Planning</button>
+</div>
 
-      <div class="grid" style="margin-top:14px">
-        <div class="card stat k"><div class="name">Your GPA</div><div id="statGpa" class="val">—</div></div>
-        <div class="card stat k"><div class="name">Target schools</div><div id="statSchools" class="val">—</div></div>
-        <div class="card stat k"><div class="name">Days to UC/CSU deadline</div><div id="statDays" class="val">—</div></div>
-      </div>
-
-      <div class="h1" style="margin-top:18px">🎯 Your schools</div>
-      <div class="row" id="viewFilters" style="margin:8px 0 12px">
-        <button class="pill" data-mode="all" onclick="setViewMode('all')">All schools</button>
-        <button class="pill sel" data-mode="my" onclick="setViewMode('my')">My list (<span id="myCount">0</span>)</button>
-      </div>
-
-      <div class="grid">
-        <div class="k3">
-          <div class="row" style="margin:8px 0 8px"><strong>Reach</strong><div class="muted">— aim high</div></div>
-          <div id="reach" class="grid"></div>
-        </div>
-        <div class="k3" style="margin-top:12px">
-          <div class="row" style="margin:8px 0 8px"><strong>Match</strong><div class="muted">— great fit</div></div>
-          <div id="match" class="grid"></div>
-        </div>
-        <div class="k3" style="margin-top:12px">
-          <div class="row" style="margin:8px 0 8px"><strong>Safety</strong><div class="muted">— solid backup</div></div>
-          <div id="safety" class="grid"></div>
-        </div>
-      </div>
-    </section>
-
-    <!-- PLANNING -->
-    <section id="planning" style="display:none">
-      <div class="h1">Planning</div>
-      <div class="grid" style="margin-top:10px">
-        <div class="card k2">
-          <div class="row"><strong>Profile</strong><div class="right"><button class="btn" onclick="resetPlanning()">Reset planning</button></div></div>
-          <div class="grid" style="margin-top:12px">
-            <div class="k">
-              <div class="muted">GPA</div>
-              <input id="inGpa" type="number" step="0.01" min="0" max="5" class="input" placeholder="e.g. 3.75">
-            </div>
-            <div class="k">
-              <div class="muted">SAT (optional)</div>
-              <input id="inSat" type="number" step="10" min="400" max="1600" class="input" placeholder="e.g. 1400">
-            </div>
-            <div class="k">
-              <div class="muted">AP / Honors</div>
-              <input id="inAp" type="number" step="1" min="0" class="input" placeholder="e.g. 4">
-            </div>
-          </div>
-          <div class="row" style="margin-top:12px">
-            <button class="btn primary" onclick="applyPlanning()">Save & update</button>
-            <div class="muted">Updates your matches, documents, timeline and aid.</div>
-          </div>
-        </div>
-
-        <div class="card k2">
-          <strong>Quick tasks</strong>
-          <div class="row" style="margin-top:8px">
-            <input id="taskIn" class="input" placeholder="Add a task…">
-            <button class="btn primary" onclick="addTask()">Add</button>
-          </div>
-          <ul id="taskList" style="list-style:none;margin:12px 0 0;padding:0"></ul>
-        </div>
-      </div>
-    </section>
-
-    <!-- DOCUMENTS -->
-    <section id="documents" style="display:none">
+<!-- Main -->
+<main class="main">
+  <!-- Dashboard -->
+  <section id="view-dash">
+    <div class="card">
       <div class="row">
-        <div class="h1" style="margin:0">Documents</div>
-        <div class="right"><button class="btn" onclick="aiDocs()">AI — Help me write</button></div>
+        <h3>Welcome<span id="helloName"></span></h3>
+        <button class="btn btn--primary" id="addSchoolsBtn">Add Schools</button>
       </div>
-      <div class="card" style="margin-top:10px">
-        <div class="row"><div class="title"><strong>Documents checklist</strong> <span class="muted">— built from your schools</span></div></div>
-        <div class="grid" id="documentsGrid" style="margin-top:12px"></div>
-      </div>
-    </section>
-
-    <!-- TIMELINE -->
-    <section id="timeline" style="display:none">
-      <div class="h1">Timeline</div>
-      <div class="card" style="margin-top:10px">
-        <div class="muted">Auto-generated from your selected schools + your doc due dates. Colors show urgency.</div>
-        <div class="grid" id="timelineGrid" style="margin-top:12px"></div>
-      </div>
-    </section>
-
-    <!-- AID -->
-    <section id="aid" style="display:none">
-      <div class="h1">Financial aid estimate</div>
-      <div class="card" style="margin-top:10px">
-        <div class="grid">
-          <div class="k">
-            <div class="muted">Campus type</div>
-            <select id="aidCampus">
-              <option value="uc">UC (public)</option>
-              <option value="csu">CSU (public)</option>
-              <option value="private">Private (nonprofit)</option>
-            </select>
-          </div>
-          <div class="k">
-            <div class="muted">California resident?</div>
-            <select id="aidResident">
-              <option value="yes">Yes</option>
-              <option value="no">No</option>
-            </select>
-          </div>
-          <div class="k">
-            <div class="muted">Family income (estimate)</div>
-            <input id="aidIncome" type="number" class="input" placeholder="e.g. 75000">
-          </div>
+      <div class="hr"></div>
+      <div class="grid-2">
+        <div class="card">
+          <div class="row"><div class="sub">Selected Schools</div><strong id="statCount">0</strong></div>
+          <div class="row"><div class="sub">Risk Balance</div><input id="risk" type="range" min="0" max="100" value="50" /></div>
+          <button class="btn btn--ghost" id="optimizeBtn">Rebalance (Game Theory)</button>
         </div>
-        <div class="row" style="margin-top:12px">
-          <button class="btn primary" onclick="computeAid()">Compute aid</button>
-          <div class="muted">Uses 2025-ish ranges; exact awards depend on FAFSA/CADAA + campus NPC.</div>
+        <div class="card">
+          <div class="sub">Next up</div>
+          <div id="nextTask" class="small muted">Add at least 3 schools to build docs & timeline.</div>
         </div>
-        <div id="aidResults" style="margin-top:12px"></div>
-        <div id="aidExtras" style="margin-top:6px"></div>
       </div>
-    </section>
-  </div>
+    </div>
+    <div class="card">
+      <h3>Your Schools</h3>
+      <div id="selGrid" class="grid"></div>
+    </div>
+    <div class="card">
+      <h3>Timeline (auto)</h3>
+      <div class="tline" id="tline"></div>
+    </div>
+  </section>
 
-  <!-- AI helper -->
-  <div id="aiBox">
-    <div class="x" onclick="document.getElementById('aiBox').style.display='none'">✕</div>
-    <div class="bubble">Need help?</div>
-  </div>
+  <!-- Schools -->
+  <section id="view-schools" class="hidden">
+    <div class="card">
+      <div class="row">
+        <h3>Explore & Add</h3>
+        <button class="btn btn--primary" id="addFromExplore">Add Selected</button>
+      </div>
+      <div id="exploreGrid" class="grid" style="margin-top:8px"></div>
+    </div>
+  </section>
+
+  <!-- Aid -->
+  <section id="view-aid" class="hidden">
+    <div class="card">
+      <h3>Financial Aid</h3>
+      <div class="grid-2">
+        <div>
+          <div class="label">Pick a school</div>
+          <select class="select" id="aidSchool"></select>
+        </div>
+        <div>
+          <div class="label">Family income (USD)</div>
+          <input class="input" id="income" type="number" placeholder="75000" value="75000" />
+        </div>
+      </div>
+      <div class="row" style="margin-top:8px">
+        <label class="small"><input type="checkbox" id="aidWhatIf"/> Preview as non-resident (what-if)</label>
+        <button class="btn btn--primary" id="calcAidBtn">Calculate eligibility</button>
+      </div>
+      <div class="hr"></div>
+      <div id="aidOut"></div>
+    </div>
+  </section>
+
+  <!-- Docs -->
+  <section id="view-docs" class="hidden">
+    <div class="card">
+      <div class="row">
+        <h3>Documents</h3>
+        <button class="btn btn--quiet" id="docsHelp">Help me write</button>
+      </div>
+      <div id="docsList"></div>
+    </div>
+  </section>
+</main>
+
+<!-- AI bubble -->
+<button class="ai" id="aiBtn" title="Need a hand?">🤖</button>
+
+<!-- Bottom sheet -->
+<div class="sheet" id="sheet">
+  <div class="sheet__grab"></div>
+  <div class="sheet__body" id="sheetBody"></div>
+</div>
 
 <script>
-/* ---------- utilities ---------- */
-const $=sel=>document.querySelector(sel);
-const $$=sel=>Array.from(document.querySelectorAll(sel));
-const today=()=>new Date();
-const save=()=>localStorage.setItem("pathwiseUser", JSON.stringify(user));
-function daysTo(dateStr){ const d=new Date(dateStr); return Math.max(0, Math.ceil((d-today())/(1000*60*60*24))); }
-
-/* ---------- state ---------- */
-let user = JSON.parse(localStorage.getItem("pathwiseUser")||"null") || {
-  name:"Student", gpa:3.5, sat:1300, ap:3, selected:[]
+/* -------------------- Data -------------------- */
+const STATES = ["CA","NY","TX","MA","IL"];
+const user = JSON.parse(localStorage.getItem("pw.user")||"null") || {
+  name:"", homeState:"CA", focus:"Balanced", gpa:null, sat:null, interests:["STEM"], selected:[], prefs:{cost:true, rep:false}, theme:"light"
 };
-let viewMode = "my";
-const storedSel = JSON.parse(localStorage.getItem("selectedSchools")||"[]");
-if(storedSel?.length){ user.selected = storedSel; }
+document.documentElement.setAttribute("data-theme", user.theme||"light");
 
-/* ---------- school data (CA-heavy + privates) ---------- */
 const SCHOOLS = [
-  // UCs
-  {id:1, name:"UC Berkeley", sector:"UC", rate:.15, avgGPA:4.25, avgSAT:1450, emphasis:"balanced",
-   app:{EA:false,ED:false,RD:true}, req:{letters:0,essays:"UC PIQs (4)"}, npc:"https://npc.berkeley.edu/", coa:{tuition:14700, roomBoard:21000}},
-  {id:2, name:"UCLA", sector:"UC", rate:.12, avgGPA:4.26, avgSAT:1445, emphasis:"balanced",
-   app:{RD:true}, req:{letters:0,essays:"UC PIQs (4)"}, npc:"https://npc.ucla.edu/", coa:{tuition:13400, roomBoard:21000}},
-  {id:3, name:"UC San Diego", sector:"UC", rate:.31, avgGPA:4.16, avgSAT:1410, emphasis:"scores",
-   app:{RD:true}, req:{letters:0,essays:"UC PIQs (4)"}, npc:"https://students.ucsd.edu/finances/financial-aid/net-price-calculator.html", coa:{tuition:14600, roomBoard:20500}},
-  {id:4, name:"UC Davis", sector:"UC", rate:.38, avgGPA:4.13, avgSAT:1350, emphasis:"balanced",
-   app:{RD:true}, req:{letters:0,essays:"UC PIQs (4)"}, npc:"https://www.ucdavis.edu/admissions/undergraduate/tuition/net-price", coa:{tuition:14600, roomBoard:20000}},
-  {id:5, name:"UC Irvine", sector:"UC", rate:.27, avgGPA:4.08, avgSAT:1360, emphasis:"balanced",
-   app:{RD:true}, req:{letters:0,essays:"UC PIQs (4)"}, npc:"https://www.ofas.uci.edu/npc", coa:{tuition:13700, roomBoard:20500}},
-  {id:6, name:"UC Santa Barbara", sector:"UC", rate:.30, avgGPA:4.15, avgSAT:1380, emphasis:"eca",
-   app:{RD:true}, req:{letters:0,essays:"UC PIQs (4)"}, npc:"https://www.finaid.ucsb.edu/aid-estimator", coa:{tuition:14400, roomBoard:21900}},
-  {id:7, name:"UC Santa Cruz", sector:"UC", rate:.51, avgGPA:3.96, avgSAT:1295, emphasis:"balanced",
-   app:{RD:true}, req:{letters:0,essays:"UC PIQs (4)"}, npc:"https://admissions.ucsc.edu/costs/npc.html", coa:{tuition:14000, roomBoard:21000}},
-  // CSU
-  {id:20, name:"Cal Poly SLO", sector:"CSU", rate:.33, avgGPA:4.06, avgSAT:1395, emphasis:"scores",
-   app:{RD:true}, req:{letters:0,essays:"None"}, npc:"https://npc.calpoly.edu/undergrad/", coa:{tuition:11000, roomBoard:20500}},
-  {id:21, name:"San Diego State", sector:"CSU", rate:.38, avgGPA:3.85, avgSAT:1270, emphasis:"balanced",
-   app:{RD:true}, req:{letters:0,essays:"None"}, npc:"https://www2.calstate.edu/attend/financial-aid/Pages/estimate-cost.aspx", coa:{tuition:8200, roomBoard:19800}},
-  // Privates
-  {id:101, name:"Stanford", sector:"Private", rate:.04, avgGPA:4.18, avgSAT:1520, emphasis:"balanced",
-   app:{EA:true,ED:false,RD:true}, req:{letters:2,essays:"CommonApp + supplements"}, npc:"https://npc.stanford.edu/", coa:{tuition:62910, roomBoard:20000}},
-  {id:102, name:"USC", sector:"Private", rate:.12, avgGPA:3.90, avgSAT:1450, emphasis:"eca",
-   app:{EA:false,ED:false,RD:true}, req:{letters:1,essays:"CommonApp + supplements"}, npc:"https://financialaid.usc.edu/undergraduates/npc", coa:{tuition:68700, roomBoard:19100}},
-  {id:103, name:"Pomona College", sector:"Private", rate:.07, avgGPA:4.00, avgSAT:1490, emphasis:"balanced",
-   app:{EA:false,ED:true,RD:true}, req:{letters:2,essays:"CommonApp + supplements"}, npc:"https://npc.pomona.edu/", coa:{tuition:65300, roomBoard:20500}},
-  {id:104, name:"Harvey Mudd", sector:"Private", rate:.14, avgGPA:4.10, avgSAT:1530, emphasis:"scores",
-   app:{EA:false,ED:true,RD:true}, req:{letters:2,essays:"CommonApp + supplements"}, npc:"https://npc.hmc.edu/", coa:{tuition:66500, roomBoard:20800}},
-  {id:105, name:"Santa Clara University", sector:"Private", rate:.54, avgGPA:3.70, avgSAT:1340, emphasis:"balanced",
-   app:{EA:true,ED:false,RD:true}, req:{letters:1,essays:"CommonApp"}, npc:"https://www.scu.edu/financialaid/undergraduates/costs/net-price-calculator/", coa:{tuition:63600, roomBoard:20700}},
-  {id:106, name:"Loyola Marymount (LMU)", sector:"Private", rate:.47, avgGPA:3.80, avgSAT:1300, emphasis:"eca",
-   app:{EA:true,ED:false,RD:true}, req:{letters:1,essays:"CommonApp + supplement"}, npc:"https://npc.lmu.edu/", coa:{tuition:58800, roomBoard:21400}},
+  // CA
+  {id:1, name:"UC Berkeley", state:"CA", public:true, rep:5, sys:"UC", avgGPA:4.25, avgSAT:1450, tRes:14226, tNon:45248},
+  {id:2, name:"UCLA", state:"CA", public:true, rep:5, sys:"UC", avgGPA:4.26, avgSAT:1445, tRes:13401, tNon:43893},
+  {id:3, name:"UC San Diego", state:"CA", public:true, rep:4, sys:"UC", avgGPA:4.16, avgSAT:1410, tRes:14616, tNon:45639},
+  {id:4, name:"Cal Poly SLO", state:"CA", public:true, rep:4, sys:"CSU", avgGPA:4.06, avgSAT:1395, tRes:10377, tNon:27587},
+  {id:5, name:"San Diego State", state:"CA", public:true, rep:3, sys:"CSU", avgGPA:3.85, avgSAT:1270, tRes:7720, tNon:19700},
+  {id:6, name:"Stanford", state:"CA", public:false, rep:5, sys:"Private", avgGPA:4.18, avgSAT:1520, tRes:61650, tNon:61650},
+  // NY
+  {id:7, name:"Columbia", state:"NY", public:false, rep:5, sys:"Private", avgGPA:4.15, avgSAT:1510, tRes:65324, tNon:65324},
+  {id:8, name:"NYU", state:"NY", public:false, rep:4, sys:"Private", avgGPA:3.9, avgSAT:1450, tRes:56800, tNon:56800},
+  {id:9, name:"SUNY Binghamton", state:"NY", public:true, rep:3, sys:"SUNY", avgGPA:3.7, avgSAT:1370, tRes:10500, tNon:28700},
+  // TX
+  {id:10, name:"UT Austin", state:"TX", public:true, rep:5, sys:"UT", avgGPA:3.9, avgSAT:1380, tRes:11300, tNon:40400},
+  {id:11, name:"Texas A&M", state:"TX", public:true, rep:4, sys:"TAMU", avgGPA:3.8, avgSAT:1270, tRes:13300, tNon:40400},
+  // MA
+  {id:12, name:"UMass Amherst", state:"MA", public:true, rep:3, sys:"UMass", avgGPA:3.9, avgSAT:1300, tRes:16952, tNon:38816},
+  {id:13, name:"Northeastern", state:"MA", public:false, rep:4, sys:"Private", avgGPA:3.9, avgSAT:1480, tRes:62100, tNon:62100},
+  // IL
+  {id:14, name:"UIUC", state:"IL", public:true, rep:4, sys:"UI", avgGPA:3.9, avgSAT:1420, tRes:17000, tNon:36800},
+  {id:15, name:"UChicago", state:"IL", public:false, rep:5, sys:"Private", avgGPA:3.95, avgSAT:1530, tRes:63500, tNon:63500},
 ];
 
-/* ---------- matching/score ---------- */
-function scoreFor(s, gpa, sat){
-  let score = 50;
-  if(s.avgGPA){ score += (gpa - s.avgGPA) * 22; }
-  if(s.avgSAT && sat){ score += (sat - s.avgSAT)/10; }
-  if(s.emphasis==="scores" && sat){ score += 6; }
-  if(s.emphasis==="eca"){ score += 3; }
-  score += (user.ap||0)*1.5;
-  return Math.max(5, Math.min(98, Math.round(score)));
-}
-
-/* ---------- rendering ---------- */
-function cardHTML(s){
-  const sc = scoreFor(s, user.gpa, user.sat);
-  const inList = user.selected.includes(s.id);
-  const cat = sc>=70 ? "ok" : sc<45 ? "danger" : "";
-  const appTypes = Object.entries(s.app).filter(([k,v])=>v).map(([k])=>k.toUpperCase()).join(" / ") || "—";
-  const focus = s.emphasis==="scores"?"Scores-heavy":s.emphasis==="eca"?"ECA-heavy":"Balanced";
-  return `<div class="card school k">
-    <div class="head"><strong>${s.name}</strong> <span class="tag ${cat}">${sc}% match</span></div>
-    <div class="muted">${s.sector} • Admit ${(s.rate*100).toFixed(0)}% • Avg GPA ${s.avgGPA??"—"} • SAT ${s.avgSAT??"—"}</div>
-    <div class="row" style="margin-top:6px">
-      <span class="tag">${focus}</span>
-      <span class="tag">App: ${appTypes}</span>
-      <span class="tag">Req: ${s.req.letters||0} recs • ${s.req.essays}</span>
-    </div>
-    <div class="flex" style="margin-top:10px">
-      <button class="btn ${inList?'':'primary'}" onclick="toggleSchool(${s.id})">${inList?'Remove':'Add'}</button>
-      <button class="btn" onclick="openAidForSchool(${s.id})">Aid</button>
-      <div class="right"></div>
-    </div>
-  </div>`;
-}
-
-function renderSchools(){
-  const removed = JSON.parse(localStorage.getItem("removedSchools")||"[]");
-  const catalog = SCHOOLS.filter(s=>!removed.includes(s.id));
-  const list = (viewMode==="my" && user.selected.length) ? catalog.filter(s=>user.selected.includes(s.id)) : catalog;
-  const buckets = {reach:[], match:[], safety:[]};
-
-  list.forEach(s=>{
-    const sc = scoreFor(s, user.gpa, user.sat);
-    let b="match";
-    const gdiff = user.gpa - (s.avgGPA||3.7);
-    if(sc<45 || gdiff<-0.25) b="reach";
-    else if(sc>=70 || gdiff>0.25) b="safety";
-    buckets[b].push(cardHTML(s));
-  });
-
-  $("#reach").innerHTML = buckets.reach.join("") || `<div class="muted">None here yet.</div>`;
-  $("#match").innerHTML = buckets.match.join("") || `<div class="muted">None here yet.</div>`;
-  $("#safety").innerHTML = buckets.safety.join("") || `<div class="muted">None here yet.</div>`;
-  $("#myCount").textContent = user.selected.length;
-  $("#statSchools").textContent = user.selected.length.toString();
-}
-
-/* ---------- docs (generated) ---------- */
-const DOC_MAP = {
-  UC:      [{id:"uc_piq", label:"UC PIQs (4 essays)"},{id:"uc_app", label:"UC application"},{id:"transcripts", label:"Official transcripts"}],
-  CSU:     [{id:"csu_app", label:"CSU application"},{id:"transcripts", label:"Official transcripts"}],
-  Common:  [{id:"common_ps", label:"CommonApp personal statement"},{id:"common_app", label:"Common Application"}],
-  Recs2:   [{id:"recs", label:"Letters of recommendation (2)"}],
-  Recs1:   [{id:"recs", label:"Letter of recommendation (1)"}],
-  Supp:    [{id:"supp", label:"School supplements"}],
-  Test:    [{id:"scores", label:"Official test scores (if sending)"}]
+const REQUIREMENTS = {
+  UC:    ["UC App","UC PIQ Essays (4)","Transcript (self-report)","FAFSA/CA Dream Act"],
+  CSU:   ["CSU App","Transcript (self-report)","FAFSA/CA Dream Act"],
+  Private:["Common App","Personal Statement","2 Recs","Transcript","FAFSA/CSS Profile"],
+  SUNY:  ["SUNY App or Common App","Transcript","1–2 Recs","FAFSA"],
+  UT:    ["ApplyTexas","Essay A","Transcript","FAFSA"],
+  TAMU:  ["ApplyTexas","Essay","Transcript","FAFSA"],
+  UMass: ["Common App","Essay","Transcript","FAFSA"],
+  UI:    ["Common App","Essay","Transcript","FAFSA"]
 };
 
-function rebuildDocuments(){
-  const chosen = SCHOOLS.filter(s=>user.selected.includes(s.id));
-  const grid = $("#documentsGrid");
-  if(!chosen.length){ grid.innerHTML = `<div class="muted">Add schools to build your checklist.</div>`; return; }
+const DEADLINES = {
+  UC: {submit:"Nov 30", priority:"Nov 15"},
+  CSU:{submit:"Nov 30"},
+  Private:{submit:"Jan 1"},
+  SUNY:{submit:"Jan 15"},
+  UT:{submit:"Dec 1"},
+  TAMU:{submit:"Dec 1"},
+  UMass:{submit:"Jan 15"},
+  UI:{submit:"Jan 5"}
+};
 
-  const set = new Map();
-  for(const s of chosen){
-    if(s.sector==="UC") DOC_MAP.UC.forEach(d=>set.set(d.id,d));
-    else if(s.sector==="CSU") DOC_MAP.CSU.forEach(d=>set.set(d.id,d));
-    else{
-      DOC_MAP.Common.forEach(d=>set.set(d.id,d));
-      if(s.req?.letters>=2) DOC_MAP.Recs2.forEach(d=>set.set(d.id,d));
-      else if(s.req?.letters>=1) DOC_MAP.Recs1.forEach(d=>set.set(d.id,d));
-      DOC_MAP.Supp.forEach(d=>set.set(d.id,d));
-      DOC_MAP.Test.forEach(d=>set.set(d.id,d));
-    }
-  }
+/* -------------------- Utilities -------------------- */
+const $ = sel => document.querySelector(sel);
+const $$ = sel => Array.from(document.querySelectorAll(sel));
+function save(){ localStorage.setItem("pw.user", JSON.stringify(user)); }
+function isResident(s){ return user.homeState === s.state && s.public; }
+function tuitionFor(s, whatIfNonRes=false){
+  if(!s.public) return s.tRes;
+  if(whatIfNonRes) return s.tNon;
+  return isResident(s)? s.tRes : s.tNon;
+}
+function matchScore(s){
+  // light heuristic: GPA/SAT vs average + interest/prefs + reputation
+  let score = 50;
+  if(user.gpa){ score += (user.gpa - s.avgGPA)*20; }
+  if(user.sat){ score += (user.sat - s.avgSAT)/10; }
+  if(user.prefs.rep) score += s.rep*1.5;
+  if(user.prefs.cost) score += (s.public?3:0) - (tuitionFor(s)>40000?4:0);
+  score = Math.max(5, Math.min(95, Math.round(score)));
+  return score;
+}
+function bucketFor(s){
+  const sc = matchScore(s);
+  if(sc >= 70) return "safe";
+  if(sc >= 50) return "match";
+  return "reach";
+}
+function daysUntil(dateStr){
+  const y = (new Date()).getFullYear();
+  const d = new Date(`${dateStr}, ${y} 23:59:59`);
+  const t = (d - new Date())/(1000*60*60*24);
+  return Math.ceil(t);
+}
 
-  const saved = JSON.parse(localStorage.getItem("docStatus")||"{}");
-  const items = Array.from(set.values());
-  const rows = items.map(d=>{
-    const st = saved[d.id]||{done:false,due:""};
-    return `<div class="card k3">
-      <div class="flex">
-        <div class="chx">
-          <input type="checkbox" ${st.done?"checked":""} onchange="markDoc('${d.id}',this.checked)">
-          <div><strong>${d.label}</strong><div class="muted">${st.due?("Due "+st.due):"Set a due date"}</div></div>
-        </div>
-        <div class="right">
-          <input type="date" class="input" style="width:180px" value="${st.due||""}" onchange="setDocDue('${d.id}',this.value)">
-        </div>
-      </div>
-    </div>`;
+/* -------------------- Theme -------------------- */
+$("#themeBtn").onclick = ()=>{
+  const next = document.documentElement.getAttribute("data-theme")==="dark" ? "light" : "dark";
+  document.documentElement.setAttribute("data-theme", next);
+  user.theme = next; save();
+};
+
+/* -------------------- Header Segments -------------------- */
+$("#seg").addEventListener("click",(e)=>{
+  const btn = e.target.closest(".seg__btn"); if(!btn) return;
+  $$(".seg__btn").forEach(b=>b.classList.remove("is-active"));
+  btn.classList.add("is-active");
+  const tab = btn.dataset.tab;
+  // toggle filters visibility
+  $("#chips").style.display = (tab==="schools") ? "flex" : "none";
+  // views
+  ["dash","schools","aid","docs"].forEach(name=>{
+    $("#view-"+name).classList.toggle("hidden", name!==tab);
   });
+});
 
-  grid.innerHTML = rows.join("");
-  const pct = Math.round(100*items.filter(d=>(saved[d.id]||{}).done).length / Math.max(1,items.length));
-  $("#documents .title").innerHTML = `<strong>Documents checklist</strong> <span class="muted">— <span style="font-weight:800">${pct}%</span> complete</span>`;
-}
+/* -------------------- Planning (Bottom Sheet) -------------------- */
+const sheet = $("#sheet"), sheetBody=$("#sheetBody");
+function openSheet(html){ sheetBody.innerHTML=html; sheet.classList.add("is-open"); }
+function closeSheet(){ sheet.classList.remove("is-open"); }
+sheet.addEventListener("click",(e)=>{ if(e.target===sheet) closeSheet(); });
 
-/* doc state helpers */
-function markDoc(id, done){
-  const saved = JSON.parse(localStorage.getItem("docStatus")||"{}");
-  saved[id] = saved[id]||{};
-  saved[id].done = !!done;
-  localStorage.setItem("docStatus", JSON.stringify(saved));
-  rebuildDocuments(); rebuildTimeline();
-}
-function setDocDue(id, date){
-  const saved = JSON.parse(localStorage.getItem("docStatus")||"{}");
-  saved[id] = saved[id]||{};
-  saved[id].due = date;
-  localStorage.setItem("docStatus", JSON.stringify(saved));
-  rebuildDocuments(); rebuildTimeline();
-}
-
-/* ---------- timeline (generated) ---------- */
-function schoolDeadlines(s){
-  const items=[];
-  if(s.sector==="UC" || s.sector==="CSU"){
-    items.push({id:`${s.id}_deadline`, label:`${s.name} application deadline`, date:"2025-11-30"});
-  } else {
-    if(s.app?.EA) items.push({id:`${s.id}_ea`, label:`${s.name} Early Action`, date:"2025-11-01"});
-    if(s.app?.ED) items.push({id:`${s.id}_ed`, label:`${s.name} Early Decision`, date:"2025-11-15"});
-    if(s.app?.RD || (!s.app?.EA && !s.app?.ED)) items.push({id:`${s.id}_rd`, label:`${s.name} Regular Decision`, date:"2026-01-01"});
-  }
-  return items;
-}
-
-function rebuildTimeline(){
-  const chosen = SCHOOLS.filter(s=>user.selected.includes(s.id));
-  const grid = $("#timelineGrid");
-  if(!chosen.length){ grid.innerHTML = `<div class="muted">Add schools to build your timeline.</div>`; return; }
-
-  const docs = JSON.parse(localStorage.getItem("docStatus")||"{}");
-  let events=[];
-  chosen.forEach(s=>events=events.concat(schoolDeadlines(s)));
-  Object.entries(docs).forEach(([id,st])=>{ if(st?.due) events.push({id:`doc_${id}`, label:`${id.replaceAll('_',' ').toUpperCase()}`, date:st.due}); });
-
-  const now = new Date();
-  const rows = events.sort((a,b)=>new Date(a.date)-new Date(b.date)).map(ev=>{
-    const d=new Date(ev.date); const days=Math.ceil((d-now)/(1000*60*60*24));
-    const color = days<=7?"red":days<=21?"orange":"green";
-    return `<div class="card k3">
-      <div class="flex">
-        <div><span class="dot ${color}"></span> <strong>${ev.label}</strong><div class="muted">${d.toDateString()}</div></div>
-        <div class="right muted">${days>0?days+" days":"due"}</div>
-      </div>
-    </div>`;
-  });
-  grid.innerHTML = rows.join("");
-}
-
-/* ---------- aid ---------- */
-function computeAid(){
-  const campus = $("#aidCampus").value;     // uc, csu, private
-  const resident = $("#aidResident").value === "yes";
-  const income = parseInt($("#aidIncome").value||"0",10);
-  const gpa = user.gpa||3.5;
-
-  // Pell — rough
-  let pell = 0;
-  if(income>0){
-    if(income<=35000) pell = 7395;
-    else if(income<=60000) pell = 3000;
-  }
-
-  // Cal Grant tuition awards (approx)
-  let cal = 0;
-  if(resident && gpa>=3.0){
-    if(campus==="uc") cal = 13752;
-    else if(campus==="csu") cal = 5742;
-    else if(campus==="private") cal = 9500; // varies by sector; rough cap
-  }
-  const total = pell + cal;
-
-  $("#aidResults").innerHTML = `
-    <div class="card k3">
-      <div class="grid">
-        <div class="k3 row" style="justify-content:space-between"><div><strong>Estimated Federal Pell Grant</strong></div><div><strong>$${pell.toLocaleString()}</strong></div></div>
-        <div class="k3 row" style="justify-content:space-between"><div><strong>Cal Grant (if eligible)</strong></div><div><strong>$${cal.toLocaleString()}</strong></div></div>
-        <div class="k3 row" style="justify-content:space-between;border-top:1px solid var(--bord);padding-top:10px;margin-top:6px"><div><strong>Total estimated grant aid</strong></div><div><strong>$${total.toLocaleString()}</strong></div></div>
-      </div>
-      <div class="muted" style="margin-top:8px">Estimates only; use each school’s Net Price Calculator for precise awards.</div>
+function openPlanning(){
+  const html = `
+  <div class="row"><h3>Planning</h3><button class="btn btn--danger" id="resetPlan">Reset plan</button></div>
+  <div class="hr"></div>
+  <div class="grid-2">
+    <div>
+      <div class="label">First name</div>
+      <input class="input" id="pName" placeholder="Your name" value="${user.name||""}" />
     </div>
-  `;
+    <div>
+      <div class="label">Home state (for residency)</div>
+      <select class="select" id="pState">${STATES.map(s=>`<option ${user.homeState===s?"selected":""}>${s}</option>`).join("")}</select>
+    </div>
+  </div>
+  <div class="grid-2" style="margin-top:8px">
+    <div>
+      <div class="label">GPA (0–5, optional)</div>
+      <input class="input" id="pGPA" type="number" step="0.01" min="0" max="5" value="${user.gpa??""}" />
+    </div>
+    <div>
+      <div class="label">SAT (optional)</div>
+      <input class="input" id="pSAT" type="number" min="400" max="1600" value="${user.sat??""}" />
+    </div>
+  </div>
+  <div class="hr"></div>
+  <div class="label">Focus</div>
+  <div class="chips" style="padding:0">
+    ${["Balanced","Cost","Reputation","STEM","Humanities"].map(f=>`
+      <button class="chip ${user.focus===f?"is-on":""}" data-focus="${f}">${f}</button>`).join("")}
+  </div>
+  <div class="hr"></div>
+  <div class="row">
+    <button class="btn btn--ghost" id="closePlan">Cancel</button>
+    <button class="btn btn--primary" id="savePlan">Save planning</button>
+  </div>`;
+  openSheet(html);
+
+  // interactions
+  sheetBody.querySelectorAll('[data-focus]').forEach(ch=>{
+    ch.addEventListener('click',()=> {
+      sheetBody.querySelectorAll('[data-focus]').forEach(x=>x.classList.remove('is-on'));
+      ch.classList.add('is-on');
+      user.focus = ch.dataset.focus;
+    });
+  });
+  $("#closePlan").onclick = closeSheet;
+  $("#resetPlan").onclick = ()=>{ if(confirm("Reset planning and clear selected schools?")){
+    user.name=""; user.homeState="CA"; user.gpa=null; user.sat=null; user.focus="Balanced"; user.selected=[]; save(); hydrate(); closeSheet();
+  }};
+  $("#savePlan").onclick = ()=>{
+    user.name = $("#pName").value.trim();
+    user.homeState = $("#pState").value;
+    const g = parseFloat($("#pGPA").value); user.gpa = isNaN(g)? null : Math.max(0, Math.min(5,g));
+    const s = parseInt($("#pSAT").value); user.sat = isNaN(s)? null : Math.max(400, Math.min(1600,s));
+    save(); hydrate(); closeSheet();
+  };
+}
+$("#editPlanBtn").onclick = openPlanning;
+
+/* -------------------- Summary + Dashboard -------------------- */
+function hydrateSummary(){
+  $("#sumHome").textContent = `Home: ${user.homeState}`;
+  $("#sumFocus").textContent = `Focus: ${user.focus}`;
+  $("#sumGPA").textContent = `GPA: ${user.gpa??"—"}`;
+  $("#helloName").textContent = user.name? `, ${user.name}` : "";
+}
+function renderSelectedGrid(){
+  const container = $("#selGrid");
+  if(user.selected.length===0){ container.innerHTML = `<div class="sub">No schools yet. Click “Add Schools”.</div>`; return; }
+  container.innerHTML = user.selected.map(id=>{
+    const s = SCHOOLS.find(x=>x.id===id);
+    const b = bucketFor(s), pill = b==="reach"?"pill--reach":b==="match"?"pill--match":"pill--safe";
+    const t = tuitionFor(s);
+    return `
+      <div class="scard">
+        <div class="row">
+          <strong>${s.name}</strong>
+          <span class="pill ${pill}">${b[0].toUpperCase()+b.slice(1)} • ${matchScore(s)}%</span>
+        </div>
+        <div class="meta">Avg GPA ${s.avgGPA.toFixed(2)} • SAT ${s.avgSAT} • ${s.public?"Public":"Private"} • ${s.state}</div>
+        <div class="row"><span>Your tuition</span><strong>$${t.toLocaleString()} <span class="pill pill--res">${isResident(s)?"Resident":"Non-resident"}</span></strong></div>
+        <footer>
+          <button class="btn btn--quiet" onclick="openReqs(${s.id})">Requirements</button>
+          <button class="btn btn--quiet" onclick="openAid(${s.id})">Aid</button>
+          <button class="btn btn--ghost" onclick="removeSchool(${s.id})">Remove</button>
+        </footer>
+      </div>`;
+  }).join("");
+  $("#statCount").textContent = user.selected.length;
+}
+function nextTask(){
+  if(user.selected.length<3) return "Add at least 3 schools to unlock a stronger plan.";
+  return "Open Docs and check off your first item.";
+}
+function hydrateDash(){
+  hydrateSummary();
+  renderSelectedGrid();
+  $("#nextTask").textContent = nextTask();
+  buildTimeline();
 }
 
-function openAidForSchool(id){
+/* -------------------- Explore / Add -------------------- */
+const exploreSel = new Set();
+function renderExplore(){
+  const chips = $("#chips");
+  let filter = chips.querySelector(".chip.is-on")?.dataset.filter || "all";
+  const list = SCHOOLS.filter(s=>{
+    if(filter==="instate") return s.state===user.homeState && s.public;
+    if(filter==="public") return s.public;
+    if(filter==="private") return !s.public;
+    if(filter==="cost") return tuitionFor(s) < 20000;
+    if(filter==="rep") return s.rep>=5;
+    return true;
+  });
+  $("#exploreGrid").innerHTML = list.map(s=>{
+    const b = bucketFor(s), pill = b==="reach"?"pill--reach":b==="match"?"pill--match":"pill--safe";
+    const t = tuitionFor(s);
+    const picked = exploreSel.has(s.id);
+    return `
+      <div class="scard" data-id="${s.id}">
+        <div class="row"><strong>${s.name}</strong><span class="pill ${pill}">${b} • ${matchScore(s)}%</span></div>
+        <div class="meta">${s.state} • ${s.public?"Public":"Private"} • Rep ${s.rep}/5</div>
+        <div class="row"><span>Tuition</span><strong>$${t.toLocaleString()} <span class="pill pill--res">${isResident(s)?"Resident":"Non-resident"}</span></strong></div>
+        <footer>
+          <button class="btn ${picked?"btn--ghost":"btn--primary"}" onclick="togglePick(${s.id})">${picked?"Unselect":"Select"}</button>
+        </footer>
+      </div>`;
+  }).join("");
+}
+function togglePick(id){ exploreSel.has(id)? exploreSel.delete(id): exploreSel.add(id); renderExplore(); }
+$("#chips").addEventListener("click",(e)=>{
+  const chip = e.target.closest(".chip"); if(!chip) return;
+  $("#chips").querySelectorAll(".chip").forEach(c=>c.classList.remove("is-on"));
+  chip.classList.add("is-on");
+  renderExplore();
+});
+$("#addSchoolsBtn").onclick = ()=>{ // open quick picker
+  $$('#seg .seg__btn').forEach(b=>b.classList.toggle('is-active', b.dataset.tab==="schools"));
+  $("#view-dash").classList.add("hidden");
+  $("#view-schools").classList.remove("hidden");
+  $("#chips").style.display="flex";
+  renderExplore();
+};
+$("#addFromExplore").onclick = ()=>{
+  exploreSel.forEach(id=>{
+    if(!user.selected.includes(id)) user.selected.push(id);
+  });
+  save(); exploreSel.clear(); renderExplore(); hydrateDash(); // stay or go back
+  alert("Added to your plan."); 
+};
+
+/* Remove */
+window.removeSchool = (id)=>{
+  user.selected = user.selected.filter(x=>x!==id);
+  save(); hydrateDash(); buildDocs();
+};
+
+/* -------------------- Requirements sheet -------------------- */
+window.openReqs = (id)=>{
   const s = SCHOOLS.find(x=>x.id===id);
-  if(!s) return;
-  const btn = $$(".tab").find(b=>b.dataset.tab==="aid");
-  switchTab(btn); // switch
-  $("#aidCampus").value = s.sector.toLowerCase()==="uc" ? "uc" : s.sector.toLowerCase()==="csu" ? "csu" : "private";
-  computeAid();
-  let extra = "";
-  if(s.coa) extra += `<div class="muted">Est. COA: tuition ~$${(s.coa.tuition||0).toLocaleString()}, room+board ~$${(s.coa.roomBoard||0).toLocaleString()}</div>`;
-  if(s.npc) extra += ` <a class="badge link" href="${s.npc}" target="_blank">Open ${s.name} Net Price Calculator</a>`;
-  $("#aidExtras").innerHTML = extra;
-  pokeAI("aid");
-}
+  const req = REQUIREMENTS[s.sys]||["Application","Transcript","FAFSA"];
+  const html = `<h3>${s.name} — Requirements</h3>
+  <div class="sub">${s.sys} • ${s.public?"Public":"Private"}</div>
+  <div class="hr"></div>
+  ${req.map(x=>`<div class="chk"><span class="tag">Req</span><div>${x}</div></div>`).join("")}
+  <div class="hr"></div>
+  <button class="btn btn--primary" onclick="closeSheet()">Done</button>`;
+  openSheet(html);
+};
 
-/* ---------- planning ---------- */
-function applyPlanning(){
-  const g=parseFloat($("#inGpa").value)||user.gpa;
-  const s=parseInt($("#inSat").value||user.sat,10)||user.sat;
-  const a=parseInt($("#inAp").value||user.ap,10)||user.ap;
-  user.gpa=g; user.sat=s; user.ap=a; save();
-  hydrateStats(); renderSchools(); rebuildDocuments(); rebuildTimeline(); computeAid();
-  pokeAI("planning");
+/* -------------------- Aid (tab + sheet) -------------------- */
+function hydrateAidSelect(){
+  const select = $("#aidSchool");
+  const pool = user.selected.length? user.selected.map(id=>SCHOOLS.find(s=>s.id===id)) : SCHOOLS;
+  select.innerHTML = pool.map(s=>`<option value="${s.id}">${s.name}</option>`).join("");
 }
-function resetPlanning(){
-  $("#inGpa").value=""; $("#inSat").value=""; $("#inAp").value="";
-  user.gpa=3.5; user.sat=1300; user.ap=3; save();
-  hydrateStats(); renderSchools(); rebuildDocuments(); rebuildTimeline(); computeAid();
+function calcAidFor(school, income, whatIf){
+  // very simple illustrative logic (you asked to pin precise tables for later)
+  const s = school;
+  const resTuition = tuitionFor(s, whatIf);
+  let pell = income<50000 ? 6500 : income<70000 ? 3000 : 0;
+  let state = 0;
+  if(s.state==="CA" && s.public){ // rough Cal Grant proxy
+    if(income<80000 && (user.gpa??3.0)>=3.0) state = 12500;
+  }
+  // institutional (heuristic, rep and private increase grant likelihood but also cost)
+  let inst = (!s.public && income<120000) ? 8000 : (s.public? 1200: 3000);
+  const total = Math.max(0, pell+state+inst);
+  const net = Math.max(0, resTuition - total);
+  return {tuition:resTuition,pell,state,inst,total,net};
 }
-
-/* tasks */
-function addTask(){
-  const v=$("#taskIn").value.trim(); if(!v) return;
-  const li=document.createElement("li");
-  li.innerHTML=`<div class="row"><span>${v}</span><div class="right"><button class="btn" onclick="this.closest('li').remove(); persistTasks()">Done</button></div></div>`;
-  $("#taskList").appendChild(li); $("#taskIn").value="";
-  persistTasks();
-}
-function persistTasks(){
-  const arr=[...$("#taskList").children].map(li=>li.innerText.replace("Done","").trim());
-  localStorage.setItem("pathwiseTasks", JSON.stringify(arr));
-}
-function loadTasks(){
-  const arr=JSON.parse(localStorage.getItem("pathwiseTasks")||"[]");
-  $("#taskList").innerHTML="";
-  arr.forEach(t=>{
-    const li=document.createElement("li");
-    li.innerHTML=`<div class="row"><span>${t}</span><div class="right"><button class="btn" onclick="this.closest('li').remove(); persistTasks()">Done</button></div></div>`;
-    $("#taskList").appendChild(li);
-  });
-}
-
-/* ---------- selection / view ---------- */
-function toggleSchool(id){
-  const i=user.selected.indexOf(id);
-  if(i>-1) user.selected.splice(i,1); else user.selected.push(id);
-  localStorage.setItem("selectedSchools", JSON.stringify(user.selected));
-  $("#myCount").textContent=user.selected.length;
-  renderSchools(); rebuildDocuments(); rebuildTimeline();
-  pokeAI("documents");
-}
-function setViewMode(mode){
-  viewMode=mode;
-  $$("#viewFilters .pill").forEach(p=>p.classList.toggle("sel", p.dataset.mode===mode));
-  renderSchools();
-}
-
-/* ---------- AI helper ---------- */
-function pokeAI(page){
-  const tips={
-    dashboard:["Add 2 safeties first, then build reach/match.","Sort by match% and prune to 8–12 schools."],
-    planning:["Small GPA gains shift matches; consider 1 AP.","Try a 4-week SAT sprint: 3 sets/week."],
-    documents:["Start UC PIQs early: 1/week cadence.","Ask for recs 3–4 weeks ahead of deadlines."],
-    timeline:["Back-plan 10–14 days for final edits.","Colors show urgency: red≤7d, orange≤21d."],
-    aid:["If income ≤$35k, Pell often maxes.","Always run the school’s NPC for accuracy."]
-  };
-  const list=tips[page]||tips.dashboard;
-  $("#aiBox .bubble").innerHTML=`<strong>Tip</strong><br>${list[Math.floor(Math.random()*list.length)]}`;
-  $("#aiBox").style.display="block";
-}
-function aiDocs(){
-  pokeAI("documents");
-  $("#aiBox .bubble").innerHTML = `
-    <strong>Writing helper</strong><br>
-    Choose a template:<br>
-    <button class="btn" style="margin-top:6px" onclick="openTemplate('uc')">UC PIQ outline</button>
-    <button class="btn" style="margin-top:6px" onclick="openTemplate('common')">CommonApp outline</button>
-    <button class="btn" style="margin-top:6px" onclick="openTemplate('rec')">Ask for a rec (email)</button>
+$("#calcAidBtn").onclick = ()=>{
+  const id = parseInt($("#aidSchool").value);
+  const s = SCHOOLS.find(x=>x.id===id);
+  const income = parseInt($("#income").value)||0;
+  const whatIf = $("#aidWhatIf").checked;
+  const r = calcAidFor(s, income, whatIf);
+  $("#aidOut").innerHTML = `
+    <div class="row"><div class="sub">Tuition (${whatIf?"what-if non-resident": isResident(s)?"resident":"non-resident"})</div><strong>$${r.tuition.toLocaleString()}</strong></div>
+    <div class="hr"></div>
+    <div class="row"><span>Pell Grant</span><strong>$${r.pell.toLocaleString()}</strong></div>
+    <div class="row"><span>State Aid</span><strong>$${r.state.toLocaleString()}</strong></div>
+    <div class="row"><span>Institutional Est.</span><strong>$${r.inst.toLocaleString()}</strong></div>
+    <div class="hr"></div>
+    <div class="row"><strong>Total Aid</strong><strong>$${r.total.toLocaleString()}</strong></div>
+    <div class="row"><strong>Estimated Net</strong><strong>$${r.net.toLocaleString()}</strong></div>
+    <div class="small muted">Approximate 2025 logic. We’ll swap in current-year tables next.</div>
   `;
-}
-function openTemplate(kind){
-  const t={
-    uc:`PIQ Prompt #X: [Theme]\n• Context…\n• Role…\n• Actions…\n• Impact…\n• Reflection…\n(250–320 words each)`,
-    common:`Hook → Context → Challenge → Choices → Change → Meaning\n(600–650 words; 3–5 scenes, all yours)`,
-    rec:`Subject: Recommendation request\n\nHi [Teacher],\nI enjoyed [class/moment]. I’m applying to [schools]; would you be willing to write a recommendation? I can share my resume + bullets. Deadline: [date].\nThank you!\n[Name]`
+};
+window.openAid = (id)=>{
+  const s = SCHOOLS.find(x=>x.id===id);
+  const income = parseInt($("#income").value)||75000;
+  const r = calcAidFor(s, income, false);
+  const html = `
+    <h3>${s.name} — Aid Snapshot</h3>
+    <div class="row"><div class="sub">Residency</div><div>${isResident(s)?"Resident":"Non-resident"}</div></div>
+    <div class="row"><div>Tuition</div><strong>$${r.tuition.toLocaleString()}</strong></div>
+    <div class="hr"></div>
+    <div class="row"><span>Pell</span><strong>$${r.pell.toLocaleString()}</strong></div>
+    <div class="row"><span>State</span><strong>$${r.state.toLocaleString()}</strong></div>
+    <div class="row"><span>Institutional</span><strong>$${r.inst.toLocaleString()}</strong></div>
+    <div class="hr"></div>
+    <div class="row"><strong>Net</strong><strong>$${r.net.toLocaleString()}</strong></div>
+    <div class="hr"></div>
+    <label class="small"><input id="sheetWhatIf" type="checkbox" /> Preview as non-resident</label>
+    <div class="row" style="margin-top:8px"><button class="btn btn--primary" id="sheetClose">Close</button></div>
+  `;
+  openSheet(html);
+  $("#sheetClose").onclick = closeSheet;
+  $("#sheetWhatIf").onchange = (e)=>{
+    const sim = calcAidFor(s, income, e.target.checked);
+    // re-render delta rows in place (for brevity we re-open)
+    openAid(id);
+    $("#sheetWhatIf").checked = e.target.checked;
   };
-  alert(t[kind]||"Template coming soon");
-}
+};
 
-/* ---------- global ---------- */
-function hydrateStats(){
-  $("#uName").textContent = user.name||"Student";
-  $("#statGpa").textContent = (user.gpa||0).toFixed(2);
-  $("#statDays").textContent = daysTo("2025-11-30");
-  $("#myCount").textContent = user.selected.length;
-  $("#inGpa").placeholder=user.gpa.toFixed(2);
-  $("#inSat").placeholder=user.sat||"";
-  $("#inAp").placeholder=user.ap||"";
-}
-function resetAll(){
-  if(!confirm("Reset everything (profile, tasks, selections)?")) return;
-  localStorage.removeItem("pathwiseUser");
-  localStorage.removeItem("pathwiseTasks");
-  localStorage.removeItem("removedSchools");
-  localStorage.removeItem("docStatus");
-  localStorage.removeItem("selectedSchools");
-  location.reload();
-}
-
-/* tabs */
-function switchTab(btn){
-  $$(".tab").forEach(b=>b.classList.toggle("active", b===btn));
-  const name = btn.dataset.tab;
-  ["dashboard","planning","documents","timeline","aid"].forEach(id=>{
-    document.getElementById(id).style.display = (id===name) ? "" : "none";
+/* -------------------- Docs (interactive) -------------------- */
+function docKey(id,name){ return `pw.doc.${id}.${name}`; }
+function buildDocs(){
+  const list = $("#docsList");
+  if(user.selected.length===0){ list.innerHTML = `<div class="sub">Add schools to generate your checklist.</div>`; return; }
+  // aggregate requirements by selected schools
+  const rows = [];
+  user.selected.forEach(id=>{
+    const s = SCHOOLS.find(x=>x.id===id);
+    const req = REQUIREMENTS[s.sys]||[];
+    req.forEach(item=>{
+      const key = docKey(id,item);
+      const checked = localStorage.getItem(key)==="1";
+      rows.push(`<label class="chk">
+        <input type="checkbox" data-doc="${key}" ${checked?"checked":""} />
+        <div><strong>${item}</strong><div class="small muted">${s.name}</div></div>
+        <span class="tag">${s.sys}</span>
+      </label>`);
+    });
   });
-  // context AI nudge
-  pokeAI(name);
+  list.innerHTML = rows.join("");
+  list.querySelectorAll("input[type=checkbox]").forEach(cb=>{
+    cb.onchange = ()=> localStorage.setItem(cb.dataset.doc, cb.checked?"1":"0");
+  });
 }
 
-/* theme */
-(function(){
-  const light = {
-    '--bg':'#f6f8fc','--card':'#fff','--text':'#071018','--muted':'#72829d',
-    '--bord':'#e6ecf5','--chip':'#f2f5fb','--pill':'#eef3fb','--pill-b':'#dbe6fb'
-  };
-  const dark = {}; // default
-  const saved = localStorage.getItem("theme")||"dark";
-  if(saved==="light") for(const k in light) document.documentElement.style.setProperty(k, light[k]);
-
-  $("#themeBtn").onclick=()=>{
-    const cur = localStorage.getItem("theme")||"dark";
-    if(cur==="dark"){ for(const k in light) document.documentElement.style.setProperty(k, light[k]); localStorage.setItem("theme","light");}
-    else{ for(const k in light) document.documentElement.style.removeProperty(k); localStorage.setItem("theme","dark");}
-  };
-})();
-
-/* init */
-function init(){
-  // tab events
-  $$(".tab").forEach(b=>b.addEventListener("click", e=>switchTab(b)));
-  // load tasks
-  loadTasks();
-  // stats + renders
-  hydrateStats(); renderSchools(); rebuildDocuments(); rebuildTimeline();
-  // seed aid inputs
-  $("#aidIncome").value = 75000;
-  computeAid();
-  // initial helper
-  setTimeout(()=>pokeAI("dashboard"), 900);
+/* -------------------- Timeline (auto) -------------------- */
+function buildTimeline(){
+  const t = $("#tline");
+  if(user.selected.length===0){ t.innerHTML = `<div class="sub">Timeline appears after you add schools.</div>`; return; }
+  const items = [];
+  user.selected.forEach(id=>{
+    const s = SCHOOLS.find(x=>x.id===id);
+    const dd = DEADLINES[s.sys]; if(!dd) return;
+    const dKey = dd.priority? dd.priority : dd.submit;
+    const days = daysUntil(dd.submit);
+    let cls = "titem"; if(days<=14) cls="titem titem--danger"; else if(days<=30) cls="titem titem--warn";
+    items.push(`<div class="${cls}">
+      <div class="small muted">${s.name}</div>
+      <div><strong>${dd.submit}</strong> — Final deadline</div>
+    </div>`);
+    if(dd.priority){
+      const pdays = daysUntil(dd.priority);
+      let pcls = "titem"; if(pdays<=14) pcls="titem titem--danger"; else if(pdays<=30) pcls="titem titem--warn";
+      items.push(`<div class="${pcls}">
+        <div class="small muted">${s.name}</div>
+        <div><strong>${dd.priority}</strong> — Priority submission</div>
+      </div>`);
+    }
+  });
+  t.innerHTML = items.join("");
 }
-init();
+
+/* -------------------- Optimizer -------------------- */
+$("#optimizeBtn").onclick = ()=>{
+  if(user.selected.length<3){ alert("Add at least 3 schools first."); return; }
+  const risk = parseInt($("#risk").value); // 0–100
+  // simple rule: risk tilts reach vs safety split
+  const total = user.selected.length;
+  const reach = Math.round((30 + risk*0.2)/100 * total);   // 30–50%
+  const safe  = Math.round((30 - risk*0.15)/100 * total);  // 30–15%
+  const match = Math.max(0,total - reach - safe);
+  openSheet(`
+    <h3>Balanced Portfolio</h3>
+    <div class="sub">Based on your risk slider</div>
+    <div class="hr"></div>
+    <div>Reach: <strong>${reach}</strong></div>
+    <div>Match: <strong>${match}</strong></div>
+    <div>Safety: <strong>${safe}</strong></div>
+    <div class="hr"></div>
+    <button class="btn btn--primary" onclick="closeSheet()">Looks good</button>
+  `);
+};
+
+/* -------------------- AI (idle) -------------------- */
+let idle; const IDLE_MS = 45000;
+function nudge(){
+  // context-aware helper
+  const dashOn = !$("#view-dash").classList.contains("hidden");
+  const schoolsOn = !$("#view-schools").classList.contains("hidden");
+  const docsOn = !$("#view-docs").classList.contains("hidden");
+  const aidOn = !$("#view-aid").classList.contains("hidden");
+  let html = `<h3>Need a hand?</h3><div class="hr"></div>`;
+  if(schoolsOn) html += `<button class="btn btn--primary" onclick="closeSheet(); document.getElementById('addFromExplore').click()">Add selected schools</button>`;
+  else if(docsOn) html += `<button class="btn btn--primary" onclick="closeSheet(); document.getElementById('docsHelp').click()">Draft a brag sheet</button>`;
+  else if(aidOn) html += `<button class="btn btn--primary" onclick="closeSheet(); document.getElementById('calcAidBtn').click()">Calculate aid now</button>`;
+  else html += `<button class="btn btn--primary" onclick="closeSheet(); document.getElementById('addSchoolsBtn').click()">Start by adding schools</button>`;
+  openSheet(html);
+}
+function resetIdle(){ clearTimeout(idle); idle = setTimeout(nudge, IDLE_MS); }
+["click","scroll","keydown","pointermove","touchstart"].forEach(e=>window.addEventListener(e, resetIdle, {passive:true}));
+resetIdle();
+$("#aiBtn").onclick = nudge;
+
+/* Docs helper */
+$("#docsHelp").onclick = ()=>{
+  openSheet(`
+    <h3>Brag Sheet Starter</h3>
+    <div class="sub">Use this quick outline to help your recommenders</div>
+    <div class="hr"></div>
+    <ol class="small">
+      <li>Top 3 achievements (impact + numbers)</li>
+      <li>Classes you loved (why, with examples)</li>
+      <li>Leadership moments (what changed)</li>
+      <li>Community or work (hours, outcomes)</li>
+      <li>What you want to study (2–3 lines)</li>
+    </ol>
+    <div class="hr"></div>
+    <button class="btn btn--primary" onclick="closeSheet()">Got it</button>
+  `);
+};
+
+/* -------------------- Init -------------------- */
+function hydrate(){
+  hydrateSummary(); hydrateDash(); hydrateAidSelect(); buildDocs(); renderExplore();
+}
+$("#aidSchool").addEventListener("focus", hydrateAidSelect);
+$("#editPlanBtn").addEventListener("click", openPlanning);
+
+/* Default state for a clean first run */
+if(!user.selected.length){ 
+  // prime with a couple of smart suggestions (in-state public + one private)
+  const seed = SCHOOLS.filter(s=>s.state===user.homeState && s.public).slice(0,1)
+    .concat(SCHOOLS.find(s=>!s.public && s.state===user.homeState) || []);
+  user.selected = seed.map(s=>s.id); save();
+}
+hydrate();
 </script>
 </body>
 </html>
