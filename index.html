@@ -1,711 +1,640 @@
-<!DOCTYPE html>
-<html lang="en" class="h-full scroll-smooth">
+<!doctype html>
+<html lang="en">
 <head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no" />
-  <meta name="mobile-web-app-capable" content="yes" />
-  <title>Pathwise – Your College Journey</title>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no">
+<title>Pathwise – California College Planner</title>
+<meta name="mobile-web-app-capable" content="yes">
 
-  <!-- Tailwind (CDN) -->
-  <script src="https://cdn.tailwindcss.com"></script>
-  <script>
-    tailwind.config = {
-      theme: {
-        extend: {
-          colors: {
-            brand: { primary:"#007AFF", secondary:"#5856D6", success:"#34C759", warning:"#FF9500", danger:"#FF3B30" }
-          },
-          boxShadow: { soft:"0 8px 30px rgba(0,0,0,.08)" }
-        }
-      },
-      darkMode: "class"
-    }
-  </script>
-  <style>
-    @keyframes slideUp { from {transform: translateY(16px); opacity: 0} to {transform: translateY(0); opacity: 1} }
-    .animate-slideUp { animation: slideUp .35s ease both; }
-    input[type="number"]::-webkit-outer-spin-button,
-    input[type="number"]::-webkit-inner-spin-button { -webkit-appearance:none; margin:0 }
-    input[type="number"] { -moz-appearance:textfield }
-  </style>
+<style>
+/* ====== THEME ====== */
+:root{
+  --bg:#0A0F1A;
+  --card:#0F1624;
+  --cardSoft:#121B2C;
+  --surface:#0C1422;
+  --text:#D6E2F5;
+  --textMuted:#8FA3C7;
+  --textStrong:#FFFFFF;
+  --primary:#3B82F6;
+  --primarySoft:#2B5ED8;
+  --accent:#8B5CF6;
+  --success:#22C55E;
+  --warning:#F59E0B;
+  --danger:#EF4444;
+  --ring: rgba(59,130,246,.35);
+  --shadow: 0 10px 30px rgba(0,0,0,.35);
+  --radius:16px;
+  --radiusSm:12px;
+  --radiusLg:22px;
+  --trans: all .25s ease;
+}
+
+[data-theme="light"]{
+  --bg:#F2F6FF;
+  --card:#FFFFFF;
+  --cardSoft:#FFFFFF;
+  --surface:#FFFFFF;
+  --text:#1F2A44;
+  --textMuted:#5A6C8E;
+  --textStrong:#0B1220;
+  --primary:#2563EB;
+  --primarySoft:#1E40AF;
+  --accent:#7C3AED;
+  --success:#16A34A;
+  --warning:#D97706;
+  --danger:#DC2626;
+  --ring: rgba(37,99,235,.35);
+  --shadow: 0 10px 26px rgba(0,0,0,.12);
+}
+
+*{box-sizing:border-box}
+html,body{height:100%}
+body{
+  margin:0;
+  font-family:-apple-system,BlinkMacSystemFont,"SF Pro Text","Helvetica Neue",Inter,system-ui,Arial,sans-serif;
+  background:linear-gradient(180deg,var(--bg) 0%, #05070d 100%);
+  color:var(--text);
+}
+
+/* ====== HEADER / TABS ====== */
+.nav{
+  position:sticky;top:0;z-index:50;
+  backdrop-filter:saturate(1.2) blur(14px);
+  background:linear-gradient(180deg,rgba(10,15,26,.85),rgba(10,15,26,.55));
+  border-bottom:1px solid rgba(255,255,255,.06);
+}
+.nav-inner{
+  max-width:1200px;margin:0 auto;padding:14px 16px;
+  display:flex;gap:12px;flex-wrap:wrap;align-items:center;
+}
+.brand{font-weight:800;letter-spacing:.3px;font-size:22px;margin-right:auto}
+.tab{
+  border:none;cursor:pointer;
+  padding:10px 16px;border-radius:9999px;
+  color:var(--textStrong); background:rgba(255,255,255,.06);
+  border:1px solid rgba(255,255,255,.08);
+  transition:var(--trans);
+}
+.tab:hover{transform:translateY(-1px)}
+.tab.active{background:var(--primary);border-color:transparent}
+.theme{
+  margin-left:6px;border:1px solid rgba(255,255,255,.1);
+  background:var(--card);color:var(--textStrong);
+  border-radius:9999px;padding:10px 14px;cursor:pointer;
+}
+
+/* ====== LAYOUT ====== */
+.container{max-width:1200px;margin:0 auto;padding:18px}
+.section{display:none}
+.section.active{display:block;animation:fade .25s ease}
+@keyframes fade{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:none}}
+
+/* ====== DASHBOARD ====== */
+.panel{
+  background:linear-gradient(180deg,var(--card) 0%, var(--cardSoft) 100%);
+  border:1px solid rgba(255,255,255,.08);
+  box-shadow:var(--shadow);
+  border-radius:var(--radius);
+}
+.welcome{padding:22px 22px 14px;border-radius:var(--radius);margin:12px 0 22px}
+.stats{display:grid;gap:18px;grid-template-columns:repeat(3,minmax(0,1fr))}
+.stat{padding:22px;border-radius:var(--radius);background:linear-gradient(180deg,var(--surface),var(--card));border:1px solid rgba(255,255,255,.08)}
+.stat .k{color:var(--textMuted);font-size:14px;margin-bottom:8px}
+.stat .v{font-size:40px;font-weight:800;letter-spacing:.3px;color:var(--textStrong)}
+
+.cat{
+  margin-top:26px
+}
+.cat h3{margin:0 0 10px 0;font-size:18px}
+.grid{display:grid;gap:16px;grid-template-columns:repeat(auto-fill,minmax(280px,1fr))}
+.card{
+  background:linear-gradient(180deg,var(--card),var(--cardSoft));
+  border:1px solid rgba(255,255,255,.08);
+  border-radius:var(--radiusSm);padding:16px;position:relative;overflow:hidden
+}
+.card .name{font-weight:700}
+.badges{display:flex;gap:8px;flex-wrap:wrap;margin:8px 0 10px}
+.badge{font-size:12px;border-radius:9999px;padding:6px 10px;border:1px solid rgba(255,255,255,.12)}
+.badge.reach{color:var(--danger);border-color:rgba(239,68,68,.35)}
+.badge.match{color:var(--success);border-color:rgba(34,197,94,.35)}
+.badge.safety{color:var(--primary);border-color:rgba(59,130,246,.35)}
+.badge.weight{color:var(--accent);border-color:rgba(139,92,246,.35)}
+.scoreBar{height:8px;background:rgba(255,255,255,.08);border-radius:9999px;overflow:hidden;margin-top:10px}
+.scoreBar>span{display:block;height:100%;background:linear-gradient(90deg,var(--primary),var(--accent));width:0%}
+.more{margin-top:10px;font-size:13px;color:var(--textMuted)}
+.actions{display:flex;gap:8px;margin-top:12px}
+.btn{border:none;cursor:pointer;padding:10px 14px;border-radius:12px;font-weight:600}
+.btn.primary{background:var(--primary);color:#fff}
+.btn.ghost{background:transparent;border:1px solid rgba(255,255,255,.12);color:var(--textStrong)}
+.btn.warn{background:transparent;border:1px solid rgba(239,68,68,.35);color:var(--danger)}
+.btn:focus{outline:3px solid var(--ring);outline-offset:2px}
+
+/* ====== DISCOVERY ====== */
+.step{padding:18px;margin:12px 0}
+.input{width:100%;padding:14px;border-radius:12px;border:1px solid rgba(255,255,255,.14);background:var(--surface);color:var(--textStrong)}
+.label{font-size:13px;color:var(--textMuted);margin:0 0 6px 2px}
+.pillGrid{display:grid;gap:10px;grid-template-columns:repeat(auto-fill,minmax(120px,1fr))}
+.pill{padding:12px;border-radius:9999px;border:1px solid rgba(255,255,255,.14);text-align:center;cursor:pointer;background:var(--surface)}
+.pill.sel{background:linear-gradient(90deg,var(--primary),var(--accent));color:#fff;border-color:transparent}
+
+/* ====== DOCS / TIMELINE / AID ====== */
+.list{display:grid;gap:12px}
+.row{display:flex;gap:12px;align-items:center;justify-content:space-between;padding:14px;border-radius:12px;background:var(--surface);border:1px solid rgba(255,255,255,.08)}
+.row .left{display:flex;gap:12px;align-items:center}
+.dot{width:10px;height:10px;border-radius:50%}
+.dot.ok{background:var(--success)} .dot.warn{background:var(--warning)} .dot.miss{background:var(--danger)}
+
+.help{
+  position:fixed;bottom:18px;right:18px;z-index:70;
+  background:linear-gradient(90deg,var(--primary),var(--accent));
+  color:#fff;padding:12px 14px;border-radius:16px;box-shadow:var(--shadow);display:none;
+}
+.help.show{display:block}
+.backPlan{margin-left:10px}
+
+/* ====== UTIL ====== */
+.hidden{display:none!important}
+.mt{margin-top:14px}
+small, .muted{color:var(--textMuted)}
+a.link{color:var(--primary);text-decoration:none}
+a.link:hover{text-decoration:underline}
+</style>
 </head>
-<body class="h-full bg-slate-50 text-slate-900 dark:bg-slate-950 dark:text-slate-100">
-  <!-- Consent -->
-  <div id="consentModal" class="fixed inset-0 z-[70] hidden">
-    <div class="absolute inset-0 bg-black/60"></div>
-    <div class="relative mx-auto w-full max-w-lg p-4 sm:p-6 animate-slideUp">
-      <div class="rounded-2xl bg-white p-6 shadow-soft dark:bg-slate-900">
-        <div class="flex items-start gap-3">
-          <div class="h-10 w-10 rounded-xl bg-gradient-to-br from-brand.primary to-brand.secondary text-white grid place-items-center text-lg">🔒</div>
-          <div class="flex-1">
-            <h3 class="text-xl font-semibold">Welcome to Pathwise</h3>
-            <p class="mt-1 text-sm text-slate-500 dark:text-slate-400">
-              We store your progress in your browser. Add email if you want deadline reminders. We never sell or share data.
-            </p>
-          </div>
-        </div>
-        <div class="mt-4">
-          <label class="text-xs font-medium text-slate-500 dark:text-slate-400">Email for reminders (optional)</label>
-          <input id="consentEmail" type="email" placeholder="you@email.com"
-            class="mt-1 w-full rounded-xl border border-slate-200 bg-slate-50 px-3 py-2 text-sm outline-none focus:border-brand.primary focus:ring-2 focus:ring-brand.primary/20 dark:border-slate-700 dark:bg-slate-800" />
-        </div>
-        <div class="mt-6 grid gap-3 sm:grid-cols-2">
-          <button id="consentAccept" class="rounded-xl bg-gradient-to-r from-brand.primary to-brand.secondary px-4 py-2.5 text-white font-semibold">Yes, let’s go!</button>
-          <button id="consentDecline" class="rounded-xl border border-slate-200 bg-white px-4 py-2.5 font-semibold dark:border-slate-700 dark:bg-slate-800">No thanks</button>
-        </div>
-      </div>
-    </div>
+<body>
+
+<!-- NAV -->
+<div class="nav">
+  <div class="nav-inner">
+    <div class="brand">Pathwise</div>
+    <button class="tab active" onclick="showTab('dashboard', this)">🏠 Dashboard</button>
+    <button class="tab" onclick="showTab('planning', this)">🧭 Planning</button>
+    <button class="tab" onclick="showTab('documents', this)">📄 Documents</button>
+    <button class="tab" onclick="showTab('timeline', this)">📅 Timeline</button>
+    <button class="tab" onclick="showTab('aid', this)">💰 Financial Aid</button>
+    <button class="theme" id="themeBtn" onclick="toggleTheme()">🌙 Theme</button>
   </div>
+</div>
 
-  <!-- Header -->
-  <header class="sticky top-0 z-50 bg-white/80 backdrop-blur border-b border-slate-200 dark:bg-slate-950/70 dark:border-slate-800">
-    <div class="mx-auto flex max-w-6xl items-center justify-between px-4 py-3">
-      <div class="flex items-center gap-2">
-        <button id="backBtn" class="hidden rounded-lg border border-slate-200 px-2 py-1 text-brand.primary hover:bg-slate-100 dark:border-slate-700 dark:hover:bg-slate-800">← Back</button>
-        <h1 class="text-xl font-semibold bg-gradient-to-r from-brand.primary to-brand.secondary bg-clip-text text-transparent">Pathwise</h1>
-      </div>
-      <nav class="flex gap-2 overflow-x-auto">
-        <button class="tab-btn rounded-full px-3 py-1.5 text-sm font-semibold border border-slate-200 bg-white dark:bg-slate-900 dark:border-slate-700" data-tab="dashboard">🏠 Dashboard</button>
-        <button class="tab-btn rounded-full px-3 py-1.5 text-sm font-semibold border border-slate-200 bg-white dark:bg-slate-900 dark:border-slate-700" data-tab="planning">📝 Planning</button>
-        <button class="tab-btn rounded-full px-3 py-1.5 text-sm font-semibold border border-slate-200 bg-white dark:bg-slate-900 dark:border-slate-700" data-tab="documents">📄 Documents</button>
-        <button class="tab-btn rounded-full px-3 py-1.5 text-sm font-semibold border border-slate-200 bg-white dark:bg-slate-900 dark:border-slate-700" data-tab="timeline">📅 Timeline</button>
-        <button class="tab-btn rounded-full px-3 py-1.5 text-sm font-semibold border border-slate-200 bg-white dark:bg-slate-900 dark:border-slate-700" data-tab="financial">💸 Financial Aid</button>
-      </nav>
-      <div class="flex items-center gap-2">
-        <button id="shareBtn" class="rounded-lg border border-slate-200 px-2 py-1 text-sm hover:bg-slate-100 dark:border-slate-700 dark:hover:bg-slate-800">Share</button>
-        <button id="themeToggle" class="rounded-lg border border-slate-200 px-2 py-1 text-sm hover:bg-slate-100 dark:border-slate-700 dark:hover:bg-slate-800">🌙</button>
-      </div>
-    </div>
-  </header>
+<div class="container">
 
-  <main class="mx-auto max-w-6xl px-4 pb-24">
-    <!-- Onboarding -->
-    <section id="onboarding" class="mt-6">
-      <div class="mx-auto max-w-xl">
-        <div class="mb-4">
-          <div class="flex items-center justify-between text-xs text-slate-500 dark:text-slate-400">
-            <span id="progressLabel">Getting started</span><span id="progressPct">20%</span>
-          </div>
-          <div class="mt-1 h-2 rounded-full bg-slate-200 dark:bg-slate-800">
-            <div id="progressBar" class="h-2 w-[20%] rounded-full bg-gradient-to-r from-brand.primary to-brand.secondary transition-all"></div>
-          </div>
-        </div>
-
-        <!-- Step 1 -->
-        <div id="step1" class="animate-slideUp rounded-2xl border border-slate-200 bg-white p-5 shadow-soft dark:border-slate-800 dark:bg-slate-900">
-          <h2 class="text-2xl font-bold">Let’s get started</h2>
-          <p class="mt-1 text-slate-500 dark:text-slate-400">Tell us a bit about you.</p>
-          <div class="mt-4 grid gap-4">
-            <div>
-              <label class="text-xs font-semibold text-slate-500 dark:text-slate-400">First name <span class="text-brand.danger">*</span></label>
-              <input id="firstName" type="text" class="mt-1 w-full rounded-xl border border-slate-200 bg-slate-50 px-3 py-2 outline-none focus:border-brand.primary focus:ring-2 focus:ring-brand.primary/20 dark:border-slate-700 dark:bg-slate-800" />
-              <p id="nameError" class="mt-1 hidden text-xs text-brand.danger">Please enter your name.</p>
-            </div>
-            <div>
-              <label class="text-xs font-semibold text-slate-500 dark:text-slate-400">Current grade <span class="text-brand.danger">*</span></label>
-              <select id="gradeLevel" class="mt-1 w-full rounded-xl border border-slate-200 bg-slate-50 px-3 py-2 outline-none focus:border-brand.primary focus:ring-2 focus:ring-brand.primary/20 dark:border-slate-700 dark:bg-slate-800">
-                <option value="">Select your grade</option>
-                <option value="9">Freshman (9th)</option>
-                <option value="10">Sophomore (10th)</option>
-                <option value="11">Junior (11th)</option>
-                <option value="12">Senior (12th)</option>
-                <option value="transfer">Transfer</option>
-              </select>
-              <p id="gradeError" class="mt-1 hidden text-xs text-brand.danger">Please select a grade.</p>
-            </div>
-          </div>
-          <div class="mt-5 flex gap-3">
-            <button id="step1Next" class="flex-1 rounded-xl bg-gradient-to-r from-brand.primary to-brand.secondary px-4 py-2.5 font-semibold text-white">Continue →</button>
-          </div>
-        </div>
-
-        <!-- Step 2 -->
-        <div id="step2" class="mt-4 hidden animate-slideUp rounded-2xl border border-slate-200 bg-white p-5 shadow-soft dark:border-slate-800 dark:bg-slate-900">
-          <h2 class="text-2xl font-bold">What’s your vibe?</h2>
-          <p class="mt-1 text-slate-500 dark:text-slate-400">Pick as many as you want.</p>
-
-          <div class="mt-3 grid grid-cols-2 gap-2 sm:grid-cols-4">
-            <button data-interest="stem" class="interest chip">🔬 STEM</button>
-            <button data-interest="arts" class="interest chip">🎨 Arts</button>
-            <button data-interest="business" class="interest chip">💼 Business</button>
-            <button data-interest="health" class="interest chip">🏥 Health</button>
-            <button data-interest="social" class="interest chip">🤝 Social</button>
-            <button data-interest="humanities" class="interest chip">📚 Humanities</button>
-            <button data-interest="education" class="interest chip">🎓 Education</button>
-            <button data-interest="unsure" class="interest chip">🤔 Not sure</button>
-          </div>
-
-          <!-- Intended majors (new) -->
-          <h3 class="mt-5 text-lg font-semibold">Intended majors (optional)</h3>
-          <p class="text-sm text-slate-500 dark:text-slate-400">This helps personalize impacted majors and tips.</p>
-          <div class="mt-2 grid grid-cols-2 gap-2 sm:grid-cols-4">
-            <!-- keep classes static (no dynamic tailwind) -->
-            <button class="major chip" data-major="Computer Science">💻 Computer Science</button>
-            <button class="major chip" data-major="Data Science">📊 Data Science</button>
-            <button class="major chip" data-major="Engineering">🛠️ Engineering</button>
-            <button class="major chip" data-major="Biology">🧬 Biology</button>
-            <button class="major chip" data-major="Pre-Med">🩺 Pre-Med</button>
-            <button class="major chip" data-major="Nursing">🧑‍⚕️ Nursing</button>
-            <button class="major chip" data-major="Business">💼 Business</button>
-            <button class="major chip" data-major="Economics">📈 Economics</button>
-            <button class="major chip" data-major="Psychology">🧠 Psychology</button>
-            <button class="major chip" data-major="Political Science">🏛️ Political Science</button>
-            <button class="major chip" data-major="Communications">🗣️ Communications</button>
-            <button class="major chip" data-major="Design">🎨 Design</button>
-            <button class="major chip" data-major="Music">🎵 Music</button>
-            <button class="major chip" data-major="Performing Arts">🎭 Performing Arts</button>
-            <button class="major chip" data-major="Environmental Science">🌱 Environmental Science</button>
-            <button class="major chip" data-major="Mathematics">➗ Mathematics</button>
-          </div>
-
-          <div class="mt-5 flex gap-3">
-            <button class="rounded-xl border border-slate-200 px-4 py-2.5 font-semibold dark:border-slate-700" id="step2Back">← Back</button>
-            <button class="flex-1 rounded-xl bg-gradient-to-r from-brand.primary to-brand.secondary px-4 py-2.5 font-semibold text-white" id="step2Next">Continue →</button>
-          </div>
-        </div>
-
-        <!-- Step 3 -->
-        <div id="step3" class="mt-4 hidden animate-slideUp rounded-2xl border border-slate-200 bg-white p-5 shadow-soft dark:border-slate-800 dark:bg-slate-900">
-          <h2 class="text-2xl font-bold">What matters most?</h2>
-          <p class="mt-1 text-slate-500 dark:text-slate-400">Pick your priorities.</p>
-          <div class="mt-3 grid gap-3">
-            <button data-preference="reputation" class="pref pill">🏆 School reputation</button>
-            <button data-preference="cost" class="pref pill">💰 Affordability</button>
-            <button data-preference="location" class="pref pill">📍 Location vibes</button>
-            <button data-preference="size" class="pref pill">👥 Campus size</button>
-          </div>
-          <div class="mt-5 flex gap-3">
-            <button class="rounded-xl border border-slate-200 px-4 py-2.5 font-semibold dark:border-slate-700" id="step3Back">← Back</button>
-            <button class="flex-1 rounded-xl bg-gradient-to-r from-brand.primary to-brand.secondary px-4 py-2.5 font-semibold text-white" id="step3Next">Continue →</button>
-          </div>
-        </div>
-
-        <!-- Step 4 -->
-        <div id="step4" class="mt-4 hidden animate-slideUp rounded-2xl border border-slate-200 bg-white p-5 shadow-soft dark:border-slate-800 dark:bg-slate-900">
-          <h2 class="text-2xl font-bold">Academic snapshot</h2>
-          <p class="mt-1 text-slate-500 dark:text-slate-400">Optional, but helps accuracy.</p>
-          <div class="mt-4 grid gap-4 sm:grid-cols-3">
-            <div><label class="text-xs font-semibold text-slate-500 dark:text-slate-400">GPA (0–5)</label><input id="gpa" type="number" step="0.01" min="0" max="5" class="mt-1 w-full rounded-xl border border-slate-200 bg-slate-50 px-3 py-2 outline-none focus:border-brand.primary focus:ring-2 focus:ring-brand.primary/20 dark:border-slate-700 dark:bg-slate-800"></div>
-            <div><label class="text-xs font-semibold text-slate-500 dark:text-slate-400">SAT (400–1600)</label><input id="sat" type="number" step="10" min="400" max="1600" class="mt-1 w-full rounded-xl border border-slate-200 bg-slate-50 px-3 py-2 outline-none focus:border-brand.primary focus:ring-2 focus:ring-brand.primary/20 dark:border-slate-700 dark:bg-slate-800"></div>
-            <div><label class="text-xs font-semibold text-slate-500 dark:text-slate-400">AP/Honors courses</label><input id="ap" type="number" min="0" class="mt-1 w-full rounded-xl border border-slate-200 bg-slate-50 px-3 py-2 outline-none focus:border-brand.primary focus:ring-2 focus:ring-brand.primary/20 dark:border-slate-700 dark:bg-slate-800"></div>
-          </div>
-          <p id="matchPreview" class="mt-2 text-sm text-slate-500 dark:text-slate-400">Enter GPA/SAT to preview matches…</p>
-          <div class="mt-5 flex gap-3">
-            <button class="rounded-xl border border-slate-200 px-4 py-2.5 font-semibold dark:border-slate-700" id="step4Back">← Back</button>
-            <button class="flex-1 rounded-xl bg-gradient-to-r from-brand.primary to-brand.secondary px-4 py-2.5 font-semibold text-white" id="finishBtn">See my matches →</button>
-          </div>
-        </div>
-      </div>
-    </section>
-
-    <!-- App -->
-    <section id="app" class="mt-6 hidden">
-      <div class="rounded-2xl bg-gradient-to-r from-brand.primary to-brand.secondary p-6 text-white">
-        <h2 class="text-2xl font-bold">Welcome back, <span id="userName">Student</span> 👋</h2>
-        <p class="mt-1 opacity-90">Your personalized California college roadmap is ready.</p>
-      </div>
-      <div class="mt-4 grid gap-4 sm:grid-cols-3">
-        <div class="card"><p class="label">Your GPA</p><p id="statGPA" class="stat">—</p></div>
-        <div class="card"><p class="label">Target schools</p><p id="statSchools" class="stat">—</p></div>
-        <div class="card"><p class="label">Days to UC/CSU deadline</p><p id="daysLeft" class="stat">—</p></div>
-      </div>
-
-      <div class="mt-6 space-y-6">
-        <div id="tab-dashboard" class="tab-pane">
-          <h3 class="mb-3 text-xl font-semibold">🎯 Your schools</h3>
-          <div id="schoolsWrap" class="space-y-8"></div>
-        </div>
-
-        <div id="tab-planning" class="tab-pane hidden">
-          <h3 class="mb-3 text-xl font-semibold">📝 Planning</h3>
-          <div class="rounded-2xl border border-slate-200 bg-white p-5 shadow-soft dark:border-slate-800 dark:bg-slate-900">
-            <div class="flex items-center gap-2">
-              <input id="newTask" type="text" placeholder="Add a task…" class="w-full rounded-xl border border-slate-200 bg-slate-50 px-3 py-2 text-sm outline-none focus:border-brand.primary focus:ring-2 focus:ring-brand.primary/20 dark:border-slate-700 dark:bg-slate-800">
-              <button id="addTask" class="rounded-xl bg-brand.primary px-3 py-2 text-sm font-semibold text-white">Add</button>
-            </div>
-            <ul id="todoList" class="mt-3 space-y-2"></ul>
-          </div>
-        </div>
-
-        <div id="tab-documents" class="tab-pane hidden">
-          <h3 class="mb-3 text-xl font-semibold">📄 Documents checklist</h3>
-          <div id="docsList" class="grid gap-3 sm:grid-cols-2"></div>
-          <div class="mt-4 rounded-2xl border border-slate-200 bg-white p-4 text-sm shadow-soft dark:border-slate-800 dark:bg-slate-900">
-            <p><span class="font-semibold">Progress:</span> <span id="docProgressPct">0%</span></p>
-            <div class="mt-2 h-2 rounded-full bg-slate-200 dark:bg-slate-800"><div id="docProgressBar" class="h-2 w-0 rounded-full bg-gradient-to-r from-brand.warning to-brand.danger"></div></div>
-          </div>
-        </div>
-
-        <div id="tab-timeline" class="tab-pane hidden">
-          <h3 class="mb-3 text-xl font-semibold">📅 Timeline</h3>
-          <div id="timelineList" class="grid gap-3"></div>
-        </div>
-
-        <div id="tab-financial" class="tab-pane hidden">
-          <h3 class="mb-3 text-xl font-semibold">💸 Financial Aid</h3>
-          <div class="rounded-2xl border border-slate-200 bg-white p-5 shadow-soft dark:border-slate-800 dark:bg-slate-900">
-            <div class="grid gap-4 sm:grid-cols-3">
-              <div><label class="text-xs font-semibold text-slate-500 dark:text-slate-400">Family income (USD)</label><input id="faIncome" type="number" value="75000" class="mt-1 w-full rounded-xl border border-slate-200 bg-slate-50 px-3 py-2 outline-none focus:border-brand.primary focus:ring-2 focus:ring-brand.primary/20 dark:border-slate-700 dark:bg-slate-800"></div>
-              <div><label class="text-xs font-semibold text-slate-500 dark:text-slate-400">Household size</label><input id="faHousehold" type="number" value="4" class="mt-1 w-full rounded-xl border border-slate-200 bg-slate-50 px-3 py-2 outline-none focus:border-brand.primary focus:ring-2 focus:ring-brand.primary/20 dark:border-slate-700 dark:bg-slate-800"></div>
-              <div><label class="text-xs font-semibold text-slate-500 dark:text-slate-400">Students in college</label><input id="faStudents" type="number" value="1" class="mt-1 w-full rounded-xl border border-slate-200 bg-slate-50 px-3 py-2 outline-none focus:border-brand.primary focus:ring-2 focus:ring-brand.primary/20 dark:border-slate-700 dark:bg-slate-800"></div>
-            </div>
-            <button id="calcAid" class="mt-4 w-full rounded-xl bg-brand.primary py-2.5 font-semibold text-white sm:w-auto sm:px-6">Calculate</button>
-            <div id="aidResult" class="mt-4 grid gap-3 sm:grid-cols-3"></div>
-            <p class="mt-3 text-xs text-slate-500 dark:text-slate-400">Estimates use 2024–2025 guidelines; actual awards depend on FAFSA/CADAA and campus policies.</p>
-          </div>
-        </div>
-      </div>
-    </section>
-  </main>
-
-  <!-- Help FAB -->
-  <button id="helpBtn" class="fixed bottom-6 right-4 z-[60] rounded-full bg-gradient-to-br from-brand.primary to-brand.secondary p-3 text-white shadow-soft">❓</button>
-
-  <!-- Help Modal -->
-  <div id="helpModal" class="fixed inset-0 z-[70] hidden">
-    <div class="absolute inset-0 bg-black/60"></div>
-    <div class="relative mx-auto w-full max-w-lg p-4 sm:p-6 animate-slideUp">
-      <div class="rounded-2xl bg-white p-6 shadow-soft dark:bg-slate-900">
-        <div class="flex items-center justify-between">
-          <h3 class="text-xl font-semibold">Need help?</h3>
-          <button id="helpClose" class="rounded-lg border border-slate-200 px-2 py-1 text-sm hover:bg-slate-100 dark:border-slate-700 dark:hover:bg-slate-800">✕</button>
-        </div>
-        <div id="helpContent" class="mt-3 space-y-2 text-sm text-slate-600 dark:text-slate-300">
-          <p class="font-semibold">Quick answers</p>
-          <div class="flex flex-wrap gap-2">
-            <button class="qa chip" data-q="reach">What makes a school “reach/match/safety”?</button>
-            <button class="qa chip" data-q="piq">How do UC PIQs work?</button>
-            <button class="qa chip" data-q="majors">How should I pick a major?</button>
-            <button class="qa chip" data-q="aid">How is aid estimated?</button>
-          </div>
-          <div id="qaAnswer" class="rounded-xl border border-slate-200 bg-slate-50 p-3 dark:border-slate-700 dark:bg-slate-800"></div>
-        </div>
-      </div>
-    </div>
-  </div>
-
-  <!-- Toasts -->
-  <div id="toaster" class="fixed top-4 right-4 z-[60] space-y-2"></div>
-
-  <script>
-    /* ---------- helpers & base styles ---------- */
-    const $ = s => document.querySelector(s);
-    const $$ = s => document.querySelectorAll(s);
-    const dayDiff = (a,b)=>Math.max(0, Math.ceil((a-b)/86400000));
-    const save = (s)=>localStorage.setItem("pathwise", JSON.stringify(state));
-    const load = ()=>{
-      const raw = localStorage.getItem("pathwise");
-      if (raw) try { Object.assign(state, JSON.parse(raw)); } catch {}
-    };
-    const setTheme = m => { document.documentElement.classList.toggle("dark", m==="dark"); localStorage.setItem("theme", m); $("#themeToggle").textContent = m==="dark" ? "☀️" : "🌙"; };
-    const toast = (title,msg)=>{ const div=document.createElement("div"); div.className="animate-slideUp rounded-xl border border-slate-200 bg-white p-3 shadow-soft dark:border-slate-800 dark:bg-slate-900"; div.innerHTML=`<p class="font-semibold">${title}</p><p class="text-sm text-slate-500 dark:text-slate-400">${msg}</p>`; $("#toaster").appendChild(div); setTimeout(()=>div.remove(),3000); };
-
-    /* ---------- state ---------- */
-    const deadline = new Date("Nov 30, 2025");
-    let state = {
-      firstName:"", gradeLevel:"", interests:[], majors:[], preferences:[],
-      gpa:null, sat:null, ap:0, email:"", consent:false, tasks:[],
-      docs:{ profile:true, transcripts:false, recommendations:false, personal_statement:false, fafsa:false }
-    };
-
-    /* ---------- schools: review style + reqs + notes + impacted majors ---------- */
-    const schools = [
-      { id:1, name:"UC Berkeley", gpa:4.25, sat:1450, rate:14.5, tuition:14226,
-        review:"scores", req:{ essays:true, letters:false, portfolio:false, testOptional:true, app:"UC App" },
-        majors:{ impacted:["Computer Science","Data Science","Engineering","Economics"] },
-        notes:["L&S CS is selective; declare after prerequisites with GPA", "EECS (Engineering) is extremely competitive"]
-      },
-      { id:2, name:"UCLA", gpa:4.26, sat:1445, rate:12.3, tuition:13401,
-        review:"scores", req:{ essays:true, letters:false, portfolio:false, testOptional:true, app:"UC App" },
-        majors:{ impacted:["Computer Science","Engineering","Business","Biology"] },
-        notes:["CS & Engineering are highly competitive", "Portfolio required only for certain Arts programs"]
-      },
-      { id:3, name:"UC San Diego", gpa:4.16, sat:1410, rate:31.5, tuition:14616,
-        review:"scores", req:{ essays:true, letters:false, portfolio:false, testOptional:true, app:"UC App" },
-        majors:{ impacted:["Computer Science","Data Science","Engineering"] },
-        notes:["Many majors are capped (CS, DS). Consider alternate major strategy."]
-      },
-      { id:4, name:"UC Davis", gpa:4.13, sat:1350, rate:37.6, tuition:14597,
-        review:"balanced", req:{ essays:true, letters:false, portfolio:false, testOptional:true, app:"UC App" },
-        majors:{ impacted:["Computer Science","Engineering","Nursing"] },
-        notes:["Strong life sciences; CS selective; Nursing highly competitive."]
-      },
-      { id:5, name:"UC Irvine", gpa:4.08, sat:1360, rate:26.5, tuition:13727,
-        review:"balanced", req:{ essays:true, letters:false, portfolio:false, testOptional:true, app:"UC App" },
-        majors:{ impacted:["Computer Science","Engineering","Nursing","Business"] },
-        notes:["CS/Engineering selective; Business majors impacted."]
-      },
-      { id:6, name:"UC Santa Barbara", gpa:4.15, sat:1380, rate:29.6, tuition:14391,
-        review:"balanced", req:{ essays:true, letters:false, portfolio:false, testOptional:true, app:"UC App" },
-        majors:{ impacted:["Computer Science","Engineering"] },
-        notes:["CS/Engineering selective; strong for physics & engineering."]
-      },
-      { id:7, name:"Cal Poly SLO", gpa:4.06, sat:1395, rate:32.5, tuition:10377,
-        review:"eca", req:{ essays:false, letters:false, portfolio:false, testOptional:true, app:"Cal State Apply" },
-        majors:{ impacted:["Computer Science","Engineering","Business"] },
-        notes:["Multi-factor MCA emphasizes course rigor & ECs; apply ‘Learn by Doing’ angle."]
-      },
-      { id:8, name:"UC Santa Cruz", gpa:3.96, sat:1295, rate:51.3, tuition:13991,
-        review:"balanced", req:{ essays:true, letters:false, portfolio:false, testOptional:true, app:"UC App" },
-        majors:{ impacted:["Computer Science","Engineering"] },
-        notes:["CS selective; cool research in games & human-centered computing."]
-      },
-      { id:9, name:"San Diego State", gpa:3.85, sat:1270, rate:37.8, tuition:7720,
-        review:"balanced", req:{ essays:false, letters:false, portfolio:false, testOptional:true, app:"Cal State Apply" },
-        majors:{ impacted:["Nursing","Business","Computer Science"] },
-        notes:["Some majors impacted; CSU generally no essays at application time."]
-      }
-    ];
-
-    /* ---------- setup ---------- */
-    (function init(){
-      // theme + saved state
-      setTheme(localStorage.getItem("theme") || "light");
-      load();
-
-      // consent
-      if (!state.consent) $("#consentModal").classList.remove("hidden");
-      $("#consentAccept").onclick = ()=>{ state.consent = true; const e=$("#consentEmail").value.trim(); if (e) state.email=e; save(state); $("#consentModal").classList.add("hidden"); toast("Journey started","Welcome to Pathwise!") };
-      $("#consentDecline").onclick = ()=> $("#consentModal").classList.add("hidden");
-
-      // already onboarded?
-      if (state.firstName) { $("#onboarding").classList.add("hidden"); $("#app").classList.remove("hidden"); $("#backBtn").classList.remove("hidden"); hydrateApp(); }
-
-      // theme/share
-      $("#themeToggle").onclick = ()=> setTheme(document.documentElement.classList.contains("dark") ? "light" : "dark");
-      $("#shareBtn").onclick = ()=> { const text="Check out Pathwise – smart CA college planning"; if (navigator.share) navigator.share({title:"Pathwise",text,url:location.href}); else { navigator.clipboard.writeText(location.href); toast("Link copied","Share it with friends!"); } };
-
-      /* onboarding events */
-      $("#step1Next").onclick = ()=>{
-        const name=$("#firstName").value.trim(), grade=$("#gradeLevel").value;
-        let ok=true; if(!name){$("#nameError").classList.remove("hidden"); ok=false}else $("#nameError").classList.add("hidden");
-        if(!grade){$("#gradeError").classList.remove("hidden"); ok=false}else $("#gradeError").classList.add("hidden");
-        if(!ok) return; state.firstName=name; state.gradeLevel=grade; save(state); gotoStep(2);
-      };
-
-      $$(".interest").forEach(b=> b.onclick=()=> togglePick(b,state.interests,b.dataset.interest,"unsure",".interest"));
-      $$(".major").forEach(b=> b.onclick=()=> togglePick(b,state.majors,b.dataset.major,null,".major"));
-      $("#step2Back").onclick = ()=> gotoStep(1);
-      $("#step2Next").onclick = ()=> { if (state.interests.length===0) return showHelpAuto("Pick a couple interests—or choose “Not sure”."); gotoStep(3); };
-
-      $$(".pref").forEach(b=> b.onclick=()=> toggleFlag(b,state.preferences,b.dataset.preference));
-      $("#step3Back").onclick = ()=> gotoStep(2);
-      $("#step3Next").onclick = ()=> { if (state.preferences.length===0) return showHelpAuto("Choose 1–2 priorities so we can tailor picks."); gotoStep(4); };
-
-      ["gpa","sat","ap"].forEach(id=> $(`#${id}`).addEventListener("input", previewMatches));
-      $("#step4Back").onclick = ()=> gotoStep(3);
-      $("#finishBtn").onclick = ()=>{
-        state.gpa = parseFloat($("#gpa").value)||null;
-        state.sat = parseInt($("#sat").value)||null;
-        state.ap  = parseInt($("#ap").value)||0;
-        save(state);
-        $("#onboarding").classList.add("hidden"); $("#app").classList.remove("hidden"); $("#backBtn").classList.remove("hidden");
-        hydrateApp(); toast("Profile complete","Your college journey begins!");
-      };
-
-      // tabs (ensure visible in all themes)
-      $$(".tab-btn").forEach(b=> b.onclick = ()=>{
-        $$(".tab-btn").forEach(x=> x.classList.remove("bg-brand.primary","text-white"));
-        b.classList.add("bg-brand.primary","text-white");
-        $$(".tab-pane").forEach(p=> p.classList.add("hidden"));
-        $(`#tab-${b.dataset.tab}`).classList.remove("hidden");
-        if (b.dataset.tab==="financial") calcAid();
-      });
-      document.querySelector('[data-tab="dashboard"]').click();
-
-      // planning
-      $("#addTask").onclick = ()=>{ const v=$("#newTask").value.trim(); if(!v) return; state.tasks.push({text:v,done:false}); $("#newTask").value=""; save(state); renderTasks(); };
-
-      // back
-      $("#backBtn").onclick = ()=>{ $("#app").classList.add("hidden"); $("#onboarding").classList.remove("hidden"); document.documentElement.scrollTop=0; };
-
-      // help
-      $("#helpBtn").onclick = ()=> $("#helpModal").classList.remove("hidden");
-      $("#helpClose").onclick = ()=> $("#helpModal").classList.add("hidden");
-      $$(".qa").forEach(b=> b.onclick = ()=> showQA(b.dataset.q));
-
-      // initial help nudge
-      setTimeout(()=> showHelpAuto("Need help choosing schools? I can explain reach/match/safety."), 6500);
-    })();
-
-    /* ---------- UI helpers ---------- */
-    function gotoStep(n){
-      const pct=[20,40,60,80,100][n-1]||20;
-      $("#progressPct").textContent=pct+"%";
-      $("#progressBar").style.width=pct+"%";
-      $("#progressLabel").textContent=["Getting started","Building your profile","Priorities","Almost there","Ready"][n-1]||"Getting started";
-      [1,2,3,4].forEach(i=> $("#step"+i).classList.toggle("hidden", i!==n));
-      document.documentElement.scrollTop=0;
-    }
-    function togglePick(btn, arr, val, clearVal, selector){
-      const on = btn.classList.toggle("ring-2");
-      btn.classList.toggle("ring-brand.primary/40", on);
-      if (on) {
-        if (clearVal){ // clear "unsure" if choosing others
-          if (val!==clearVal) {
-            const unsure = document.querySelector(`${selector}[data-${selector===".major"?"major":"interest"}="${clearVal}"]`);
-            if (unsure) unsure.classList.remove("ring-2","ring-brand.primary/40");
-            const i = arr.indexOf(clearVal); if (i>-1) arr.splice(i,1);
-          }
-        }
-        if (!arr.includes(val)) arr.push(val);
-      } else {
-        const i = arr.indexOf(val); if (i>-1) arr.splice(i,1);
-      }
-      save(state);
-    }
-    function toggleFlag(btn, arr, val){
-      const on = btn.classList.toggle("ring-2");
-      btn.classList.toggle("ring-brand.primary/40", on);
-      if (on){ if(!arr.includes(val)) arr.push(val); } else { const i=arr.indexOf(val); if(i>-1) arr.splice(i,1); }
-      save(state);
-    }
-    function previewMatches(){
-      const g = parseFloat($("#gpa").value)||0, s = parseInt($("#sat").value)||0, a = parseInt($("#ap").value)||0;
-      let count=0; for (const sc of schools){ if (matchScore(sc,g,s,a)>=50) count++; }
-      $("#matchPreview").textContent = (g||s) ? `~${count} likely matches so far` : "Enter GPA/SAT to preview matches…";
-    }
-
-    /* ---------- render app ---------- */
-    function hydrateApp(){
-      $("#userName").textContent = state.firstName || "Student";
-      $("#statGPA").textContent = state.gpa ? state.gpa.toFixed(2) : "—";
-      $("#daysLeft").textContent = dayDiff(deadline, new Date());
-      renderSchools(); renderTasks(); renderDocs(); renderTimeline(); calcAid();
-    }
-
-    /* ---------- scoring (review style aware + majors/impaction) ---------- */
-    function matchScore(sc, g=state.gpa, s=state.sat, ap=state.ap){
-      let score = 50;
-
-      // weights shift by school review style
-      const w = { gpa: sc.review==="scores" ? 26 : sc.review==="balanced" ? 20 : 14,
-                  sat: sc.review==="scores" ? 10 : 8,
-                  ap : sc.review==="eca"    ? 8  : 4 };
-
-      if (g) score += (g - sc.gpa) * w.gpa;
-      if (s) score += (s - sc.sat) / (sc.review==="scores"?8:10);
-      if (ap) score += ap * w.ap * 0.5;
-
-      // interests alignment (small bonus)
-      if (state.interests.includes("stem") && (sc.name.includes("UC") || sc.name.includes("Poly"))) score += 4;
-      if (state.interests.includes("arts") && sc.req.portfolio) score += 3;
-
-      // impacted majors reduce match a bit if chosen
-      if (state.majors.some(m => sc.majors.impacted.includes(m))) score -= 6;
-
-      // preferences
-      if (state.preferences.includes("reputation") && sc.rate < 30) score += 5;
-      if (state.preferences.includes("cost") && sc.tuition < 12000) score += 6;
-
-      return Math.max(0, Math.min(100, Math.round(score)));
-    }
-    function bucketBy(score){ if (score<45) return "reach"; if (score>70) return "safety"; return "match"; }
-
-    function renderSchools(){
-      const buckets = { reach:[], match:[], safety:[] };
-      for (const sc of schools){
-        const score = matchScore(sc);
-        buckets[bucketBy(score)].push(schoolCard(sc, score));
-      }
-      const label = (title, note, cls) => `
+  <!-- DASHBOARD -->
+  <section id="dashboard" class="section active">
+    <div class="welcome panel">
+      <div style="display:flex;align-items:center;justify-content:space-between;gap:12px">
         <div>
-          <div class="mb-2 flex items-center gap-2">
-            <span class="rounded-full px-2 py-0.5 text-xs font-bold ${cls}">${title}</span>
-            <span class="text-sm text-slate-500 dark:text-slate-400">${note}</span>
-          </div>
-          <div class="grid gap-3 sm:grid-cols-2">${buckets[title.toLowerCase()].join("") || emptyCard()}</div>
+          <h2 style="margin:0 0 4px 0">Your personalized California college roadmap is ready.</h2>
+          <small class="muted">Powered by your profile, interests, and each school’s requirement profile.</small>
         </div>
-      `;
-      // static color classes (no dynamic strings)
-      $("#schoolsWrap").innerHTML =
-        label("reach","Shoot your shot 🚀","bg-rose-100 text-rose-700 dark:bg-rose-900/40 dark:text-rose-200") +
-        label("match","You got this ✅","bg-green-100 text-green-700 dark:bg-green-900/40 dark:text-green-200") +
-        label("safety","Solid backup 🛡️","bg-blue-100 text-blue-700 dark:bg-blue-900/40 dark:text-blue-200");
+        <button class="btn ghost backPlan" onclick="showTab('planning',document.querySelector('.tab:nth-child(2)'))">↩︎ Back to Planning</button>
+      </div>
+    </div>
 
-      $("#statSchools").textContent = (buckets.reach.length + buckets.match.length + buckets.safety.length).toString();
-    }
+    <div class="stats">
+      <div class="stat panel">
+        <div class="k">Your GPA</div>
+        <div class="v" id="statGPA">3.50</div>
+      </div>
+      <div class="stat panel">
+        <div class="k">Target schools</div>
+        <div class="v" id="statCount">9</div>
+      </div>
+      <div class="stat panel">
+        <div class="k">Days to UC/CSU deadline</div>
+        <div class="v" id="statDays">72</div>
+      </div>
+    </div>
 
-    function reqChips(req){
-      const chip = (label,on,clsOn,clsOff)=>`<span class="rounded-full px-2 py-0.5 text-[11px] font-semibold ${on?clsOn:clsOff}">${label}${on?"":" N/A"}</span>`;
-      return [
-        chip("Essays", req.essays, "bg-indigo-100 text-indigo-700 dark:bg-indigo-900/40 dark:text-indigo-200", "bg-slate-200 text-slate-700 dark:bg-slate-800 dark:text-slate-300"),
-        chip("Letters", req.letters, "bg-emerald-100 text-emerald-700 dark:bg-emerald-900/40 dark:text-emerald-200", "bg-slate-200 text-slate-700 dark:bg-slate-800 dark:text-slate-300"),
-        chip("Portfolio", req.portfolio, "bg-amber-100 text-amber-700 dark:bg-amber-900/40 dark:text-amber-200", "bg-slate-200 text-slate-700 dark:bg-slate-800 dark:text-slate-300"),
-        chip("Test-optional", req.testOptional, "bg-teal-100 text-teal-700 dark:bg-teal-900/40 dark:text-teal-200", "bg-slate-200 text-slate-700 dark:bg-slate-800 dark:text-slate-300"),
-        `<span class="rounded-full px-2 py-0.5 text-[11px] font-semibold bg-sky-100 text-sky-700 dark:bg-sky-900/40 dark:text-sky-200">${req.app}</span>`
-      ].join(" ");
-    }
-    function tipsFor(sc, score){
-      const tips=[];
-      if (sc.review==="scores" && state.gpa && state.gpa < sc.gpa-0.2) tips.push("Raise core GPA trend; use PIQs to show rigor and growth.");
-      if (sc.review==="eca" && state.ap<6) tips.push("Show meaningful EC impact (leadership, hours, outcomes).");
-      if (state.majors.some(m=>sc.majors.impacted.includes(m))) tips.push("Your major is impacted here—add a related alternate major just in case.");
-      if (state.preferences.includes("cost") && sc.tuition>12000) tips.push("Flag for scholarships & need-based aid on this campus.");
-      if (score<45) tips.push("Consider retesting SAT/ACT (if offered as optional) or strengthening senior schedule.");
-      return tips.length ? `<ul class="ml-4 list-disc text-sm text-slate-600 dark:text-slate-300">${tips.map(t=>`<li>${t}</li>`).join("")}</ul>` : `<p class="text-sm text-slate-500 dark:text-slate-400">Solid fit—keep momentum!</p>`;
-    }
-    function schoolCard(sc, score){
-      const reviewTag = sc.review==="scores" ? "Scores-heavy" : sc.review==="eca" ? "ECA-heavy" : "Balanced";
-      const reviewCls = sc.review==="scores" ? "bg-fuchsia-100 text-fuchsia-700 dark:bg-fuchsia-900/40 dark:text-fuchsia-200"
-                      : sc.review==="eca"    ? "bg-amber-100 text-amber-700 dark:bg-amber-900/40 dark:text-amber-200"
-                                             : "bg-slate-100 text-slate-700 dark:bg-slate-800 dark:text-slate-200";
-      const matchCls = score>70 ? "bg-green-100 text-green-700 dark:bg-green-900/40 dark:text-green-200"
-                   : score>50 ? "bg-amber-100 text-amber-700 dark:bg-amber-900/40 dark:text-amber-200"
-                              : "bg-rose-100 text-rose-700 dark:bg-rose-900/40 dark:text-rose-200";
+    <div id="schoolBuckets"></div>
+  </section>
 
-      const impacted = state.majors.filter(m => sc.majors.impacted.includes(m));
-      const impHtml = impacted.length ? `<div class="text-xs text-rose-600 dark:text-rose-300 mt-1">Impacted major(s): ${impacted.join(", ")}</div>` : "";
+  <!-- PLANNING -->
+  <section id="planning" class="section">
+    <div class="panel step">
+      <h3 style="margin:0 0 10px 0">Step 1 — Tell us a bit about you</h3>
+      <label class="label">First name</label>
+      <input id="firstName" class="input" placeholder="What should we call you?" />
 
-      const detailsId = `d-${sc.id}`;
-      return `
-        <div class="rounded-2xl border border-slate-200 bg-white p-4 shadow-soft dark:border-slate-800 dark:bg-slate-900">
-          <div class="flex items-start justify-between">
-            <div>
-              <p class="text-lg font-bold">${sc.name}</p>
-              <p class="text-xs text-slate-500 dark:text-slate-400">Acceptance: ${sc.rate}%</p>
-              ${impHtml}
-            </div>
-            <div class="text-right">
-              <div class="mb-1"><span class="rounded-full px-2 py-0.5 text-xs font-bold ${matchCls}">${score}% match</span></div>
-              <div><span class="rounded-full px-2 py-0.5 text-[11px] font-bold ${reviewCls}">${reviewTag}</span></div>
-            </div>
-          </div>
-
-          <div class="mt-3 grid grid-cols-3 gap-2 text-xs">
-            <div class="rounded-xl border border-slate-200 p-2 dark:border-slate-700"><p class="font-semibold">Avg GPA</p><p>${sc.gpa}</p></div>
-            <div class="rounded-xl border border-slate-200 p-2 dark:border-slate-700"><p class="font-semibold">Avg SAT</p><p>${sc.sat}</p></div>
-            <div class="rounded-xl border border-slate-200 p-2 dark:border-slate-700"><p class="font-semibold">Tuition</p><p>$${sc.tuition.toLocaleString()}/yr</p></div>
-          </div>
-
-          <div class="mt-3 flex flex-wrap gap-1">${reqChips(sc.req)}</div>
-
-          <button class="mt-3 w-full rounded-xl border border-slate-200 px-3 py-2 text-sm font-semibold hover:bg-slate-50 dark:border-slate-700 dark:hover:bg-slate-800"
-                  onclick="document.getElementById('${detailsId}').classList.toggle('hidden')">View details & tips</button>
-
-          <div id="${detailsId}" class="mt-3 hidden rounded-xl border border-slate-200 p-3 text-sm dark:border-slate-700">
-            <p class="font-semibold">Notes</p>
-            <ul class="ml-4 list-disc text-slate-600 dark:text-slate-300">${sc.notes.map(n=>`<li>${n}</li>`).join("")}</ul>
-            <p class="mt-3 font-semibold">Personalized tips</p>
-            ${tipsFor(sc, score)}
-          </div>
+      <div style="display:grid;gap:12px;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));margin-top:12px">
+        <div>
+          <label class="label">Grade level</label>
+          <select id="grade" class="input">
+            <option value="">Select</option>
+            <option value="9">9th</option><option value="10">10th</option>
+            <option value="11">11th</option><option value="12">12th</option>
+            <option value="transfer">Transfer</option>
+          </select>
         </div>
-      `;
-    }
-    function emptyCard(){ return `<div class="rounded-2xl border border-dashed border-slate-300 p-4 text-sm text-slate-500 dark:border-slate-700 dark:text-slate-400">No schools in this bucket yet. Adjust GPA/SAT or preferences.</div>`; }
-
-    /* ---------- planning ---------- */
-    function renderTasks(){
-      const ul=$("#todoList"); ul.innerHTML="";
-      state.tasks.forEach((t,i)=>{
-        const li=document.createElement("li");
-        li.className="flex items-center justify-between rounded-xl border border-slate-200 bg-white p-3 text-sm dark:border-slate-800 dark:bg-slate-900";
-        li.innerHTML=`<label class="flex items-center gap-2"><input type="checkbox" ${t.done?"checked":""} class="h-4 w-4 rounded border-slate-300 text-brand.primary focus:ring-brand.primary"><span class="${t.done?"line-through text-slate-400":""}">${t.text}</span></label><button class="text-slate-400 hover:text-brand.danger">🗑️</button>`;
-        const [cb,del]=li.querySelectorAll("input,button");
-        cb.onchange=e=>{ state.tasks[i].done=e.target.checked; save(state); renderTasks(); };
-        del.onclick=()=>{ state.tasks.splice(i,1); save(state); renderTasks(); };
-        ul.appendChild(li);
-      });
-    }
-
-    /* ---------- documents ---------- */
-    function renderDocs(){
-      const wrap=$("#docsList"); wrap.innerHTML="";
-      const items=[
-        ["profile","Personal info","Completed","success"],
-        ["transcripts","Transcripts","Request from counselor by Oct 15","warning"],
-        ["recommendations","Recommendation letters","Need 2–3 teachers (for non-UCs)","danger"],
-        ["personal_statement","Personal statement (UC PIQs)","4 short essays for UC","danger"],
-        ["fafsa","FAFSA/CADAA","Opens Oct 1, 2025","danger"]
-      ];
-      let done=0;
-      for (const [k,title,desc,theme] of items){
-        const on=!!state.docs[k]; if(on) done++;
-        wrap.insertAdjacentHTML("beforeend",`
-          <div class="flex items-start gap-3 rounded-2xl border border-slate-200 bg-white p-4 shadow-soft dark:border-slate-800 dark:bg-slate-900">
-            <input type="checkbox" ${on?"checked":""} class="mt-0.5 h-4 w-4 rounded border-slate-300 text-brand.primary focus:ring-brand.primary">
-            <div class="flex-1"><p class="font-semibold">${title}</p><p class="text-sm text-slate-500 dark:text-slate-400">${desc}</p></div>
-            <span class="rounded-full px-2 py-0.5 text-xs font-bold ${
-              theme==="success"?"bg-green-100 text-green-700 dark:bg-green-900/40 dark:text-green-200":
-              theme==="warning"?"bg-amber-100 text-amber-700 dark:bg-amber-900/40 dark:text-amber-200":
-              "bg-rose-100 text-rose-700 dark:bg-rose-900/40 dark:text-rose-200"
-            }">${on?"Done":"Pending"}</span>
-          </div>
-        `);
-        const cb = wrap.lastElementChild.querySelector("input");
-        cb.onchange = ()=>{ state.docs[k]=cb.checked; save(state); renderDocs(); }
-      }
-      const pct = Math.round(done/items.length*100);
-      $("#docProgressPct").textContent = pct+"%";
-      $("#docProgressBar").style.width = pct+"%";
-    }
-
-    /* ---------- timeline ---------- */
-    function renderTimeline(){
-      const list=$("#timelineList");
-      const items=[
-        {date:"Aug 1, 2025", title:"UC application opens", tip:"Start PIQs + activities list"},
-        {date:"Oct 1, 2025", title:"FAFSA/CADAA opens", tip:"Submit ASAP for max aid"},
-        {date:"Nov 15, 2025", title:"Priority submission", tip:"Early submission shows interest"},
-        {date:"Nov 30, 2025", title:"UC/CSU deadline", tip:"No extensions; submit!"},
-        {date:"Mar 15–30, 2026", title:"Decisions released", tip:"Check portals"}
-      ];
-      list.innerHTML = items.map(i=>`
-        <div class="rounded-2xl border border-slate-200 bg-white p-4 shadow-soft dark:border-slate-800 dark:bg-slate-900">
-          <p class="text-xs text-slate-500 dark:text-slate-400">${i.date}</p>
-          <p class="text-lg font-bold">${i.title}</p>
-          <p class="text-sm text-slate-500 dark:text-slate-400">${i.tip}</p>
+        <div>
+          <label class="label">GPA (weighted OK)</label>
+          <input id="gpa" type="number" step="0.01" min="0" max="5" class="input" placeholder="e.g., 3.75">
         </div>
-      `).join("");
-    }
+        <div>
+          <label class="label">SAT (optional)</label>
+          <input id="sat" type="number" min="400" max="1600" class="input" placeholder="e.g., 1400">
+        </div>
+        <div>
+          <label class="label">AP/Honors courses</label>
+          <input id="ap" type="number" min="0" class="input" placeholder="e.g., 5">
+        </div>
+      </div>
+    </div>
 
-    /* ---------- aid ---------- */
-    function calcAid(){
-      const income=parseInt($("#faIncome").value)||0;
-      const pell = income<65000 ? (income<50000?7395:3500) : 0;
-      const cal  = (income<80000 && (state.gpa??3.2)>=3.0) ? 12570 : 0;
-      const mcs  = (income>=80000 && income<=177000) ? Math.max(0, 3000 - Math.floor((income-80000)/5000)*250) : 0;
-      const total = pell+cal+mcs;
-      const card=(l,a)=>`<div class="rounded-2xl border border-slate-200 bg-white p-4 text-center shadow-soft dark:border-slate-800 dark:bg-slate-900"><p class="text-xs text-slate-500 dark:text-slate-400">${l}</p><p class="mt-1 text-2xl font-bold">$${a.toLocaleString()}</p></div>`;
-      $("#aidResult").innerHTML = card("Pell Grant",pell)+card("Cal Grant A/B",cal)+card("Middle Class Scholarship",mcs)+
-        `<div class="sm:col-span-3 mt-2 rounded-2xl border border-slate-200 bg-slate-50 p-4 text-center font-semibold dark:border-slate-800 dark:bg-slate-900">Estimated annual aid: $${total.toLocaleString()}</div>`;
-    }
-    $("#calcAid")?.addEventListener("click", calcAid);
+    <div class="panel step">
+      <h3 style="margin:0 0 10px 0">Step 2 — What’s your vibe? (interests)</h3>
+      <div id="interestGrid" class="pillGrid"></div>
+    </div>
 
-    /* ---------- help (smarter) ---------- */
-    function showHelpAuto(text){
-      // open mini modal if user is stuck (less intrusive than bubble-on-top-of-buttons)
-      $("#helpModal").classList.remove("hidden");
-      showQA("custom", text);
-    }
-    function showQA(key, override){
-      const ans=$("#qaAnswer");
-      const majors = state.majors.length ? `You're exploring: <b>${state.majors.join(", ")}</b>. ` : "";
-      const map={
-        reach:`${majors}We bucket by your profile vs campus profile. <b>Reach</b> ~ acceptance <30% or your stats below average; <b>Match</b> ~ close to averages; <b>Safety</b> ~ your stats clearly above. We also tweak by school style (scores/balanced/ECA) and impacted majors.`,
-        piq:`UC uses 4 short “PIQs” (~350 words each). Show impact, growth, and voice. Tie examples to your interests/major signals. No letters required at submit; some UCs may request later.`,
-        majors:`Pick what excites you now; it’s fine to pivot. For impacted majors (e.g., CS, Nursing), also choose a related alternate (e.g., DS, Math, Cognitive Sci).`,
-        aid:`Estimator uses Pell (need), Cal Grant (CA resident + GPA), and Middle Class Scholarship (income-based). Exact awards vary—submit FAFSA/CADAA early.`,
-        custom: override || "Ask away!"
-      };
-      ans.innerHTML = `<div class="prose dark:prose-invert prose-sm max-w-none">${map[key]}</div>`;
-    }
+    <div class="panel step">
+      <h3 style="margin:0 0 10px 0">Step 3 — What matters most?</h3>
+      <div id="prefGrid" class="pillGrid"></div>
+    </div>
 
-    /* ---------- tiny CSS aliases ---------- */
-    // (keep classes static so Tailwind CDN always renders)
-    document.head.insertAdjacentHTML("beforeend", `
-      <style>
-        .chip { border:1px solid rgb(226,232,240); background:#f8fafc; padding:.5rem .75rem; border-radius:9999px; font-weight:600; font-size:.875rem }
-        .chip:hover { background:white }
-        .pill { border:1px solid rgb(226,232,240); background:#f8fafc; padding:.75rem; border-radius:.75rem; text-align:left; font-weight:600 }
-        .pill:hover { background:white }
-        .card { border:1px solid rgb(226,232,240); background:white; border-radius:1rem; padding:1.25rem; box-shadow:0 8px 30px rgba(0,0,0,.08) }
-        .label { font-size:.75rem; font-weight:700; color:rgb(100,116,139) }
-        .stat { margin-top:.25rem; font-size:1.75rem; font-weight:800 }
-        .dark .chip, .dark .pill { background:#0f172a; border-color:#334155 }
-        .dark .chip:hover, .dark .pill:hover { background:#0b1220 }
-      </style>
-    `);
-  </script>
+    <div class="panel step">
+      <button class="btn primary" onclick="finishPlanning()">Build my matches</button>
+      <button class="btn ghost" style="margin-left:8px" onclick="showTab('dashboard',document.querySelector('.tab:nth-child(1)'))">Skip & view dashboard</button>
+    </div>
+  </section>
+
+  <!-- DOCUMENTS -->
+  <section id="documents" class="section">
+    <h3>Application checklist</h3>
+    <div class="list mt">
+      <div class="row"><div class="left"><span class="dot ok"></span><div>Profile basics</div></div><div class="muted">Complete</div></div>
+      <div class="row"><div class="left"><span class="dot warn"></span><div>Transcripts</div></div><div class="muted">Request by Oct 15</div></div>
+      <div class="row"><div class="left"><span class="dot miss"></span><div>Letters of recommendation</div></div><div class="muted">Need 2–3 teachers</div></div>
+      <div class="row"><div class="left"><span class="dot miss"></span><div>FAFSA / CADAA</div></div><div class="muted">Opens Oct 1</div></div>
+    </div>
+  </section>
+
+  <!-- TIMELINE -->
+  <section id="timeline" class="section">
+    <h3>Your application timeline</h3>
+    <div class="list mt">
+      <div class="row"><div class="left"><span class="dot ok"></span><div>Aug 1 — UC app opens</div></div><div class="muted">Start essays</div></div>
+      <div class="row"><div class="left"><span class="dot warn"></span><div>Oct 1 — FAFSA/CADAA opens</div></div><div class="muted">Submit ASAP</div></div>
+      <div class="row"><div class="left"><span class="dot warn"></span><div>Nov 15 — Priority submission</div></div><div class="muted">Better outcome odds</div></div>
+      <div class="row"><div class="left"><span class="dot miss"></span><div>Nov 30 — UC/CSU deadline</div></div><div class="muted">Final day, no extensions</div></div>
+    </div>
+  </section>
+
+  <!-- AID -->
+  <section id="aid" class="section">
+    <h3>Financial aid estimate (CA resident)</h3>
+    <div class="panel step">
+      <div class="row"><div>Estimated Federal Pell Grant</div><div id="pell">$0</div></div>
+      <div class="row"><div>Cal Grant (if GPA ≥ 3.0 & income in range)</div><div id="cal">$0</div></div>
+      <div class="row"><div>Middle Class Scholarship</div><div class="muted">Check eligibility</div></div>
+      <div class="row"><div><b>Total estimated grant aid</b></div><div id="aidTotal">$0</div></div>
+      <small class="muted">These are estimates based on 2024-25 ranges; actual awards depend on FAFSA/CADAA.</small>
+    </div>
+  </section>
+
+</div>
+
+<!-- AI HELP -->
+<div id="ai" class="help"></div>
+
+<script>
+/* =========================
+   STATE / CONSTANTS
+   ========================= */
+const state = {
+  name:"",
+  grade:"",
+  gpa:3.5,
+  sat:0,
+  ap:0,
+  interests:[],
+  prefs:[],
+  selected:[] // ids
+};
+
+const INTERESTS = [
+  "Computer Science","Engineering","Business","Biology","Pre-Med","Psychology",
+  "Economics","Art & Design","Music","Film & Media","Education","Nursing",
+  "Environmental Science","Data Science","Political Science","Mathematics",
+  "Physics","Chemistry","Communications","Sociology"
+];
+
+const PREFS = [
+  "Reputation / Prestige","Affordability","Close to Home","Big Campus Energy",
+  "Small Classes","Research Opportunities","Co-ops / Internships","Athletics / Spirit"
+];
+
+/* School weighting:
+   - score-heavy: GPA/SAT weigh more in matching
+   - eca-heavy: AP/Interests weigh more
+   - balanced: even split
+*/
+const SCHOOLS = [
+  // UC
+  {id:1,  name:"UC Berkeley",           sys:"UC", type:"public",  weighting:"score-heavy",  avgGPA:4.25, avgSAT:1450, acceptance:14,  tuition:14226,
+    requirements:["PIQ essays","No LOR (most majors)","Portfolio for some Arts"], majors:["CS","Engineering","Business","Economics","Biology"]},
+  {id:2,  name:"UCLA",                  sys:"UC", type:"public",  weighting:"score-heavy",  avgGPA:4.26, avgSAT:1445, acceptance:12,  tuition:13401,
+    requirements:["PIQ essays","No LOR","Film majors require supplements"], majors:["CS","Biology","Psychology","Film & Media"]},
+  {id:3,  name:"UC San Diego",          sys:"UC", type:"public",  weighting:"balanced",     avgGPA:4.16, avgSAT:1410, acceptance:31,  tuition:14616,
+    requirements:["PIQ essays","Colleges within UCSD selection"], majors:["CS","Data Science","Biology","Economics"]},
+  {id:4,  name:"UC Davis",              sys:"UC", type:"public",  weighting:"balanced",     avgGPA:4.13, avgSAT:1350, acceptance:38,  tuition:14597,
+    requirements:["PIQ essays"], majors:["Biology","Animal Science","Psychology","CS"]},
+  {id:5,  name:"UC Irvine",             sys:"UC", type:"public",  weighting:"balanced",     avgGPA:4.08, avgSAT:1360, acceptance:27,  tuition:13727,
+    requirements:["PIQ essays"], majors:["CS","Engineering","Business","Nursing"]},
+  {id:6,  name:"UC Santa Barbara",      sys:"UC", type:"public",  weighting:"balanced",     avgGPA:4.15, avgSAT:1380, acceptance:30,  tuition:14391,
+    requirements:["PIQ essays"], majors:["CS","Physics","Biology","Economics"]},
+  {id:7,  name:"UC Santa Cruz",         sys:"UC", type:"public",  weighting:"eca-heavy",    avgGPA:3.96, avgSAT:1295, acceptance:51,  tuition:13991,
+    requirements:["PIQ essays"], majors:["CS","Art & Design","Psychology"]},
+  {id:8,  name:"UC Riverside",          sys:"UC", type:"public",  weighting:"balanced",     avgGPA:3.85, avgSAT:1250, acceptance:66,  tuition:13923,
+    requirements:["PIQ essays"], majors:["Biology","Engineering","Business"]},
+  {id:9,  name:"UC Merced",             sys:"UC", type:"public",  weighting:"eca-heavy",    avgGPA:3.6,  avgSAT:1170, acceptance:87,  tuition:13218,
+    requirements:["PIQ essays"], majors:["Engineering","CS","Biology"]},
+
+  // CSU flagships (rough averages vary by program)
+  {id:20, name:"Cal Poly San Luis Obispo", sys:"CSU", type:"public", weighting:"score-heavy", avgGPA:4.06, avgSAT:1395, acceptance:33, tuition:10377,
+    requirements:["Program-based review","Some portfolios (Architecture)"], majors:["Engineering","CS","Architecture","Business"]},
+  {id:21, name:"San Diego State",          sys:"CSU", type:"public", weighting:"balanced",   avgGPA:3.85, avgSAT:1270, acceptance:38, tuition:7720,
+    requirements:["Impaction for many majors"], majors:["Business","Nursing","CS"]},
+  {id:22, name:"Cal State Long Beach",     sys:"CSU", type:"public", weighting:"balanced",   avgGPA:3.8,  avgSAT:1240, acceptance:47, tuition:7378,
+    requirements:["Impacted majors (Nursing/CS)"], majors:["Nursing","CS","Business","Art & Design"]},
+
+  // Private CA
+  {id:30, name:"Stanford University",   sys:"Private", type:"private", weighting:"score-heavy", avgGPA:4.2, avgSAT:1520, acceptance:4,  tuition:61500,
+    requirements:["Common App","Essays","LORs","Standardized tests optional"], majors:["CS","Engineering","Economics","Biology","Data Science"]},
+  {id:31, name:"Caltech",               sys:"Private", type:"private", weighting:"score-heavy", avgGPA:4.3, avgSAT:1550, acceptance:3,  tuition:60600,
+    requirements:["Rigorous math/science","Essays","LORs"], majors:["CS","Physics","Mathematics","Chemistry"]},
+  {id:32, name:"USC",                   sys:"Private", type:"private", weighting:"balanced",    avgGPA:3.9, avgSAT:1460,  acceptance:9,  tuition:66400,
+    requirements:["Common App","Essays","LORs","Portfolios for some arts"], majors:["Business","Film & Media","CS","Engineering"]},
+  {id:33, name:"Pomona College",        sys:"Private", type:"private", weighting:"balanced",    avgGPA:4.0, avgSAT:1500,  acceptance:7,  tuition:63500,
+    requirements:["Common App/Coalition","Essays","LORs"], majors:["Economics","Biology","Psychology","Math"]},
+  {id:34, name:"Santa Clara University",sys:"Private", type:"private", weighting:"eca-heavy",   avgGPA:3.7, avgSAT:1380,  acceptance:48, tuition:59700,
+    requirements:["Common App","Essays","LORs"], majors:["Business","CS","Engineering"]},
+  {id:35, name:"Loyola Marymount (LMU)",sys:"Private", type:"private", weighting:"eca-heavy",   avgGPA:3.7, avgSAT:1330,  acceptance:46, tuition:58260,
+    requirements:["Common App","Essays","LORs","Portfolios for arts"], majors:["Film & Media","Business","Communications"]},
+  {id:36, name:"Pepperdine University", sys:"Private", type:"private", weighting:"eca-heavy",   avgGPA:3.7, avgSAT:1320,  acceptance:53, tuition:65200,
+    requirements:["Common App","Essays","LORs"], majors:["Business","Psychology","Communications"]},
+  {id:37, name:"University of San Diego",sys:"Private", type:"private", weighting:"eca-heavy",  avgGPA:3.7, avgSAT:1310,  acceptance:48, tuition:57200,
+    requirements:["Common App","Essays","LORs"], majors:["Business","Nursing","CS"]}
+];
+
+/* =========================
+   UTIL
+   ========================= */
+function $(sel){return document.querySelector(sel)}
+function daysTo(dateStr){
+  const d=new Date(dateStr), t=new Date();
+  return Math.max(0, Math.floor((d-t)/(1000*60*60*24)));
+}
+function clamp(n,min,max){return Math.min(max,Math.max(min,n))}
+
+/* =========================
+   INIT UI
+   ========================= */
+document.documentElement.setAttribute('data-theme','dark');
+restoreState();
+buildInterestPills(); buildPrefPills();
+renderDashboard(); buildBuckets();
+
+/* =========================
+   THEME / TABS
+   ========================= */
+function toggleTheme(){
+  const root=document.documentElement;
+  const cur=root.getAttribute('data-theme');
+  const nxt=cur==='dark'?'light':'dark';
+  root.setAttribute('data-theme',nxt);
+  localStorage.setItem('theme',nxt);
+  $('#themeBtn').textContent = (nxt==='dark'?'🌙 Theme':'☀️ Theme');
+}
+(function initTheme(){
+  const saved=localStorage.getItem('theme')||'dark';
+  document.documentElement.setAttribute('data-theme',saved);
+  $('#themeBtn').textContent = (saved==='dark'?'🌙 Theme':'☀️ Theme');
+})();
+
+function showTab(id, el){
+  document.querySelectorAll('.section').forEach(s=>s.classList.remove('active'));
+  document.querySelectorAll('.tab').forEach(b=>b.classList.remove('active'));
+  const sec=$("#"+id); if(sec) sec.classList.add('active');
+  if(el) el.classList.add('active');
+  // context AI nudge
+  if(id==='planning'){nudge("Want help choosing majors or schools? I can suggest based on your interests.")}
+}
+
+/* =========================
+   PLANNING UI
+   ========================= */
+function buildInterestPills(){
+  const wrap=$("#interestGrid"); if(!wrap) return;
+  wrap.innerHTML = INTERESTS.map(v=>`<div class="pill" data-v="${v}" onclick="togglePill(this,'interests')">${v}</div>`).join('');
+  // restore
+  [...wrap.children].forEach(p=>{ if(state.interests.includes(p.dataset.v)) p.classList.add('sel'); });
+}
+function buildPrefPills(){
+  const wrap=$("#prefGrid"); if(!wrap) return;
+  wrap.innerHTML = PREFS.map(v=>`<div class="pill" data-v="${v}" onclick="togglePill(this,'prefs')">${v}</div>`).join('');
+  [...wrap.children].forEach(p=>{ if(state.prefs.includes(p.dataset.v)) p.classList.add('sel'); });
+}
+function togglePill(el, key){
+  const v=el.dataset.v;
+  const list=state[key];
+  const i=list.indexOf(v);
+  if(i>-1){ list.splice(i,1); el.classList.remove('sel'); }
+  else { list.push(v); el.classList.add('sel'); }
+  saveState();
+}
+
+function finishPlanning(){
+  // pull inputs
+  state.name = $("#firstName")?.value?.trim() || state.name;
+  state.grade = $("#grade")?.value || state.grade;
+  state.gpa = parseFloat($("#gpa")?.value) || state.gpa;
+  state.sat = parseInt($("#sat")?.value) || state.sat;
+  state.ap  = parseInt($("#ap")?.value) || state.ap;
+  saveState();
+  buildBuckets(); renderDashboard();
+  showTab('dashboard', document.querySelector('.tab:nth-child(1)'));
+  nudge("Nice! I rebuilt your matches using your latest info.");
+}
+
+/* =========================
+   MATCHING / BUCKETS
+   ========================= */
+function matchScore(s){
+  // base
+  let score = 50;
+
+  // GPA vs avg
+  if(state.gpa){ score += (state.gpa - s.avgGPA) * 22; }
+  // SAT vs avg
+  if(state.sat){ score += (state.sat - s.avgSAT)/12; }
+  // AP bonus
+  score += (state.ap||0)*1.5;
+
+  // Interest matching boosts for majors present
+  const interestHit = state.interests.some(i => s.majors?.some(m => i.toLowerCase().includes(m.toLowerCase()) || m.toLowerCase().includes(i.toLowerCase())));
+  if(interestHit) score += 8;
+
+  // Preference signals
+  if(state.prefs.includes("Reputation / Prestige") && s.acceptance <= 15) score += 8;
+  if(state.prefs.includes("Affordability") && s.sys!=="Private") score += 8;
+  if(state.prefs.includes("Small Classes") && s.sys==="Private") score += 6;
+  if(state.prefs.includes("Big Campus Energy") && (s.sys==="UC" || s.sys==="CSU")) score += 5;
+
+  // Weighting
+  if(s.weighting==="score-heavy"){
+    // double down on scores
+    score += (state.gpa ? (state.gpa - s.avgGPA)*10 : 0);
+    score += (state.sat ? (state.sat - s.avgSAT)/20 : 0);
+  }else if(s.weighting==="eca-heavy"){
+    if(interestHit) score += 12;
+    score += (state.ap||0)*1.5;
+  } // balanced = default
+
+  return clamp(Math.round(score),0,100);
+}
+
+function bucketFor(s, score){
+  // use GPA delta + score
+  const gdiff = (state.gpa||0) - s.avgGPA;
+  if (gdiff < -0.35 || score < 45) return "reach";
+  if (gdiff > 0.25 || score > 75) return "safety";
+  return "match";
+}
+
+function buildBuckets(){
+  const buckets={reach:[],match:[],safety:[]};
+  SCHOOLS.forEach(s=>{
+    const sc=matchScore(s);
+    buckets[bucketFor(s,sc)].push({...s,score:sc});
+  });
+
+  // sort by score desc
+  Object.keys(buckets).forEach(k=>buckets[k].sort((a,b)=>b.score-a.score));
+
+  const root=$("#schoolBuckets"); if(!root) return;
+  const section = (title, badge, arr)=>`
+    <div class="cat">
+      <h3>${title} <span class="badge ${badge}">${badge==='reach'?'Aim High!':badge==='match'?'Great Fit!':'Solid Backup'}</span></h3>
+      <div class="grid">
+        ${arr.map(card).join('')}
+      </div>
+    </div>`;
+
+  root.innerHTML =
+    section("🎯 Reach schools","reach", buckets.reach) +
+    section("✅ Match schools","match", buckets.match) +
+    section("🛡️ Safety schools","safety", buckets.safety);
+
+  // animate score bars
+  root.querySelectorAll('.scoreBar span').forEach(el=>{
+    requestAnimationFrame(()=> el.style.width = el.dataset.w + "%");
+  });
+
+  // update count stat
+  $("#statCount").textContent = (buckets.reach.length + buckets.match.length + buckets.safety.length);
+}
+
+function card(s){
+  const req = (s.requirements||[]).slice(0,2).join(" • ");
+  return `
+  <div class="card">
+    <div class="name">${s.name}</div>
+    <div class="badges">
+      <span class="badge ${s.weighting==='score-heavy'?'weight':''}">${niceWeight(s.weighting)}</span>
+      <span class="badge">${s.sys}</span>
+      <span class="badge">Acc ${s.acceptance}%</span>
+    </div>
+    <div class="muted">Avg GPA ${s.avgGPA} | SAT ${s.avgSAT || '—'}</div>
+    <div class="scoreBar"><span data-w="${s.score}"></span></div>
+    <div class="more">Reqs: ${req}${(s.requirements||[]).length>2?' • …':''}</div>
+    <div class="actions">
+      <button class="btn primary" onclick="toggleSelect(${s.id})">${state.selected.includes(s.id)?'Added':'Add'}</button>
+      <button class="btn ghost" onclick="showDetails(${s.id})">Details</button>
+      <button class="btn warn" onclick="removeCard(${s.id})">Remove</button>
+    </div>
+  </div>`;
+}
+function niceWeight(w){
+  return w==='score-heavy'?'Score-heavy' : (w==='eca-heavy'?'ECA-heavy':'Balanced');
+}
+function toggleSelect(id){
+  const i=state.selected.indexOf(id);
+  if(i>-1) state.selected.splice(i,1); else state.selected.push(id);
+  saveState(); buildBuckets();
+}
+function removeCard(id){
+  // “Remove” means hide from buckets (blacklist)
+  state.selected = state.selected.filter(x=>x!==id);
+  SCHOOLS.splice(SCHOOLS.findIndex(s=>s.id===id),1);
+  saveState(); buildBuckets();
+}
+function showDetails(id){
+  const s=SCHOOLS.find(x=>x.id===id); if(!s) return;
+  const msg = `${s.name}\n\nSystem: ${s.sys}\nWeighting: ${niceWeight(s.weighting)}\nAcceptance: ${s.acceptance}%\nAvg GPA: ${s.avgGPA}  SAT: ${s.avgSAT || '—'}\n\nApplication requirements:\n- ${s.requirements.join('\n- ')}\n\nPopular majors:\n- ${(s.majors||[]).join('\n- ')}`;
+  alert(msg);
+}
+
+/* =========================
+   DASHBOARD NUMBERS
+   ========================= */
+function renderDashboard(){
+  $("#statGPA").textContent = (state.gpa||3.5).toFixed(2);
+  const days=daysTo('Nov 30, 2025');
+  $("#statDays").textContent = days;
+}
+
+/* =========================
+   FINANCIAL AID (quick estimate)
+   ========================= */
+(function aid(){
+  // quickly infer Pell & CalGrant from GPA & a mid income (can wire later to inputs)
+  const income = 75000;
+  let pell = income<70000 ? (income<50000?7395:3000) : 0;
+  let cal = (state.gpa>=3.0 && income<80000) ? 12570 : 0;
+  $("#pell").textContent = `$${pell.toLocaleString()}`;
+  $("#cal").textContent = `$${cal.toLocaleString()}`;
+  $("#aidTotal").textContent = `$${(pell+cal).toLocaleString()}`;
+})();
+
+/* =========================
+   AI HELPER (context nudges)
+   ========================= */
+let aiTimer=null;
+function nudge(text){
+  const a=$("#ai"); if(!a) return;
+  a.textContent = "🤖 " + text;
+  a.classList.add('show');
+  clearTimeout(aiTimer);
+  aiTimer=setTimeout(()=>a.classList.remove('show'), 5500);
+}
+// idle nudge on planning page if nothing selected in 45s
+let idleTimer=null;
+document.addEventListener('visibilitychange',()=>clearTimeout(idleTimer));
+function startIdleNudge(){
+  clearTimeout(idleTimer);
+  idleTimer=setTimeout(()=>{
+    if($('#planning').classList.contains('active') && state.interests.length===0){
+      nudge("Try tapping a few interests — that unlocks smarter school matches.");
+    }
+  },45000);
+}
+startIdleNudge();
+
+/* =========================
+   PERSISTENCE
+   ========================= */
+function saveState(){ localStorage.setItem('pwState', JSON.stringify(state)); }
+function restoreState(){
+  try{
+    const s=JSON.parse(localStorage.getItem('pwState')||"{}");
+    Object.assign(state,s);
+    // hydrate inputs
+    if($("#firstName")) $("#firstName").value = state.name||"";
+    if($("#grade")) $("#grade").value = state.grade||"";
+    if($("#gpa")) $("#gpa").value = state.gpa||"";
+    if($("#sat")) $("#sat").value = state.sat||"";
+    if($("#ap"))  $("#ap").value  = state.ap||"";
+  }catch(e){}
+}
+</script>
 </body>
 </html>
