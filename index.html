@@ -1,11 +1,9 @@
-
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Pathwise - Complete College Planning Platform</title>
+    <title>Pathwise - California College Success Platform</title>
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
     <style>
@@ -111,6 +109,11 @@
             position: sticky;
             top: 0;
             z-index: 100;
+            -webkit-overflow-scrolling: touch;
+        }
+        
+        .main-nav::-webkit-scrollbar {
+            display: none;
         }
         
         .nav-pill {
@@ -167,6 +170,56 @@
             margin-bottom: 20px;
             box-shadow: var(--shadow);
         }
+        
+        .schools-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 12px;
+            margin-bottom: 20px;
+        }
+        
+        .school-card {
+            background: var(--card);
+            border-radius: var(--border-radius);
+            padding: 16px;
+            border: 2px solid transparent;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            position: relative;
+        }
+        
+        .school-card.selected {
+            border-color: var(--primary);
+            background: linear-gradient(to right, rgba(0, 122, 255, 0.05), transparent);
+        }
+        
+        .school-card:hover {
+            transform: translateY(-2px);
+            box-shadow: var(--shadow);
+        }
+        
+        .school-name {
+            font-weight: 600;
+            margin-bottom: 4px;
+        }
+        
+        .school-details {
+            font-size: 12px;
+            color: var(--text-tertiary);
+        }
+        
+        .fit-indicator {
+            position: absolute;
+            top: 8px;
+            right: 8px;
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+        }
+        
+        .fit-reach { background: var(--danger); }
+        .fit-match { background: var(--warning); }
+        .fit-safety { background: var(--success); }
         
         .input-group {
             margin-bottom: 20px;
@@ -337,116 +390,238 @@
             background: rgba(0, 122, 255, 0.05);
         }
         
-        .recommendation-tracker {
-            background: var(--card);
-            border-radius: var(--border-radius);
-            padding: 20px;
-            margin-bottom: 20px;
-        }
-        
-        .rec-item {
+        /* College Match Results */
+        .college-match {
             display: flex;
             justify-content: space-between;
             align-items: center;
-            padding: 12px;
-            border-bottom: 1px solid var(--background);
+            padding: 15px;
+            margin: 10px 0;
+            border-radius: 10px;
+            border-left: 5px solid;
         }
         
-        .rec-item:last-child {
-            border-bottom: none;
+        .college-match.reach {
+            border-left-color: var(--danger);
+            background: linear-gradient(to right, rgba(255, 59, 48, 0.05), transparent);
         }
         
-        .rec-info {
+        .college-match.target {
+            border-left-color: var(--warning);
+            background: linear-gradient(to right, rgba(255, 149, 0, 0.05), transparent);
+        }
+        
+        .college-match.safety {
+            border-left-color: var(--success);
+            background: linear-gradient(to right, rgba(52, 199, 89, 0.05), transparent);
+        }
+        
+        .college-info {
             flex: 1;
         }
         
-        .rec-name {
+        .college-info h3 {
+            font-size: 18px;
+            margin-bottom: 4px;
+        }
+        
+        .college-info p {
+            font-size: 14px;
+            color: var(--text-secondary);
+        }
+        
+        .admission-chance {
+            text-align: right;
+        }
+        
+        .chance-percentage {
+            font-size: 28px;
+            font-weight: 700;
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+        
+        .chance-label {
+            font-size: 12px;
+            color: var(--text-tertiary);
+            text-transform: uppercase;
+        }
+        
+        .impacted-badge {
+            display: inline-block;
+            padding: 4px 8px;
+            background: var(--danger);
+            color: white;
+            border-radius: 12px;
+            font-size: 11px;
+            font-weight: 600;
+            margin-left: 8px;
+        }
+        
+        .action-card {
+            background: var(--card);
+            border-radius: var(--border-radius);
+            padding: 20px;
+            margin-bottom: 16px;
+            box-shadow: var(--shadow);
+            transition: all 0.3s ease;
+        }
+        
+        .action-card:hover {
+            transform: translateY(-2px);
+            box-shadow: var(--shadow-large);
+        }
+        
+        .timeline-container {
+            position: relative;
+            padding-left: 40px;
+        }
+        
+        .timeline-item {
+            background: var(--card);
+            border-radius: var(--border-radius);
+            padding: 16px;
+            margin-bottom: 16px;
+            position: relative;
+            box-shadow: var(--shadow);
+        }
+        
+        .timeline-dot {
+            position: absolute;
+            left: -34px;
+            top: 20px;
+            width: 16px;
+            height: 16px;
+            border-radius: 50%;
+            background: var(--primary);
+            border: 3px solid var(--card);
+        }
+        
+        .timeline-date {
+            font-size: 13px;
+            color: var(--text-tertiary);
+            margin-bottom: 4px;
+        }
+        
+        .timeline-title {
             font-weight: 600;
             margin-bottom: 4px;
         }
         
-        .rec-email {
-            font-size: 14px;
-            color: var(--text-tertiary);
+        .ai-chat-button {
+            position: fixed;
+            bottom: 24px;
+            right: 24px;
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            color: white;
+            border: none;
+            box-shadow: var(--shadow-large);
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 28px;
+            transition: all 0.3s ease;
+            z-index: 999;
         }
         
-        .rec-status {
-            padding: 6px 12px;
-            border-radius: 20px;
-            font-size: 12px;
-            font-weight: 600;
+        .ai-chat-button:hover {
+            transform: scale(1.1);
         }
         
-        .status-complete {
-            background: rgba(52, 199, 89, 0.15);
-            color: var(--success);
-        }
-        
-        .status-pending {
-            background: rgba(255, 149, 0, 0.15);
-            color: var(--warning);
-        }
-        
-        .status-not-sent {
-            background: var(--background);
-            color: var(--text-tertiary);
-        }
-        
-        .cost-comparison {
-            display: grid;
-            gap: 20px;
-            margin-top: 20px;
-        }
-        
-        .school-cost-card {
+        .ai-chat-window {
+            position: fixed;
+            bottom: 100px;
+            right: 24px;
+            width: 360px;
+            max-width: calc(100vw - 48px);
+            height: 500px;
+            max-height: 60vh;
             background: var(--card);
             border-radius: var(--border-radius);
-            padding: 20px;
+            box-shadow: var(--shadow-large);
+            display: none;
+            flex-direction: column;
+            z-index: 998;
+            animation: slideUp 0.3s ease-out;
+        }
+        
+        @keyframes slideUp {
+            from { transform: translateY(20px); opacity: 0; }
+            to { transform: translateY(0); opacity: 1; }
+        }
+        
+        .ai-chat-window.active {
+            display: flex;
+        }
+        
+        .ai-chat-header {
+            padding: 16px 20px;
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            color: white;
+            border-radius: var(--border-radius) var(--border-radius) 0 0;
             display: flex;
             justify-content: space-between;
             align-items: center;
         }
         
-        .school-cost-info h3 {
-            font-size: 18px;
-            margin-bottom: 8px;
-        }
-        
-        .cost-details {
+        .ai-chat-messages {
+            flex: 1;
+            overflow-y: auto;
+            padding: 20px;
             display: flex;
-            gap: 24px;
-            margin-top: 8px;
+            flex-direction: column;
+            gap: 12px;
         }
         
-        .cost-item {
-            font-size: 14px;
+        .ai-message {
+            max-width: 80%;
+            padding: 12px 16px;
+            border-radius: 18px;
+            font-size: 15px;
+            line-height: 1.4;
         }
         
-        .cost-label {
-            color: var(--text-tertiary);
-            margin-bottom: 2px;
+        .ai-message.user {
+            align-self: flex-end;
+            background: var(--primary);
+            color: white;
         }
         
-        .cost-value {
+        .ai-message.assistant {
+            align-self: flex-start;
+            background: var(--background);
+            color: var(--text-primary);
+        }
+        
+        .ai-chat-input {
+            display: flex;
+            gap: 8px;
+            padding: 12px;
+            border-top: 1px solid var(--background);
+        }
+        
+        .ai-chat-input input {
+            flex: 1;
+            padding: 12px;
+            border: none;
+            background: var(--background);
+            border-radius: 20px;
+            font-size: 15px;
+        }
+        
+        .ai-chat-input button {
+            padding: 12px 20px;
+            background: var(--primary);
+            color: white;
+            border: none;
+            border-radius: 20px;
             font-weight: 600;
-            font-size: 18px;
-        }
-        
-        .net-cost {
-            text-align: right;
-        }
-        
-        .net-cost-label {
-            font-size: 12px;
-            color: var(--text-tertiary);
-            text-transform: uppercase;
-            margin-bottom: 4px;
-        }
-        
-        .net-cost-value {
-            font-size: 28px;
-            font-weight: 700;
-            color: var(--primary);
+            cursor: pointer;
         }
         
         @media (max-width: 768px) {
@@ -454,19 +629,21 @@
                 grid-template-columns: 1fr;
             }
             
-            .cost-details {
-                flex-direction: column;
-                gap: 8px;
+            .schools-grid {
+                grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
             }
             
-            .school-cost-card {
-                flex-direction: column;
-                text-align: center;
+            .ai-chat-window {
+                right: 0;
+                bottom: 0;
+                width: 100%;
+                height: 100vh;
+                max-height: 100vh;
+                border-radius: 0;
             }
             
-            .net-cost {
-                text-align: center;
-                margin-top: 16px;
+            .ai-chat-header {
+                border-radius: 0;
             }
         }
     </style>
@@ -474,39 +651,162 @@
 <body>
     <div class="app-container">
         <div class="journey-header">
-            <h1 class="student-greeting">College Planning Hub 🎓</h1>
-            <p class="journey-status">Complete your application requirements</p>
+            <h1 class="student-greeting">Welcome to Your College Journey! 🎓</h1>
+            <p class="journey-status">Your personalized path to UC & CSU success</p>
             
             <div class="progress-overview">
                 <div class="progress-item">
-                    <div class="progress-value">$12,450</div>
+                    <div class="progress-value">3.85</div>
+                    <div class="progress-label">Current GPA</div>
+                </div>
+                <div class="progress-item">
+                    <div class="progress-value">$19,465</div>
                     <div class="progress-label">Est. Aid/Year</div>
                 </div>
                 <div class="progress-item">
-                    <div class="progress-value">3/7</div>
-                    <div class="progress-label">Documents</div>
+                    <div class="progress-value">5</div>
+                    <div class="progress-label">Target Schools</div>
                 </div>
                 <div class="progress-item">
-                    <div class="progress-value">1/3</div>
-                    <div class="progress-label">Rec Letters</div>
-                </div>
-                <div class="progress-item">
-                    <div class="progress-value" id="daysLeft">42</div>
+                    <div class="progress-value" id="daysLeft">--</div>
                     <div class="progress-label">Days Left</div>
                 </div>
             </div>
         </div>
         
         <nav class="main-nav">
-            <button class="nav-pill active" onclick="switchSection('financial')">💰 Financial Aid</button>
+            <button class="nav-pill active" onclick="switchSection('dashboard')">🏠 Dashboard</button>
+            <button class="nav-pill" onclick="switchSection('schools')">🎯 Schools</button>
+            <button class="nav-pill" onclick="switchSection('calculator')">📊 Calculator</button>
+            <button class="nav-pill" onclick="switchSection('financial')">💰 Financial Aid</button>
             <button class="nav-pill" onclick="switchSection('documents')">📄 Documents</button>
-            <button class="nav-pill" onclick="switchSection('recommendations')">✉️ Recommendations</button>
-            <button class="nav-pill" onclick="switchSection('costs')">💵 Compare Costs</button>
+            <button class="nav-pill" onclick="switchSection('timeline')">📅 Timeline</button>
+            <button class="nav-pill" onclick="switchSection('strategy')">🧠 Strategy</button>
         </nav>
         
         <div class="content-area">
-            <!-- Financial Aid Calculator Section -->
-            <div id="financial" class="section active">
+            <!-- Dashboard Section -->
+            <div id="dashboard" class="section active">
+                <h2 class="section-title">Your College Dashboard</h2>
+                
+                <div class="card">
+                    <h3 style="margin-bottom: 16px;">🎯 Your Target Schools</h3>
+                    <div class="schools-grid">
+                        <div class="school-card selected" onclick="showSchoolDetails('UC Berkeley')">
+                            <div class="fit-indicator fit-reach"></div>
+                            <div class="school-name">UC Berkeley</div>
+                            <div class="school-details">
+                                <div>Reach - 28% chance</div>
+                                <div>GPA needed: 4.25</div>
+                            </div>
+                        </div>
+                        <div class="school-card selected" onclick="showSchoolDetails('UCLA')">
+                            <div class="fit-indicator fit-reach"></div>
+                            <div class="school-name">UCLA</div>
+                            <div class="school-details">
+                                <div>Reach - 25% chance</div>
+                                <div>GPA needed: 4.23</div>
+                            </div>
+                        </div>
+                        <div class="school-card selected" onclick="showSchoolDetails('UC San Diego')">
+                            <div class="fit-indicator fit-match"></div>
+                            <div class="school-name">UC San Diego</div>
+                            <div class="school-details">
+                                <div>Match - 45% chance</div>
+                                <div>GPA needed: 4.15</div>
+                            </div>
+                        </div>
+                        <div class="school-card selected" onclick="showSchoolDetails('UC Davis')">
+                            <div class="fit-indicator fit-match"></div>
+                            <div class="school-name">UC Davis</div>
+                            <div class="school-details">
+                                <div>Match - 52% chance</div>
+                                <div>GPA needed: 4.05</div>
+                            </div>
+                        </div>
+                        <div class="school-card selected" onclick="showSchoolDetails('UC Riverside')">
+                            <div class="fit-indicator fit-safety"></div>
+                            <div class="school-name">UC Riverside</div>
+                            <div class="school-details">
+                                <div>Safety - 78% chance</div>
+                                <div>GPA needed: 3.75</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="card">
+                    <h3 style="margin-bottom: 16px;">📈 What You Need to Do</h3>
+                    <div class="action-card">
+                        <h4>1. Improve Your GPA</h4>
+                        <p>You need 0.4 points to reach UC Berkeley's average. Take 3 more AP/Honors classes.</p>
+                    </div>
+                    <div class="action-card">
+                        <h4>2. Complete Personal Insight Questions</h4>
+                        <p>4 essays required for UC applications. Start with your leadership experience.</p>
+                    </div>
+                    <div class="action-card">
+                        <h4>3. Apply for Financial Aid</h4>
+                        <p>You qualify for $19,465/year. Submit FAFSA by March 2.</p>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Schools Section -->
+            <div id="schools" class="section">
+                <h2 class="section-title">School-Specific Requirements</h2>
+                <div id="schoolsContent">
+                    <!-- Will be populated by JavaScript -->
+                </div>
+            </div>
+            
+            <!-- Calculator Section -->
+            <div id="calculator" class="section">
+                <h2 class="section-title">Admission Calculator</h2>
+                
+                <div class="card">
+                    <h3 style="margin-bottom: 20px;">Calculate Your Chances</h3>
+                    
+                    <div class="input-group">
+                        <label class="input-label">Weighted GPA</label>
+                        <input type="number" class="input-field" id="gpa" value="3.85" step="0.01" max="5.0">
+                    </div>
+                    
+                    <div class="input-group">
+                        <label class="input-label">SAT Score (Optional)</label>
+                        <input type="number" class="input-field" id="sat" placeholder="1350" max="1600">
+                    </div>
+                    
+                    <div class="input-group">
+                        <label class="input-label">Intended Major</label>
+                        <select class="input-field" id="major">
+                            <option value="computer-science">Computer Science</option>
+                            <option value="engineering">Engineering</option>
+                            <option value="business">Business</option>
+                            <option value="biology">Biology</option>
+                            <option value="psychology">Psychology</option>
+                            <option value="undeclared">Undeclared</option>
+                        </select>
+                    </div>
+                    
+                    <div class="input-group">
+                        <label class="input-label">AP/Honors Courses Taken</label>
+                        <input type="number" class="input-field" id="apCourses" value="5" max="20">
+                    </div>
+                    
+                    <button class="btn-primary" onclick="calculateAdmissions()">Calculate My Chances</button>
+                </div>
+                
+                <div id="calculatorResults" style="display: none;">
+                    <div class="card">
+                        <h3 style="margin-bottom: 20px;">Your College Matches</h3>
+                        <div id="collegeMatches"></div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Financial Aid Section -->
+            <div id="financial" class="section">
                 <h2 class="section-title">Financial Aid Calculator</h2>
                 <p style="color: var(--text-secondary); margin-bottom: 24px;">
                     Get an estimate of your financial aid eligibility for California colleges
@@ -517,7 +817,7 @@
                     
                     <div class="input-group">
                         <label class="input-label">Family Annual Income</label>
-                        <input type="number" class="input-field" id="familyIncome" placeholder="75000" onchange="calculateAid()">
+                        <input type="number" class="input-field" id="familyIncome" value="75000" onchange="calculateAid()">
                         <small style="color: var(--text-tertiary);">Total household income before taxes</small>
                     </div>
                     
@@ -544,7 +844,6 @@
                     <div class="input-group">
                         <label class="input-label">Your GPA</label>
                         <input type="number" class="input-field" id="studentGPA" value="3.85" step="0.01" max="5.0" onchange="calculateAid()">
-                        <small style="color: var(--text-tertiary);">Used for merit-based aid eligibility</small>
                     </div>
                     
                     <div class="input-group">
@@ -583,21 +882,6 @@
                             </div>
                         </div>
                     </div>
-                    
-                    <div class="card">
-                        <h3>Additional Opportunities</h3>
-                        <div id="additionalAid"></div>
-                    </div>
-                    
-                    <div class="card">
-                        <h3>Next Steps</h3>
-                        <ul style="padding-left: 20px; line-height: 2;">
-                            <li><strong>October 1:</strong> Complete FAFSA application at studentaid.gov</li>
-                            <li><strong>March 2:</strong> Submit Cal Grant GPA verification form</li>
-                            <li><strong>Check deadlines:</strong> Each school may have additional aid forms</li>
-                            <li><strong>Apply for scholarships:</strong> You may qualify for 10+ scholarships</li>
-                        </ul>
-                    </div>
                 </div>
             </div>
             
@@ -605,7 +889,7 @@
             <div id="documents" class="section">
                 <h2 class="section-title">Document Tracker</h2>
                 <p style="color: var(--text-secondary); margin-bottom: 24px;">
-                    Track and upload all required application documents
+                    Track all required application documents
                 </p>
                 
                 <div class="document-grid">
@@ -648,150 +932,324 @@
                     </div>
                     
                     <div class="document-card missing">
-                        <div class="document-icon">🎨</div>
-                        <div class="document-title">Portfolio (Optional)</div>
-                        <div class="document-status">For Art/Architecture majors</div>
-                        <div class="upload-area" onclick="uploadDocument('portfolio')">
-                            <div>📤 Upload portfolio</div>
-                            <small>PDF or link</small>
-                        </div>
-                    </div>
-                </div>
-                
-                <div class="card">
-                    <h3>Document Checklist by School</h3>
-                    <div style="margin-top: 16px;">
-                        <div style="padding: 12px; background: var(--background); border-radius: 8px; margin-bottom: 12px;">
-                            <div style="display: flex; justify-content: space-between; align-items: center;">
-                                <div>
-                                    <strong>UC Applications</strong>
-                                    <div style="font-size: 14px; color: var(--text-tertiary); margin-top: 4px;">
-                                        ✅ Transcript • ✅ Essays • ⏳ Activities • ❌ FAFSA
-                                    </div>
-                                </div>
-                                <span style="color: var(--warning); font-weight: 600;">75%</span>
-                            </div>
-                        </div>
-                        
-                        <div style="padding: 12px; background: var(--background); border-radius: 8px; margin-bottom: 12px;">
-                            <div style="display: flex; justify-content: space-between; align-items: center;">
-                                <div>
-                                    <strong>CSU Applications</strong>
-                                    <div style="font-size: 14px; color: var(--text-tertiary); margin-top: 4px;">
-                                        ✅ Transcript • ⏳ SAT (optional) • ❌ FAFSA
-                                    </div>
-                                </div>
-                                <span style="color: var(--warning); font-weight: 600;">66%</span>
-                            </div>
-                        </div>
+                        <div class="document-icon">✉️</div>
+                        <div class="document-title">Recommendations</div>
+                        <div class="document-status">1 of 3 received</div>
+                        <button class="btn-secondary" style="width: 100%;">Track Status</button>
                     </div>
                 </div>
             </div>
             
-            <!-- Recommendations Section -->
-            <div id="recommendations" class="section">
-                <h2 class="section-title">Letters of Recommendation</h2>
-                <p style="color: var(--text-secondary); margin-bottom: 24px;">
-                    Track recommendation letter requests and submissions
-                </p>
+            <!-- Timeline Section -->
+            <div id="timeline" class="section">
+                <h2 class="section-title">Application Timeline</h2>
                 
-                <div class="recommendation-tracker">
-                    <h3 style="margin-bottom: 20px;">Recommendation Status</h3>
-                    
-                    <div class="rec-item">
-                        <div class="rec-info">
-                            <div class="rec-name">Mr. Johnson</div>
-                            <div class="rec-email">AP Calculus Teacher • johnson@school.edu</div>
-                        </div>
-                        <div class="rec-status status-complete">Submitted</div>
+                <div class="timeline-container">
+                    <div class="timeline-item">
+                        <div class="timeline-dot"></div>
+                        <div class="timeline-date">August 1, 2025</div>
+                        <div class="timeline-title">UC Application Opens</div>
+                        <p style="font-size: 14px; color: var(--text-secondary);">Start filling out your application</p>
                     </div>
                     
-                    <div class="rec-item">
-                        <div class="rec-info">
-                            <div class="rec-name">Ms. Rodriguez</div>
-                            <div class="rec-email">English Teacher • rodriguez@school.edu</div>
-                        </div>
-                        <div class="rec-status status-pending">Pending</div>
+                    <div class="timeline-item">
+                        <div class="timeline-dot" style="background: var(--warning);"></div>
+                        <div class="timeline-date">October 1, 2025</div>
+                        <div class="timeline-title">FAFSA Opens</div>
+                        <p style="font-size: 14px; color: var(--text-secondary);">Submit for financial aid</p>
                     </div>
                     
-                    <div class="rec-item">
-                        <div class="rec-info">
-                            <div class="rec-name">Dr. Chen</div>
-                            <div class="rec-email">Science Olympiad Coach • chen@school.edu</div>
-                        </div>
-                        <div class="rec-status status-not-sent">Not Requested</div>
+                    <div class="timeline-item">
+                        <div class="timeline-dot" style="background: var(--danger);"></div>
+                        <div class="timeline-date">November 15, 2025</div>
+                        <div class="timeline-title">🎯 Optimal Submission Date</div>
+                        <p style="font-size: 14px; color: var(--text-secondary);">Submit 2 weeks early for 23% better chances</p>
                     </div>
+                    
+                    <div class="timeline-item">
+                        <div class="timeline-dot" style="background: var(--danger);"></div>
+                        <div class="timeline-date">November 30, 2025</div>
+                        <div class="timeline-title">UC/CSU Application Deadline</div>
+                        <p style="font-size: 14px; color: var(--text-secondary);">Final deadline - no extensions!</p>
+                    </div>
+                    
+                    <div class="timeline-item">
+                        <div class="timeline-dot"></div>
+                        <div class="timeline-date">March 2, 2026</div>
+                        <div class="timeline-title">Cal Grant Deadline</div>
+                        <p style="font-size: 14px; color: var(--text-secondary);">Submit GPA verification</p>
+                    </div>
+                    
+                    <div class="timeline-item">
+                        <div class="timeline-dot" style="background: var(--success);"></div>
+                        <div class="timeline-date">March 15-30, 2026</div>
+                        <div class="timeline-title">UC Decisions Released</div>
+                        <p style="font-size: 14px; color: var(--text-secondary);">Admission decisions arrive!</p>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Strategy Section -->
+            <div id="strategy" class="section">
+                <h2 class="section-title">Game Theory Strategy</h2>
+                
+                <div class="card">
+                    <h3 style="margin-bottom: 16px;">🎯 Nash Equilibrium Strategy</h3>
+                    <p>Based on game theory, your optimal application portfolio:</p>
+                    <ul style="margin-top: 12px; padding-left: 20px;">
+                        <li><strong>2 Reach Schools:</strong> UC Berkeley, UCLA</li>
+                        <li><strong>3 Match Schools:</strong> UC San Diego, UC Davis, UC Irvine</li>
+                        <li><strong>2 Safety Schools:</strong> UC Riverside, UC Merced</li>
+                    </ul>
                 </div>
                 
                 <div class="card">
-                    <h3>Add New Recommender</h3>
-                    <div class="input-group">
-                        <label class="input-label">Recommender Name</label>
-                        <input type="text" class="input-field" id="recName" placeholder="Teacher/Counselor name">
-                    </div>
-                    <div class="input-group">
-                        <label class="input-label">Email Address</label>
-                        <input type="email" class="input-field" id="recEmail" placeholder="teacher@school.edu">
-                    </div>
-                    <div class="input-group">
-                        <label class="input-label">Relationship</label>
-                        <select class="input-field" id="recRelation">
-                            <option>Teacher</option>
-                            <option>Counselor</option>
-                            <option>Coach</option>
-                            <option>Mentor</option>
-                            <option>Employer</option>
-                        </select>
-                    </div>
-                    <button class="btn-primary" onclick="requestRecommendation()">Send Request</button>
+                    <h3 style="margin-bottom: 16px;">⏰ Optimal Timing</h3>
+                    <p><strong>Submit by November 15:</strong> Applications submitted 2 weeks early have 23% higher acceptance rates due to:</p>
+                    <ul style="margin-top: 12px; padding-left: 20px;">
+                        <li>Avoiding technical issues near deadline</li>
+                        <li>Showing genuine interest</li>
+                        <li>More time for review if issues arise</li>
+                    </ul>
                 </div>
                 
                 <div class="card">
-                    <h3>Tips for Strong Recommendations</h3>
-                    <ul style="padding-left: 20px; line-height: 2;">
-                        <li>Ask teachers who know you well (junior year teachers are ideal)</li>
-                        <li>Provide a "brag sheet" with your accomplishments</li>
-                        <li>Ask at least 3-4 weeks before the deadline</li>
-                        <li>Send a thank you note after submission</li>
-                        <li>UC schools don't require letters, but private schools do</li>
+                    <h3 style="margin-bottom: 16px;">💰 Financial Strategy</h3>
+                    <p>Your estimated costs after aid:</p>
+                    <ul style="margin-top: 12px; padding-left: 20px;">
+                        <li><strong>UC Schools:</strong> ~$16,500/year after $19,465 in aid</li>
+                        <li><strong>CSU Schools:</strong> ~$9,000/year after aid</li>
+                        <li><strong>Total 4-year cost:</strong> ~$66,000 (UC) or ~$36,000 (CSU)</li>
                     </ul>
                 </div>
             </div>
-            
-            <!-- Cost Comparison Section -->
-            <div id="costs" class="section">
-                <h2 class="section-title">Net Cost Comparison</h2>
-                <p style="color: var(--text-secondary); margin-bottom: 24px;">
-                    Compare your actual costs after financial aid at each school
-                </p>
-                
-                <div class="cost-comparison" id="costComparison">
-                    <!-- Will be populated by JavaScript -->
-                </div>
-                
-                <div class="card">
-                    <h3>Understanding Your Costs</h3>
-                    <div style="display: grid; gap: 16px; margin-top: 16px;">
-                        <div>
-                            <strong>Direct Costs:</strong>
-                            <p style="color: var(--text-secondary); font-size: 14px;">Tuition and fees paid directly to the school</p>
-                        </div>
-                        <div>
-                            <strong>Indirect Costs:</strong>
-                            <p style="color: var(--text-secondary); font-size: 14px;">Room, board, books, transportation, personal expenses</p>
-                        </div>
-                        <div>
-                            <strong>Net Price:</strong>
-                            <p style="color: var(--text-secondary); font-size: 14px;">Total cost minus grants and scholarships (what you actually pay)</p>
-                        </div>
-                    </div>
-                </div>
+        </div>
+        
+        <!-- AI Chat Button -->
+        <button class="ai-chat-button" onclick="toggleChat()">💬</button>
+        
+        <!-- AI Chat Window -->
+        <div class="ai-chat-window" id="chatWindow">
+            <div class="ai-chat-header">
+                <span>AI College Counselor</span>
+                <button onclick="toggleChat()" style="background: none; border: none; color: white; font-size: 20px; cursor: pointer;">×</button>
+            </div>
+            <div class="ai-chat-messages" id="chatMessages">
+                <div class="ai-message assistant">Hi! I'm your AI college counselor. I can help with UC/CSU applications, financial aid, essays, and strategy. What would you like to know?</div>
+            </div>
+            <div class="ai-chat-input">
+                <input type="text" id="chatInput" placeholder="Ask anything..." onkeypress="if(event.key==='Enter') sendMessage()">
+                <button onclick="sendMessage()">Send</button>
             </div>
         </div>
     </div>
     
     <script>
-        // Financial Aid Calculation Engine
+        // California College Database
+        const collegeDatabase = {
+            'UC Berkeley': {
+                system: 'UC',
+                location: 'Berkeley, CA',
+                acceptanceRate: 14.5,
+                gpa: { minimum: 3.0, average: 4.25, recommended: 4.3 },
+                sat: { average: 1450, range: [1330, 1530] },
+                testOptional: true,
+                tuition: { resident: 14226, nonResident: 44008 },
+                roomBoard: 17652,
+                totalCost: { resident: 36078, nonResident: 65880 },
+                majors: {
+                    'computer-science': { impacted: true, additionalGPA: 0.3, acceptance: 3 },
+                    'engineering': { impacted: true, additionalGPA: 0.25, acceptance: 8 },
+                    'business': { impacted: true, additionalGPA: 0.2, acceptance: 4 },
+                    'biology': { impacted: false, additionalGPA: 0.1, acceptance: 15 },
+                    'psychology': { impacted: false, additionalGPA: 0, acceptance: 18 }
+                },
+                deadlines: {
+                    application: 'November 30',
+                    fafsa: 'March 2',
+                    housing: 'May 1'
+                }
+            },
+            'UCLA': {
+                system: 'UC',
+                location: 'Los Angeles, CA',
+                acceptanceRate: 11.0,
+                gpa: { minimum: 3.0, average: 4.23, recommended: 4.28 },
+                sat: { average: 1440, range: [1300, 1530] },
+                testOptional: true,
+                tuition: { resident: 13401, nonResident: 43473 },
+                roomBoard: 16763,
+                totalCost: { resident: 34164, nonResident: 64237 },
+                majors: {
+                    'computer-science': { impacted: true, additionalGPA: 0.35, acceptance: 3.5 },
+                    'engineering': { impacted: true, additionalGPA: 0.3, acceptance: 7 },
+                    'business': { impacted: true, additionalGPA: 0.25, acceptance: 5 },
+                    'biology': { impacted: false, additionalGPA: 0.1, acceptance: 16 },
+                    'psychology': { impacted: false, additionalGPA: 0.1, acceptance: 14 }
+                },
+                deadlines: {
+                    application: 'November 30',
+                    fafsa: 'March 2',
+                    housing: 'June 1'
+                }
+            },
+            'UC San Diego': {
+                system: 'UC',
+                location: 'La Jolla, CA',
+                acceptanceRate: 31.5,
+                gpa: { minimum: 3.0, average: 4.15, recommended: 4.2 },
+                sat: { average: 1420, range: [1270, 1520] },
+                testOptional: true,
+                tuition: { resident: 14415, nonResident: 44487 },
+                roomBoard: 15254,
+                totalCost: { resident: 33669, nonResident: 63741 },
+                majors: {
+                    'computer-science': { impacted: true, additionalGPA: 0.25, acceptance: 6 },
+                    'engineering': { impacted: true, additionalGPA: 0.2, acceptance: 12 },
+                    'biology': { impacted: true, additionalGPA: 0.15, acceptance: 20 },
+                    'psychology': { impacted: false, additionalGPA: 0, acceptance: 35 }
+                },
+                deadlines: {
+                    application: 'November 30',
+                    fafsa: 'March 2',
+                    housing: 'May 1'
+                }
+            },
+            'UC Davis': {
+                system: 'UC',
+                location: 'Davis, CA',
+                acceptanceRate: 39.0,
+                gpa: { minimum: 3.0, average: 4.05, recommended: 4.1 },
+                sat: { average: 1370, range: [1220, 1480] },
+                testOptional: true,
+                tuition: { resident: 14495, nonResident: 44567 },
+                roomBoard: 16100,
+                totalCost: { resident: 34595, nonResident: 64667 },
+                majors: {
+                    'computer-science': { impacted: true, additionalGPA: 0.2, acceptance: 12 },
+                    'engineering': { impacted: true, additionalGPA: 0.15, acceptance: 18 },
+                    'biology': { impacted: false, additionalGPA: 0.1, acceptance: 35 },
+                    'psychology': { impacted: false, additionalGPA: 0, acceptance: 38 }
+                },
+                deadlines: {
+                    application: 'November 30',
+                    fafsa: 'March 2',
+                    housing: 'May 1'
+                }
+            },
+            'UC Riverside': {
+                system: 'UC',
+                location: 'Riverside, CA',
+                acceptanceRate: 57.0,
+                gpa: { minimum: 3.0, average: 3.75, recommended: 3.85 },
+                sat: { average: 1250, range: [1110, 1380] },
+                testOptional: true,
+                tuition: { resident: 13473, nonResident: 43487 },
+                roomBoard: 15300,
+                totalCost: { resident: 32773, nonResident: 62787 },
+                majors: {
+                    'computer-science': { impacted: false, additionalGPA: 0.1, acceptance: 35 },
+                    'engineering': { impacted: false, additionalGPA: 0.1, acceptance: 40 },
+                    'biology': { impacted: false, additionalGPA: 0, acceptance: 55 },
+                    'psychology': { impacted: false, additionalGPA: 0, acceptance: 60 }
+                },
+                deadlines: {
+                    application: 'November 30',
+                    fafsa: 'March 2',
+                    housing: 'May 1'
+                }
+            }
+        };
+        
+        // Calculate admission chances
+        function calculateAdmissionChance(school, profile) {
+            const schoolData = collegeDatabase[school];
+            if (!schoolData) return 50;
+            
+            let baseChance = schoolData.acceptanceRate;
+            
+            // GPA factor
+            const gpaGap = profile.gpa - schoolData.gpa.average;
+            baseChance += gpaGap * 15;
+            
+            // SAT factor (if available)
+            if (profile.sat && schoolData.sat) {
+                const satGap = profile.sat - schoolData.sat.average;
+                baseChance += satGap * 0.03;
+            }
+            
+            // Major-specific adjustment
+            if (profile.major && schoolData.majors[profile.major]) {
+                const majorData = schoolData.majors[profile.major];
+                if (majorData.impacted) {
+                    baseChance *= 0.7;
+                }
+            }
+            
+            // AP courses bonus
+            if (profile.apCourses) {
+                baseChance += profile.apCourses * 1.5;
+            }
+            
+            return Math.max(5, Math.min(95, Math.round(baseChance)));
+        }
+        
+        // Calculate admissions for all schools
+        function calculateAdmissions() {
+            const profile = {
+                gpa: parseFloat(document.getElementById('gpa').value) || 0,
+                sat: parseInt(document.getElementById('sat').value) || 0,
+                major: document.getElementById('major').value,
+                apCourses: parseInt(document.getElementById('apCourses').value) || 0
+            };
+            
+            if (profile.gpa === 0) {
+                alert('Please enter your GPA to continue');
+                return;
+            }
+            
+            let results = [];
+            Object.keys(collegeDatabase).forEach(schoolName => {
+                const chance = calculateAdmissionChance(schoolName, profile);
+                let category = 'safety';
+                if (chance < 30) category = 'reach';
+                else if (chance < 60) category = 'target';
+                
+                results.push({
+                    name: schoolName,
+                    chance: chance,
+                    category: category,
+                    data: collegeDatabase[schoolName]
+                });
+            });
+            
+            // Sort by chance
+            results.sort((a, b) => b.chance - a.chance);
+            
+            // Display results
+            const matchesDiv = document.getElementById('collegeMatches');
+            let html = '';
+            
+            results.forEach(result => {
+                html += `
+                    <div class="college-match ${result.category}">
+                        <div class="college-info">
+                            <h3>${result.name}</h3>
+                            <p>${result.category.charAt(0).toUpperCase() + result.category.slice(1)} School • ${result.data.acceptanceRate}% acceptance rate</p>
+                        </div>
+                        <div class="admission-chance">
+                            <div class="chance-percentage">${result.chance}%</div>
+                            <div class="chance-label">Your Chance</div>
+                        </div>
+                    </div>
+                `;
+            });
+            
+            matchesDiv.innerHTML = html;
+            document.getElementById('calculatorResults').style.display = 'block';
+        }
+        
+        // Financial Aid Calculation
         function calculateAid() {
             const income = parseInt(document.getElementById('familyIncome').value) || 0;
             const familySize = parseInt(document.getElementById('familySize').value);
@@ -817,10 +1275,8 @@
             let calGrant = 0;
             if (isResident) {
                 if (income < 80000 && gpa >= 3.0) {
-                    // Cal Grant A
                     calGrant = 12570;
                 } else if (income < 120000 && gpa >= 2.0) {
-                    // Cal Grant B
                     calGrant = 1648;
                 }
             }
@@ -828,12 +1284,11 @@
             // Middle Class Scholarship (California residents)
             let middleClass = 0;
             if (isResident && income >= 80000 && income <= 177000) {
-                // Covers 10-40% of tuition
                 const percentage = Math.max(0.1, Math.min(0.4, (177000 - income) / 97000 * 0.3 + 0.1));
                 middleClass = Math.round(14000 * percentage);
             }
             
-            // UC/CSU system grant (need-based)
+            // UC/CSU system grant
             let systemGrant = 0;
             if (income < 80000) {
                 systemGrant = Math.max(0, Math.min(5000, 14000 - pellGrant - calGrant));
@@ -849,104 +1304,72 @@
             document.getElementById('systemGrant').textContent = `$${systemGrant.toLocaleString()}`;
             document.getElementById('totalAid').textContent = `$${totalAid.toLocaleString()}`;
             
-            // Additional opportunities
-            let additional = '<ul style="padding-left: 20px; line-height: 2;">';
-            
-            if (gpa >= 3.5) {
-                additional += '<li><strong>Merit Scholarships:</strong> Your GPA qualifies you for academic scholarships ($2,000-$10,000)</li>';
-            }
-            
-            if (income < 60000) {
-                additional += '<li><strong>Work-Study:</strong> Eligible for federal work-study program ($2,500/year)</li>';
-                additional += '<li><strong>SEOG Grant:</strong> May qualify for additional $1,000-$4,000</li>';
-            }
-            
-            additional += '<li><strong>Private Scholarships:</strong> Apply to 10+ external scholarships</li>';
-            additional += '</ul>';
-            
-            document.getElementById('additionalAid').innerHTML = additional;
             document.getElementById('aidResults').style.display = 'block';
-            
-            // Update cost comparison
-            updateCostComparison(totalAid);
         }
         
-        // Update cost comparison with aid
-        function updateCostComparison(totalAid) {
-            const schools = [
-                { name: 'UC Berkeley', total: 36078, tuition: 14226 },
-                { name: 'UCLA', total: 34164, tuition: 13401 },
-                { name: 'UC San Diego', total: 33669, tuition: 14415 },
-                { name: 'UC Davis', total: 34595, tuition: 14495 },
-                { name: 'Cal Poly SLO', total: 28476, tuition: 10099 }
-            ];
+        // Show school details
+        function showSchoolDetails(schoolName) {
+            const school = collegeDatabase[schoolName];
+            if (!school) return;
             
-            const comparisonDiv = document.getElementById('costComparison');
-            let html = '';
-            
-            schools.forEach(school => {
-                const netCost = Math.max(0, school.total - totalAid);
-                const loanAmount = Math.max(0, netCost - 5000); // Assuming $5k family contribution
-                
-                html += `
-                    <div class="school-cost-card">
-                        <div class="school-cost-info">
-                            <h3>${school.name}</h3>
-                            <div class="cost-details">
-                                <div class="cost-item">
-                                    <div class="cost-label">Sticker Price</div>
-                                    <div class="cost-value">$${school.total.toLocaleString()}</div>
-                                </div>
-                                <div class="cost-item">
-                                    <div class="cost-label">Your Aid</div>
-                                    <div class="cost-value" style="color: var(--success);">-$${totalAid.toLocaleString()}</div>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="net-cost">
-                            <div class="net-cost-label">Net Cost</div>
-                            <div class="net-cost-value">$${netCost.toLocaleString()}</div>
-                            <small style="color: var(--text-tertiary);">~$${Math.round(loanAmount/4).toLocaleString()}/year in loans</small>
-                        </div>
-                    </div>
-                `;
-            });
-            
-            comparisonDiv.innerHTML = html;
+            alert(`${schoolName}\n\n` +
+                  `Acceptance Rate: ${school.acceptanceRate}%\n` +
+                  `Average GPA: ${school.gpa.average}\n` +
+                  `SAT Range: ${school.sat.range[0]}-${school.sat.range[1]}\n` +
+                  `Total Cost (CA Resident): $${school.totalCost.resident.toLocaleString()}\n\n` +
+                  `Application Deadline: ${school.deadlines.application}`);
         }
         
-        // Document upload simulation
-        function uploadDocument(type) {
-            // In production, this would handle actual file upload
-            alert(`Upload interface for ${type} would open here. In production, this would:\n\n` +
-                  '1. Allow file selection (PDF, DOC, DOCX)\n' +
-                  '2. Upload to secure storage\n' +
-                  '3. Update document status\n' +
-                  '4. Notify colleges if required');
+        // Toggle AI chat
+        function toggleChat() {
+            const chatWindow = document.getElementById('chatWindow');
+            chatWindow.classList.toggle('active');
         }
         
-        // Request recommendation simulation
-        function requestRecommendation() {
-            const name = document.getElementById('recName').value;
-            const email = document.getElementById('recEmail').value;
+        // Send AI message
+        function sendMessage() {
+            const input = document.getElementById('chatInput');
+            const message = input.value.trim();
             
-            if (name && email) {
-                alert(`Recommendation request would be sent to ${name} at ${email}.\n\n` +
-                      'Email would include:\n' +
-                      '• Link to recommendation form\n' +
-                      '• List of schools requiring letters\n' +
-                      '• Deadline reminders\n' +
-                      '• Your brag sheet');
-                      
-                // Clear form
-                document.getElementById('recName').value = '';
-                document.getElementById('recEmail').value = '';
-            } else {
-                alert('Please enter recommender name and email');
+            if (!message) return;
+            
+            const messagesDiv = document.getElementById('chatMessages');
+            
+            // Add user message
+            messagesDiv.innerHTML += `<div class="ai-message user">${message}</div>`;
+            
+            // Simulate AI response
+            const responses = {
+                'requirements': 'UC requires completion of A-G courses: 4 years English, 3 years Math (4 recommended), 2 years History, 2 years Lab Science, 2 years Foreign Language, 1 year Visual/Performing Arts, and 1 year College Prep Elective.',
+                'deadline': 'UC and CSU applications are due November 30. I recommend submitting by November 15 for optimal chances.',
+                'gpa': 'UC uses a weighted GPA for 10th and 11th grade A-G courses. Honors/AP courses get an extra point.',
+                'essays': 'UC requires 4 Personal Insight Questions (350 words each) chosen from 8 prompts. Focus on unique experiences and specific details.',
+                'financial': 'Based on your profile, you may qualify for Cal Grant ($12,570), Pell Grant (up to $7,395), and Middle Class Scholarship if family income is under $177,000.'
+            };
+            
+            let response = 'I can help with UC/CSU requirements, deadlines, GPA calculations, essays, and financial aid. What specific question do you have?';
+            
+            for (const [key, value] of Object.entries(responses)) {
+                if (message.toLowerCase().includes(key)) {
+                    response = value;
+                    break;
+                }
             }
+            
+            setTimeout(() => {
+                messagesDiv.innerHTML += `<div class="ai-message assistant">${response}</div>`;
+                messagesDiv.scrollTop = messagesDiv.scrollHeight;
+            }, 500);
+            
+            input.value = '';
         }
         
-        // Section switching
+        // Upload document simulation
+        function uploadDocument(type) {
+            alert(`Document upload for ${type} would open here. In production, this would handle file uploads securely.`);
+        }
+        
+        // Switch between sections
         function switchSection(sectionName) {
             document.querySelectorAll('.section').forEach(section => {
                 section.classList.remove('active');
@@ -959,19 +1382,18 @@
             event.target.classList.add('active');
         }
         
-        // Initialize on load
-        document.addEventListener('DOMContentLoaded', () => {
-            // Set sample data
-            document.getElementById('familyIncome').value = '75000';
-            
-            // Calculate initial aid
-            calculateAid();
-            
-            // Calculate days until deadline
-            const deadline = new Date('November 30, 2024');
+        // Calculate days until deadline
+        function updateDaysLeft() {
+            const deadline = new Date('November 30, 2025');
             const today = new Date();
             const daysLeft = Math.floor((deadline - today) / (1000 * 60 * 60 * 24));
-            document.getElementById('daysLeft').textContent = daysLeft;
+            document.getElementById('daysLeft').textContent = daysLeft > 0 ? daysLeft : '--';
+        }
+        
+        // Initialize on load
+        document.addEventListener('DOMContentLoaded', () => {
+            updateDaysLeft();
+            calculateAid(); // Calculate initial aid with default values
         });
     </script>
 </body>
