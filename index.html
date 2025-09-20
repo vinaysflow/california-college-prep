@@ -2,1137 +2,2768 @@
 <html lang="en">
 <head>
 <meta charset="utf-8" />
-<meta
-  name="viewport"
-  content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"
-/>
-<title>Pathwise — College Journey</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+<title>Pathwise — Your College Journey</title>
 <meta name="apple-mobile-web-app-capable" content="yes" />
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+<meta name="theme-color" content="#667eea" />
 
 <style>
-  :root{
-    --bg:#f5f7fb;
-    --card:#ffffff;
-    --ink:#0f172a;
-    --muted:#64748b;
-    --primary:#0a84ff;      /* iOS blue */
-    --primary-2:#5856d6;    /* iOS purple */
-    --success:#34c759;
-    --warn:#ff9500;
-    --danger:#ff3b30;
-    --ring:rgba(10,132,255,.25);
-    --radius:14px;
-    --radius-lg:20px;
-    --shadow:0 8px 30px rgba(15,23,42,.08);
-    --shadow-soft:0 2px 12px rgba(15,23,42,.06);
+  /* Modern Design System */
+  :root {
+    --bg: #fafbfc;
+    --bg-secondary: #f3f4f6;
+    --card: rgba(255, 255, 255, 0.95);
+    --card-hover: rgba(255, 255, 255, 1);
+    --ink: #0f172a;
+    --ink-secondary: #475569;
+    --muted: #64748b;
+    --border: rgba(15, 23, 42, 0.08);
+    
+    /* Brand Colors */
+    --primary: #667eea;
+    --primary-dark: #5a67d8;
+    --secondary: #f56565;
+    --accent: #48bb78;
+    --warning: #ed8936;
+    --danger: #f56565;
+    --success: #48bb78;
+    
+    /* Gradients */
+    --gradient-primary: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    --gradient-secondary: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+    --gradient-success: linear-gradient(135deg, #11998e 0%, #38ef7d 100%);
+    --gradient-warm: linear-gradient(135deg, #fa709a 0%, #fee140 100%);
+    
+    /* Effects */
+    --glass: rgba(255, 255, 255, 0.7);
+    --glass-dark: rgba(17, 24, 39, 0.7);
+    --blur: 20px;
+    --shadow-sm: 0 2px 8px rgba(15, 23, 42, 0.08);
+    --shadow: 0 10px 30px rgba(15, 23, 42, 0.12);
+    --shadow-lg: 0 20px 60px rgba(15, 23, 42, 0.15);
+    --shadow-xl: 0 25px 80px rgba(15, 23, 42, 0.18);
+    --shadow-colored: 0 20px 60px rgba(102, 126, 234, 0.25);
+    
+    /* Spacing & Sizing */
+    --radius: 16px;
+    --radius-lg: 24px;
+    --radius-xl: 32px;
+    --transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    --transition-fast: all 0.15s cubic-bezier(0.4, 0, 0.2, 1);
+    
+    /* Z-index layers */
+    --z-base: 0;
+    --z-dropdown: 100;
+    --z-sticky: 200;
+    --z-overlay: 300;
+    --z-modal: 400;
+    --z-toast: 500;
   }
-  [data-theme="dark"]{
-    --bg:#0b0e14;
-    --card:#121826;
-    --ink:#f8fafc;
-    --muted:#94a3b8;
-    --ring:rgba(10,132,255,.35);
-    --shadow:0 8px 30px rgba(0,0,0,.45);
-    --shadow-soft:0 2px 12px rgba(0,0,0,.35);
+
+  /* Dark theme */
+  [data-theme="dark"] {
+    --bg: #0f1419;
+    --bg-secondary: #1a1f2e;
+    --card: rgba(26, 31, 46, 0.95);
+    --card-hover: rgba(26, 31, 46, 1);
+    --ink: #f8fafc;
+    --ink-secondary: #cbd5e1;
+    --muted: #94a3b8;
+    --border: rgba(148, 163, 184, 0.1);
+    --glass: rgba(26, 31, 46, 0.7);
+    --shadow-sm: 0 2px 8px rgba(0, 0, 0, 0.3);
+    --shadow: 0 10px 30px rgba(0, 0, 0, 0.4);
+    --shadow-lg: 0 20px 60px rgba(0, 0, 0, 0.5);
+    --shadow-colored: 0 20px 60px rgba(102, 126, 234, 0.15);
   }
-  *{box-sizing:border-box}
-  html,body{height:100%}
-  body{
-    margin:0;
-    font-family:-apple-system,BlinkMacSystemFont,"SF Pro Text","SF Pro Display","Helvetica Neue",Arial,sans-serif;
-    color:var(--ink);
-    background:var(--bg);
-    -webkit-font-smoothing:antialiased;
-    line-height:1.45;
+
+  /* Reset & Base */
+  * {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+  }
+
+  html {
+    height: 100%;
+    scroll-behavior: smooth;
+    -webkit-tap-highlight-color: transparent;
+  }
+
+  body {
+    height: 100%;
+    font-family: -apple-system, BlinkMacSystemFont, "SF Pro Display", "Inter", "Helvetica Neue", sans-serif;
+    font-size: 16px;
+    line-height: 1.6;
+    color: var(--ink);
+    background: var(--bg);
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    position: relative;
+    overflow-x: hidden;
+  }
+
+  /* Animated Background */
+  .bg-animation {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: -1;
+    opacity: 0.03;
+    pointer-events: none;
+  }
+
+  .bg-animation::before,
+  .bg-animation::after {
+    content: '';
+    position: absolute;
+    width: 400px;
+    height: 400px;
+    border-radius: 50%;
+    background: var(--gradient-primary);
+    animation: float 20s ease-in-out infinite;
+  }
+
+  .bg-animation::before {
+    top: -200px;
+    left: -200px;
+    animation-delay: 0s;
+  }
+
+  .bg-animation::after {
+    bottom: -200px;
+    right: -200px;
+    animation-delay: 10s;
+  }
+
+  @keyframes float {
+    0%, 100% { transform: translate(0, 0) rotate(0deg); }
+    33% { transform: translate(100px, 100px) rotate(120deg); }
+    66% { transform: translate(-100px, 50px) rotate(240deg); }
+  }
+
+  /* Typography */
+  h1, h2, h3, h4, h5, h6 {
+    font-weight: 700;
+    line-height: 1.3;
+    letter-spacing: -0.02em;
+  }
+
+  h1 { font-size: 2.5rem; }
+  h2 { font-size: 2rem; }
+  h3 { font-size: 1.5rem; }
+  h4 { font-size: 1.25rem; }
+  h5 { font-size: 1.125rem; }
+
+  @media (max-width: 640px) {
+    h1 { font-size: 2rem; }
+    h2 { font-size: 1.5rem; }
+    h3 { font-size: 1.25rem; }
   }
 
   /* Header */
-  .header{
-    position:sticky; top:0; z-index:50;
-    backdrop-filter: blur(18px);
-    -webkit-backdrop-filter: blur(18px);
-    background: color-mix(in srgb, var(--card) 88%, transparent);
-    border-bottom:1px solid color-mix(in srgb, var(--ink) 10%, transparent);
+  .header {
+    position: sticky;
+    top: 0;
+    z-index: var(--z-sticky);
+    backdrop-filter: blur(var(--blur));
+    -webkit-backdrop-filter: blur(var(--blur));
+    background: var(--glass);
+    border-bottom: 1px solid var(--border);
+    transition: var(--transition);
   }
-  .header-inner{
-    max-width:1100px; margin:0 auto; padding:10px 16px;
-    display:flex; align-items:center; gap:8px; justify-content:space-between;
-  }
-  .brand{display:flex; align-items:center; gap:10px; font-weight:700}
-  .brand-badge{
-    width:28px;height:28px;border-radius:8px;
-    background:linear-gradient(135deg,var(--primary),var(--primary-2));
-    box-shadow:var(--shadow-soft);
-  }
-  .header-actions{display:flex; align-items:center; gap:8px}
-  .btn{
-    appearance:none; border:0; cursor:pointer; user-select:none;
-    display:inline-flex; align-items:center; justify-content:center;
-    gap:8px; padding:12px 16px; border-radius:12px; font-weight:600;
-    background:var(--card); color:var(--ink); box-shadow:var(--shadow-soft);
-    transition:transform .12s ease, box-shadow .12s ease, background .12s ease, color .12s ease;
-  }
-  .btn:hover{transform:translateY(-1px); box-shadow:var(--shadow)}
-  .btn:active{transform:translateY(0)}
-  .btn.primary{
-    background:linear-gradient(135deg,var(--primary),var(--primary-2)); color:#fff;
-  }
-  .btn.ghost{
-    background:transparent; box-shadow:none; border:1px solid color-mix(in srgb, var(--ink) 15%, transparent);
-  }
-  .btn.icon{padding:10px 12px; border-radius:10px}
-  .btn.danger{background:var(--danger); color:#fff}
-  .hidden{display:none !important}
 
-  /* Shell */
-  .wrap{max-width:1100px; margin:18px auto 80px; padding:0 16px}
-  .card{
-    background:var(--card);
-    border-radius:var(--radius-lg);
-    box-shadow:var(--shadow);
-    padding:20px;
+  .header-inner {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 1rem;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1rem;
   }
-  .title{font-size:22px; font-weight:800; margin:0 0 6px}
-  .sub{color:var(--muted); font-size:14px; margin-bottom:14px}
 
-  /* Planner */
-  .grid{display:grid; gap:14px}
-  @media(min-width:760px){ .grid.cols-2{grid-template-columns:1fr 1fr} .grid.cols-3{grid-template-columns:repeat(3,1fr)} }
-  .field label{font-size:12px; text-transform:uppercase; letter-spacing:.03em; color:var(--muted); display:block; margin-bottom:6px}
-  .field input, .field select{
-    width:100%; padding:14px 12px; border-radius:12px; border:1px solid color-mix(in srgb, var(--ink) 15%, transparent);
-    background:var(--bg); color:var(--ink); outline: none;
+  .brand {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    font-weight: 800;
+    font-size: 1.25rem;
+    cursor: pointer;
+    transition: var(--transition-fast);
   }
-  .field input:focus, .field select:focus{ box-shadow:0 0 0 6px var(--ring); background:var(--card) }
+
+  .brand:hover {
+    transform: translateY(-1px);
+  }
+
+  .brand-logo {
+    width: 40px;
+    height: 40px;
+    border-radius: 12px;
+    background: var(--gradient-primary);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.5rem;
+    box-shadow: var(--shadow-sm);
+    animation: pulse 2s ease infinite;
+  }
+
+  @keyframes pulse {
+    0%, 100% { transform: scale(1); }
+    50% { transform: scale(1.05); }
+  }
+
+  .header-actions {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+  }
+
+  /* Buttons */
+  .btn {
+    appearance: none;
+    border: none;
+    outline: none;
+    background: var(--card);
+    color: var(--ink);
+    font-family: inherit;
+    font-size: 0.9rem;
+    font-weight: 600;
+    padding: 0.75rem 1.25rem;
+    border-radius: var(--radius);
+    cursor: pointer;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+    transition: var(--transition);
+    box-shadow: var(--shadow-sm);
+    user-select: none;
+    position: relative;
+    overflow: hidden;
+    min-height: 44px;
+  }
+
+  .btn:hover {
+    transform: translateY(-2px);
+    box-shadow: var(--shadow);
+  }
+
+  .btn:active {
+    transform: translateY(0);
+    box-shadow: var(--shadow-sm);
+  }
+
+  .btn:focus-visible {
+    outline: 3px solid var(--primary);
+    outline-offset: 2px;
+  }
+
+  .btn.primary {
+    background: var(--gradient-primary);
+    color: white;
+    box-shadow: var(--shadow-colored);
+    animation: gradient-shift 3s ease infinite;
+    background-size: 200% 200%;
+  }
+
+  @keyframes gradient-shift {
+    0% { background-position: 0% 50%; }
+    50% { background-position: 100% 50%; }
+    100% { background-position: 0% 50%; }
+  }
+
+  .btn.secondary {
+    background: var(--gradient-secondary);
+    color: white;
+  }
+
+  .btn.success {
+    background: var(--gradient-success);
+    color: white;
+  }
+
+  .btn.ghost {
+    background: transparent;
+    box-shadow: none;
+    border: 2px solid var(--border);
+  }
+
+  .btn.icon {
+    padding: 0.75rem;
+    min-width: 44px;
+  }
+
+  .btn.danger {
+    background: var(--gradient-secondary);
+    color: white;
+  }
+
+  .btn.disabled,
+  .btn:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+    pointer-events: none;
+  }
+
+  /* Ripple Effect */
+  .btn::after {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 0;
+    height: 0;
+    border-radius: 50%;
+    background: rgba(255, 255, 255, 0.5);
+    transform: translate(-50%, -50%);
+    transition: width 0.5s, height 0.5s;
+  }
+
+  .btn:active::after {
+    width: 300px;
+    height: 300px;
+  }
+
+  /* Main Container */
+  .container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 1.5rem 1rem;
+  }
+
+  /* Cards */
+  .card {
+    background: var(--card);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    border-radius: var(--radius-lg);
+    padding: 1.5rem;
+    box-shadow: var(--shadow);
+    border: 1px solid var(--border);
+    transition: var(--transition);
+    position: relative;
+    overflow: hidden;
+  }
+
+  .card:hover {
+    box-shadow: var(--shadow-lg);
+    transform: translateY(-2px);
+  }
+
+  .card::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 4px;
+    background: var(--gradient-primary);
+    opacity: 0;
+    transition: opacity 0.3s;
+  }
+
+  .card:hover::before {
+    opacity: 1;
+  }
+
+  /* Grid System */
+  .grid {
+    display: grid;
+    gap: 1rem;
+  }
+
+  @media (min-width: 640px) {
+    .grid-cols-2 { grid-template-columns: repeat(2, 1fr); }
+    .grid-cols-3 { grid-template-columns: repeat(3, 1fr); }
+    .grid-cols-4 { grid-template-columns: repeat(4, 1fr); }
+  }
+
+  @media (min-width: 1024px) {
+    .lg\:grid-cols-3 { grid-template-columns: repeat(3, 1fr); }
+    .lg\:grid-cols-4 { grid-template-columns: repeat(4, 1fr); }
+  }
+
+  /* Form Elements */
+  .field {
+    margin-bottom: 1.25rem;
+  }
+
+  .field label {
+    display: block;
+    font-size: 0.875rem;
+    font-weight: 600;
+    color: var(--ink-secondary);
+    margin-bottom: 0.5rem;
+    text-transform: uppercase;
+    letter-spacing: 0.025em;
+  }
+
+  .field input,
+  .field select,
+  .field textarea {
+    width: 100%;
+    padding: 0.875rem 1rem;
+    font-size: 1rem;
+    font-family: inherit;
+    border: 2px solid var(--border);
+    border-radius: var(--radius);
+    background: var(--bg-secondary);
+    color: var(--ink);
+    transition: var(--transition-fast);
+    outline: none;
+    min-height: 44px;
+  }
+
+  .field input:focus,
+  .field select:focus,
+  .field textarea:focus {
+    border-color: var(--primary);
+    background: var(--card);
+    box-shadow: 0 0 0 4px rgba(102, 126, 234, 0.1);
+  }
+
+  .field.error input,
+  .field.error select {
+    border-color: var(--danger);
+    background: rgba(245, 101, 101, 0.05);
+  }
+
+  .field .error-msg {
+    color: var(--danger);
+    font-size: 0.875rem;
+    margin-top: 0.25rem;
+    display: flex;
+    align-items: center;
+    gap: 0.25rem;
+    animation: shake 0.5s;
+  }
+
+  @keyframes shake {
+    0%, 100% { transform: translateX(0); }
+    25% { transform: translateX(-5px); }
+    75% { transform: translateX(5px); }
+  }
+
+  .field .helper-text {
+    color: var(--muted);
+    font-size: 0.875rem;
+    margin-top: 0.25rem;
+  }
+
+  /* Checkbox & Radio */
+  .checkbox-wrapper,
+  .radio-wrapper {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    cursor: pointer;
+    padding: 0.5rem;
+    border-radius: var(--radius);
+    transition: var(--transition-fast);
+  }
+
+  .checkbox-wrapper:hover,
+  .radio-wrapper:hover {
+    background: var(--bg-secondary);
+  }
+
+  .checkbox-wrapper input[type="checkbox"],
+  .radio-wrapper input[type="radio"] {
+    width: 20px;
+    height: 20px;
+    accent-color: var(--primary);
+    cursor: pointer;
+  }
 
   /* Tabs */
-  .tabs{display:flex; gap:10px; overflow:auto; padding:10px 2px 2px}
-  .tab{padding:10px 14px; border-radius:999px; background:var(--card); box-shadow:var(--shadow-soft); white-space:nowrap; cursor:pointer}
-  .tab.active{ background:linear-gradient(135deg,var(--primary),var(--primary-2)); color:#fff }
-
-  /* Buckets */
-  .bucket{margin-top:18px}
-  .bucket h3{display:flex; align-items:center; gap:10px; margin:0 0 8px}
-  .badge{font-size:12px; padding:6px 10px; border-radius:999px; font-weight:700}
-  .reach{ background: color-mix(in srgb, var(--danger) 15%, transparent); color:var(--danger) }
-  .match{ background: color-mix(in srgb, var(--success) 15%, transparent); color:var(--success) }
-  .safety{ background: color-mix(in srgb, var(--primary) 18%, transparent); color:var(--primary) }
-
-  /* School cards */
-  .schools{display:grid; gap:12px}
-  @media(min-width:760px){ .schools{grid-template-columns:repeat(3,1fr)} }
-  .school{
-    position:relative; background:var(--card); border-radius:16px; padding:14px; box-shadow:var(--shadow-soft); border:1px solid color-mix(in srgb, var(--ink) 10%, transparent);
+  .tabs {
+    display: flex;
+    gap: 0.5rem;
+    padding: 0.5rem;
+    background: var(--bg-secondary);
+    border-radius: var(--radius-lg);
+    overflow-x: auto;
+    margin-bottom: 1.5rem;
+    scrollbar-width: none;
+    -webkit-overflow-scrolling: touch;
   }
-  .school h4{margin:0 0 6px; font-size:16px}
-  .muted{color:var(--muted); font-size:12px}
-  .pill{position:absolute; top:10px; right:10px; font-size:11px; padding:6px 8px; border-radius:999px; background:color-mix(in srgb, var(--ink) 10%, transparent)}
-  .actions{display:flex; gap:8px; margin-top:10px}
-  .mini{padding:8px 10px; border-radius:10px; background:var(--bg); border:1px solid color-mix(in srgb, var(--ink) 15%, transparent); cursor:pointer}
-  .mini.primary{ background:linear-gradient(135deg,var(--primary),var(--primary-2)); color:#fff; border:0 }
 
-  /* Lists */
-  .list{display:grid; gap:12px}
-  .row{
-    display:flex; align-items:center; gap:12px; justify-content:space-between;
-    padding:12px; border-radius:12px; background:var(--bg); border:1px solid color-mix(in srgb, var(--ink) 15%, transparent);
+  .tabs::-webkit-scrollbar {
+    display: none;
   }
-  .chip{padding:6px 10px; border-radius:999px; background:var(--card); box-shadow:var(--shadow-soft); border:1px solid color-mix(in srgb, var(--ink) 12%, transparent)}
-  .progress{
-    height:8px; width:100%; background:color-mix(in srgb, var(--ink) 10%, transparent);
-    border-radius:999px; overflow:hidden;
+
+  .tab {
+    padding: 0.75rem 1.5rem;
+    border-radius: var(--radius);
+    background: transparent;
+    color: var(--muted);
+    font-weight: 600;
+    cursor: pointer;
+    transition: var(--transition);
+    white-space: nowrap;
+    position: relative;
+    user-select: none;
+    min-height: 44px;
+    display: flex;
+    align-items: center;
   }
-  .bar{height:100%; width:0; background:linear-gradient(90deg,var(--primary),var(--primary-2))}
-  .flex{display:flex; gap:10px; align-items:center}
-  .right{margin-left:auto}
+
+  .tab:hover {
+    background: var(--card);
+    color: var(--ink);
+  }
+
+  .tab.active {
+    background: var(--gradient-primary);
+    color: white;
+    box-shadow: var(--shadow-colored);
+  }
+
+  /* Badges & Pills */
+  .badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.25rem;
+    padding: 0.375rem 0.75rem;
+    border-radius: 999px;
+    font-size: 0.75rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.025em;
+  }
+
+  .badge.reach {
+    background: rgba(245, 101, 101, 0.15);
+    color: var(--danger);
+  }
+
+  .badge.match {
+    background: rgba(72, 187, 120, 0.15);
+    color: var(--success);
+  }
+
+  .badge.safety {
+    background: rgba(102, 126, 234, 0.15);
+    color: var(--primary);
+  }
+
+  .pill {
+    position: absolute;
+    top: 1rem;
+    right: 1rem;
+    padding: 0.375rem 0.75rem;
+    border-radius: 999px;
+    background: var(--gradient-primary);
+    color: white;
+    font-size: 0.75rem;
+    font-weight: 700;
+    box-shadow: var(--shadow-sm);
+  }
+
+  /* School Cards */
+  .school-card {
+    background: var(--card);
+    border-radius: var(--radius-lg);
+    padding: 1.5rem;
+    border: 1px solid var(--border);
+    box-shadow: var(--shadow-sm);
+    transition: var(--transition);
+    position: relative;
+    cursor: pointer;
+    overflow: hidden;
+  }
+
+  .school-card:hover {
+    transform: translateY(-4px) scale(1.02);
+    box-shadow: var(--shadow-lg);
+    border-color: var(--primary);
+  }
+
+  .school-card h4 {
+    margin-bottom: 0.5rem;
+    color: var(--ink);
+  }
+
+  .school-meta {
+    color: var(--muted);
+    font-size: 0.875rem;
+    margin-bottom: 0.75rem;
+  }
+
+  .school-stats {
+    display: flex;
+    gap: 1rem;
+    margin: 0.75rem 0;
+    padding: 0.75rem;
+    background: var(--bg-secondary);
+    border-radius: var(--radius);
+  }
+
+  .stat-item {
+    display: flex;
+    flex-direction: column;
+    gap: 0.25rem;
+  }
+
+  .stat-label {
+    font-size: 0.75rem;
+    color: var(--muted);
+    text-transform: uppercase;
+  }
+
+  .stat-value {
+    font-weight: 700;
+    color: var(--ink);
+  }
+
+  .school-actions {
+    display: flex;
+    gap: 0.5rem;
+    margin-top: 1rem;
+  }
+
+  /* Progress Components */
+  .progress-ring {
+    width: 80px;
+    height: 80px;
+  }
+
+  .progress-ring circle {
+    transition: stroke-dashoffset 0.5s ease;
+  }
+
+  .progress-text {
+    font-size: 1.25rem;
+    font-weight: 700;
+    fill: var(--ink);
+  }
+
+  .progress-bar {
+    height: 8px;
+    background: var(--bg-secondary);
+    border-radius: 999px;
+    overflow: hidden;
+    position: relative;
+  }
+
+  .progress-bar-fill {
+    height: 100%;
+    background: var(--gradient-primary);
+    border-radius: 999px;
+    transition: width 0.5s ease;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .progress-bar-fill::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.3), transparent);
+    animation: shimmer 2s infinite;
+  }
+
+  @keyframes shimmer {
+    0% { transform: translateX(-100%); }
+    100% { transform: translateX(100%); }
+  }
 
   /* Timeline */
-  .tl{display:grid; gap:10px}
-  .tl-item{
-    padding:12px; border-radius:12px; border-left:8px solid var(--primary);
-    background:var(--bg); border:1px solid color-mix(in srgb, var(--ink) 15%, transparent);
+  .timeline {
+    position: relative;
+    padding-left: 2rem;
   }
-  .urg-red{ border-left-color: var(--danger) }
-  .urg-orange{ border-left-color: var(--warn) }
-  .urg-green{ border-left-color: var(--success) }
 
-  /* AI bubble */
-  .ai{
-    position:fixed; right:16px; bottom:90px; z-index:60;
-    background:linear-gradient(135deg,var(--primary),var(--primary-2)); color:#fff;
-    padding:14px 16px; border-radius:16px; box-shadow:var(--shadow); cursor:pointer;
-    animation:slidein .35s ease both;
+  .timeline::before {
+    content: '';
+    position: absolute;
+    left: 0;
+    top: 0;
+    bottom: 0;
+    width: 2px;
+    background: var(--border);
   }
-  .ai.small{bottom:20px; border-radius:50%; padding:12px}
-  .ai p{margin:0; font-weight:700}
-  @keyframes slidein{ from{ transform:translateY(12px); opacity:0 } to{ transform:translateY(0); opacity:1 } }
 
-  /* Footer spacer for mobile */
-  .spacer{height:40px}
+  .timeline-item {
+    position: relative;
+    padding: 1rem;
+    margin-bottom: 1rem;
+    background: var(--card);
+    border-radius: var(--radius);
+    border: 1px solid var(--border);
+    transition: var(--transition);
+  }
+
+  .timeline-item:hover {
+    transform: translateX(4px);
+    box-shadow: var(--shadow);
+  }
+
+  .timeline-item::before {
+    content: '';
+    position: absolute;
+    left: -2rem;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 12px;
+    height: 12px;
+    border-radius: 50%;
+    background: var(--primary);
+    border: 2px solid var(--bg);
+    z-index: 1;
+  }
+
+  .timeline-item.urgent-high::before {
+    background: var(--danger);
+    animation: pulse-danger 1s infinite;
+  }
+
+  @keyframes pulse-danger {
+    0%, 100% { box-shadow: 0 0 0 0 rgba(245, 101, 101, 0.7); }
+    50% { box-shadow: 0 0 0 8px rgba(245, 101, 101, 0); }
+  }
+
+  .timeline-item.urgent-medium::before {
+    background: var(--warning);
+  }
+
+  .timeline-item.urgent-low::before {
+    background: var(--success);
+  }
+
+  /* Empty States */
+  .empty-state {
+    text-align: center;
+    padding: 3rem 1.5rem;
+  }
+
+  .empty-icon {
+    font-size: 4rem;
+    margin-bottom: 1rem;
+    animation: bounce 2s ease infinite;
+  }
+
+  @keyframes bounce {
+    0%, 100% { transform: translateY(0); }
+    50% { transform: translateY(-10px); }
+  }
+
+  .empty-state h3 {
+    color: var(--ink);
+    margin-bottom: 0.5rem;
+  }
+
+  .empty-state p {
+    color: var(--muted);
+    margin-bottom: 1.5rem;
+  }
+
+  /* Modals */
+  .modal-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(0, 0, 0, 0.5);
+    backdrop-filter: blur(4px);
+    z-index: var(--z-modal);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 1rem;
+    opacity: 0;
+    visibility: hidden;
+    transition: opacity 0.3s, visibility 0.3s;
+  }
+
+  .modal-overlay.active {
+    opacity: 1;
+    visibility: visible;
+  }
+
+  .modal {
+    background: var(--card);
+    border-radius: var(--radius-xl);
+    padding: 2rem;
+    max-width: 500px;
+    width: 100%;
+    max-height: 90vh;
+    overflow-y: auto;
+    box-shadow: var(--shadow-xl);
+    transform: scale(0.9);
+    transition: transform 0.3s;
+  }
+
+  .modal-overlay.active .modal {
+    transform: scale(1);
+  }
+
+  /* Toast Notifications */
+  .toast-container {
+    position: fixed;
+    top: 1rem;
+    right: 1rem;
+    z-index: var(--z-toast);
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+    pointer-events: none;
+  }
+
+  .toast {
+    background: var(--card);
+    padding: 1rem 1.5rem;
+    border-radius: var(--radius);
+    box-shadow: var(--shadow-lg);
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    min-width: 250px;
+    pointer-events: auto;
+    transform: translateX(400px);
+    transition: transform 0.3s;
+    border-left: 4px solid var(--primary);
+  }
+
+  .toast.show {
+    transform: translateX(0);
+  }
+
+  .toast.success {
+    border-left-color: var(--success);
+  }
+
+  .toast.error {
+    border-left-color: var(--danger);
+  }
+
+  .toast.warning {
+    border-left-color: var(--warning);
+  }
+
+  /* AI Assistant */
+  .ai-bubble {
+    position: fixed;
+    right: 1.5rem;
+    bottom: 1.5rem;
+    z-index: var(--z-overlay);
+    background: var(--gradient-primary);
+    color: white;
+    padding: 1rem 1.5rem;
+    border-radius: var(--radius-lg);
+    box-shadow: var(--shadow-xl);
+    cursor: pointer;
+    transition: var(--transition);
+    animation: slide-up 0.5s ease;
+    max-width: 300px;
+  }
+
+  .ai-bubble:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 30px 80px rgba(102, 126, 234, 0.3);
+  }
+
+  .ai-bubble.minimized {
+    width: 60px;
+    height: 60px;
+    padding: 0;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.5rem;
+  }
+
+  @keyframes slide-up {
+    from {
+      opacity: 0;
+      transform: translateY(20px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+
+  /* Achievements */
+  .achievement {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    padding: 1rem;
+    background: var(--card);
+    border-radius: var(--radius);
+    border: 1px solid var(--border);
+    margin-bottom: 0.75rem;
+    transition: var(--transition);
+    animation: slide-in 0.5s ease;
+  }
+
+  @keyframes slide-in {
+    from {
+      opacity: 0;
+      transform: translateX(-20px);
+    }
+    to {
+      opacity: 1;
+      transform: translateX(0);
+    }
+  }
+
+  .achievement-icon {
+    font-size: 2rem;
+  }
+
+  .achievement-content h4 {
+    margin-bottom: 0.25rem;
+  }
+
+  .achievement-content p {
+    color: var(--muted);
+    font-size: 0.875rem;
+  }
+
+  .achievement.new {
+    background: linear-gradient(135deg, rgba(102, 126, 234, 0.1) 0%, rgba(118, 75, 162, 0.1) 100%);
+    border-color: var(--primary);
+  }
+
+  /* Confetti */
+  .confetti-container {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    pointer-events: none;
+    z-index: var(--z-toast);
+  }
+
+  .confetti {
+    position: absolute;
+    width: 10px;
+    height: 10px;
+    background: var(--primary);
+    animation: confetti-fall 3s ease-out forwards;
+  }
+
+  @keyframes confetti-fall {
+    0% {
+      transform: translateY(-100vh) rotate(0deg);
+      opacity: 1;
+    }
+    100% {
+      transform: translateY(100vh) rotate(720deg);
+      opacity: 0;
+    }
+  }
+
+  /* Loading States */
+  .skeleton {
+    background: linear-gradient(90deg, var(--bg-secondary) 25%, var(--border) 50%, var(--bg-secondary) 75%);
+    background-size: 200% 100%;
+    animation: skeleton-loading 1.5s infinite;
+    border-radius: var(--radius);
+  }
+
+  @keyframes skeleton-loading {
+    0% { background-position: 200% 0; }
+    100% { background-position: -200% 0; }
+  }
+
+  /* Utilities */
+  .hidden { display: none !important; }
+  .flex { display: flex; }
+  .flex-col { flex-direction: column; }
+  .items-center { align-items: center; }
+  .justify-between { justify-content: space-between; }
+  .justify-center { justify-content: center; }
+  .gap-1 { gap: 0.25rem; }
+  .gap-2 { gap: 0.5rem; }
+  .gap-3 { gap: 0.75rem; }
+  .gap-4 { gap: 1rem; }
+  .mt-2 { margin-top: 0.5rem; }
+  .mt-4 { margin-top: 1rem; }
+  .mt-6 { margin-top: 1.5rem; }
+  .mb-4 { margin-bottom: 1rem; }
+  .text-center { text-align: center; }
+  .text-muted { color: var(--muted); }
+  .font-bold { font-weight: 700; }
+  .text-sm { font-size: 0.875rem; }
+  .text-lg { font-size: 1.125rem; }
+  .w-full { width: 100%; }
+
+  /* Responsive */
+  @media (max-width: 640px) {
+    .container {
+      padding: 1rem 0.75rem;
+    }
+    
+    .card {
+      padding: 1.25rem;
+    }
+    
+    .hide-mobile {
+      display: none;
+    }
+    
+    .school-stats {
+      flex-direction: column;
+      gap: 0.5rem;
+    }
+    
+    .tabs {
+      padding: 0.375rem;
+    }
+    
+    .tab {
+      padding: 0.625rem 1rem;
+      font-size: 0.875rem;
+    }
+  }
+
+  /* Print Styles */
+  @media print {
+    body {
+      background: white;
+      color: black;
+    }
+    
+    .header,
+    .ai-bubble,
+    .toast-container {
+      display: none;
+    }
+    
+    .card {
+      box-shadow: none;
+      border: 1px solid #ddd;
+      page-break-inside: avoid;
+    }
+  }
+
+  /* Accessibility */
+  .sr-only {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    padding: 0;
+    margin: -1px;
+    overflow: hidden;
+    clip: rect(0, 0, 0, 0);
+    white-space: nowrap;
+    border: 0;
+  }
+
+  /* Focus Management */
+  :focus-visible {
+    outline: 3px solid var(--primary);
+    outline-offset: 2px;
+  }
+
+  /* Reduced Motion */
+  @media (prefers-reduced-motion: reduce) {
+    *,
+    *::before,
+    *::after {
+      animation-duration: 0.01ms !important;
+      animation-iteration-count: 1 !important;
+      transition-duration: 0.01ms !important;
+      scroll-behavior: auto !important;
+    }
+  }
 </style>
 </head>
 <body>
 
+<!-- Background Animation -->
+<div class="bg-animation" aria-hidden="true"></div>
+
 <!-- Header -->
-<div class="header">
+<header class="header" role="banner">
   <div class="header-inner">
-    <div class="brand">
-      <div class="brand-badge"></div>
-      <div>Pathwise</div>
+    <div class="brand" role="button" tabindex="0" aria-label="Pathwise Home">
+      <div class="brand-logo" aria-hidden="true">🎓</div>
+      <span>Pathwise</span>
     </div>
-    <div class="header-actions">
-      <button id="backPlanningBtn" class="btn ghost hidden">← Back to Planning</button>
-      <button id="resetBtn" class="btn danger">Reset</button>
-      <button id="themeBtn" class="btn icon" title="Toggle theme">🌙</button>
+    <nav class="header-actions" role="navigation" aria-label="Main navigation">
+      <button id="backBtn" class="btn ghost hidden" aria-label="Back to planning">
+        <span aria-hidden="true">←</span> Back
+      </button>
+      <button id="profileBtn" class="btn icon" aria-label="Profile">👤</button>
+      <button id="themeBtn" class="btn icon" aria-label="Toggle theme">🌙</button>
+      <button id="resetBtn" class="btn icon danger" aria-label="Reset all data">🔄</button>
+    </nav>
+  </div>
+</header>
+
+<!-- Main Content -->
+<main class="container" role="main">
+
+  <!-- Planning Section -->
+  <section id="planningSection" aria-label="College planning form">
+    <div class="card">
+      <h1>Plan Your College Journey</h1>
+      <p class="text-muted mb-4">We'll match you with perfect schools and track everything for you.</p>
+      
+      <form id="planningForm" novalidate>
+        <div class="grid grid-cols-2 gap-4">
+          <div class="field">
+            <label for="firstName">First Name *</label>
+            <input type="text" id="firstName" name="firstName" required aria-required="true" autocomplete="given-name">
+            <span class="helper-text">How should we call you?</span>
+          </div>
+          
+          <div class="field">
+            <label for="grade">Current Grade *</label>
+            <select id="grade" name="grade" required aria-required="true">
+              <option value="">Select grade...</option>
+              <option value="9">9th Grade</option>
+              <option value="10">10th Grade</option>
+              <option value="11">11th Grade</option>
+              <option value="12">12th Grade</option>
+              <option value="transfer">Transfer Student</option>
+              <option value="gap">Gap Year</option>
+            </select>
+          </div>
+          
+          <div class="field">
+            <label for="homeState">Home State *</label>
+            <select id="homeState" name="homeState" required aria-required="true">
+              <option value="">Select state...</option>
+              <option value="CA">California</option>
+              <option value="NY">New York</option>
+              <option value="TX">Texas</option>
+              <option value="MA">Massachusetts</option>
+              <option value="IL">Illinois</option>
+              <option value="FL">Florida</option>
+              <option value="PA">Pennsylvania</option>
+              <option value="other">Other State</option>
+            </select>
+          </div>
+          
+          <div class="field">
+            <label for="income">Household Income (optional)</label>
+            <input type="number" id="income" name="income" min="0" step="5000" placeholder="75000">
+            <span class="helper-text">Helps estimate financial aid</span>
+          </div>
+          
+          <div class="field">
+            <label for="gpa">GPA</label>
+            <input type="number" id="gpa" name="gpa" min="0" max="5" step="0.01" placeholder="3.85">
+            <span class="helper-text">Weighted or unweighted</span>
+          </div>
+          
+          <div class="field">
+            <label for="sat">SAT Score (optional)</label>
+            <input type="number" id="sat" name="sat" min="400" max="1600" step="10" placeholder="1400">
+            <span class="helper-text">Many schools are test-optional</span>
+          </div>
+          
+          <div class="field">
+            <label for="ap">AP/Honors Courses</label>
+            <input type="number" id="ap" name="ap" min="0" max="30" placeholder="5">
+            <span class="helper-text">Total count taken or planned</span>
+          </div>
+          
+          <div class="field">
+            <label for="interests">Academic Interests</label>
+            <select id="interests" name="interests">
+              <option value="">Not sure yet...</option>
+              <option value="stem">STEM (Science, Tech, Engineering, Math)</option>
+              <option value="business">Business & Economics</option>
+              <option value="arts">Arts & Design</option>
+              <option value="humanities">Humanities & Social Sciences</option>
+              <option value="health">Health & Medicine</option>
+              <option value="education">Education</option>
+            </select>
+          </div>
+        </div>
+        
+        <div class="flex gap-3 mt-6">
+          <button type="submit" class="btn primary">
+            Find My Matches <span aria-hidden="true">→</span>
+          </button>
+          <div id="matchCounter" class="badge" aria-live="polite">0 potential matches</div>
+        </div>
+      </form>
     </div>
+    
+    <!-- Achievement Notifications -->
+    <div id="achievementsContainer" class="mt-6" aria-live="polite"></div>
+  </section>
+
+  <!-- Dashboard Section -->
+  <section id="dashboardSection" class="hidden" aria-label="College application dashboard">
+    
+    <!-- Stats Cards -->
+    <div class="grid grid-cols-3 gap-4 mb-6">
+      <div class="card">
+        <div class="text-muted text-sm">Profile Strength</div>
+        <div class="flex items-center gap-3 mt-2">
+          <svg width="60" height="60" class="progress-ring">
+            <defs>
+              <linearGradient id="gradient">
+                <stop offset="0%" stop-color="#667eea"/>
+                <stop offset="100%" stop-color="#764ba2"/>
+              </linearGradient>
+            </defs>
+            <circle r="25" cx="30" cy="30" fill="transparent" stroke="var(--border)" stroke-width="5"/>
+            <circle id="profileProgress" r="25" cx="30" cy="30" fill="transparent" stroke="url(#gradient)" 
+                    stroke-width="5" stroke-dasharray="157" stroke-dashoffset="157" 
+                    transform="rotate(-90 30 30)" stroke-linecap="round"/>
+            <text x="30" y="35" text-anchor="middle" class="progress-text" id="profilePercent">0%</text>
+          </svg>
+        </div>
+      </div>
+      
+      <div class="card">
+        <div class="text-muted text-sm">Schools Added</div>
+        <div class="text-lg font-bold mt-2" id="schoolCount">0</div>
+        <div class="progress-bar mt-2">
+          <div class="progress-bar-fill" id="schoolProgress" style="width: 0%"></div>
+        </div>
+      </div>
+      
+      <div class="card">
+        <div class="text-muted text-sm">Days Until Deadline</div>
+        <div class="text-lg font-bold mt-2" id="daysLeft">--</div>
+        <div class="text-sm text-muted" id="nextDeadline">No deadlines set</div>
+      </div>
+    </div>
+    
+    <!-- Navigation Tabs -->
+    <nav class="tabs" role="tablist" aria-label="Dashboard sections">
+      <button role="tab" class="tab active" data-tab="schools" aria-selected="true">Schools</button>
+      <button role="tab" class="tab" data-tab="financial" aria-selected="false">Financial Aid</button>
+      <button role="tab" class="tab" data-tab="documents" aria-selected="false">Documents</button>
+      <button role="tab" class="tab" data-tab="timeline" aria-selected="false">Timeline</button>
+      <button role="tab" class="tab" data-tab="insights" aria-selected="false">Insights</button>
+    </nav>
+    
+    <!-- Tab Content -->
+    <div class="tab-content">
+      
+      <!-- Schools Tab -->
+      <div id="schoolsTab" role="tabpanel" aria-labelledby="schools-tab">
+        <div class="card mb-4">
+          <h2>Find Your Perfect Schools</h2>
+          
+          <!-- Filters -->
+          <div class="grid grid-cols-3 gap-3 mt-4">
+            <div class="field">
+              <label for="filterState">State</label>
+              <select id="filterState">
+                <option value="">All States</option>
+                <option value="CA">California</option>
+                <option value="NY">New York</option>
+                <option value="TX">Texas</option>
+                <option value="MA">Massachusetts</option>
+                <option value="IL">Illinois</option>
+              </select>
+            </div>
+            
+            <div class="field">
+              <label for="filterType">School Type</label>
+              <select id="filterType">
+                <option value="">All Types</option>
+                <option value="public">Public</option>
+                <option value="private">Private</option>
+                <option value="UC">UC System</option>
+                <option value="CSU">CSU System</option>
+              </select>
+            </div>
+            
+            <div class="field">
+              <label for="searchSchool">Search</label>
+              <input type="text" id="searchSchool" placeholder="School name or city...">
+            </div>
+          </div>
+        </div>
+        
+        <!-- School Categories -->
+        <div id="schoolCategories">
+          <div class="mb-6">
+            <h3 class="flex items-center gap-2 mb-3">
+              <span class="badge reach">REACH</span>
+              Dream big - these are ambitious choices
+            </h3>
+            <div id="reachSchools" class="grid grid-cols-3 gap-3"></div>
+          </div>
+          
+          <div class="mb-6">
+            <h3 class="flex items-center gap-2 mb-3">
+              <span class="badge match">MATCH</span>
+              Great fit - you're right in the range
+            </h3>
+            <div id="matchSchools" class="grid grid-cols-3 gap-3"></div>
+          </div>
+          
+          <div class="mb-6">
+            <h3 class="flex items-center gap-2 mb-3">
+              <span class="badge safety">SAFETY</span>
+              Solid options - high acceptance chances
+            </h3>
+            <div id="safetySchools" class="grid grid-cols-3 gap-3"></div>
+          </div>
+        </div>
+        
+        <!-- My Schools List -->
+        <div class="card">
+          <h3>My School List</h3>
+          <div id="mySchoolsList" class="mt-4"></div>
+        </div>
+      </div>
+      
+      <!-- Financial Aid Tab -->
+      <div id="financialTab" class="hidden" role="tabpanel" aria-labelledby="financial-tab">
+        <div class="card">
+          <h2>Financial Aid Estimates</h2>
+          <p class="text-muted mb-4">Based on your profile and each school's aid programs.</p>
+          <div id="aidEstimates"></div>
+        </div>
+      </div>
+      
+      <!-- Documents Tab -->
+      <div id="documentsTab" class="hidden" role="tabpanel" aria-labelledby="documents-tab">
+        <div class="card">
+          <h2>Application Documents</h2>
+          <div class="flex justify-between items-center mb-4">
+            <p class="text-muted">Track all your requirements in one place.</p>
+            <div class="badge" id="docProgress">0% Complete</div>
+          </div>
+          <div id="documentsList"></div>
+        </div>
+      </div>
+      
+      <!-- Timeline Tab -->
+      <div id="timelineTab" class="hidden" role="tabpanel" aria-labelledby="timeline-tab">
+        <div class="card">
+          <h2>Application Timeline</h2>
+          <p class="text-muted mb-4">Never miss a deadline.</p>
+          <div class="timeline" id="timelineList"></div>
+        </div>
+      </div>
+      
+      <!-- Insights Tab -->
+      <div id="insightsTab" class="hidden" role="tabpanel" aria-labelledby="insights-tab">
+        <div class="card">
+          <h2>Your Insights</h2>
+          <div id="insightsContent"></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+</main>
+
+<!-- AI Assistant Bubble -->
+<div id="aiBubble" class="ai-bubble hidden" role="button" tabindex="0" aria-label="AI Assistant">
+  <p id="aiMessage">Need help picking schools? I'm here to guide you! 🎯</p>
+</div>
+
+<!-- Toast Container -->
+<div class="toast-container" id="toastContainer" aria-live="polite" aria-atomic="true"></div>
+
+<!-- Profile Modal -->
+<div class="modal-overlay" id="profileModal" role="dialog" aria-modal="true" aria-labelledby="profileTitle">
+  <div class="modal">
+    <h2 id="profileTitle">Your Profile</h2>
+    <div id="profileContent"></div>
+    <button class="btn ghost mt-4" onclick="closeModal('profileModal')">Close</button>
   </div>
 </div>
 
-<div class="wrap">
-
-  <!-- PLANNER -->
-  <section id="planner" class="card">
-    <h2 class="title">Plan your path</h2>
-    <p class="sub">We’ll tailor schools, costs, docs, and deadlines to you.</p>
-
-    <div class="grid cols-2">
-      <div class="field">
-        <label>First name *</label>
-        <input id="p_name" type="text" placeholder="Jordan" />
-      </div>
-
-      <div class="field">
-        <label>Grade *</label>
-        <select id="p_grade">
-          <option value="">Select…</option>
-          <option>9</option><option>10</option><option>11</option><option>12</option>
-          <option value="transfer">Transfer</option>
-        </select>
-      </div>
-
-      <div class="field">
-        <label>Home state *</label>
-        <select id="p_homeState">
-          <option value="">Select…</option>
-          <option value="CA">California</option>
-          <option value="NY">New York</option>
-          <option value="TX">Texas</option>
-          <option value="MA">Massachusetts</option>
-          <option value="IL">Illinois</option>
-        </select>
-      </div>
-
-      <div class="field">
-        <label>Household income (USD)</label>
-        <input id="p_income" type="number" min="0" step="500" placeholder="75000" />
-      </div>
-
-      <div class="field">
-        <label>GPA (weighted ok)</label>
-        <input id="p_gpa" type="number" min="0" max="5" step="0.01" placeholder="3.85" />
-      </div>
-
-      <div class="field">
-        <label>SAT (optional)</label>
-        <input id="p_sat" type="number" min="400" max="1600" step="10" placeholder="1400" />
-      </div>
-
-      <div class="field">
-        <label>AP/Honors count</label>
-        <input id="p_ap" type="number" min="0" step="1" placeholder="5" />
-      </div>
-
-      <div class="field">
-        <label>Target states (filter results)</label>
-        <select id="p_states" multiple>
-          <option value="CA">California</option>
-          <option value="NY">New York</option>
-          <option value="TX">Texas</option>
-          <option value="MA">Massachusetts</option>
-          <option value="IL">Illinois</option>
-        </select>
-      </div>
-    </div>
-
-    <div class="grid cols-3" style="margin-top:14px">
-      <div class="field">
-        <label>What matters most?</label>
-        <select id="p_pref">
-          <option value="">Balanced</option>
-          <option value="reputation">Reputation</option>
-          <option value="cost">Affordability</option>
-          <option value="location">Location</option>
-          <option value="size">Campus size</option>
-        </select>
-      </div>
-      <div class="field">
-        <label>Interests (quick set)</label>
-        <select id="p_interest">
-          <option value="">General</option>
-          <option value="stem">STEM</option>
-          <option value="arts">Arts</option>
-          <option value="business">Business</option>
-          <option value="health">Health</option>
-          <option value="humanities">Humanities</option>
-        </select>
-      </div>
-      <div class="field">
-        <label>Email for reminders (optional)</label>
-        <input id="p_email" type="email" placeholder="you@email.com" />
-      </div>
-    </div>
-
-    <div class="flex" style="margin-top:12px">
-      <button id="startBtn" class="btn primary">See my matches →</button>
-      <div class="chip" id="matchPreview">0 matches yet</div>
-    </div>
-  </section>
-
-  <!-- DASHBOARD -->
-  <section id="dashboard" class="hidden">
-    <!-- Stats -->
-    <div class="grid cols-3">
-      <div class="card">
-        <div class="muted">Your GPA</div>
-        <div id="statGPA" class="title" style="margin:6px 0 0">—</div>
-      </div>
-      <div class="card">
-        <div class="muted">My schools</div>
-        <div id="statCount" class="title" style="margin:6px 0 0">0</div>
-      </div>
-      <div class="card">
-        <div class="muted">Days to UC/CSU deadline (Nov 30, 2025)</div>
-        <div id="statDays" class="title" style="margin:6px 0 0">—</div>
-      </div>
-    </div>
-
-    <!-- Tabs -->
-    <div class="tabs" style="margin-top:10px">
-      <div data-tab="schools" class="tab active">Schools</div>
-      <div data-tab="aid" class="tab">Financial Aid</div>
-      <div data-tab="docs" class="tab">Documents</div>
-      <div data-tab="timeline" class="tab">Timeline</div>
-    </div>
-
-    <!-- Schools tab -->
-    <div id="tab-schools" class="card" style="margin-top:10px">
-      <div class="grid cols-3">
-        <div class="field">
-          <label>Filter by state</label>
-          <select id="f_state">
-            <option value="">All</option>
-            <option value="CA">CA</option><option value="NY">NY</option><option value="TX">TX</option><option value="MA">MA</option><option value="IL">IL</option>
-          </select>
-        </div>
-        <div class="field">
-          <label>System</label>
-          <select id="f_sys">
-            <option value="">Any</option>
-            <option value="UC">UC</option><option value="CSU">CSU</option><option value="SUNY">SUNY</option><option value="UT">UT</option><option value="Private">Private</option>
-          </select>
-        </div>
-        <div class="field">
-          <label>Search</label>
-          <input id="f_q" type="text" placeholder="Type to filter…" />
-        </div>
-      </div>
-
-      <div id="bucket-reach" class="bucket">
-        <h3><span class="badge reach">Reach • Shoot your shot</span></h3>
-        <div class="schools" id="reachGrid"></div>
-      </div>
-
-      <div id="bucket-match" class="bucket">
-        <h3><span class="badge match">Match • Great fit</span></h3>
-        <div class="schools" id="matchGrid"></div>
-      </div>
-
-      <div id="bucket-safety" class="bucket">
-        <h3><span class="badge safety">Safety • Solid W</span></h3>
-        <div class="schools" id="safetyGrid"></div>
-      </div>
-
-      <div class="card" style="margin-top:12px">
-        <div class="flex">
-          <div class="title" style="font-size:18px">My Schools</div>
-          <div class="right muted" id="mySchoolsHint">Add schools from the lists above</div>
-        </div>
-        <div id="mySchools" class="list" style="margin-top:8px"></div>
-      </div>
-    </div>
-
-    <!-- Aid tab -->
-    <div id="tab-aid" class="card hidden" style="margin-top:10px">
-      <h3 class="title" style="font-size:18px">Financial Aid — per school</h3>
-      <p class="sub">Uses household income, residency, and each state’s grant scaffolding.</p>
-      <div id="aidList" class="list"></div>
-    </div>
-
-    <!-- Docs tab -->
-    <div id="tab-docs" class="card hidden" style="margin-top:10px">
-      <div class="flex">
-        <h3 class="title" style="font-size:18px">Documents & Tasks</h3>
-        <div class="chip right" id="docsProgress">0% done</div>
-      </div>
-      <div id="docList" class="list" style="margin-top:8px"></div>
-    </div>
-
-    <!-- Timeline tab -->
-    <div id="tab-timeline" class="card hidden" style="margin-top:10px">
-      <h3 class="title" style="font-size:18px">Timeline</h3>
-      <p class="sub">Auto-built from your schools & documents.</p>
-      <div id="tlList" class="tl"></div>
-    </div>
-
-  </section>
-
-  <div class="spacer"></div>
-</div>
-
-<!-- AI helper -->
-<div id="aiBubble" class="ai hidden" title="Need help?">
-  <p>Need help picking schools?</p>
-</div>
-
 <script>
-/* ===== Pathwise native bridge (drop-in) ===== */
-(function () {
-  const listeners = {};
-  function emitToNative(type, payload = {}) {
-    try {
-      // iOS
-      if (window.webkit?.messageHandlers?.pathwise) {
-        window.webkit.messageHandlers.pathwise.postMessage({ type, payload });
+// ============================================
+// ENHANCED PATHWISE APPLICATION
+// ============================================
+
+// State Management System
+class AppState {
+  constructor() {
+    this.state = {
+      user: null,
+      schools: [],
+      mySchools: [],
+      documents: {},
+      achievements: [],
+      filters: {
+        state: '',
+        type: '',
+        search: ''
+      },
+      ui: {
+        currentSection: 'planning',
+        currentTab: 'schools',
+        theme: 'light'
       }
-      // Android
-      if (window.Android?.postMessage) {
-        window.Android.postMessage(JSON.stringify({ type, payload }));
-      }
-    } catch (e) { /* no-op */ }
+    };
+    this.listeners = new Map();
+    this.loadState();
   }
 
-  // Public API native can call (and web can also use internally)
-  window.PathwiseBridge = {
-    on(type, cb) { (listeners[type] ||= []).push(cb); },
-    setUser(u)       { try { window.__pw_setUser?.(u); } catch{} },
-    reset()          { try { window.__pw_reset?.(); } catch{} },
-    navigate(dest)   { try { window.__pw_nav?.(dest); } catch{} }, // 'planner' | 'dashboard'
-    setTheme(mode)   { try { document.documentElement.setAttribute('data-theme', mode);
-                              localStorage.setItem('pw_theme', mode);} catch{} },
-    selectSchools(ids){ try { window.__pw_selectSchools?.(ids); } catch{} },
-    getState()       { try { return window.__pw_getState?.() || "{}"; } catch{ return "{}"; } }
-  };
+  subscribe(key, callback) {
+    if (!this.listeners.has(key)) {
+      this.listeners.set(key, new Set());
+    }
+    this.listeners.get(key).add(callback);
+    return () => this.listeners.get(key).delete(callback);
+  }
 
-  window.__pw_emit_native = emitToNative;                   // web → native
-  window.__pw_emit_local  = (type,p)=>{ (listeners[type]||[]).forEach(cb=>cb(p)); };
+  update(key, value) {
+    const oldValue = this.getNestedValue(key);
+    this.setNestedValue(key, value);
+    this.notify(key, value, oldValue);
+    this.persist();
+  }
 
-  setTimeout(()=>emitToNative('ready', {}), 0);
-})();
+  get(key) {
+    return this.getNestedValue(key);
+  }
 
-/* ========================
-   DATA & UTILITIES
-   ======================== */
+  notify(key, newValue, oldValue) {
+    if (this.listeners.has(key)) {
+      this.listeners.get(key).forEach(cb => cb(newValue, oldValue));
+    }
+  }
 
-const UI = {
-  planner: document.getElementById('planner'),
-  dashboard: document.getElementById('dashboard'),
-  backPlanningBtn: document.getElementById('backPlanningBtn'),
-  resetBtn: document.getElementById('resetBtn'),
-  themeBtn: document.getElementById('themeBtn'),
-  startBtn: document.getElementById('startBtn'),
-  matchPreview: document.getElementById('matchPreview'),
-  statGPA: document.getElementById('statGPA'),
-  statCount: document.getElementById('statCount'),
-  statDays: document.getElementById('statDays'),
-  tabs: Array.from(document.querySelectorAll('.tab')),
-  tabViews: {
-    schools: document.getElementById('tab-schools'),
-    aid: document.getElementById('tab-aid'),
-    docs: document.getElementById('tab-docs'),
-    timeline: document.getElementById('tab-timeline')
-  },
-  filters: {
-    state: document.getElementById('f_state'),
-    sys: document.getElementById('f_sys'),
-    q: document.getElementById('f_q')
-  },
-  grids: {
-    reach: document.getElementById('reachGrid'),
-    match: document.getElementById('matchGrid'),
-    safety: document.getElementById('safetyGrid')
-  },
-  mySchools: document.getElementById('mySchools'),
-  mySchoolsHint: document.getElementById('mySchoolsHint'),
-  aidList: document.getElementById('aidList'),
-  docList: document.getElementById('docList'),
-  docsProgress: document.getElementById('docsProgress'),
-  tlList: document.getElementById('tlList'),
-  aiBubble: document.getElementById('aiBubble'),
-};
+  getNestedValue(path) {
+    return path.split('.').reduce((obj, key) => obj?.[key], this.state);
+  }
 
-/* Expanded SCHOOLS (resident/non-resident tuition baked in) */
-const SCHOOLS = [
-  // UC
-  {id:'ucb',name:'UC Berkeley',state:'CA',system:'UC',type:'public',city:'Berkeley',avgGPA:4.25,avgSAT:1450,acceptanceRate:14.5,tuitionResident:14226,tuitionNonResident:14226+32574,deadlines:{app:'Nov 30 2025',priority:'Nov 15 2025'},weights:{academics:.60,rigor:.20,eca:.10,essays:.10},requirements:{essays:4,recs:false,portfolio:false}},
-  {id:'ucla',name:'UCLA',state:'CA',system:'UC',type:'public',city:'Los Angeles',avgGPA:4.26,avgSAT:1445,acceptanceRate:12.3,tuitionResident:13401,tuitionNonResident:13401+32574,deadlines:{app:'Nov 30 2025',priority:'Nov 15 2025'},weights:{academics:.58,rigor:.22,eca:.10,essays:.10},requirements:{essays:4,recs:false,portfolio:false}},
-  {id:'ucsd',name:'UC San Diego',state:'CA',system:'UC',type:'public',city:'La Jolla',avgGPA:4.16,avgSAT:1410,acceptanceRate:31.5,tuitionResident:14616,tuitionNonResident:14616+32574,deadlines:{app:'Nov 30 2025',priority:'Nov 15 2025'},weights:{academics:.56,rigor:.22,eca:.12,essays:.10},requirements:{essays:4,recs:false,portfolio:false}},
-  {id:'ucd',name:'UC Davis',state:'CA',system:'UC',type:'public',city:'Davis',avgGPA:4.13,avgSAT:1350,acceptanceRate:37.6,tuitionResident:14597,tuitionNonResident:14597+32574,deadlines:{app:'Nov 30 2025',priority:'Nov 15 2025'},weights:{academics:.54,rigor:.22,eca:.12,essays:.12},requirements:{essays:4,recs:false,portfolio:false}},
-  {id:'uci',name:'UC Irvine',state:'CA',system:'UC',type:'public',city:'Irvine',avgGPA:4.08,avgSAT:1360,acceptanceRate:26.5,tuitionResident:13727,tuitionNonResident:13727+32574,deadlines:{app:'Nov 30 2025',priority:'Nov 15 2025'},weights:{academics:.54,rigor:.22,eca:.12,essays:.12},requirements:{essays:4,recs:false,portfolio:false}},
-  {id:'ucsb',name:'UC Santa Barbara',state:'CA',system:'UC',type:'public',city:'Santa Barbara',avgGPA:4.15,avgSAT:1380,acceptanceRate:29.6,tuitionResident:14391,tuitionNonResident:14391+32574,deadlines:{app:'Nov 30 2025',priority:'Nov 15 2025'},weights:{academics:.54,rigor:.22,eca:.12,essays:.12},requirements:{essays:4,recs:false,portfolio:false}},
-  {id:'ucsc',name:'UC Santa Cruz',state:'CA',system:'UC',type:'public',city:'Santa Cruz',avgGPA:3.96,avgSAT:1295,acceptanceRate:51.3,tuitionResident:13991,tuitionNonResident:13991+32574,deadlines:{app:'Nov 30 2025',priority:'Nov 15 2025'},weights:{academics:.52,rigor:.20,eca:.16,essays:.12},requirements:{essays:4,recs:false,portfolio:false}},
-  // CSU
-  {id:'cpslo',name:'Cal Poly SLO',state:'CA',system:'CSU',type:'public',city:'San Luis Obispo',avgGPA:4.06,avgSAT:1395,acceptanceRate:32.5,tuitionResident:10377,tuitionNonResident:10377+11880,deadlines:{app:'Nov 30 2025',priority:'Nov 15 2025'},weights:{academics:.52,rigor:.22,eca:.16,essays:.10},requirements:{essays:0,recs:false,portfolio:false}},
-  {id:'sdsu',name:'San Diego State',state:'CA',system:'CSU',type:'public',city:'San Diego',avgGPA:3.85,avgSAT:1270,acceptanceRate:37.8,tuitionResident:7720,tuitionNonResident:7720+11880,deadlines:{app:'Nov 30 2025',priority:'Nov 15 2025'},weights:{academics:.50,rigor:.20,eca:.20,essays:.10},requirements:{essays:0,recs:false,portfolio:false}},
-  {id:'csulb',name:'Cal State Long Beach',state:'CA',system:'CSU',type:'public',city:'Long Beach',avgGPA:3.8,avgSAT:1240,acceptanceRate:46,tuitionResident:7720,tuitionNonResident:7720+11880,deadlines:{app:'Nov 30 2025',priority:'Nov 15 2025'},weights:{academics:.48,rigor:.20,eca:.22,essays:.10},requirements:{essays:0,recs:false,portfolio:false}},
-  // CA Privates
-  {id:'stan',name:'Stanford University',state:'CA',system:'Private',type:'private',city:'Stanford',avgGPA:4.18,avgSAT:1520,acceptanceRate:4.0,tuitionResident:61650,tuitionNonResident:61650,deadlines:{app:'Jan 1 2026',priority:'Nov 1 2025'},weights:{academics:.55,rigor:.20,eca:.15,essays:.10},requirements:{essays:1,recs:true,portfolio:false}},
-  {id:'usc',name:'USC',state:'CA',system:'Private',type:'private',city:'Los Angeles',avgGPA:3.9,avgSAT:1460,acceptanceRate:10.5,tuitionResident:68337,tuitionNonResident:68337,deadlines:{app:'Jan 15 2026',priority:'Dec 1 2025'},weights:{academics:.52,rigor:.20,eca:.18,essays:.10},requirements:{essays:1,recs:true,portfolio:false}},
-  {id:'caltech',name:'Caltech',state:'CA',system:'Private',type:'private',city:'Pasadena',avgGPA:4.2,avgSAT:1560,acceptanceRate:3.0,tuitionResident:65394,tuitionNonResident:65394,deadlines:{app:'Jan 3 2026',priority:'Nov 1 2025'},weights:{academics:.65,rigor:.20,eca:.10,essays:.05},requirements:{essays:1,recs:true,portfolio:false}},
-  {id:'pomona',name:'Pomona College',state:'CA',system:'Private',type:'private',city:'Claremont',avgGPA:3.95,avgSAT:1500,acceptanceRate:7.0,tuitionResident:63540,tuitionNonResident:63540,deadlines:{app:'Jan 8 2026',priority:'Nov 1 2025'},weights:{academics:.55,rigor:.18,eca:.17,essays:.10},requirements:{essays:1,recs:true,portfolio:false}},
-  // NY SUNY & privates
-  {id:'suny-bing',name:'SUNY Binghamton',state:'NY',system:'SUNY',type:'public',city:'Binghamton',avgGPA:3.8,avgSAT:1350,acceptanceRate:44,tuitionResident:7360,tuitionNonResident:26290,deadlines:{app:'Jan 15 2026',priority:'Nov 1 2025'},weights:{academics:.52,rigor:.22,eca:.16,essays:.10},requirements:{essays:1,recs:true,portfolio:false}},
-  {id:'suny-sb',name:'SUNY Stony Brook',state:'NY',system:'SUNY',type:'public',city:'Stony Brook',avgGPA:3.8,avgSAT:1370,acceptanceRate:48,tuitionResident:7360,tuitionNonResident:26290,deadlines:{app:'Jan 15 2026',priority:'Nov 1 2025'},weights:{academics:.52,rigor:.22,eca:.16,essays:.10},requirements:{essays:1,recs:true,portfolio:false}},
-  {id:'suny-buff',name:'SUNY Buffalo (UB)',state:'NY',system:'SUNY',type:'public',city:'Buffalo',avgGPA:3.7,avgSAT:1290,acceptanceRate:67,tuitionResident:7360,tuitionNonResident:26290,deadlines:{app:'Feb 1 2026',priority:'Nov 15 2025'},weights:{academics:.50,rigor:.22,eca:.18,essays:.10},requirements:{essays:1,recs:true,portfolio:false}},
-  {id:'suny-gen',name:'SUNY Geneseo',state:'NY',system:'SUNY',type:'public',city:'Geneseo',avgGPA:3.7,avgSAT:1270,acceptanceRate:65,tuitionResident:7360,tuitionNonResident:18240,deadlines:{app:'Jan 15 2026',priority:'Nov 1 2025'},weights:{academics:.48,rigor:.20,eca:.22,essays:.10},requirements:{essays:1,recs:true,portfolio:false}},
-  {id:'nyu',name:'New York University',state:'NY',system:'Private',type:'private',city:'New York',avgGPA:3.8,avgSAT:1500,acceptanceRate:12.5,tuitionResident:58960,tuitionNonResident:58960,deadlines:{app:'Jan 5 2026',priority:'Nov 1 2025'},weights:{academics:.52,rigor:.18,eca:.20,essays:.10},requirements:{essays:1,recs:true,portfolio:false}},
-  // TX UT / TAMU / Rice
-  {id:'uta',name:'UT Austin',state:'TX',system:'UT',type:'public',city:'Austin',avgGPA:3.9,avgSAT:1370,acceptanceRate:31,tuitionResident:11500,tuitionNonResident:40000,deadlines:{app:'Dec 1 2025',priority:'Nov 1 2025'},weights:{academics:.55,rigor:.20,eca:.15,essays:.10},requirements:{essays:2,recs:false,portfolio:false}},
-  {id:'utd',name:'UT Dallas',state:'TX',system:'UT',type:'public',city:'Richardson',avgGPA:3.7,avgSAT:1320,acceptanceRate:79,tuitionResident:14600,tuitionNonResident:39500,deadlines:{app:'Jul 1 2026',priority:'May 1 2026'},weights:{academics:.50,rigor:.20,eca:.20,essays:.10},requirements:{essays:1,recs:false,portfolio:false}},
-  {id:'tamu',name:'Texas A&M — College Station',state:'TX',system:'TAMU',type:'public',city:'College Station',avgGPA:3.7,avgSAT:1270,acceptanceRate:63,tuitionResident:13900,tuitionNonResident:40900,deadlines:{app:'Dec 1 2025',priority:'Nov 1 2025'},weights:{academics:.50,rigor:.22,eca:.18,essays:.10},requirements:{essays:1,recs:false,portfolio:false}},
-  {id:'rice',name:'Rice University',state:'TX',system:'Private',type:'private',city:'Houston',avgGPA:3.95,avgSAT:1530,acceptanceRate:7.0,tuitionResident:57600,tuitionNonResident:57600,deadlines:{app:'Jan 4 2026',priority:'Nov 1 2025'},weights:{academics:.55,rigor:.20,eca:.15,essays:.10},requirements:{essays:1,recs:true,portfolio:false}},
-  // MA
-  {id:'umass',name:'UMass Amherst',state:'MA',system:'UMass',type:'public',city:'Amherst',avgGPA:3.9,avgSAT:1310,acceptanceRate:66,tuitionResident:16952,tuitionNonResident:39224,deadlines:{app:'Jan 15 2026',priority:'Nov 5 2025'},weights:{academics:.50,rigor:.22,eca:.18,essays:.10},requirements:{essays:1,recs:true,portfolio:false}},
-  {id:'neu',name:'Northeastern',state:'MA',system:'Private',type:'private',city:'Boston',avgGPA:4.0,avgSAT:1490,acceptanceRate:7.0,tuitionResident:63700,tuitionNonResident:63700,deadlines:{app:'Jan 1 2026',priority:'Nov 1 2025'},weights:{academics:.52,rigor:.18,eca:.20,essays:.10},requirements:{essays:1,recs:true,portfolio:false}},
-  {id:'bu',name:'Boston University',state:'MA',system:'Private',type:'private',city:'Boston',avgGPA:3.9,avgSAT:1470,acceptanceRate:14,tuitionResident:65700,tuitionNonResident:65700,deadlines:{app:'Jan 4 2026',priority:'Nov 1 2025'},weights:{academics:.52,rigor:.18,eca:.20,essays:.10},requirements:{essays:1,recs:true,portfolio:false}},
-  // IL
-  {id:'uiuc',name:'UIUC',state:'IL',system:'UI',type:'public',city:'Urbana–Champaign',avgGPA:3.8,avgSAT:1430,acceptanceRate:45,tuitionResident:17000,tuitionNonResident:36000,deadlines:{app:'Jan 5 2026',priority:'Nov 1 2025'},weights:{academics:.54,rigor:.20,eca:.16,essays:.10},requirements:{essays:2,recs:false,portfolio:false}},
-  {id:'uic',name:'UIC',state:'IL',system:'UI',type:'public',city:'Chicago',avgGPA:3.6,avgSAT:1210,acceptanceRate:73,tuitionResident:16400,tuitionNonResident:33200,deadlines:{app:'Mar 1 2026',priority:'Nov 1 2025'},weights:{academics:.48,rigor:.20,eca:.22,essays:.10},requirements:{essays:1,recs:false,portfolio:false}},
-  {id:'northwestern',name:'Northwestern',state:'IL',system:'Private',type:'private',city:'Evanston',avgGPA:4.1,avgSAT:1520,acceptanceRate:7.0,tuitionResident:66800,tuitionNonResident:66800,deadlines:{app:'Jan 2 2026',priority:'Nov 1 2025'},weights:{academics:.56,rigor:.20,eca:.14,essays:.10},requirements:{essays:1,recs:true,portfolio:false}},
+  setNestedValue(path, value) {
+    const keys = path.split('.');
+    const lastKey = keys.pop();
+    const target = keys.reduce((obj, key) => {
+      if (!obj[key]) obj[key] = {};
+      return obj[key];
+    }, this.state);
+    target[lastKey] = value;
+  }
+
+  persist() {
+    try {
+      localStorage.setItem('pathwise_state', JSON.stringify(this.state));
+    } catch (e) {
+      if (e.name === 'QuotaExceededError') {
+        this.handleStorageQuotaExceeded();
+      }
+      console.error('Failed to save state:', e);
+    }
+  }
+
+  loadState() {
+    try {
+      const saved = localStorage.getItem('pathwise_state');
+      if (saved) {
+        this.state = { ...this.state, ...JSON.parse(saved) };
+      }
+    } catch (e) {
+      console.error('Failed to load state:', e);
+    }
+  }
+
+  handleStorageQuotaExceeded() {
+    Toast.show('Storage full. Some data may not be saved.', 'warning');
+    // Implement cleanup logic
+  }
+
+  reset() {
+    const theme = this.state.ui.theme;
+    this.state = {
+      user: null,
+      schools: [],
+      mySchools: [],
+      documents: {},
+      achievements: [],
+      filters: { state: '', type: '', search: '' },
+      ui: { currentSection: 'planning', currentTab: 'schools', theme }
+    };
+    localStorage.removeItem('pathwise_state');
+    this.persist();
+    location.reload();
+  }
+}
+
+// School Database
+const SCHOOLS_DB = [
+  // UC System
+  {id:'ucb',name:'UC Berkeley',state:'CA',system:'UC',type:'public',city:'Berkeley',avgGPA:4.25,avgSAT:1450,acceptRate:14.5,tuitionIn:14226,tuitionOut:46770,rank:22,size:'large',setting:'urban'},
+  {id:'ucla',name:'UCLA',state:'CA',system:'UC',type:'public',city:'Los Angeles',avgGPA:4.26,avgSAT:1445,acceptRate:12.3,tuitionIn:13401,tuitionOut:45975,rank:20,size:'large',setting:'urban'},
+  {id:'ucsd',name:'UC San Diego',state:'CA',system:'UC',type:'public',city:'La Jolla',avgGPA:4.16,avgSAT:1410,acceptRate:31.5,tuitionIn:14616,tuitionOut:47190,rank:34,size:'large',setting:'suburban'},
+  {id:'ucd',name:'UC Davis',state:'CA',system:'UC',type:'public',city:'Davis',avgGPA:4.13,avgSAT:1350,acceptRate:37.6,tuitionIn:14597,tuitionOut:47171,rank:38,size:'large',setting:'suburban'},
+  {id:'uci',name:'UC Irvine',state:'CA',system:'UC',type:'public',city:'Irvine',avgGPA:4.08,avgSAT:1360,acceptRate:26.5,tuitionIn:13727,tuitionOut:46301,rank:36,size:'large',setting:'suburban'},
+  {id:'ucsb',name:'UC Santa Barbara',state:'CA',system:'UC',type:'public',city:'Santa Barbara',avgGPA:4.15,avgSAT:1380,acceptRate:29.6,tuitionIn:14391,tuitionOut:46965,rank:32,size:'large',setting:'suburban'},
+  
+  // CSU System
+  {id:'cpslo',name:'Cal Poly SLO',state:'CA',system:'CSU',type:'public',city:'San Luis Obispo',avgGPA:4.06,avgSAT:1395,acceptRate:32.5,tuitionIn:10377,tuitionOut:22257,rank:null,size:'large',setting:'suburban'},
+  {id:'sdsu',name:'San Diego State',state:'CA',system:'CSU',type:'public',city:'San Diego',avgGPA:3.85,avgSAT:1270,acceptRate:37.8,tuitionIn:7720,tuitionOut:19600,rank:null,size:'large',setting:'urban'},
+  
+  // Private CA
+  {id:'stanford',name:'Stanford',state:'CA',system:'Private',type:'private',city:'Stanford',avgGPA:4.18,avgSAT:1520,acceptRate:4.0,tuitionIn:61650,tuitionOut:61650,rank:3,size:'medium',setting:'suburban'},
+  {id:'usc',name:'USC',state:'CA',system:'Private',type:'private',city:'Los Angeles',avgGPA:3.9,avgSAT:1460,acceptRate:10.5,tuitionIn:68337,tuitionOut:68337,rank:28,size:'large',setting:'urban'},
+  
+  // NY Schools
+  {id:'columbia',name:'Columbia',state:'NY',system:'Ivy',type:'private',city:'New York',avgGPA:4.15,avgSAT:1530,acceptRate:5.0,tuitionIn:66600,tuitionOut:66600,rank:12,size:'medium',setting:'urban'},
+  {id:'nyu',name:'NYU',state:'NY',system:'Private',type:'private',city:'New York',avgGPA:3.8,avgSAT:1500,acceptRate:12.5,tuitionIn:58960,tuitionOut:58960,rank:35,size:'large',setting:'urban'},
+  
+  // Add more schools...
 ];
 
-/* Aid tables (placeholder bands; swap with exact current-year later) */
-const AID_TABLES = {
-  PELL: [[30000,7395],[45000,4500],[60000,1500]],
-  CA: { calGrantA:{minGPA:3.0,incomeMax:125000,amountUC:12570,amountCSU:5742,amountPrivate:9850},
-        mcs:{incomeMax:217000,approxAmount:2500} },
-  NY: { tap:[[80000,5500],[100000,3000]] },
-  TX: { texasGrant:[[70000,5000],[90000,2500]] },
-  MA: { massGrant:[[80000,2000],[100000,1000]] },
-  IL: { map:[[70000,5400],[90000,2500]] },
+// Validators
+const Validators = {
+  gpa: (val) => {
+    const n = parseFloat(val);
+    if (isNaN(n) || n < 0 || n > 5) {
+      return { valid: false, error: 'GPA must be between 0.0 and 5.0' };
+    }
+    return { valid: true, value: n };
+  },
+  
+  sat: (val) => {
+    if (!val) return { valid: true, value: null };
+    const n = parseInt(val);
+    if (isNaN(n) || n < 400 || n > 1600) {
+      return { valid: false, error: 'SAT score must be between 400 and 1600' };
+    }
+    return { valid: true, value: n };
+  },
+  
+  income: (val) => {
+    if (!val) return { valid: true, value: null };
+    const n = parseInt(val);
+    if (isNaN(n) || n < 0) {
+      return { valid: false, error: 'Income must be a positive number' };
+    }
+    return { valid: true, value: n };
+  },
+  
+  ap: (val) => {
+    const n = parseInt(val) || 0;
+    if (n < 0 || n > 30) {
+      return { valid: false, error: 'AP courses must be between 0 and 30' };
+    }
+    return { valid: true, value: n };
+  },
+  
+  required: (val, fieldName) => {
+    if (!val || val.trim() === '') {
+      return { valid: false, error: `${fieldName} is required` };
+    }
+    return { valid: true, value: val.trim() };
+  }
 };
 
-const LS_KEYS = {
-  user:'pw_user',
-  my:'pw_my_schools',
-  docs:'pw_docs',
-  theme:'pw_theme'
-};
-
-let user = null;
-let mySchools = [];         // array of school ids
-let docState = {};          // { [docKey]: {done:boolean, due:string, label:string, schoolId?:string } }
-
-/* ========================
-   HELPERS
-   ======================== */
-const $ = s => document.querySelector(s);
-function daysUntil(dateStr){
-  const now = new Date();
-  const d = new Date(dateStr);
-  return Math.floor((d - now)/(1000*60*60*24));
+// Toast Notification System
+class Toast {
+  static show(message, type = 'info', duration = 3000) {
+    const container = document.getElementById('toastContainer');
+    const toast = document.createElement('div');
+    toast.className = `toast ${type}`;
+    toast.innerHTML = `
+      <span class="toast-icon">${this.getIcon(type)}</span>
+      <span>${message}</span>
+    `;
+    
+    container.appendChild(toast);
+    
+    // Trigger reflow for animation
+    toast.offsetHeight;
+    
+    setTimeout(() => toast.classList.add('show'), 10);
+    
+    setTimeout(() => {
+      toast.classList.remove('show');
+      setTimeout(() => toast.remove(), 300);
+    }, duration);
+  }
+  
+  static getIcon(type) {
+    const icons = {
+      success: '✅',
+      error: '❌',
+      warning: '⚠️',
+      info: 'ℹ️'
+    };
+    return icons[type] || icons.info;
+  }
 }
-function clamp(n,min,max){ return Math.max(min, Math.min(max, n)) }
-function isResident(school){ return !!(user && school && user.homeState === school.state) }
-function tuitionFor(school){
-  return isResident(school) ? school.tuitionResident : school.tuitionNonResident;
+
+// Achievement System
+class AchievementSystem {
+  static ACHIEVEMENTS = {
+    first_school: {
+      id: 'first_school',
+      icon: '🎯',
+      title: 'First Pick',
+      description: 'Added your first school to the list'
+    },
+    five_schools: {
+      id: 'five_schools',
+      icon: '🔥',
+      title: 'On Fire',
+      description: 'Added 5 schools to your list'
+    },
+    balanced_list: {
+      id: 'balanced_list',
+      icon: '⚖️',
+      title: 'Perfectly Balanced',
+      description: 'Have reach, match, and safety schools'
+    },
+    early_bird: {
+      id: 'early_bird',
+      icon: '🏃',
+      title: 'Early Bird',
+      description: 'Started planning 6+ months before deadline'
+    },
+    profile_complete: {
+      id: 'profile_complete',
+      icon: '✨',
+      title: 'Profile Complete',
+      description: 'Filled out all profile information'
+    }
+  };
+  
+  static check(appState) {
+    const user = appState.get('user');
+    const mySchools = appState.get('mySchools') || [];
+    const achievements = appState.get('achievements') || [];
+    
+    // Check first school
+    if (mySchools.length >= 1 && !achievements.includes('first_school')) {
+      this.unlock('first_school', appState);
+    }
+    
+    // Check five schools
+    if (mySchools.length >= 5 && !achievements.includes('five_schools')) {
+      this.unlock('five_schools', appState);
+    }
+    
+    // Check balanced list
+    if (this.hasBalancedList(mySchools, appState) && !achievements.includes('balanced_list')) {
+      this.unlock('balanced_list', appState);
+    }
+    
+    // Check profile complete
+    if (this.isProfileComplete(user) && !achievements.includes('profile_complete')) {
+      this.unlock('profile_complete', appState);
+    }
+  }
+  
+  static unlock(achievementId, appState) {
+    const achievement = this.ACHIEVEMENTS[achievementId];
+    if (!achievement) return;
+    
+    const achievements = appState.get('achievements') || [];
+    achievements.push(achievementId);
+    appState.update('achievements', achievements);
+    
+    this.showNotification(achievement);
+    this.celebrate();
+  }
+  
+  static showNotification(achievement) {
+    const container = document.getElementById('achievementsContainer');
+    const elem = document.createElement('div');
+    elem.className = 'achievement new';
+    elem.innerHTML = `
+      <div class="achievement-icon">${achievement.icon}</div>
+      <div class="achievement-content">
+        <h4>${achievement.title}</h4>
+        <p>${achievement.description}</p>
+      </div>
+    `;
+    
+    container.appendChild(elem);
+    
+    setTimeout(() => {
+      elem.classList.remove('new');
+    }, 3000);
+    
+    Toast.show(`Achievement Unlocked: ${achievement.title}`, 'success');
+  }
+  
+  static celebrate() {
+    // Haptic feedback
+    if ('vibrate' in navigator) {
+      navigator.vibrate([100, 50, 100]);
+    }
+    
+    // Confetti animation
+    const container = document.createElement('div');
+    container.className = 'confetti-container';
+    
+    for (let i = 0; i < 50; i++) {
+      const confetti = document.createElement('div');
+      confetti.className = 'confetti';
+      confetti.style.left = Math.random() * 100 + '%';
+      confetti.style.animationDelay = Math.random() * 3 + 's';
+      confetti.style.backgroundColor = `hsl(${Math.random() * 360}, 100%, 50%)`;
+      container.appendChild(confetti);
+    }
+    
+    document.body.appendChild(container);
+    setTimeout(() => container.remove(), 5000);
+  }
+  
+  static hasBalancedList(schools, appState) {
+    // Check if user has at least one school in each category
+    // Implementation would check school categories
+    return false; // Placeholder
+  }
+  
+  static isProfileComplete(user) {
+    if (!user) return false;
+    return !!(user.firstName && user.grade && user.homeState && user.gpa);
+  }
 }
-function bandedAmount(bands,income){ for(const [cap,amt] of bands){ if(income<=cap) return amt } return 0 }
-function pellAmount(income){ return bandedAmount(AID_TABLES.PELL, income||0) }
-function stateGrant(state,resident,gpa,income,system,type){
-  const items=[]; if(!resident) return {items,total:0};
-  switch(state){
-    case 'CA':{
-      const {calGrantA,mcs}=AID_TABLES.CA;
-      if(gpa>=calGrantA.minGPA && income<=calGrantA.incomeMax){
-        let amt=0;
-        if(system==='UC') amt=calGrantA.amountUC;
-        else if(system==='CSU') amt=calGrantA.amountCSU;
-        else if(type==='private') amt=calGrantA.amountPrivate;
-        if(amt) items.push({label:'Cal Grant A (est.)',amount:amt});
+
+// School Matching Algorithm
+class SchoolMatcher {
+  static calculateMatch(school, user) {
+    if (!user) return 50;
+    
+    let score = 50;
+    
+    // GPA comparison (±40 points)
+    if (user.gpa) {
+      const gpaDiff = (user.gpa - school.avgGPA) * 20;
+      score += Math.max(-40, Math.min(40, gpaDiff));
+    }
+    
+    // SAT comparison (±20 points)
+    if (user.sat && school.avgSAT) {
+      const satDiff = (user.sat - school.avgSAT) / 10;
+      score += Math.max(-20, Math.min(20, satDiff));
+    }
+    
+    // AP/Honors bonus (up to 15 points)
+    if (user.ap) {
+      score += Math.min(15, user.ap * 1.5);
+    }
+    
+    // Interest alignment bonus (up to 10 points)
+    if (user.interests) {
+      score += this.getInterestBonus(school, user.interests);
+    }
+    
+    // In-state bonus (5 points)
+    if (user.homeState === school.state) {
+      score += 5;
+    }
+    
+    return Math.max(0, Math.min(100, Math.round(score)));
+  }
+  
+  static getInterestBonus(school, interest) {
+    const bonuses = {
+      stem: ['stanford', 'caltech', 'ucb', 'ucla'],
+      business: ['usc', 'nyu', 'columbia'],
+      arts: ['nyu', 'usc', 'ucla']
+    };
+    
+    const schoolsForInterest = bonuses[interest] || [];
+    return schoolsForInterest.includes(school.id) ? 10 : 0;
+  }
+  
+  static categorizeSchool(school, user) {
+    const matchScore = this.calculateMatch(school, user);
+    const gpaDiff = user.gpa ? user.gpa - school.avgGPA : 0;
+    
+    if (matchScore < 40 || gpaDiff < -0.3) {
+      return 'reach';
+    } else if (matchScore > 70 || gpaDiff > 0.3) {
+      return 'safety';
+    } else {
+      return 'match';
+    }
+  }
+}
+
+// Financial Aid Calculator
+class FinancialAidCalculator {
+  static PELL_GRANT_TABLE = [
+    { maxIncome: 30000, amount: 7395 },
+    { maxIncome: 45000, amount: 4500 },
+    { maxIncome: 60000, amount: 1500 },
+    { maxIncome: 75000, amount: 500 }
+  ];
+  
+  static STATE_GRANTS = {
+    CA: {
+      calGrantA: { minGPA: 3.0, maxIncome: 125000, ucAmount: 12570, csuAmount: 5742, privateAmount: 9850 },
+      middleClass: { maxIncome: 217000, amount: 2500 }
+    },
+    NY: {
+      tap: [
+        { maxIncome: 80000, amount: 5500 },
+        { maxIncome: 100000, amount: 3000 }
+      ]
+    }
+  };
+  
+  static calculate(school, user) {
+    if (!user || !user.income) {
+      return { items: [], total: 0, netPrice: school.tuitionIn };
+    }
+    
+    const items = [];
+    let totalAid = 0;
+    
+    // Calculate Pell Grant
+    const pellAmount = this.calculatePellGrant(user.income);
+    if (pellAmount > 0) {
+      items.push({ name: 'Federal Pell Grant', amount: pellAmount });
+      totalAid += pellAmount;
+    }
+    
+    // Calculate state grants
+    if (user.homeState === school.state) {
+      const stateAid = this.calculateStateGrant(school, user);
+      if (stateAid.amount > 0) {
+        items.push({ name: stateAid.name, amount: stateAid.amount });
+        totalAid += stateAid.amount;
       }
-      if(income<=mcs.incomeMax){ items.push({label:'Middle Class Scholarship (approx.)',amount:mcs.approxAmount}); }
-      break;
     }
-    case 'NY':{
-      const t=bandedAmount(AID_TABLES.NY.tap, income||0);
-      if(t) items.push({label:'NYS TAP (est.)',amount:t});
-      break;
+    
+    // Calculate institutional aid (simplified)
+    if (school.type === 'private' && user.income < 100000) {
+      const instAid = Math.round((100000 - user.income) / 100 * 50);
+      items.push({ name: 'Institutional Aid (est.)', amount: instAid });
+      totalAid += instAid;
     }
-    case 'TX':{
-      const g=bandedAmount(AID_TABLES.TX.texasGrant, income||0);
-      if(g && type==='public') items.push({label:'TEXAS Grant (est.)',amount:g});
-      break;
-    }
-    case 'MA':{
-      const m=bandedAmount(AID_TABLES.MA.massGrant, income||0);
-      if(m) items.push({label:'MASSGrant (est.)',amount:m});
-      break;
-    }
-    case 'IL':{
-      const m=bandedAmount(AID_TABLES.IL.map, income||0);
-      if(m) items.push({label:'Illinois MAP (est.)',amount:m});
-      break;
-    }
+    
+    const tuition = user.homeState === school.state ? school.tuitionIn : school.tuitionOut;
+    const netPrice = Math.max(0, tuition - totalAid);
+    
+    return { items, total: totalAid, netPrice, tuition };
   }
-  const total = items.reduce((s,i)=>s+i.amount,0);
-  return {items,total};
-}
-function computeAidForSchool(school){
-  const income = Number(user.householdIncome||0);
-  const pell = pellAmount(income);
-  const sg = stateGrant(school.state, isResident(school), Number(user.gpa||0), income, school.system, school.type);
-  return { items:[{label:'Federal Pell (est.)',amount:pell}, ...sg.items], total: pell + sg.total };
-}
-
-/* ========================
-   BUCKETING & MATCH
-   ======================== */
-function matchScore(school){
-  let s=50;
-  const gpa = Number(user.gpa||0);
-  const sat = Number(user.sat||0);
-  if(gpa){
-    const g = clamp((gpa - school.avgGPA) * 20, -40, 40);
-    s += g;
+  
+  static calculatePellGrant(income) {
+    for (const bracket of this.PELL_GRANT_TABLE) {
+      if (income <= bracket.maxIncome) {
+        return bracket.amount;
+      }
+    }
+    return 0;
   }
-  if(sat){
-    const d = clamp((sat - school.avgSAT) / 10, -20, 20);
-    s += d;
-  }
-  // AP/Rigor
-  const ap = Number(user.ap||0);
-  s += clamp(ap*1.5, 0, 12);
-
-  // Preference nudge
-  if(user.pref==='reputation' && school.acceptanceRate<30) s+=6;
-  if(user.pref==='cost' && tuitionFor(school) < 15000) s+=8;
-
-  // Interest nudge (STEM → UC/Caltech/Stanford/UT)
-  if(user.interest==='stem' && (school.system==='UC' || ['stan','caltech','uta','utd','tamu','uiuc'].includes(school.id))) s+=6;
-
-  return clamp(Math.round(s),0,100);
-}
-function bucketFor(school){
-  const s = matchScore(school);
-  const gpa = Number(user.gpa||0);
-  const gdiff = gpa ? gpa - (school.avgGPA||gpa) : 0;
-  if (gdiff < -0.25 || s < 45) return 'reach';
-  if (gdiff > 0.25 || s > 70) return 'safety';
-  return 'match';
-}
-
-/* ========================
-   DOCS & TIMELINE BUILDERS
-   ======================== */
-function makeDocsForSchool(s){
-  // requirements map → interactive tasks
-  const items = [];
-  items.push({key:`${s.id}_profile`, label:`${s.name}: application info`, due:s.deadlines.priority||s.deadlines.app});
-  if(s.requirements.essays>0) items.push({key:`${s.id}_essays`, label:`${s.name}: essays (${s.requirements.essays})`, due:addDays(s.deadlines.app,-15)});
-  if(s.requirements.recs) items.push({key:`${s.id}_recs`, label:`${s.name}: 2 recommendations`, due:addDays(s.deadlines.app,-21)});
-  items.push({key:`${s.id}_transcript`, label:`${s.name}: transcript request`, due:addDays(s.deadlines.app,-30)});
-  // FAFSA (once per state key)
-  if(['CA','NY','TX','MA','IL'].includes(user.homeState||'')){
-    items.push({key:`fafsa_${s.state}`, label:`FAFSA for ${s.state}`, due:(s.state==='CA'?'Oct 1 2025':'Oct 1 2025')});
-  }
-  return items;
-}
-function addDays(dateStr, delta){
-  const d = new Date(dateStr); d.setDate(d.getDate()+delta); 
-  const opts = {month:'short', day:'numeric', year:'numeric'};
-  return d.toLocaleDateString('en-US', opts);
-}
-function urgencyClass(dateStr){
-  const d = daysUntil(dateStr);
-  if (d <= 14) return 'urg-red';
-  if (d <= 30) return 'urg-orange';
-  return 'urg-green';
-}
-
-/* ========================
-   LOCAL STORAGE
-   ======================== */
-function saveAll(){
-  localStorage.setItem(LS_KEYS.user, JSON.stringify(user));
-  localStorage.setItem(LS_KEYS.my, JSON.stringify(mySchools));
-  localStorage.setItem(LS_KEYS.docs, JSON.stringify(docState));
-}
-function loadAll(){
-  try{
-    user = JSON.parse(localStorage.getItem(LS_KEYS.user) || 'null');
-    mySchools = JSON.parse(localStorage.getItem(LS_KEYS.my) || '[]');
-    docState = JSON.parse(localStorage.getItem(LS_KEYS.docs) || '{}');
-  }catch(e){ user=null; mySchools=[]; docState={}; }
-}
-
-/* ========================
-   RENDERING
-   ======================== */
-function renderPlanner(){
-  UI.planner.classList.remove('hidden');
-  UI.dashboard.classList.add('hidden');
-  UI.backPlanningBtn.classList.add('hidden');
-  // blank slate fields
-  if(!user){
-    $('#p_name').value='';
-    $('#p_grade').value='';
-    $('#p_homeState').value='';
-    $('#p_income').value='';
-    $('#p_gpa').value='';
-    $('#p_sat').value='';
-    $('#p_ap').value='';
-    $('#p_pref').value='';
-    $('#p_interest').value='';
-    { const sel = $('#p_states'); Array.from(sel.options).forEach(o => o.selected = false); }
-    UI.matchPreview.textContent = '0 matches yet';
-  }else{
-    // preload
-    $('#p_name').value = user.name||'';
-    $('#p_grade').value = user.grade||'';
-    $('#p_homeState').value = user.homeState||'';
-    $('#p_income').value = user.householdIncome||'';
-    $('#p_gpa').value = user.gpa||'';
-    $('#p_sat').value = user.sat||'';
-    $('#p_ap').value = user.ap||'';
-    $('#p_pref').value = user.pref||'';
-    $('#p_interest').value = user.interest||'';
-    const sel = $('#p_states');
-    const states = user.targetStates||[];
-    Array.from(sel.options).forEach(o => { o.selected = states.includes(o.value) });
+  
+  static calculateStateGrant(school, user) {
+    const grants = this.STATE_GRANTS[user.homeState];
+    if (!grants) return { name: '', amount: 0 };
+    
+    if (user.homeState === 'CA') {
+      const { calGrantA, middleClass } = grants;
+      
+      if (user.gpa >= calGrantA.minGPA && user.income <= calGrantA.maxIncome) {
+        let amount = 0;
+        if (school.system === 'UC') amount = calGrantA.ucAmount;
+        else if (school.system === 'CSU') amount = calGrantA.csuAmount;
+        else if (school.type === 'private') amount = calGrantA.privateAmount;
+        
+        if (amount > 0) {
+          return { name: 'Cal Grant A', amount };
+        }
+      }
+      
+      if (user.income <= middleClass.maxIncome) {
+        return { name: 'Middle Class Scholarship', amount: middleClass.amount };
+      }
+    }
+    
+    return { name: '', amount: 0 };
   }
 }
-function renderDashboard(){
-  UI.planner.classList.add('hidden');
-  UI.dashboard.classList.remove('hidden');
-  UI.backPlanningBtn.classList.remove('hidden');
 
-  // stats
-  UI.statGPA.textContent = user.gpa ? Number(user.gpa).toFixed(2) : '—';
-  const dleft = daysUntil('Nov 30 2025'); UI.statDays.textContent = dleft>0 ? dleft : 0;
-
-  // first tab default
-  setActiveTab('schools');
-  renderSchoolsTab();
-  renderAidTab();
-  renderDocsTab();
-  renderTimelineTab();
+// Document Tracker
+class DocumentTracker {
+  static generateDocuments(schools, user) {
+    const docs = new Map();
+    
+    // Common documents
+    docs.set('fafsa', {
+      id: 'fafsa',
+      name: 'FAFSA',
+      due: new Date(2025, 9, 1), // Oct 1, 2025
+      status: 'pending',
+      universal: true
+    });
+    
+    docs.set('profile', {
+      id: 'profile',
+      name: 'Personal Statement',
+      due: new Date(2025, 10, 15), // Nov 15, 2025
+      status: 'pending',
+      universal: true
+    });
+    
+    // School-specific documents
+    schools.forEach(schoolId => {
+      const school = SCHOOLS_DB.find(s => s.id === schoolId);
+      if (!school) return;
+      
+      // Application
+      docs.set(`${schoolId}_app`, {
+        id: `${schoolId}_app`,
+        name: `${school.name} Application`,
+        due: new Date(2025, 10, 30), // Nov 30 for UC/CSU, adjust as needed
+        status: 'pending',
+        schoolId
+      });
+      
+      // Essays
+      docs.set(`${schoolId}_essays`, {
+        id: `${schoolId}_essays`,
+        name: `${school.name} Essays`,
+        due: new Date(2025, 10, 15),
+        status: 'pending',
+        schoolId
+      });
+      
+      // Transcripts
+      docs.set(`${schoolId}_transcript`, {
+        id: `${schoolId}_transcript`,
+        name: `${school.name} Transcript`,
+        due: new Date(2025, 10, 1),
+        status: 'pending',
+        schoolId
+      });
+    });
+    
+    return Array.from(docs.values());
+  }
+  
+  static getProgress(documents) {
+    const total = documents.length;
+    const completed = documents.filter(d => d.status === 'completed').length;
+    return total > 0 ? Math.round((completed / total) * 100) : 0;
+  }
+  
+  static getUrgency(dueDate) {
+    const now = new Date();
+    const days = Math.floor((dueDate - now) / (1000 * 60 * 60 * 24));
+    
+    if (days < 0) return 'overdue';
+    if (days <= 7) return 'urgent-high';
+    if (days <= 30) return 'urgent-medium';
+    return 'urgent-low';
+  }
 }
-function setActiveTab(name){
-  UI.tabs.forEach(t=>{
-    const is = t.dataset.tab===name;
-    t.classList.toggle('active', is);
-    UI.tabViews[t.dataset.tab].classList.toggle('hidden', !is);
-  });
-}
 
-/* Schools tab */
-function renderSchoolsTab(){
-  // filters
-  const fState = UI.filters.state.value;
-  const fSys = UI.filters.sys.value;
-  const q = UI.filters.q.value.toLowerCase();
-
-  // filter to target states if set in planner
-  const allowStates = (user.targetStates && user.targetStates.length>0) ? new Set(user.targetStates) : null;
-
-  const pool = SCHOOLS.filter(s=>{
-    if(allowStates && !allowStates.has(s.state)) return false;
-    if(fState && s.state!==fState) return false;
-    if(fSys && s.system!==fSys) return false;
-    if(q && !(`${s.name} ${s.city} ${s.system}`.toLowerCase().includes(q))) return false;
+// UI Controller
+class UIController {
+  constructor(appState) {
+    this.appState = appState;
+    this.initElements();
+    this.bindEvents();
+    this.setupSubscriptions();
+    this.applyTheme();
+  }
+  
+  initElements() {
+    // Sections
+    this.planningSection = document.getElementById('planningSection');
+    this.dashboardSection = document.getElementById('dashboardSection');
+    
+    // Forms
+    this.planningForm = document.getElementById('planningForm');
+    
+    // Navigation
+    this.tabs = document.querySelectorAll('.tab');
+    this.backBtn = document.getElementById('backBtn');
+    this.themeBtn = document.getElementById('themeBtn');
+    this.resetBtn = document.getElementById('resetBtn');
+    this.profileBtn = document.getElementById('profileBtn');
+    
+    // AI
+    this.aiBubble = document.getElementById('aiBubble');
+    this.aiMessage = document.getElementById('aiMessage');
+    
+    // Containers
+    this.reachSchools = document.getElementById('reachSchools');
+    this.matchSchools = document.getElementById('matchSchools');
+    this.safetySchools = document.getElementById('safetySchools');
+    this.mySchoolsList = document.getElementById('mySchoolsList');
+    this.aidEstimates = document.getElementById('aidEstimates');
+    this.documentsList = document.getElementById('documentsList');
+    this.timelineList = document.getElementById('timelineList');
+    this.insightsContent = document.getElementById('insightsContent');
+  }
+  
+  bindEvents() {
+    // Form submission
+    this.planningForm.addEventListener('submit', (e) => {
+      e.preventDefault();
+      this.handlePlanningSubmit();
+    });
+    
+    // Form validation on change
+    this.planningForm.querySelectorAll('input, select').forEach(input => {
+      input.addEventListener('blur', () => this.validateField(input));
+      input.addEventListener('input', () => this.updateMatchPreview());
+    });
+    
+    // Navigation
+    this.tabs.forEach(tab => {
+      tab.addEventListener('click', () => this.switchTab(tab.dataset.tab));
+    });
+    
+    this.backBtn.addEventListener('click', () => this.showPlanning());
+    this.themeBtn.addEventListener('click', () => this.toggleTheme());
+    this.resetBtn.addEventListener('click', () => this.confirmReset());
+    this.profileBtn.addEventListener('click', () => this.showProfile());
+    
+    // Filters
+    document.getElementById('filterState').addEventListener('change', () => this.filterSchools());
+    document.getElementById('filterType').addEventListener('change', () => this.filterSchools());
+    document.getElementById('searchSchool').addEventListener('input', debounce(() => this.filterSchools(), 300));
+    
+    // AI Assistant
+    this.aiBubble.addEventListener('click', () => this.handleAIClick());
+    
+    // Keyboard navigation
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape') this.closeModals();
+    });
+  }
+  
+  setupSubscriptions() {
+    this.appState.subscribe('user', () => this.renderProfile());
+    this.appState.subscribe('mySchools', () => {
+      this.renderMySchools();
+      this.renderFinancialAid();
+      this.renderDocuments();
+      this.renderTimeline();
+      AchievementSystem.check(this.appState);
+    });
+    this.appState.subscribe('ui.currentSection', (section) => {
+      if (section === 'dashboard') this.showDashboard();
+      else this.showPlanning();
+    });
+  }
+  
+  validateField(input) {
+    const field = input.closest('.field');
+    const name = input.name;
+    const value = input.value;
+    
+    // Remove previous error
+    field.classList.remove('error');
+    const existingError = field.querySelector('.error-msg');
+    if (existingError) existingError.remove();
+    
+    // Validate based on field type
+    let result = { valid: true };
+    
+    if (input.hasAttribute('required')) {
+      result = Validators.required(value, input.labels[0]?.textContent || name);
+    }
+    
+    if (result.valid && name in Validators) {
+      result = Validators[name](value);
+    }
+    
+    if (!result.valid) {
+      field.classList.add('error');
+      const error = document.createElement('div');
+      error.className = 'error-msg';
+      error.textContent = result.error;
+      field.appendChild(error);
+      return false;
+    }
+    
     return true;
-  });
-
-  const reach=[], match=[], safety=[];
-  pool.forEach(s=>{
-    const b = bucketFor(s);
-    const card = schoolCard(s);
-    if(b==='reach') reach.push(card); else if(b==='match') match.push(card); else safety.push(card);
-  });
-
-  UI.grids.reach.innerHTML = reach.join('') || `<div class="muted">No reach results</div>`;
-  UI.grids.match.innerHTML = match.join('') || `<div class="muted">No match results</div>`;
-  UI.grids.safety.innerHTML = safety.join('') || `<div class="muted">No safety results</div>`;
-
-  // my schools
-  if(mySchools.length===0){
-    UI.mySchools.innerHTML = '';
-    UI.mySchoolsHint.textContent = 'Add schools from the lists above';
-  }else{
-    UI.mySchoolsHint.textContent = '';
-    UI.mySchools.innerHTML = mySchools.map(id=>{
-      const s=SCHOOLS.find(x=>x.id===id);
-      const aid = computeAidForSchool(s);
-      return `
-        <div class="row">
-          <div>
-            <div style="font-weight:700">${s.name}</div>
-            <div class="muted" style="font-size:12px">${s.city}, ${s.state} • ${s.system} • Tuition ${isResident(s)?'Resident':'Non-Res'}: $${tuitionFor(s).toLocaleString()}</div>
+  }
+  
+  handlePlanningSubmit() {
+    const form = this.planningForm;
+    const inputs = form.querySelectorAll('input, select');
+    let isValid = true;
+    
+    inputs.forEach(input => {
+      if (!this.validateField(input)) {
+        isValid = false;
+      }
+    });
+    
+    if (!isValid) {
+      Toast.show('Please correct the errors in the form', 'error');
+      return;
+    }
+    
+    // Create user profile
+    const formData = new FormData(form);
+    const user = {
+      firstName: formData.get('firstName'),
+      grade: formData.get('grade'),
+      homeState: formData.get('homeState'),
+      income: parseInt(formData.get('income')) || null,
+      gpa: parseFloat(formData.get('gpa')) || null,
+      sat: parseInt(formData.get('sat')) || null,
+      ap: parseInt(formData.get('ap')) || 0,
+      interests: formData.get('interests') || null
+    };
+    
+    this.appState.update('user', user);
+    this.appState.update('ui.currentSection', 'dashboard');
+    
+    Toast.show(`Welcome, ${user.firstName}! Let's find your perfect schools.`, 'success');
+    this.showAIMessage("Great profile! I'll help you build a balanced school list. Start by exploring the schools below!");
+    
+    // Check initial achievements
+    if (this.isProfileComplete(user)) {
+      AchievementSystem.unlock('profile_complete', this.appState);
+    }
+  }
+  
+  isProfileComplete(user) {
+    return !!(user.firstName && user.grade && user.homeState && user.gpa);
+  }
+  
+  updateMatchPreview() {
+    const form = this.planningForm;
+    const formData = new FormData(form);
+    
+    const tempUser = {
+      gpa: parseFloat(formData.get('gpa')) || null,
+      sat: parseInt(formData.get('sat')) || null,
+      ap: parseInt(formData.get('ap')) || 0,
+      interests: formData.get('interests') || null,
+      homeState: formData.get('homeState') || null
+    };
+    
+    let matchCount = 0;
+    SCHOOLS_DB.forEach(school => {
+      const score = SchoolMatcher.calculateMatch(school, tempUser);
+      if (score >= 50) matchCount++;
+    });
+    
+    document.getElementById('matchCounter').textContent = `${matchCount} potential matches`;
+  }
+  
+  showPlanning() {
+    this.planningSection.classList.remove('hidden');
+    this.dashboardSection.classList.add('hidden');
+    this.backBtn.classList.add('hidden');
+  }
+  
+  showDashboard() {
+    this.planningSection.classList.add('hidden');
+    this.dashboardSection.classList.remove('hidden');
+    this.backBtn.classList.remove('hidden');
+    this.renderDashboard();
+  }
+  
+  renderDashboard() {
+    this.renderStats();
+    this.renderSchools();
+    this.renderMySchools();
+    this.renderFinancialAid();
+    this.renderDocuments();
+    this.renderTimeline();
+    this.renderInsights();
+  }
+  
+  renderStats() {
+    const user = this.appState.get('user');
+    const mySchools = this.appState.get('mySchools') || [];
+    
+    // Profile strength
+    let profileStrength = 0;
+    if (user) {
+      if (user.firstName) profileStrength += 20;
+      if (user.grade) profileStrength += 20;
+      if (user.homeState) profileStrength += 20;
+      if (user.gpa) profileStrength += 20;
+      if (user.sat || user.ap) profileStrength += 20;
+    }
+    
+    const progressCircle = document.getElementById('profileProgress');
+    const circumference = 2 * Math.PI * 25;
+    const offset = circumference - (profileStrength / 100) * circumference;
+    progressCircle.style.strokeDashoffset = offset;
+    document.getElementById('profilePercent').textContent = `${profileStrength}%`;
+    
+    // School count
+    document.getElementById('schoolCount').textContent = mySchools.length;
+    const schoolProgress = Math.min(100, (mySchools.length / 10) * 100);
+    document.getElementById('schoolProgress').style.width = `${schoolProgress}%`;
+    
+    // Days until deadline
+    const deadline = new Date(2025, 10, 30); // Nov 30, 2025
+    const today = new Date();
+    const days = Math.floor((deadline - today) / (1000 * 60 * 60 * 24));
+    document.getElementById('daysLeft').textContent = days > 0 ? days : 'Past';
+    document.getElementById('nextDeadline').textContent = 'UC/CSU Applications';
+  }
+  
+  renderSchools() {
+    const user = this.appState.get('user');
+    const mySchoolIds = this.appState.get('mySchools') || [];
+    
+    const reach = [];
+    const match = [];
+    const safety = [];
+    
+    SCHOOLS_DB.forEach(school => {
+      const category = SchoolMatcher.categorizeSchool(school, user);
+      const card = this.createSchoolCard(school, mySchoolIds.includes(school.id));
+      
+      if (category === 'reach') reach.push(card);
+      else if (category === 'match') match.push(card);
+      else safety.push(card);
+    });
+    
+    this.reachSchools.innerHTML = reach.length ? reach.join('') : this.createEmptyState('reach');
+    this.matchSchools.innerHTML = match.length ? match.join('') : this.createEmptyState('match');
+    this.safetySchools.innerHTML = safety.length ? safety.join('') : this.createEmptyState('safety');
+  }
+  
+  createSchoolCard(school, isAdded) {
+    const user = this.appState.get('user');
+    const matchScore = SchoolMatcher.calculateMatch(school, user);
+    const tuition = user?.homeState === school.state ? school.tuitionIn : school.tuitionOut;
+    
+    return `
+      <div class="school-card" data-school-id="${school.id}">
+        <span class="pill">${matchScore}% match</span>
+        <h4>${school.name}</h4>
+        <div class="school-meta">${school.city}, ${school.state} • ${school.system}</div>
+        <div class="school-stats">
+          <div class="stat-item">
+            <span class="stat-label">GPA</span>
+            <span class="stat-value">${school.avgGPA}</span>
           </div>
-          <span class="chip">Aid est: $${aid.total.toLocaleString()}</span>
-          <button class="mini" onclick="removeSchool('${s.id}')">Remove</button>
+          <div class="stat-item">
+            <span class="stat-label">SAT</span>
+            <span class="stat-value">${school.avgSAT}</span>
+          </div>
+          <div class="stat-item">
+            <span class="stat-label">Accept</span>
+            <span class="stat-value">${school.acceptRate}%</span>
+          </div>
+        </div>
+        <div class="school-meta">Tuition: ${tuition.toLocaleString()}/year</div>
+        <div class="school-actions">
+          <button class="btn ${isAdded ? 'success' : 'primary'}" 
+                  onclick="app.toggleSchool('${school.id}')"
+                  ${isAdded ? 'disabled' : ''}>
+            ${isAdded ? '✓ Added' : 'Add to List'}
+          </button>
+          <button class="btn ghost" onclick="app.showSchoolDetails('${school.id}')">Details</button>
+        </div>
+      </div>
+    `;
+  }
+  
+  createEmptyState(type) {
+    const messages = {
+      reach: 'No reach schools found. Try adjusting your profile!',
+      match: 'No match schools found. Update your stats to see matches.',
+      safety: 'No safety schools found. Great profile!'
+    };
+    
+    return `
+      <div class="empty-state">
+        <div class="empty-icon">🎯</div>
+        <p>${messages[type]}</p>
+      </div>
+    `;
+  }
+  
+  renderMySchools() {
+    const mySchoolIds = this.appState.get('mySchools') || [];
+    const user = this.appState.get('user');
+    
+    if (mySchoolIds.length === 0) {
+      this.mySchoolsList.innerHTML = `
+        <div class="empty-state">
+          <div class="empty-icon">📚</div>
+          <h3>No schools added yet</h3>
+          <p>Add schools from the lists above to build your application list.</p>
+        </div>
+      `;
+      return;
+    }
+    
+    const schoolCards = mySchoolIds.map(id => {
+      const school = SCHOOLS_DB.find(s => s.id === id);
+      if (!school) return '';
+      
+      const aid = FinancialAidCalculator.calculate(school, user);
+      
+      return `
+        <div class="card mb-4">
+          <div class="flex justify-between items-center">
+            <div>
+              <h4>${school.name}</h4>
+              <div class="text-muted text-sm">${school.city}, ${school.state}</div>
+            </div>
+            <div class="flex gap-2">
+              <div class="badge">Net: ${aid.netPrice.toLocaleString()}</div>
+              <button class="btn danger" onclick="app.removeSchool('${school.id}')">Remove</button>
+            </div>
+          </div>
         </div>
       `;
     }).join('');
+    
+    this.mySchoolsList.innerHTML = schoolCards;
   }
-
-  UI.statCount.textContent = String(mySchools.length);
-}
-function schoolCard(s){
-  const score = matchScore(s);
-  const badge = `<span class="pill">${score}% match</span>`;
-  const tuition = tuitionFor(s);
-  const btnLabel = mySchools.includes(s.id) ? 'Added' : 'Add';
-  const btnState = mySchools.includes(s.id) ? 'disabled' : '';
-  return `
-    <div class="school">
-      ${badge}
-      <h4>${s.name}</h4>
-      <div class="muted">${s.city}, ${s.state} • ${s.system} • ${s.type}</div>
-      <div class="muted" style="margin-top:6px">Avg GPA ${s.avgGPA} • SAT ${s.avgSAT} • Admit ${s.acceptanceRate}%</div>
-      <div class="muted" style="margin-top:4px">Tuition ${isResident(s)?'Resident':'Non-Res'}: <b>$${tuition.toLocaleString()}</b>/yr</div>
-      <div class="actions">
-        <button class="mini primary" ${btnState} onclick="addSchool('${s.id}')">${btnLabel}</button>
-        <button class="mini" onclick="quickAid('${s.id}')">Aid</button>
-        <button class="mini" onclick="quickReq('${s.id}')">Reqs</button>
-      </div>
-    </div>
-  `;
-}
-function addSchool(id){
-  if(!mySchools.includes(id)){ mySchools.push(id); saveAll(); renderSchoolsTab(); renderAidTab(); renderDocsTab(); renderTimelineTab(); }
-}
-function removeSchool(id){
-  mySchools = mySchools.filter(x=>x!==id); saveAll();
-  renderSchoolsTab(); renderAidTab(); renderDocsTab(); renderTimelineTab();
-}
-function quickAid(id){
-  setActiveTab('aid'); renderAidTab();
-  aiPing("I broke down your aid per school — want me to explain Pell vs state grants?");
-}
-function quickReq(id){
-  setActiveTab('docs'); renderDocsTab();
-  aiPing("Need a nudge on essays or recs? I can draft prompts or request templates.");
-}
-
-/* Aid tab */
-function renderAidTab(){
-  if(mySchools.length===0){ UI.aidList.innerHTML = `<div class="muted">Add schools to see aid estimates.</div>`; return; }
-  UI.aidList.innerHTML = mySchools.map(id=>{
-    const s=SCHOOLS.find(x=>x.id===id);
-    const aid = computeAidForSchool(s);
-    const rows = aid.items.map(i=>`<div class="row"><div>${i.label}</div><div style="font-weight:700">$${i.amount.toLocaleString()}</div></div>`).join('');
-    return `
-      <div class="card">
-        <div class="flex">
-          <div>
-            <div class="title" style="font-size:18px">${s.name}</div>
-            <div class="muted" style="font-size:12px">${isResident(s)?'Resident':'Non-Resident'} • Tuition: $${tuitionFor(s).toLocaleString()}</div>
-          </div>
-          <div class="chip right">Aid est: $${aid.total.toLocaleString()}</div>
+  
+  renderFinancialAid() {
+    const mySchoolIds = this.appState.get('mySchools') || [];
+    const user = this.appState.get('user');
+    
+    if (mySchoolIds.length === 0) {
+      this.aidEstimates.innerHTML = `
+        <div class="empty-state">
+          <div class="empty-icon">💰</div>
+          <p>Add schools to see financial aid estimates.</p>
         </div>
-        <div class="list" style="margin-top:10px">${rows}</div>
-      </div>
-    `;
-  }).join('');
-}
-
-/* Docs tab (dedup by key) */
-function renderDocsTab(){
-  // Build docs per selected school, but de-duplicate by key
-  const docMap = new Map();
-
-  mySchools.forEach(id=>{
-    const s=SCHOOLS.find(x=>x.id===id);
-    makeDocsForSchool(s).forEach(d=>{
-      if(!docMap.has(d.key)) docMap.set(d.key, {...d, schoolId:s.id});
-      if(!(d.key in docState)){
-        docState[d.key] = {done:false,label:d.label,due:d.due,schoolId:s.id};
+      `;
+      return;
+    }
+    
+    const aidCards = mySchoolIds.map(id => {
+      const school = SCHOOLS_DB.find(s => s.id === id);
+      if (!school) return '';
+      
+      const aid = FinancialAidCalculator.calculate(school, user);
+      
+      const aidItems = aid.items.map(item => `
+        <div class="flex justify-between">
+          <span>${item.name}</span>
+          <span class="font-bold">${item.amount.toLocaleString()}</span>
+        </div>
+      `).join('');
+      
+      return `
+        <div class="card mb-4">
+          <h4>${school.name}</h4>
+          <div class="grid gap-2 mt-3">
+            ${aidItems}
+            <hr>
+            <div class="flex justify-between">
+              <span>Tuition</span>
+              <span>${aid.tuition.toLocaleString()}</span>
+            </div>
+            <div class="flex justify-between font-bold">
+              <span>Net Price</span>
+              <span class="text-lg">${aid.netPrice.toLocaleString()}</span>
+            </div>
+          </div>
+        </div>
+      `;
+    }).join('');
+    
+    this.aidEstimates.innerHTML = aidCards;
+  }
+  
+  renderDocuments() {
+    const mySchoolIds = this.appState.get('mySchools') || [];
+    const user = this.appState.get('user');
+    const documents = this.appState.get('documents') || DocumentTracker.generateDocuments(mySchoolIds, user);
+    
+    if (documents.length === 0) {
+      this.documentsList.innerHTML = `
+        <div class="empty-state">
+          <div class="empty-icon">📝</div>
+          <p>Add schools to generate your document checklist.</p>
+        </div>
+      `;
+      document.getElementById('docProgress').textContent = '0% Complete';
+      return;
+    }
+    
+    const progress = DocumentTracker.getProgress(documents);
+    document.getElementById('docProgress').textContent = `${progress}% Complete`;
+    
+    const docCards = documents.map(doc => {
+      const urgency = DocumentTracker.getUrgency(doc.due);
+      const daysLeft = Math.floor((doc.due - new Date()) / (1000 * 60 * 60 * 24));
+      
+      return `
+        <div class="card mb-3 ${urgency}">
+          <div class="flex justify-between items-center">
+            <div class="flex items-center gap-3">
+              <input type="checkbox" 
+                     id="doc-${doc.id}"
+                     ${doc.status === 'completed' ? 'checked' : ''}
+                     onchange="app.toggleDocument('${doc.id}')">
+              <label for="doc-${doc.id}">
+                <div class="font-bold">${doc.name}</div>
+                <div class="text-sm text-muted">Due ${doc.due.toLocaleDateString()} (${daysLeft} days)</div>
+              </label>
+            </div>
+            ${doc.id.includes('essays') ? `
+              <button class="btn ghost" onclick="app.showEssayHelp('${doc.schoolId}')">
+                Get Help
+              </button>
+            ` : ''}
+          </div>
+        </div>
+      `;
+    }).join('');
+    
+    this.documentsList.innerHTML = docCards;
+  }
+  
+  renderTimeline() {
+    const mySchoolIds = this.appState.get('mySchools') || [];
+    const user = this.appState.get('user');
+    const documents = this.appState.get('documents') || DocumentTracker.generateDocuments(mySchoolIds, user);
+    
+    if (documents.length === 0) {
+      this.timelineList.innerHTML = `
+        <div class="empty-state">
+          <div class="empty-icon">📅</div>
+          <p>Your timeline will appear here once you add schools.</p>
+        </div>
+      `;
+      return;
+    }
+    
+    // Sort by due date
+    const sorted = [...documents].sort((a, b) => a.due - b.due);
+    
+    const timelineItems = sorted.map(doc => {
+      const urgency = DocumentTracker.getUrgency(doc.due);
+      const daysLeft = Math.floor((doc.due - new Date()) / (1000 * 60 * 60 * 24));
+      
+      return `
+        <div class="timeline-item ${urgency}">
+          <div class="flex justify-between items-center">
+            <div>
+              <div class="font-bold">${doc.name}</div>
+              <div class="text-sm text-muted">${doc.due.toLocaleDateString()}</div>
+            </div>
+            <div class="badge">${daysLeft} days</div>
+          </div>
+        </div>
+      `;
+    }).join('');
+    
+    this.timelineList.innerHTML = timelineItems;
+  }
+  
+  renderInsights() {
+    const user = this.appState.get('user');
+    const mySchools = this.appState.get('mySchools') || [];
+    
+    const insights = [];
+    
+    // Balance check
+    const categories = { reach: 0, match: 0, safety: 0 };
+    mySchools.forEach(id => {
+      const school = SCHOOLS_DB.find(s => s.id === id);
+      if (school) {
+        const cat = SchoolMatcher.categorizeSchool(school, user);
+        categories[cat]++;
       }
     });
-  });
-  saveAll();
-
-  const docs = Array.from(docMap.values());
-  if(docs.length===0){
-    UI.docList.innerHTML = `<div class="muted">Add schools to generate your checklist.</div>`;
-    UI.docsProgress.textContent='0% done';
-    return;
-  }
-
-  let done=0;
-  UI.docList.innerHTML = docs.map(d=>{
-    const st = docState[d.key] || {done:false,label:d.label,due:d.due,schoolId:d.schoolId};
-    if(st.done) done++;
-    return `
-      <div class="row">
-        <div class="flex">
-          <input type="checkbox" ${st.done?'checked':''} onchange="toggleDoc('${d.key}',this.checked)"/>
-          <div>
-            <div style="font-weight:700">${st.label}</div>
-            <div class="muted" style="font-size:12px">Due: ${st.due}</div>
-          </div>
-        </div>
-        ${d.key.includes('_essays') ? `<button class="mini" onclick="aiPing('Want help brainstorming essay topics for ${SCHOOLS.find(x=>x.id===d.schoolId).name}?')">Help me write</button>`:''}
-      </div>
-    `;
-  }).join('');
-
-  const pct = Math.round((done/docs.length)*100);
-  UI.docsProgress.textContent = `${pct}% done`;
-}
-function toggleDoc(key,checked){
-  if(!docState[key]) return;
-  docState[key].done = checked;
-  saveAll();
-  renderDocsTab(); renderTimelineTab();
-}
-
-/* Timeline tab */
-function renderTimelineTab(){
-  const items = [];
-  mySchools.forEach(id=>{
-    const s=SCHOOLS.find(x=>x.id===id);
-    if(s.deadlines.priority) items.push({label:`${s.name}: Priority submit`, date:s.deadlines.priority});
-    if(s.deadlines.app) items.push({label:`${s.name}: Final deadline`, date:s.deadlines.app});
-  });
-  Object.keys(docState).forEach(k=>{
-    const d=docState[k];
-    items.push({label:d.label, date:d.due, done:d.done});
-  });
-  if(user && user.homeState){
-    items.push({label:`FAFSA opens`, date:'Oct 1 2025'});
-  }
-
-  items.sort((a,b)=> new Date(a.date) - new Date(b.date));
-
-  if(items.length===0){ UI.tlList.innerHTML = `<div class="muted">Add schools to see your timeline.</div>`; return; }
-  UI.tlList.innerHTML = items.map(it=>{
-    const cls = it.done ? 'urg-green' : urgencyClass(it.date);
-    return `
-      <div class="tl-item ${cls}">
-        <div style="display:flex; align-items:center; gap:10px">
-          <div style="font-weight:700">${it.label}</div>
-          <div class="chip">${it.date}</div>
-          <div class="right muted">${daysUntil(it.date)} days</div>
-        </div>
-      </div>
-    `;
-  }).join('');
-}
-
-/* ========================
-   AI HELPER (lightweight)
-   ======================== */
-let idleTimer=null;
-function scheduleAI(){
-  clearTimeout(idleTimer);
-  idleTimer = setTimeout(()=>{
-    UI.aiBubble.innerHTML = `<p>Want me to suggest a school list?</p>`;
-    UI.aiBubble.classList.remove('hidden');
-  }, 45000); // 45s idle
-}
-function aiPing(msg){
-  UI.aiBubble.innerHTML = `<p>${msg}</p>`;
-  UI.aiBubble.classList.remove('hidden');
-  setTimeout(()=>UI.aiBubble.classList.add('hidden'), 8000);
-}
-
-/* ========================
-   RESET (shared)
-   ======================== */
-function resetAll(){
-  localStorage.removeItem(LS_KEYS.user);
-  localStorage.removeItem(LS_KEYS.my);
-  localStorage.removeItem(LS_KEYS.docs);
-  user=null; mySchools=[]; docState={};
-  renderPlanner();
-  aiPing("Fresh slate — let’s plan smart 🤝");
-}
-
-/* ========================
-   EVENTS
-   ======================== */
-UI.themeBtn.onclick = ()=>{
-  const cur = document.documentElement.getAttribute('data-theme') || 'light';
-  const next = cur==='dark'?'light':'dark';
-  document.documentElement.setAttribute('data-theme', next);
-  localStorage.setItem(LS_KEYS.theme, next);
-  UI.themeBtn.textContent = next==='dark'?'☀️':'🌙';
-};
-UI.resetBtn.onclick = ()=>{
-  if(confirm('Reset everything and start planning again?')){
-    resetAll();
-  }
-};
-UI.backPlanningBtn.onclick = ()=>{ renderPlanner(); scheduleAI(); };
-
-['#p_name','#p_grade','#p_homeState','#p_income','#p_gpa','#p_sat','#p_ap','#p_pref','#p_interest'].forEach(sel=>{
-  const el = $(sel);
-  el.addEventListener('input', previewMatches);
-  el.addEventListener('change', previewMatches);
-});
-$('#p_states').addEventListener('change', previewMatches);
-
-UI.startBtn.onclick = ()=>{
-  const name = $('#p_name').value.trim();
-  const grade = $('#p_grade').value;
-  const home = $('#p_homeState').value;
-  if(!name || !grade || !home){
-    aiPing('Name, grade, and home state are required to tailor results 📌');
-    return;
-  }
-  const sel = $('#p_states');
-  user = {
-    name,
-    grade,
-    homeState: home,
-    householdIncome: Number($('#p_income').value||0),
-    gpa: Number($('#p_gpa').value||0),
-    sat: Number($('#p_sat').value||0),
-    ap: Number($('#p_ap').value||0),
-    pref: $('#p_pref').value||'',
-    interest: $('#p_interest').value||'',
-    targetStates: Array.from(sel.selectedOptions).map(o=>o.value),
-    email: $('#p_email').value||''
-  };
-  saveAll();
-  renderDashboard();
-  scheduleAI();
-};
-
-// tab clicks
-UI.tabs.forEach(tab=>{
-  tab.addEventListener('click', ()=> setActiveTab(tab.dataset.tab));
-});
-
-// filter listeners
-UI.filters.state.onchange = ()=>renderSchoolsTab();
-UI.filters.sys.onchange = ()=>renderSchoolsTab();
-UI.filters.q.oninput = ()=>renderSchoolsTab();
-
-// AI bubble click → helpful action
-UI.aiBubble.onclick = ()=>{
-  if(UI.planner.classList.contains('hidden')){
-    if(mySchools.length===0){
-      setActiveTab('schools'); aiPing('Tap “Add” on a few schools — I’ll build docs & deadlines automatically.');
-    }else{
-      setActiveTab('aid'); aiPing('I estimated your grants; select a school to see a breakdown.');
+    
+    if (mySchools.length > 0) {
+      if (categories.reach === 0) {
+        insights.push({
+          type: 'warning',
+          title: 'Add Reach Schools',
+          text: 'Consider adding some ambitious choices to your list.'
+        });
+      }
+      if (categories.safety === 0) {
+        insights.push({
+          type: 'warning',
+          title: 'Add Safety Schools',
+          text: 'Include some schools with higher acceptance chances for balance.'
+        });
+      }
+      if (categories.match > 5) {
+        insights.push({
+          type: 'info',
+          title: 'Well Matched',
+          text: 'You have great match schools! Consider narrowing down to your favorites.'
+        });
+      }
     }
-  }else{
-    aiPing('Pick home state + income; I’ll auto-calc resident costs and aid later.');
+    
+    // Financial insights
+    if (user?.income && mySchools.length > 0) {
+      const avgNetPrice = mySchools.reduce((sum, id) => {
+        const school = SCHOOLS_DB.find(s => s.id === id);
+        if (school) {
+          const aid = FinancialAidCalculator.calculate(school, user);
+          return sum + aid.netPrice;
+        }
+        return sum;
+      }, 0) / mySchools.length;
+      
+      insights.push({
+        type: 'info',
+        title: 'Average Net Price',
+        text: `Your average estimated cost is ${Math.round(avgNetPrice).toLocaleString()} per year.`
+      });
+    }
+    
+    if (insights.length === 0) {
+      insights.push({
+        type: 'info',
+        title: 'Getting Started',
+        text: 'Add schools to see personalized insights about your application strategy.'
+      });
+    }
+    
+    this.insightsContent.innerHTML = insights.map(insight => `
+      <div class="card mb-3">
+        <div class="badge ${insight.type}">${insight.type.toUpperCase()}</div>
+        <h4 class="mt-2">${insight.title}</h4>
+        <p class="text-muted">${insight.text}</p>
+      </div>
+    `).join('');
   }
-};
-
-/* Preview match count while planning (safe if user is null) */
-function previewMatches(){
-  const tempUser = {
-    gpa: Number($('#p_gpa').value||0),
-    sat: Number($('#p_sat').value||0),
-    ap: Number($('#p_ap').value||0),
-    pref: $('#p_pref').value||'',
-    interest: $('#p_interest').value||'',
-    homeState: $('#p_homeState').value||'',
-    targetStates: Array.from($('#p_states').selectedOptions).map(o=>o.value)
-  };
-  const prev = user;
-  user = { ...(user||{}), ...tempUser };           // safe when user is null
-  const allowStates = (tempUser.targetStates && tempUser.targetStates.length>0)
-    ? new Set(tempUser.targetStates) : null;
-  const count = SCHOOLS
-    .filter(s=> !allowStates || allowStates.has(s.state))
-    .filter(s=> matchScore(s) > 50).length;
-  UI.matchPreview.textContent = `${count} potential matches`;
-  user = prev;
-}
-
-/* ========================
-   INIT
-   ======================== */
-(function init(){
-  loadAll();
-  const t = localStorage.getItem(LS_KEYS.theme) || 'light';
-  document.documentElement.setAttribute('data-theme', t);
-  UI.themeBtn.textContent = t==='dark'?'☀️':'🌙';
-
-  if(user){ renderDashboard(); }
-  else{ renderPlanner(); }
-
-  scheduleAI();
-  runTests(); // unit tests log to console
-})();
-
-/* ========================
-   UNIT TESTS (tiny harness)
-   ======================== */
-function assert(cond, msg){ if(!cond) throw new Error(msg); }
-function runTests(){
-  try{
-    const sampleUser = {gpa:4.1,sat:1500,ap:8,pref:'reputation',interest:'stem',homeState:'CA'};
-    const prev = user; user = sampleUser;
-    const stan = SCHOOLS.find(s=>s.id==='stan');
-    const ucsc = SCHOOLS.find(s=>s.id==='ucsc');
-    assert(bucketFor(stan)==='reach' || bucketFor(stan)==='match', 'Stanford should not be safety');
-    assert(bucketFor(ucsc)!=='reach', 'UCSC should be match/safety for strong profile');
-
-    const tl = [
-      ...makeDocsForSchool(SCHOOLS.find(s=>s.id==='ucla')),
-      ...makeDocsForSchool(SCHOOLS.find(s=>s.id==='ucb')),
+  
+  toggleSchool(schoolId) {
+    const mySchools = this.appState.get('mySchools') || [];
+    
+    if (mySchools.includes(schoolId)) {
+      // Remove school
+      const updated = mySchools.filter(id => id !== schoolId);
+      this.appState.update('mySchools', updated);
+      Toast.show('School removed from list', 'info');
+    } else {
+      // Add school
+      const updated = [...mySchools, schoolId];
+      this.appState.update('mySchools', updated);
+      Toast.show('School added to list!', 'success');
+      
+      // Check achievements
+      AchievementSystem.check(this.appState);
+    }
+    
+    this.renderSchools();
+  }
+  
+  removeSchool(schoolId) {
+    const mySchools = this.appState.get('mySchools') || [];
+    const updated = mySchools.filter(id => id !== schoolId);
+    this.appState.update('mySchools', updated);
+    this.renderSchools();
+    Toast.show('School removed', 'info');
+  }
+  
+  showSchoolDetails(schoolId) {
+    const school = SCHOOLS_DB.find(s => s.id === schoolId);
+    if (!school) return;
+    
+    // This would open a modal with detailed school information
+    Toast.show(`Showing details for ${school.name}`, 'info');
+  }
+  
+  toggleDocument(docId) {
+    const documents = this.appState.get('documents') || [];
+    const doc = documents.find(d => d.id === docId);
+    if (doc) {
+      doc.status = doc.status === 'completed' ? 'pending' : 'completed';
+      this.appState.update('documents', [...documents]);
+      
+      if (doc.status === 'completed') {
+        Toast.show('Document marked complete!', 'success');
+        AchievementSystem.celebrate();
+      }
+    }
+  }
+  
+  showEssayHelp(schoolId) {
+    this.showAIMessage(`I can help you brainstorm essay topics for this school! Consider writing about your unique experiences and what makes you a great fit.`);
+  }
+  
+  switchTab(tabName) {
+    // Update active tab
+    this.tabs.forEach(tab => {
+      tab.classList.toggle('active', tab.dataset.tab === tabName);
+      tab.setAttribute('aria-selected', tab.dataset.tab === tabName);
+    });
+    
+    // Show corresponding content
+    const tabContents = ['schoolsTab', 'financialTab', 'documentsTab', 'timelineTab', 'insightsTab'];
+    tabContents.forEach(id => {
+      const element = document.getElementById(id);
+      element.classList.toggle('hidden', !id.startsWith(tabName));
+    });
+    
+    this.appState.update('ui.currentTab', tabName);
+  }
+  
+  filterSchools() {
+    // Get filter values
+    const state = document.getElementById('filterState').value;
+    const type = document.getElementById('filterType').value;
+    const search = document.getElementById('searchSchool').value.toLowerCase();
+    
+    this.appState.update('filters', { state, type, search });
+    
+    // Re-render with filters
+    this.renderSchools();
+  }
+  
+  toggleTheme() {
+    const current = this.appState.get('ui.theme') || 'light';
+    const next = current === 'light' ? 'dark' : 'light';
+    
+    document.documentElement.setAttribute('data-theme', next);
+    this.appState.update('ui.theme', next);
+    
+    this.themeBtn.textContent = next === 'dark' ? '☀️' : '🌙';
+    Toast.show(`Switched to ${next} mode`, 'info');
+  }
+  
+  applyTheme() {
+    const theme = this.appState.get('ui.theme') || 'light';
+    document.documentElement.setAttribute('data-theme', theme);
+    this.themeBtn.textContent = theme === 'dark' ? '☀️' : '🌙';
+  }
+  
+  confirmReset() {
+    if (confirm('This will delete all your data. Are you sure?')) {
+      this.appState.reset();
+      Toast.show('All data has been reset', 'info');
+    }
+  }
+  
+  showProfile() {
+    const user = this.appState.get('user');
+    if (!user) {
+      Toast.show('Complete the planning form first', 'warning');
+      return;
+    }
+    
+    const modal = document.getElementById('profileModal');
+    const content = document.getElementById('profileContent');
+    
+    content.innerHTML = `
+      <div class="grid gap-3">
+        <div><strong>Name:</strong> ${user.firstName}</div>
+        <div><strong>Grade:</strong> ${user.grade}</div>
+        <div><strong>State:</strong> ${user.homeState}</div>
+        <div><strong>GPA:</strong> ${user.gpa || 'Not provided'}</div>
+        <div><strong>SAT:</strong> ${user.sat || 'Not provided'}</div>
+        <div><strong>AP Courses:</strong> ${user.ap || 0}</div>
+      </div>
+    `;
+    
+    modal.classList.add('active');
+  }
+  
+  closeModals() {
+    document.querySelectorAll('.modal-overlay').forEach(modal => {
+      modal.classList.remove('active');
+    });
+  }
+  
+  handleAIClick() {
+    const suggestions = [
+      "Let me help you find schools that match your profile!",
+      "Have you considered adding more safety schools?",
+      "Your essay deadlines are coming up - need help brainstorming?",
+      "Based on your interests, you might like these programs...",
+      "Don't forget to complete your FAFSA by October 1st!"
     ];
-    assert(tl.some(x=>x.label.includes('transcript')), 'Docs include transcripts');
-    assert(tl.some(x=>x.label.includes('essays')), 'Docs include essays');
-    user = prev;
-    console.log('%cTests passed ✓', 'color: #16a34a; font-weight:700');
-  }catch(e){
-    console.error('Tests failed:', e.message);
+    
+    const random = suggestions[Math.floor(Math.random() * suggestions.length)];
+    this.showAIMessage(random);
+  }
+  
+  showAIMessage(message) {
+    this.aiMessage.textContent = message;
+    this.aiBubble.classList.remove('hidden');
+    
+    setTimeout(() => {
+      this.aiBubble.classList.add('hidden');
+    }, 8000);
   }
 }
 
-/* =========================
-   Native Bridge → App wiring
-   ========================= */
-window.__pw_reset = function () {
-  try { resetAll(); } catch (e) { console.warn('__pw_reset issue', e); }
+// Helper Functions
+function debounce(func, wait) {
+  let timeout;
+  return function executedFunction(...args) {
+    const later = () => {
+      clearTimeout(timeout);
+      func(...args);
+    };
+    clearTimeout(timeout);
+    timeout = setTimeout(later, wait);
+  };
+}
+
+function closeModal(modalId) {
+  document.getElementById(modalId).classList.remove('active');
+}
+
+// Initialize Application
+const appState = new AppState();
+const ui = new UIController(appState);
+
+// Global app object for inline handlers
+window.app = {
+  toggleSchool: (id) => ui.toggleSchool(id),
+  removeSchool: (id) => ui.removeSchool(id),
+  showSchoolDetails: (id) => ui.showSchoolDetails(id),
+  toggleDocument: (id) => ui.toggleDocument(id),
+  showEssayHelp: (id) => ui.showEssayHelp(id)
 };
 
-window.__pw_nav = function (dest) {  // 'planner' | 'dashboard'
-  try {
-    if (dest === 'planner') renderPlanner();
-    else renderDashboard();
-  } catch (e) { console.warn('__pw_nav issue', e); }
+// Check if returning user
+document.addEventListener('DOMContentLoaded', () => {
+  const user = appState.get('user');
+  if (user) {
+    appState.update('ui.currentSection', 'dashboard');
+    Toast.show(`Welcome back, ${user.firstName}!`, 'success');
+  }
+  
+  // Show AI helper after delay
+  setTimeout(() => {
+    if (!user) {
+      ui.showAIMessage("Hi! I'm here to help you navigate college applications. Let's start by filling out your profile!");
+    }
+  }, 3000);
+});
+
+// Native Bridge Support (if needed)
+window.PathwiseBridge = {
+  getState: () => JSON.stringify(appState.state),
+  setState: (state) => {
+    appState.state = { ...appState.state, ...JSON.parse(state) };
+    appState.persist();
+  },
+  reset: () => appState.reset()
 };
 
-window.__pw_setUser = function (u) {
-  try {
-    user = { ...(user||{}), ...(u||{}) };
-    saveAll();
-    renderDashboard();
-  } catch (e) { console.warn('__pw_setUser issue', e); }
-};
+// Performance monitoring
+if ('PerformanceObserver' in window) {
+  const perfObserver = new PerformanceObserver((list) => {
+    for (const entry of list.getEntries()) {
+      if (entry.duration > 100) {
+        console.warn('Slow interaction:', entry.name, entry.duration);
+      }
+    }
+  });
+  perfObserver.observe({ entryTypes: ['measure'] });
+}
 
-window.__pw_selectSchools = function (ids) {
-  try {
-    mySchools = Array.isArray(ids) ? ids.slice(0) : [];
-    saveAll();
-    renderSchoolsTab(); renderAidTab(); renderDocsTab(); renderTimelineTab();
-  } catch (e) { console.warn('__pw_selectSchools issue', e); }
-};
-
-window.__pw_getState = function () {
-  try { return JSON.stringify({ user, mySchools, docState }); }
-  catch (e) { return "{}"; }
-};
+console.log('🎓 Pathwise loaded successfully!');
 </script>
+
 </body>
 </html>
