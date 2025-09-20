@@ -1,18 +1,16 @@
 <!DOCTYPE html>
 <html lang="en" data-theme="light">
 <head>
-<meta charset="utf-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+<meta charset="utf-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover"/>
 <title>Pathwise — Smart College Planner</title>
 <style>
 :root{
   --bg:#F2F2F7; --card:#fff; --ink:#1c1c1e; --muted:#8e8e93; --line:rgba(0,0,0,.12);
   --primary:#007AFF; --accent:#5856D6; --success:#34C759; --warn:#FF9500; --danger:#FF3B30;
-  --r:14px; --r2:18px; --shadow:0 8px 24px rgba(0,0,0,.10);
+  --r:14px; --shadow:0 8px 24px rgba(0,0,0,.10);
 }
-[data-theme="dark"]{
-  --bg:#000; --card:#1C1C1E; --ink:#F2F2F7; --muted:#9a9aa0; --line:rgba(255,255,255,.14);
-}
+[data-theme="dark"]{ --bg:#000; --card:#1C1C1E; --ink:#F2F2F7; --muted:#9a9aa0; --line:rgba(255,255,255,.14); }
 *{box-sizing:border-box} html,body{height:100%}
 body{margin:0;font:15px/1.45 -apple-system,BlinkMacSystemFont,"SF Pro Text","Helvetica Neue",Arial,sans-serif;background:var(--bg);color:var(--ink);-webkit-font-smoothing:antialiased}
 a{color:var(--primary);text-decoration:none}
@@ -28,14 +26,21 @@ button{font:600 14px -apple-system;cursor:pointer}
 [data-theme="dark"] .seg{background:rgba(255,255,255,.08)}
 .seg__btn{border:0;background:transparent;padding:8px 12px;border-radius:10px;color:inherit}
 .seg__btn.is-active{background:var(--card);box-shadow:0 1px 4px rgba(0,0,0,.08)}
-/* Chips */
+.btn{border:0;border-radius:12px;padding:12px 14px}
+.btn--primary{background:var(--primary);color:#fff}
+.btn--ghost{background:transparent;border:1px solid var(--line);color:inherit}
+.btn--quiet{background:transparent;color:var(--primary)}
+.btn--danger{background:var(--danger);color:#fff}
+
+/* Chips / pills */
 .chips{max-width:1100px;margin:8px auto 0;padding:0 16px 8px;display:flex;gap:8px;overflow:auto}
 .chip{padding:8px 12px;border-radius:999px;border:1px solid var(--line);background:transparent;white-space:nowrap}
 .chip.is-on{border-color:transparent;background:rgba(0,122,255,.12);color:var(--primary)}
-/* Summary */
-.summary{max-width:1100px;margin:12px auto 0;padding:8px 16px;display:flex;align-items:center;gap:10px;color:var(--muted)}
-.summary__pill{border:1px solid var(--line);border-radius:999px;padding:6px 10px}
-.summary__edit{margin-left:auto}
+.pill{border-radius:999px;padding:4px 8px;font-weight:700;font-size:12px}
+.pill--reach{background:rgba(255,59,48,.12);color:var(--danger)}
+.pill--match{background:rgba(52,199,89,.12);color:var(--success)}
+.pill--safe{background:rgba(0,122,255,.12);color:var(--primary)}
+.pill--res{background:rgba(0,122,255,.12);color:var(--primary)}
 
 /* Layout */
 .main{max-width:1100px;margin:8px auto 80px;padding:0 16px;display:grid;gap:16px}
@@ -44,71 +49,63 @@ button{font:600 14px -apple-system;cursor:pointer}
 .row{display:flex;align-items:center;justify-content:space-between;gap:12px}
 .sub{color:var(--muted);font-size:13px}
 .hr{height:1px;background:var(--line);margin:12px 0}
-
-/* Buttons */
-.btn{border:0;border-radius:12px;padding:12px 14px}
-.btn--primary{background:var(--primary);color:#fff}
-.btn--quiet{background:transparent;color:var(--primary)}
-.btn--ghost{background:transparent;border:1px solid var(--line);color:inherit}
-.btn--danger{background:var(--danger);color:#fff}
-
-/* School cards */
 .grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:12px}
-.scard{background:var(--card);border-radius:14px;box-shadow:var(--shadow);padding:14px;display:flex;flex-direction:column;gap:8px}
-.scard .pill{border-radius:999px;padding:4px 8px;font-weight:700;font-size:12px}
-.pill--reach{background:rgba(255,59,48,.12);color:var(--danger)}
-.pill--match{background:rgba(52,199,89,.12);color:var(--success)}
-.pill--safe{background:rgba(0,122,255,.12);color:var(--primary)}
-.pill--res{background:rgba(0,122,255,.12);color:var(--primary)}
-.meta{color:var(--muted);font-size:12px}
-.scard footer{display:flex;gap:8px;justify-content:flex-end}
-
-/* Sheet (bottom) */
-.sheet{position:fixed;left:0;right:0;bottom:-100%;transform:translateY(100%);background:var(--card);border-radius:16px 16px 0 0;box-shadow:0 -20px 40px rgba(0,0,0,.25);transition:transform .26s cubic-bezier(.2,.8,.2,1);z-index:1000}
-.sheet.is-open{transform:translateY(0)}
-.sheet__grab{width:44px;height:5px;background:var(--line);border-radius:999px;margin:10px auto}
-.sheet__body{max-height:70vh;overflow:auto;padding:8px 16px 16px}
+.grid-2{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+@media (max-width:720px){.grid-2{grid-template-columns:1fr}}
 
 /* Inputs */
 .label{font-size:12px;color:var(--muted);margin-bottom:6px}
 .input,.select{width:100%;padding:12px 12px;border:1px solid var(--line);border-radius:12px;background:transparent;color:inherit}
-.grid-2{display:grid;grid-template-columns:1fr 1fr;gap:12px}
-@media (max-width:720px){.grid-2{grid-template-columns:1fr}}
+
+/* School cards */
+.scard{background:var(--card);border-radius:14px;box-shadow:var(--shadow);padding:14px;display:flex;flex-direction:column;gap:8px}
+.meta{color:var(--muted);font-size:12px}
+.scard footer{display:flex;gap:8px;justify-content:flex-end}
 
 /* Docs checklist */
 .chk{display:flex;gap:10px;align-items:center;padding:10px;border-radius:10px;border:1px solid var(--line);margin-bottom:8px}
 .chk input{width:18px;height:18px}
 .tag{border:1px solid var(--line);border-radius:999px;padding:2px 8px;font-size:12px;color:var(--muted)}
+
 /* Timeline */
 .tline{display:grid;gap:8px}
 .titem{border-left:4px solid var(--primary);padding:8px 12px;border-radius:8px;background:rgba(0,122,255,.08)}
 .titem--warn{border-color:var(--warn);background:rgba(255,149,0,.12)}
 .titem--danger{border-color:var(--danger);background:rgba(255,59,48,.12)}
 
+/* Summary strip (below header) */
+.summary{max-width:1100px;margin:12px auto 0;padding:8px 16px;display:flex;align-items:center;gap:10px;color:var(--muted)}
+.summary__pill{border:1px solid var(--line);border-radius:999px;padding:6px 10px}
+.summary__edit{margin-left:auto}
+
 /* AI bubble */
 .ai{position:fixed;right:16px;bottom:16px;width:56px;height:56px;border-radius:50%;border:0;background:var(--primary);color:#fff;box-shadow:0 10px 28px rgba(0,122,255,.35);animation:breath 2.8s ease-in-out infinite;z-index:1200}
 @keyframes breath{0%{transform:scale(1)}50%{transform:scale(1.06)}100%{transform:scale(1)}}
 
-/* Tiny states */
-.muted{color:var(--muted)}
-.small{font-size:12px}
+/* Planning wizard */
+.wiz{max-width:760px;margin:16px auto;padding:0 16px}
+.progress{height:8px;background:rgba(0,0,0,.08);border-radius:999px;overflow:hidden}
+.bar{height:100%;width:0;background:linear-gradient(90deg,var(--primary),var(--accent))}
+.step{margin-top:16px}
+.hint{font-size:12px;color:var(--muted)}
+.sel{display:flex;gap:8px;flex-wrap:wrap}
+.sel .chip{margin:2px 0}
 </style>
 </head>
 <body>
-
 <!-- Header -->
 <div class="header">
   <div class="header__bar">
     <div class="brand">Pathwise</div>
     <div class="seg" id="seg">
-      <button class="seg__btn is-active" data-tab="dash">Dashboard</button>
+      <button class="seg__btn is-active" data-tab="plan">Plan</button>
+      <button class="seg__btn" data-tab="dash">Dashboard</button>
       <button class="seg__btn" data-tab="schools">Schools</button>
       <button class="seg__btn" data-tab="aid">Aid</button>
       <button class="seg__btn" data-tab="docs">Docs</button>
     </div>
     <button class="btn btn--ghost" id="themeBtn">Theme</button>
   </div>
-  <!-- filters (only visible on Schools) -->
   <div class="chips" id="chips" style="display:none">
     <button class="chip is-on" data-filter="all">All</button>
     <button class="chip" data-filter="instate">In-State</button>
@@ -119,18 +116,88 @@ button{font:600 14px -apple-system;cursor:pointer}
   </div>
 </div>
 
-<!-- Planning summary -->
+<!-- Summary strip -->
 <div class="summary" id="summary">
   <span class="summary__pill" id="sumHome">Home: —</span>
   <span class="summary__pill" id="sumFocus">Focus: —</span>
   <span class="summary__pill" id="sumGPA">GPA: —</span>
-  <button class="btn btn--quiet summary__edit" id="editPlanBtn">Edit Planning</button>
+  <button class="btn btn--quiet summary__edit" id="editPlanBtn">Open Planning</button>
 </div>
 
 <!-- Main -->
 <main class="main">
+  <!-- Planning Wizard (full page) -->
+  <section id="view-plan">
+    <div class="card wiz">
+      <div class="row">
+        <h3>Planning</h3>
+        <button class="btn btn--danger" id="resetAllBtn">Reset plan</button>
+      </div>
+      <div class="progress" style="margin:8px 0 12px"><div class="bar" id="planBar"></div></div>
+
+      <div id="step1" class="step">
+        <h3>Basics</h3>
+        <div class="grid-2" style="margin-top:8px">
+          <div>
+            <div class="label">First name <span class="hint">(required)</span></div>
+            <input class="input" id="pName" placeholder="Your name"/>
+            <div class="hint" id="nameErr" style="color:var(--danger);display:none">Please enter your name.</div>
+          </div>
+          <div>
+            <div class="label">Home state (residency)</div>
+            <select class="select" id="pState"></select>
+          </div>
+        </div>
+        <div class="row" style="margin-top:12px">
+          <div class="hint">We’ll use home state to apply in-state tuition automatically.</div>
+          <div>
+            <button class="btn btn--primary" id="to2">Continue</button>
+          </div>
+        </div>
+      </div>
+
+      <div id="step2" class="step hidden">
+        <h3>Academics</h3>
+        <div class="grid-2" style="margin-top:8px">
+          <div>
+            <div class="label">GPA (0–5, optional)</div>
+            <input class="input" id="pGPA" type="number" min="0" max="5" step="0.01" placeholder="e.g., 3.85"/>
+          </div>
+          <div>
+            <div class="label">SAT (optional)</div>
+            <input class="input" id="pSAT" type="number" min="400" max="1600" placeholder="e.g., 1400"/>
+          </div>
+        </div>
+        <div class="row" style="margin-top:12px">
+          <button class="btn btn--ghost" id="back1">Back</button>
+          <button class="btn btn--primary" id="to3">Continue</button>
+        </div>
+      </div>
+
+      <div id="step3" class="step hidden">
+        <h3>Interests</h3>
+        <div class="label" style="margin-top:8px">Pick a few</div>
+        <div class="sel" id="interestSel"></div>
+        <div class="row" style="margin-top:12px">
+          <button class="btn btn--ghost" id="back2">Back</button>
+          <button class="btn btn--primary" id="to4">Continue</button>
+        </div>
+      </div>
+
+      <div id="step4" class="step hidden">
+        <h3>Preferences</h3>
+        <div class="label" style="margin-top:8px">What matters?</div>
+        <div class="sel" id="prefSel"></div>
+        <div class="row" style="margin-top:12px">
+          <button class="btn btn--ghost" id="back3">Back</button>
+          <button class="btn btn--primary" id="finishPlan">Save & Start</button>
+        </div>
+      </div>
+    </div>
+  </section>
+
   <!-- Dashboard -->
-  <section id="view-dash">
+  <section id="view-dash" class="hidden">
     <div class="card">
       <div class="row">
         <h3>Welcome<span id="helloName"></span></h3>
@@ -140,12 +207,12 @@ button{font:600 14px -apple-system;cursor:pointer}
       <div class="grid-2">
         <div class="card">
           <div class="row"><div class="sub">Selected Schools</div><strong id="statCount">0</strong></div>
-          <div class="row"><div class="sub">Risk Balance</div><input id="risk" type="range" min="0" max="100" value="50" /></div>
+          <div class="row"><div class="sub">Risk Balance</div><input id="risk" type="range" min="0" max="100" value="50"/></div>
           <button class="btn btn--ghost" id="optimizeBtn">Rebalance (Game Theory)</button>
         </div>
         <div class="card">
           <div class="sub">Next up</div>
-          <div id="nextTask" class="small muted">Add at least 3 schools to build docs & timeline.</div>
+          <div id="nextTask" class="small sub">Add at least 3 schools to build docs & timeline.</div>
         </div>
       </div>
     </div>
@@ -181,7 +248,7 @@ button{font:600 14px -apple-system;cursor:pointer}
         </div>
         <div>
           <div class="label">Family income (USD)</div>
-          <input class="input" id="income" type="number" placeholder="75000" value="75000" />
+          <input class="input" id="income" type="number" placeholder="75000" value="75000"/>
         </div>
       </div>
       <div class="row" style="margin-top:8px">
@@ -208,20 +275,34 @@ button{font:600 14px -apple-system;cursor:pointer}
 <!-- AI bubble -->
 <button class="ai" id="aiBtn" title="Need a hand?">🤖</button>
 
-<!-- Bottom sheet -->
-<div class="sheet" id="sheet">
-  <div class="sheet__grab"></div>
-  <div class="sheet__body" id="sheetBody"></div>
-</div>
-
 <script>
-/* -------------------- Data -------------------- */
+/* ====== State & persistence ====== */
 const STATES = ["CA","NY","TX","MA","IL"];
-const user = JSON.parse(localStorage.getItem("pw.user")||"null") || {
-  name:"", homeState:"CA", focus:"Balanced", gpa:null, sat:null, interests:["STEM"], selected:[], prefs:{cost:true, rep:false}, theme:"light"
-};
-document.documentElement.setAttribute("data-theme", user.theme||"light");
+const DEFAULT_USER = {setupComplete:false,name:"",homeState:"CA",focus:"Balanced",gpa:null,sat:null,interests:[],prefs:{cost:true,rep:false,location:false,size:false},selected:[],theme:"light"};
+let user = loadUser();
 
+function loadUser(){
+  const raw = localStorage.getItem("pw.user");
+  if(!raw) return {...DEFAULT_USER};
+  try{ return {...DEFAULT_USER, ...JSON.parse(raw)}; }catch{ return {...DEFAULT_USER}; }
+}
+function save(){ localStorage.setItem("pw.user", JSON.stringify(user)); }
+function clearAll(){
+  // remove all Pathwise keys (user + docs)
+  const keys = [];
+  for(let i=0;i<localStorage.length;i++){ const k=localStorage.key(i); if(k && (k.startsWith("pw."))) keys.push(k); }
+  keys.forEach(k=>localStorage.removeItem(k));
+}
+
+/* ====== Theme ====== */
+document.documentElement.setAttribute("data-theme", user.theme||"light");
+document.getElementById("themeBtn").onclick = ()=>{
+  const next = document.documentElement.getAttribute("data-theme")==="dark" ? "light" : "dark";
+  document.documentElement.setAttribute("data-theme", next);
+  user.theme = next; save();
+};
+
+/* ====== Catalog ====== */
 const SCHOOLS = [
   // CA
   {id:1, name:"UC Berkeley", state:"CA", public:true, rep:5, sys:"UC", avgGPA:4.25, avgSAT:1450, tRes:14226, tNon:45248},
@@ -235,29 +316,27 @@ const SCHOOLS = [
   {id:8, name:"NYU", state:"NY", public:false, rep:4, sys:"Private", avgGPA:3.9, avgSAT:1450, tRes:56800, tNon:56800},
   {id:9, name:"SUNY Binghamton", state:"NY", public:true, rep:3, sys:"SUNY", avgGPA:3.7, avgSAT:1370, tRes:10500, tNon:28700},
   // TX
-  {id:10, name:"UT Austin", state:"TX", public:true, rep:5, sys:"UT", avgGPA:3.9, avgSAT:1380, tRes:11300, tNon:40400},
-  {id:11, name:"Texas A&M", state:"TX", public:true, rep:4, sys:"TAMU", avgGPA:3.8, avgSAT:1270, tRes:13300, tNon:40400},
+  {id:10,name:"UT Austin", state:"TX", public:true, rep:5, sys:"UT", avgGPA:3.9, avgSAT:1380, tRes:11300, tNon:40400},
+  {id:11,name:"Texas A&M", state:"TX", public:true, rep:4, sys:"TAMU", avgGPA:3.8, avgSAT:1270, tRes:13300, tNon:40400},
   // MA
-  {id:12, name:"UMass Amherst", state:"MA", public:true, rep:3, sys:"UMass", avgGPA:3.9, avgSAT:1300, tRes:16952, tNon:38816},
-  {id:13, name:"Northeastern", state:"MA", public:false, rep:4, sys:"Private", avgGPA:3.9, avgSAT:1480, tRes:62100, tNon:62100},
+  {id:12,name:"UMass Amherst", state:"MA", public:true, rep:3, sys:"UMass", avgGPA:3.9, avgSAT:1300, tRes:16952, tNon:38816},
+  {id:13,name:"Northeastern", state:"MA", public:false, rep:4, sys:"Private", avgGPA:3.9, avgSAT:1480, tRes:62100, tNon:62100},
   // IL
-  {id:14, name:"UIUC", state:"IL", public:true, rep:4, sys:"UI", avgGPA:3.9, avgSAT:1420, tRes:17000, tNon:36800},
-  {id:15, name:"UChicago", state:"IL", public:false, rep:5, sys:"Private", avgGPA:3.95, avgSAT:1530, tRes:63500, tNon:63500},
+  {id:14,name:"UIUC", state:"IL", public:true, rep:4, sys:"UI", avgGPA:3.9, avgSAT:1420, tRes:17000, tNon:36800},
+  {id:15,name:"UChicago", state:"IL", public:false, rep:5, sys:"Private", avgGPA:3.95, avgSAT:1530, tRes:63500, tNon:63500},
 ];
-
 const REQUIREMENTS = {
-  UC:    ["UC App","UC PIQ Essays (4)","Transcript (self-report)","FAFSA/CA Dream Act"],
-  CSU:   ["CSU App","Transcript (self-report)","FAFSA/CA Dream Act"],
+  UC:["UC App","UC PIQ Essays (4)","Transcript (self-report)","FAFSA/CA Dream Act"],
+  CSU:["CSU App","Transcript (self-report)","FAFSA/CA Dream Act"],
   Private:["Common App","Personal Statement","2 Recs","Transcript","FAFSA/CSS Profile"],
-  SUNY:  ["SUNY App or Common App","Transcript","1–2 Recs","FAFSA"],
-  UT:    ["ApplyTexas","Essay A","Transcript","FAFSA"],
-  TAMU:  ["ApplyTexas","Essay","Transcript","FAFSA"],
-  UMass: ["Common App","Essay","Transcript","FAFSA"],
-  UI:    ["Common App","Essay","Transcript","FAFSA"]
+  SUNY:["SUNY App or Common App","Transcript","1–2 Recs","FAFSA"],
+  UT:["ApplyTexas","Essay A","Transcript","FAFSA"],
+  TAMU:["ApplyTexas","Essay","Transcript","FAFSA"],
+  UMass:["Common App","Essay","Transcript","FAFSA"],
+  UI:["Common App","Essay","Transcript","FAFSA"]
 };
-
 const DEADLINES = {
-  UC: {submit:"Nov 30", priority:"Nov 15"},
+  UC:{submit:"Nov 30", priority:"Nov 15"},
   CSU:{submit:"Nov 30"},
   Private:{submit:"Jan 1"},
   SUNY:{submit:"Jan 15"},
@@ -267,173 +346,158 @@ const DEADLINES = {
   UI:{submit:"Jan 5"}
 };
 
-/* -------------------- Utilities -------------------- */
-const $ = sel => document.querySelector(sel);
-const $$ = sel => Array.from(document.querySelectorAll(sel));
-function save(){ localStorage.setItem("pw.user", JSON.stringify(user)); }
-function isResident(s){ return user.homeState === s.state && s.public; }
-function tuitionFor(s, whatIfNonRes=false){
-  if(!s.public) return s.tRes;
-  if(whatIfNonRes) return s.tNon;
-  return isResident(s)? s.tRes : s.tNon;
-}
+/* ====== Helpers ====== */
+const $ = s=>document.querySelector(s);
+const $$ = s=>Array.from(document.querySelectorAll(s));
+function isResident(s){ return user.homeState===s.state && s.public; }
+function tuitionFor(s, whatIfNonRes=false){ if(!s.public) return s.tRes; return (whatIfNonRes? s.tNon : (isResident(s)? s.tRes : s.tNon)); }
 function matchScore(s){
-  // light heuristic: GPA/SAT vs average + interest/prefs + reputation
-  let score = 50;
-  if(user.gpa){ score += (user.gpa - s.avgGPA)*20; }
-  if(user.sat){ score += (user.sat - s.avgSAT)/10; }
-  if(user.prefs.rep) score += s.rep*1.5;
-  if(user.prefs.cost) score += (s.public?3:0) - (tuitionFor(s)>40000?4:0);
-  score = Math.max(5, Math.min(95, Math.round(score)));
-  return score;
+  let score=50;
+  if(user.gpa) score+=(user.gpa - s.avgGPA)*20;
+  if(user.sat) score+=(user.sat - s.avgSAT)/10;
+  if(user.prefs.rep) score+=s.rep*1.5;
+  if(user.prefs.cost) score+=(s.public?3:0)-(tuitionFor(s)>40000?4:0);
+  return Math.max(5, Math.min(95, Math.round(score)));
 }
-function bucketFor(s){
-  const sc = matchScore(s);
-  if(sc >= 70) return "safe";
-  if(sc >= 50) return "match";
-  return "reach";
-}
-function daysUntil(dateStr){
-  const y = (new Date()).getFullYear();
-  const d = new Date(`${dateStr}, ${y} 23:59:59`);
-  const t = (d - new Date())/(1000*60*60*24);
-  return Math.ceil(t);
+function bucketFor(s){ const sc=matchScore(s); if(sc>=70) return "safe"; if(sc>=50) return "match"; return "reach"; }
+function daysUntil(dateStr){ const y=(new Date()).getFullYear(); const d=new Date(`${dateStr}, ${y} 23:59:59`); return Math.ceil((d-new Date())/(1000*60*60*24)); }
+function hydrateSummary(){
+  $("#sumHome").textContent=`Home: ${user.homeState||"—"}`;
+  $("#sumFocus").textContent=`Focus: ${user.focus||"—"}`;
+  $("#sumGPA").textContent=`GPA: ${user.gpa??"—"}`;
+  $("#helloName").textContent = user.name?`, ${user.name}`:"";
 }
 
-/* -------------------- Theme -------------------- */
-$("#themeBtn").onclick = ()=>{
-  const next = document.documentElement.getAttribute("data-theme")==="dark" ? "light" : "dark";
-  document.documentElement.setAttribute("data-theme", next);
-  user.theme = next; save();
-};
-
-/* -------------------- Header Segments -------------------- */
+/* ====== Header nav ====== */
 $("#seg").addEventListener("click",(e)=>{
-  const btn = e.target.closest(".seg__btn"); if(!btn) return;
-  $$(".seg__btn").forEach(b=>b.classList.remove("is-active"));
-  btn.classList.add("is-active");
-  const tab = btn.dataset.tab;
-  // toggle filters visibility
-  $("#chips").style.display = (tab==="schools") ? "flex" : "none";
-  // views
-  ["dash","schools","aid","docs"].forEach(name=>{
-    $("#view-"+name).classList.toggle("hidden", name!==tab);
-  });
+  const btn=e.target.closest(".seg__btn"); if(!btn) return;
+  $$("#seg .seg__btn").forEach(b=>b.classList.remove("is-active")); btn.classList.add("is-active");
+  const tab=btn.dataset.tab;
+  $("#chips").style.display=(tab==="schools")?"flex":"none";
+  ["plan","dash","schools","aid","docs"].forEach(v=>$("#view-"+v).classList.toggle("hidden", v!==tab));
 });
 
-/* -------------------- Planning (Bottom Sheet) -------------------- */
-const sheet = $("#sheet"), sheetBody=$("#sheetBody");
-function openSheet(html){ sheetBody.innerHTML=html; sheet.classList.add("is-open"); }
-function closeSheet(){ sheet.classList.remove("is-open"); }
-sheet.addEventListener("click",(e)=>{ if(e.target===sheet) closeSheet(); });
-
-function openPlanning(){
-  const html = `
-  <div class="row"><h3>Planning</h3><button class="btn btn--danger" id="resetPlan">Reset plan</button></div>
-  <div class="hr"></div>
-  <div class="grid-2">
-    <div>
-      <div class="label">First name</div>
-      <input class="input" id="pName" placeholder="Your name" value="${user.name||""}" />
-    </div>
-    <div>
-      <div class="label">Home state (for residency)</div>
-      <select class="select" id="pState">${STATES.map(s=>`<option ${user.homeState===s?"selected":""}>${s}</option>`).join("")}</select>
-    </div>
-  </div>
-  <div class="grid-2" style="margin-top:8px">
-    <div>
-      <div class="label">GPA (0–5, optional)</div>
-      <input class="input" id="pGPA" type="number" step="0.01" min="0" max="5" value="${user.gpa??""}" />
-    </div>
-    <div>
-      <div class="label">SAT (optional)</div>
-      <input class="input" id="pSAT" type="number" min="400" max="1600" value="${user.sat??""}" />
-    </div>
-  </div>
-  <div class="hr"></div>
-  <div class="label">Focus</div>
-  <div class="chips" style="padding:0">
-    ${["Balanced","Cost","Reputation","STEM","Humanities"].map(f=>`
-      <button class="chip ${user.focus===f?"is-on":""}" data-focus="${f}">${f}</button>`).join("")}
-  </div>
-  <div class="hr"></div>
-  <div class="row">
-    <button class="btn btn--ghost" id="closePlan">Cancel</button>
-    <button class="btn btn--primary" id="savePlan">Save planning</button>
-  </div>`;
-  openSheet(html);
-
-  // interactions
-  sheetBody.querySelectorAll('[data-focus]').forEach(ch=>{
-    ch.addEventListener('click',()=> {
-      sheetBody.querySelectorAll('[data-focus]').forEach(x=>x.classList.remove('is-on'));
-      ch.classList.add('is-on');
-      user.focus = ch.dataset.focus;
-    });
+/* ====== Planning Wizard ====== */
+const plan = { step:1, steps:4 };
+function fillStates(){
+  $("#pState").innerHTML = STATES.map(s=>`<option ${user.homeState===s?"selected":""}>${s}</option>`).join("");
+}
+const INTERESTS = ["STEM","Business","Health","Arts","CS/AI","Humanities","Education","Social Impact","Undecided"];
+const PREFS = ["Cost","Reputation","Location","Campus Size"];
+function buildInterestChips(){
+  const box=$("#interestSel"); box.innerHTML="";
+  INTERESTS.forEach(i=>{
+    const btn=document.createElement("button"); btn.className="chip"+(user.interests.includes(i)?" is-on":""); btn.textContent=i;
+    btn.onclick=()=>{ const on=btn.classList.toggle("is-on"); if(on){ if(!user.interests.includes(i)) user.interests.push(i); } else { user.interests=user.interests.filter(x=>x!==i);} };
+    box.appendChild(btn);
   });
-  $("#closePlan").onclick = closeSheet;
-  $("#resetPlan").onclick = ()=>{ if(confirm("Reset planning and clear selected schools?")){
-    user.name=""; user.homeState="CA"; user.gpa=null; user.sat=null; user.focus="Balanced"; user.selected=[]; save(); hydrate(); closeSheet();
-  }};
-  $("#savePlan").onclick = ()=>{
-    user.name = $("#pName").value.trim();
-    user.homeState = $("#pState").value;
-    const g = parseFloat($("#pGPA").value); user.gpa = isNaN(g)? null : Math.max(0, Math.min(5,g));
-    const s = parseInt($("#pSAT").value); user.sat = isNaN(s)? null : Math.max(400, Math.min(1600,s));
-    save(); hydrate(); closeSheet();
-  };
 }
-$("#editPlanBtn").onclick = openPlanning;
+function buildPrefChips(){
+  const box=$("#prefSel"); box.innerHTML="";
+  PREFS.forEach(p=>{
+    const key=p.toLowerCase().split(" ")[0]; const on=!!user.prefs[key];
+    const btn=document.createElement("button"); btn.className="chip"+(on?" is-on":""); btn.textContent=p;
+    btn.onclick=()=>{ const isOn=btn.classList.toggle("is-on"); user.prefs[key]=isOn; };
+    box.appendChild(btn);
+  });
+}
+function showStep(n){
+  plan.step=n;
+  for(let i=1;i<=plan.steps;i++){ $("#step"+i).classList.toggle("hidden", i!==n); }
+  $("#planBar").style.width = Math.round((n-1)/(plan.steps-1)*100)+"%";
+}
+function startPlanning(prefill=false){
+  // prefill fields from user if requested
+  fillStates();
+  $("#pName").value = prefill? (user.name||"") : "";
+  $("#pGPA").value  = prefill && (user.gpa!=null) ? user.gpa : "";
+  $("#pSAT").value  = prefill && (user.sat!=null) ? user.sat : "";
+  buildInterestChips(); buildPrefChips(); showStep(1);
+  // switch tab to Plan
+  $$("#seg .seg__btn").forEach(b=>b.classList.toggle("is-active", b.dataset.tab==="plan"));
+  ["plan","dash","schools","aid","docs"].forEach(v=>$("#view-"+v).classList.toggle("hidden", v!=="plan"));
+}
+$("#to2").onclick=()=>{
+  const name=$("#pName").value.trim();
+  if(!name){ $("#nameErr").style.display="block"; return; } else $("#nameErr").style.display="none";
+  user.name=name; user.homeState=$("#pState").value; save(); showStep(2);
+};
+$("#back1").onclick=()=>showStep(1);
+$("#to3").onclick=()=>{
+  const g=parseFloat($("#pGPA").value); user.gpa=isNaN(g)?null:Math.max(0,Math.min(5,g));
+  const s=parseInt($("#pSAT").value);  user.sat=isNaN(s)?null:Math.max(400,Math.min(1600,s));
+  save(); showStep(3);
+};
+$("#back2").onclick=()=>showStep(2);
+$("#to4").onclick=()=>{ if(user.interests.length===0) user.interests=["Undecided"]; save(); showStep(4); };
+$("#back3").onclick=()=>showStep(3);
+$("#finishPlan").onclick=()=>{
+  if(!user.prefs) user.prefs={cost:true}; // safety
+  user.setupComplete=true; save();
+  hydrateSummary();
+  // jump to dashboard (blank slate: no selected schools)
+  $$("#seg .seg__btn").forEach(b=>b.classList.toggle("is-active", b.dataset.tab==="dash"));
+  ["plan","dash","schools","aid","docs"].forEach(v=>$("#view-"+v).classList.toggle("hidden", v!=="dash"));
+  hydrateDash();
+};
+$("#resetAllBtn").onclick=()=>{
+  if(confirm("Reset all planning and selected schools?")){ clearAll(); user={...DEFAULT_USER}; startPlanning(false); save(); hydrateSummary(); }
+};
+// header summary planning shortcut
+$("#editPlanBtn").onclick=()=>startPlanning(true);
 
-/* -------------------- Summary + Dashboard -------------------- */
-function hydrateSummary(){
-  $("#sumHome").textContent = `Home: ${user.homeState}`;
-  $("#sumFocus").textContent = `Focus: ${user.focus}`;
-  $("#sumGPA").textContent = `GPA: ${user.gpa??"—"}`;
-  $("#helloName").textContent = user.name? `, ${user.name}` : "";
-}
+/* ====== Dashboard / Explore / Docs / Aid ====== */
 function renderSelectedGrid(){
-  const container = $("#selGrid");
-  if(user.selected.length===0){ container.innerHTML = `<div class="sub">No schools yet. Click “Add Schools”.</div>`; return; }
+  const container=$("#selGrid");
+  if(!user.selected.length){ container.innerHTML=`<div class="sub">No schools yet. Click “Add Schools”.</div>`; $("#statCount").textContent="0"; return; }
   container.innerHTML = user.selected.map(id=>{
-    const s = SCHOOLS.find(x=>x.id===id);
-    const b = bucketFor(s), pill = b==="reach"?"pill--reach":b==="match"?"pill--match":"pill--safe";
-    const t = tuitionFor(s);
-    return `
-      <div class="scard">
-        <div class="row">
-          <strong>${s.name}</strong>
-          <span class="pill ${pill}">${b[0].toUpperCase()+b.slice(1)} • ${matchScore(s)}%</span>
-        </div>
-        <div class="meta">Avg GPA ${s.avgGPA.toFixed(2)} • SAT ${s.avgSAT} • ${s.public?"Public":"Private"} • ${s.state}</div>
-        <div class="row"><span>Your tuition</span><strong>$${t.toLocaleString()} <span class="pill pill--res">${isResident(s)?"Resident":"Non-resident"}</span></strong></div>
-        <footer>
-          <button class="btn btn--quiet" onclick="openReqs(${s.id})">Requirements</button>
-          <button class="btn btn--quiet" onclick="openAid(${s.id})">Aid</button>
-          <button class="btn btn--ghost" onclick="removeSchool(${s.id})">Remove</button>
-        </footer>
-      </div>`;
+    const s=SCHOOLS.find(x=>x.id===id); const b=bucketFor(s);
+    const pill=b==="reach"?"pill--reach":b==="match"?"pill--match":"pill--safe";
+    const t=tuitionFor(s);
+    return `<div class="scard">
+      <div class="row">
+        <strong>${s.name}</strong>
+        <span class="pill ${pill}">${b[0].toUpperCase()+b.slice(1)} • ${matchScore(s)}%</span>
+      </div>
+      <div class="meta">Avg GPA ${s.avgGPA.toFixed(2)} • SAT ${s.avgSAT} • ${s.public?"Public":"Private"} • ${s.state}</div>
+      <div class="row"><span>Your tuition</span><strong>$${t.toLocaleString()} <span class="pill pill--res">${isResident(s)?"Resident":"Non-resident"}</span></strong></div>
+      <footer>
+        <button class="btn btn--quiet" onclick="openReqs(${s.id})">Requirements</button>
+        <button class="btn btn--quiet" onclick="openAid(${s.id})">Aid</button>
+        <button class="btn btn--ghost" onclick="removeSchool(${s.id})">Remove</button>
+      </footer>
+    </div>`;
   }).join("");
-  $("#statCount").textContent = user.selected.length;
+  $("#statCount").textContent=String(user.selected.length);
 }
 function nextTask(){
   if(user.selected.length<3) return "Add at least 3 schools to unlock a stronger plan.";
   return "Open Docs and check off your first item.";
 }
-function hydrateDash(){
-  hydrateSummary();
-  renderSelectedGrid();
-  $("#nextTask").textContent = nextTask();
-  buildTimeline();
+function buildTimeline(){
+  const t=$("#tline");
+  if(!user.selected.length){ t.innerHTML=`<div class="sub">Timeline appears after you add schools.</div>`; return; }
+  const items=[];
+  user.selected.forEach(id=>{
+    const s=SCHOOLS.find(x=>x.id===id); const dd=DEADLINES[s.sys]; if(!dd) return;
+    const days=daysUntil(dd.submit);
+    let cls="titem"; if(days<=14) cls="titem titem--danger"; else if(days<=30) cls="titem titem--warn";
+    items.push(`<div class="${cls}"><div class="small sub">${s.name}</div><div><strong>${dd.submit}</strong> — Final deadline</div></div>`);
+    if(dd.priority){
+      const pd=daysUntil(dd.priority);
+      let pcls="titem"; if(pd<=14) pcls="titem titem--danger"; else if(pd<=30) pcls="titem titem--warn";
+      items.push(`<div class="${pcls}"><div class="small sub">${s.name}</div><div><strong>${dd.priority}</strong> — Priority submission</div></div>`);
+    }
+  });
+  t.innerHTML=items.join("");
 }
+function hydrateDash(){ hydrateSummary(); renderSelectedGrid(); $("#nextTask").textContent=nextTask(); buildTimeline(); }
 
-/* -------------------- Explore / Add -------------------- */
-const exploreSel = new Set();
+/* Explore */
+const exploreSel=new Set();
 function renderExplore(){
-  const chips = $("#chips");
-  let filter = chips.querySelector(".chip.is-on")?.dataset.filter || "all";
-  const list = SCHOOLS.filter(s=>{
+  const filter=$("#chips .chip.is-on")?.dataset.filter || "all";
+  const list=SCHOOLS.filter(s=>{
     if(filter==="instate") return s.state===user.homeState && s.public;
     if(filter==="public") return s.public;
     if(filter==="private") return !s.public;
@@ -442,90 +506,62 @@ function renderExplore(){
     return true;
   });
   $("#exploreGrid").innerHTML = list.map(s=>{
-    const b = bucketFor(s), pill = b==="reach"?"pill--reach":b==="match"?"pill--match":"pill--safe";
-    const t = tuitionFor(s);
-    const picked = exploreSel.has(s.id);
-    return `
-      <div class="scard" data-id="${s.id}">
-        <div class="row"><strong>${s.name}</strong><span class="pill ${pill}">${b} • ${matchScore(s)}%</span></div>
-        <div class="meta">${s.state} • ${s.public?"Public":"Private"} • Rep ${s.rep}/5</div>
-        <div class="row"><span>Tuition</span><strong>$${t.toLocaleString()} <span class="pill pill--res">${isResident(s)?"Resident":"Non-resident"}</span></strong></div>
-        <footer>
-          <button class="btn ${picked?"btn--ghost":"btn--primary"}" onclick="togglePick(${s.id})">${picked?"Unselect":"Select"}</button>
-        </footer>
-      </div>`;
+    const picked=exploreSel.has(s.id);
+    const b=bucketFor(s), pill=b==="reach"?"pill--reach":b==="match"?"pill--match":"pill--safe";
+    const t=tuitionFor(s);
+    return `<div class="scard">
+      <div class="row"><strong>${s.name}</strong><span class="pill ${pill}">${b} • ${matchScore(s)}%</span></div>
+      <div class="meta">${s.state} • ${s.public?"Public":"Private"} • Rep ${s.rep}/5</div>
+      <div class="row"><span>Tuition</span><strong>$${t.toLocaleString()} <span class="pill pill--res">${isResident(s)?"Resident":"Non-resident"}</span></strong></div>
+      <footer>
+        <button class="btn ${picked?"btn--ghost":"btn--primary"}" onclick="togglePick(${s.id})">${picked?"Unselect":"Select"}</button>
+      </footer>
+    </div>`;
   }).join("");
 }
-function togglePick(id){ exploreSel.has(id)? exploreSel.delete(id): exploreSel.add(id); renderExplore(); }
-$("#chips").addEventListener("click",(e)=>{
-  const chip = e.target.closest(".chip"); if(!chip) return;
-  $("#chips").querySelectorAll(".chip").forEach(c=>c.classList.remove("is-on"));
-  chip.classList.add("is-on");
-  renderExplore();
-});
-$("#addSchoolsBtn").onclick = ()=>{ // open quick picker
-  $$('#seg .seg__btn').forEach(b=>b.classList.toggle('is-active', b.dataset.tab==="schools"));
-  $("#view-dash").classList.add("hidden");
-  $("#view-schools").classList.remove("hidden");
-  $("#chips").style.display="flex";
-  renderExplore();
+window.togglePick=(id)=>{ exploreSel.has(id)?exploreSel.delete(id):exploreSel.add(id); renderExplore(); }
+$("#chips").addEventListener("click",(e)=>{ const chip=e.target.closest(".chip"); if(!chip) return; $("#chips").querySelectorAll(".chip").forEach(c=>c.classList.remove("is-on")); chip.classList.add("is-on"); renderExplore(); });
+$("#addSchoolsBtn").onclick=()=>{ // jump to Schools tab
+  $$("#seg .seg__btn").forEach(b=>b.classList.toggle("is-active", b.dataset.tab==="schools"));
+  ["plan","dash","schools","aid","docs"].forEach(v=>$("#view-"+v).classList.toggle("hidden", v!=="schools"));
+  $("#chips").style.display="flex"; renderExplore();
 };
-$("#addFromExplore").onclick = ()=>{
-  exploreSel.forEach(id=>{
-    if(!user.selected.includes(id)) user.selected.push(id);
-  });
-  save(); exploreSel.clear(); renderExplore(); hydrateDash(); // stay or go back
-  alert("Added to your plan."); 
+$("#addFromExplore").onclick=()=>{
+  exploreSel.forEach(id=>{ if(!user.selected.includes(id)) user.selected.push(id); });
+  exploreSel.clear(); save(); renderExplore(); hydrateDash(); alert("Added to your plan.");
 };
 
-/* Remove */
-window.removeSchool = (id)=>{
-  user.selected = user.selected.filter(x=>x!==id);
-  save(); hydrateDash(); buildDocs();
+/* Remove from selected */
+window.removeSchool=(id)=>{ user.selected=user.selected.filter(x=>x!==id); save(); hydrateDash(); buildDocs(); };
+
+/* Requirements (inline modal via alert-style sheet omitted for brevity) */
+window.openReqs=(id)=>{
+  const s=SCHOOLS.find(x=>x.id===id); const req=REQUIREMENTS[s.sys]||["Application","Transcript","FAFSA"];
+  alert(`${s.name} requirements:\n\n- ${req.join("\n- ")}`);
 };
 
-/* -------------------- Requirements sheet -------------------- */
-window.openReqs = (id)=>{
-  const s = SCHOOLS.find(x=>x.id===id);
-  const req = REQUIREMENTS[s.sys]||["Application","Transcript","FAFSA"];
-  const html = `<h3>${s.name} — Requirements</h3>
-  <div class="sub">${s.sys} • ${s.public?"Public":"Private"}</div>
-  <div class="hr"></div>
-  ${req.map(x=>`<div class="chk"><span class="tag">Req</span><div>${x}</div></div>`).join("")}
-  <div class="hr"></div>
-  <button class="btn btn--primary" onclick="closeSheet()">Done</button>`;
-  openSheet(html);
-};
-
-/* -------------------- Aid (tab + sheet) -------------------- */
+/* Aid */
 function hydrateAidSelect(){
-  const select = $("#aidSchool");
-  const pool = user.selected.length? user.selected.map(id=>SCHOOLS.find(s=>s.id===id)) : SCHOOLS;
-  select.innerHTML = pool.map(s=>`<option value="${s.id}">${s.name}</option>`).join("");
+  const select=$("#aidSchool");
+  const pool=user.selected.length? user.selected.map(id=>SCHOOLS.find(s=>s.id===id)) : SCHOOLS;
+  select.innerHTML=pool.map(s=>`<option value="${s.id}">${s.name}</option>`).join("");
 }
-function calcAidFor(school, income, whatIf){
-  // very simple illustrative logic (you asked to pin precise tables for later)
-  const s = school;
-  const resTuition = tuitionFor(s, whatIf);
-  let pell = income<50000 ? 6500 : income<70000 ? 3000 : 0;
-  let state = 0;
-  if(s.state==="CA" && s.public){ // rough Cal Grant proxy
-    if(income<80000 && (user.gpa??3.0)>=3.0) state = 12500;
-  }
-  // institutional (heuristic, rep and private increase grant likelihood but also cost)
-  let inst = (!s.public && income<120000) ? 8000 : (s.public? 1200: 3000);
-  const total = Math.max(0, pell+state+inst);
-  const net = Math.max(0, resTuition - total);
-  return {tuition:resTuition,pell,state,inst,total,net};
+function calcAidFor(s, income, whatIf){
+  const tuition=tuitionFor(s, whatIf);
+  let pell= income<50000?6500 : income<70000?3000 : 0;
+  let state=0;
+  if(s.state==="CA" && s.public){ if(income<80000 && (user.gpa??3)>=3) state=12500; }
+  let inst = (!s.public && income<120000)?8000 : (s.public?1200:3000);
+  const total=Math.max(0,pell+state+inst);
+  const net=Math.max(0,tuition-total);
+  return {tuition,pell,state,inst,total,net};
 }
-$("#calcAidBtn").onclick = ()=>{
-  const id = parseInt($("#aidSchool").value);
-  const s = SCHOOLS.find(x=>x.id===id);
-  const income = parseInt($("#income").value)||0;
-  const whatIf = $("#aidWhatIf").checked;
-  const r = calcAidFor(s, income, whatIf);
-  $("#aidOut").innerHTML = `
-    <div class="row"><div class="sub">Tuition (${whatIf?"what-if non-resident": isResident(s)?"resident":"non-resident"})</div><strong>$${r.tuition.toLocaleString()}</strong></div>
+$("#calcAidBtn").onclick=()=>{
+  const id=parseInt($("#aidSchool").value); const s=SCHOOLS.find(x=>x.id===id);
+  const income=parseInt($("#income").value)||0; const whatIf=$("#aidWhatIf").checked;
+  const r=calcAidFor(s,income,whatIf);
+  $("#aidOut").innerHTML=`
+    <div class="row"><div class="sub">Tuition (${whatIf?"what-if non-resident":isResident(s)?"resident":"non-resident"})</div><strong>$${r.tuition.toLocaleString()}</strong></div>
     <div class="hr"></div>
     <div class="row"><span>Pell Grant</span><strong>$${r.pell.toLocaleString()}</strong></div>
     <div class="row"><span>State Aid</span><strong>$${r.state.toLocaleString()}</strong></div>
@@ -533,164 +569,82 @@ $("#calcAidBtn").onclick = ()=>{
     <div class="hr"></div>
     <div class="row"><strong>Total Aid</strong><strong>$${r.total.toLocaleString()}</strong></div>
     <div class="row"><strong>Estimated Net</strong><strong>$${r.net.toLocaleString()}</strong></div>
-    <div class="small muted">Approximate 2025 logic. We’ll swap in current-year tables next.</div>
-  `;
+    <div class="small sub">Approximate logic. We’ll wire exact current-year tables next.</div>`;
 };
-window.openAid = (id)=>{
-  const s = SCHOOLS.find(x=>x.id===id);
-  const income = parseInt($("#income").value)||75000;
-  const r = calcAidFor(s, income, false);
-  const html = `
-    <h3>${s.name} — Aid Snapshot</h3>
-    <div class="row"><div class="sub">Residency</div><div>${isResident(s)?"Resident":"Non-resident"}</div></div>
-    <div class="row"><div>Tuition</div><strong>$${r.tuition.toLocaleString()}</strong></div>
-    <div class="hr"></div>
-    <div class="row"><span>Pell</span><strong>$${r.pell.toLocaleString()}</strong></div>
-    <div class="row"><span>State</span><strong>$${r.state.toLocaleString()}</strong></div>
-    <div class="row"><span>Institutional</span><strong>$${r.inst.toLocaleString()}</strong></div>
-    <div class="hr"></div>
-    <div class="row"><strong>Net</strong><strong>$${r.net.toLocaleString()}</strong></div>
-    <div class="hr"></div>
-    <label class="small"><input id="sheetWhatIf" type="checkbox" /> Preview as non-resident</label>
-    <div class="row" style="margin-top:8px"><button class="btn btn--primary" id="sheetClose">Close</button></div>
-  `;
-  openSheet(html);
-  $("#sheetClose").onclick = closeSheet;
-  $("#sheetWhatIf").onchange = (e)=>{
-    const sim = calcAidFor(s, income, e.target.checked);
-    // re-render delta rows in place (for brevity we re-open)
-    openAid(id);
-    $("#sheetWhatIf").checked = e.target.checked;
-  };
+window.openAid=(id)=>{
+  const s=SCHOOLS.find(x=>x.id===id); const r=calcAidFor(s, parseInt($("#income").value)||75000, false);
+  alert(`${s.name} Aid (resident):\nTuition $${r.tuition}\nPell $${r.pell}\nState $${r.state}\nInstitutional $${r.inst}\nNet $${r.net}`);
 };
 
-/* -------------------- Docs (interactive) -------------------- */
+/* Docs (interactive, generated from selected) */
 function docKey(id,name){ return `pw.doc.${id}.${name}`; }
 function buildDocs(){
-  const list = $("#docsList");
-  if(user.selected.length===0){ list.innerHTML = `<div class="sub">Add schools to generate your checklist.</div>`; return; }
-  // aggregate requirements by selected schools
-  const rows = [];
+  const list=$("#docsList");
+  if(!user.selected.length){ list.innerHTML=`<div class="sub">Add schools to generate your checklist.</div>`; return; }
+  const rows=[];
   user.selected.forEach(id=>{
-    const s = SCHOOLS.find(x=>x.id===id);
-    const req = REQUIREMENTS[s.sys]||[];
+    const s=SCHOOLS.find(x=>x.id===id); const req=REQUIREMENTS[s.sys]||[];
     req.forEach(item=>{
-      const key = docKey(id,item);
-      const checked = localStorage.getItem(key)==="1";
-      rows.push(`<label class="chk">
-        <input type="checkbox" data-doc="${key}" ${checked?"checked":""} />
-        <div><strong>${item}</strong><div class="small muted">${s.name}</div></div>
-        <span class="tag">${s.sys}</span>
-      </label>`);
+      const key=docKey(id,item); const checked=localStorage.getItem(key)==="1";
+      rows.push(`<label class="chk"><input type="checkbox" data-doc="${key}" ${checked?"checked":""}/>
+        <div><strong>${item}</strong><div class="small sub">${s.name}</div></div><span class="tag">${s.sys}</span></label>`);
     });
   });
-  list.innerHTML = rows.join("");
+  list.innerHTML=rows.join("");
   list.querySelectorAll("input[type=checkbox]").forEach(cb=>{
-    cb.onchange = ()=> localStorage.setItem(cb.dataset.doc, cb.checked?"1":"0");
+    cb.onchange=()=>localStorage.setItem(cb.dataset.doc, cb.checked?"1":"0");
   });
 }
 
-/* -------------------- Timeline (auto) -------------------- */
-function buildTimeline(){
-  const t = $("#tline");
-  if(user.selected.length===0){ t.innerHTML = `<div class="sub">Timeline appears after you add schools.</div>`; return; }
-  const items = [];
-  user.selected.forEach(id=>{
-    const s = SCHOOLS.find(x=>x.id===id);
-    const dd = DEADLINES[s.sys]; if(!dd) return;
-    const dKey = dd.priority? dd.priority : dd.submit;
-    const days = daysUntil(dd.submit);
-    let cls = "titem"; if(days<=14) cls="titem titem--danger"; else if(days<=30) cls="titem titem--warn";
-    items.push(`<div class="${cls}">
-      <div class="small muted">${s.name}</div>
-      <div><strong>${dd.submit}</strong> — Final deadline</div>
-    </div>`);
-    if(dd.priority){
-      const pdays = daysUntil(dd.priority);
-      let pcls = "titem"; if(pdays<=14) pcls="titem titem--danger"; else if(pdays<=30) pcls="titem titem--warn";
-      items.push(`<div class="${pcls}">
-        <div class="small muted">${s.name}</div>
-        <div><strong>${dd.priority}</strong> — Priority submission</div>
-      </div>`);
-    }
-  });
-  t.innerHTML = items.join("");
-}
-
-/* -------------------- Optimizer -------------------- */
-$("#optimizeBtn").onclick = ()=>{
+/* Optimizer */
+$("#optimizeBtn").onclick=()=>{
   if(user.selected.length<3){ alert("Add at least 3 schools first."); return; }
-  const risk = parseInt($("#risk").value); // 0–100
-  // simple rule: risk tilts reach vs safety split
-  const total = user.selected.length;
-  const reach = Math.round((30 + risk*0.2)/100 * total);   // 30–50%
-  const safe  = Math.round((30 - risk*0.15)/100 * total);  // 30–15%
-  const match = Math.max(0,total - reach - safe);
-  openSheet(`
-    <h3>Balanced Portfolio</h3>
-    <div class="sub">Based on your risk slider</div>
-    <div class="hr"></div>
-    <div>Reach: <strong>${reach}</strong></div>
-    <div>Match: <strong>${match}</strong></div>
-    <div>Safety: <strong>${safe}</strong></div>
-    <div class="hr"></div>
-    <button class="btn btn--primary" onclick="closeSheet()">Looks good</button>
-  `);
+  const risk=parseInt($("#risk").value);
+  const total=user.selected.length;
+  const reach=Math.round((30 + risk*0.2)/100 * total);
+  const safe =Math.round((30 - risk*0.15)/100 * total);
+  const match=Math.max(0,total - reach - safe);
+  alert(`Balanced Portfolio\n\nReach: ${reach}\nMatch: ${match}\nSafety: ${safe}`);
 };
 
-/* -------------------- AI (idle) -------------------- */
-let idle; const IDLE_MS = 45000;
+/* AI bubble (idle nudge) */
+let idle; const IDLE_MS=45000;
 function nudge(){
-  // context-aware helper
-  const dashOn = !$("#view-dash").classList.contains("hidden");
-  const schoolsOn = !$("#view-schools").classList.contains("hidden");
-  const docsOn = !$("#view-docs").classList.contains("hidden");
-  const aidOn = !$("#view-aid").classList.contains("hidden");
-  let html = `<h3>Need a hand?</h3><div class="hr"></div>`;
-  if(schoolsOn) html += `<button class="btn btn--primary" onclick="closeSheet(); document.getElementById('addFromExplore').click()">Add selected schools</button>`;
-  else if(docsOn) html += `<button class="btn btn--primary" onclick="closeSheet(); document.getElementById('docsHelp').click()">Draft a brag sheet</button>`;
-  else if(aidOn) html += `<button class="btn btn--primary" onclick="closeSheet(); document.getElementById('calcAidBtn').click()">Calculate aid now</button>`;
-  else html += `<button class="btn btn--primary" onclick="closeSheet(); document.getElementById('addSchoolsBtn').click()">Start by adding schools</button>`;
-  openSheet(html);
+  // context-aware button hint
+  const schoolsOn=!$("#view-schools").classList.contains("hidden");
+  const docsOn=!$("#view-docs").classList.contains("hidden");
+  const aidOn =!$("#view-aid").classList.contains("hidden");
+  if(schoolsOn) alert("Tip: use the filter chips, Select a few, then ‘Add Selected’."); 
+  else if(docsOn) alert("Open ‘Help me write’ for a brag-sheet starter, then check items off.");
+  else if(aidOn) alert("Pick a school, set income, toggle ‘what-if’ non-resident, then Calculate.");
+  else alert("Start by adding 3+ schools to unlock docs & a stronger plan.");
 }
-function resetIdle(){ clearTimeout(idle); idle = setTimeout(nudge, IDLE_MS); }
+function resetIdle(){ clearTimeout(idle); idle=setTimeout(nudge, IDLE_MS); }
 ["click","scroll","keydown","pointermove","touchstart"].forEach(e=>window.addEventListener(e, resetIdle, {passive:true}));
 resetIdle();
-$("#aiBtn").onclick = nudge;
+$("#aiBtn").onclick=nudge;
 
-/* Docs helper */
-$("#docsHelp").onclick = ()=>{
-  openSheet(`
-    <h3>Brag Sheet Starter</h3>
-    <div class="sub">Use this quick outline to help your recommenders</div>
-    <div class="hr"></div>
-    <ol class="small">
-      <li>Top 3 achievements (impact + numbers)</li>
-      <li>Classes you loved (why, with examples)</li>
-      <li>Leadership moments (what changed)</li>
-      <li>Community or work (hours, outcomes)</li>
-      <li>What you want to study (2–3 lines)</li>
-    </ol>
-    <div class="hr"></div>
-    <button class="btn btn--primary" onclick="closeSheet()">Got it</button>
-  `);
-};
-
-/* -------------------- Init -------------------- */
-function hydrate(){
-  hydrateSummary(); hydrateDash(); hydrateAidSelect(); buildDocs(); renderExplore();
-}
+/* Aid select hydrate on focus */
 $("#aidSchool").addEventListener("focus", hydrateAidSelect);
-$("#editPlanBtn").addEventListener("click", openPlanning);
 
-/* Default state for a clean first run */
-if(!user.selected.length){ 
-  // prime with a couple of smart suggestions (in-state public + one private)
-  const seed = SCHOOLS.filter(s=>s.state===user.homeState && s.public).slice(0,1)
-    .concat(SCHOOLS.find(s=>!s.public && s.state===user.homeState) || []);
-  user.selected = seed.map(s=>s.id); save();
+/* Add schools flow */
+window.togglePick=(id)=>{ /* defined above */ }
+document.getElementById("addFromExplore").onclick = document.getElementById("addFromExplore").onclick; // noop keep
+
+/* ====== Init (blank slate respected) ====== */
+function initSummaryAndPlan(){
+  hydrateSummary();
+  // first-run: force Plan tab
+  if(!user.setupComplete){
+    startPlanning(false);
+  }else{
+    // jump to dashboard by default
+    $$("#seg .seg__btn").forEach(b=>b.classList.toggle("is-active", b.dataset.tab==="dash"));
+    ["plan","dash","schools","aid","docs"].forEach(v=>$("#view-"+v).classList.toggle("hidden", v!=="dash"));
+    hydrateDash();
+  }
 }
-hydrate();
+initSummaryAndPlan();
 </script>
 </body>
 </html>
