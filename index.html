@@ -247,6 +247,54 @@
             border-color: transparent;
         }
 
+        /* Preference Cards */
+        .preference-grid {
+            display: grid;
+            gap: 16px;
+            margin-bottom: 30px;
+        }
+
+        .preference-card {
+            padding: 20px;
+            border-radius: var(--border-radius);
+            background: var(--background);
+            border: 2px solid transparent;
+            cursor: pointer;
+            transition: all 0.2s;
+            display: flex;
+            align-items: center;
+            gap: 16px;
+        }
+
+        .preference-card:hover {
+            border-color: var(--primary);
+            transform: translateX(4px);
+        }
+
+        .preference-card.selected {
+            border-color: var(--primary);
+            background: linear-gradient(135deg, rgba(0,122,255,0.1), rgba(88,86,214,0.1));
+        }
+
+        .preference-icon {
+            font-size: 24px;
+        }
+
+        .preference-text {
+            flex: 1;
+        }
+
+        .preference-title {
+            font-size: 16px;
+            font-weight: 600;
+            margin-bottom: 4px;
+        }
+
+        .preference-desc {
+            font-size: 14px;
+            color: var(--gray);
+        }
+
         /* Dashboard */
         .dashboard-container {
             padding: 20px;
@@ -295,11 +343,51 @@
             color: var(--dark);
         }
 
+        /* School Categories */
+        .school-category {
+            margin-bottom: 30px;
+        }
+
+        .category-header {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            margin-bottom: 16px;
+        }
+
+        .category-title {
+            font-size: 20px;
+            font-weight: 600;
+        }
+
+        .category-badge {
+            padding: 4px 12px;
+            border-radius: 12px;
+            font-size: 12px;
+            font-weight: 600;
+        }
+
+        .badge-reach {
+            background: rgba(255, 59, 48, 0.1);
+            color: var(--danger);
+        }
+
+        .badge-match {
+            background: rgba(52, 199, 89, 0.1);
+            color: var(--success);
+        }
+
+        .badge-safety {
+            background: rgba(0, 122, 255, 0.1);
+            color: var(--primary);
+        }
+
         /* School Cards */
         .schools-grid {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
             gap: 20px;
+            margin-bottom: 20px;
         }
 
         .school-card {
@@ -309,11 +397,32 @@
             box-shadow: var(--shadow);
             cursor: pointer;
             transition: all 0.2s;
+            position: relative;
         }
 
         .school-card:hover {
             transform: translateY(-4px);
             box-shadow: var(--shadow-large);
+        }
+
+        .school-card.selected {
+            border: 2px solid var(--primary);
+        }
+
+        .school-remove {
+            position: absolute;
+            top: 12px;
+            right: 12px;
+            width: 24px;
+            height: 24px;
+            border-radius: 50%;
+            background: var(--danger);
+            color: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            font-size: 16px;
         }
 
         .school-header {
@@ -350,27 +459,197 @@
             color: var(--danger);
         }
 
-        /* Mobile Optimizations */
-        @media (max-width: 768px) {
-            .discovery-card {
-                padding: 20px;
-            }
+        /* Add School Button */
+        .add-school-btn {
+            width: 100%;
+            padding: 20px;
+            border: 2px dashed var(--light-gray);
+            border-radius: var(--border-radius);
+            background: transparent;
+            color: var(--primary);
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
 
-            .discovery-title {
-                font-size: 24px;
-            }
+        .add-school-btn:hover {
+            border-color: var(--primary);
+            background: rgba(0, 122, 255, 0.05);
+        }
 
-            .interest-grid {
-                grid-template-columns: repeat(2, 1fr);
-            }
+        /* Tab Navigation */
+        .tab-nav {
+            display: flex;
+            gap: 8px;
+            padding: 20px;
+            overflow-x: auto;
+            -webkit-overflow-scrolling: touch;
+        }
 
-            .stats-grid {
-                grid-template-columns: 1fr;
-            }
+        .tab-button {
+            padding: 10px 20px;
+            border-radius: 20px;
+            background: var(--background);
+            border: none;
+            font-size: 15px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.2s;
+            white-space: nowrap;
+        }
 
-            .schools-grid {
-                grid-template-columns: 1fr;
+        .tab-button.active {
+            background: var(--primary);
+            color: white;
+        }
+
+        /* Financial Aid Tab */
+        .aid-calculator {
+            background: var(--card);
+            border-radius: var(--border-radius);
+            padding: 30px;
+            margin-bottom: 20px;
+        }
+
+        .aid-result {
+            background: linear-gradient(135deg, rgba(52, 199, 89, 0.1), rgba(0, 122, 255, 0.1));
+            border-radius: var(--border-radius);
+            padding: 20px;
+            margin-top: 20px;
+        }
+
+        /* Document Tracker */
+        .document-list {
+            display: grid;
+            gap: 16px;
+        }
+
+        .document-item {
+            background: var(--card);
+            border-radius: var(--border-radius);
+            padding: 20px;
+            display: flex;
+            align-items: center;
+            gap: 16px;
+        }
+
+        .document-status {
+            width: 24px;
+            height: 24px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .status-complete {
+            background: var(--success);
+            color: white;
+        }
+
+        .status-pending {
+            background: var(--warning);
+            color: white;
+        }
+
+        .status-missing {
+            background: var(--danger);
+            color: white;
+        }
+
+        /* Timeline */
+        .timeline-item {
+            background: var(--card);
+            border-radius: var(--border-radius);
+            padding: 20px;
+            margin-bottom: 16px;
+            border-left: 4px solid var(--primary);
+        }
+
+        .timeline-date {
+            font-size: 14px;
+            color: var(--gray);
+            margin-bottom: 8px;
+        }
+
+        .timeline-title {
+            font-size: 18px;
+            font-weight: 600;
+            margin-bottom: 8px;
+        }
+
+        /* AI Assistant */
+        .ai-bubble {
+            position: fixed;
+            bottom: 80px;
+            right: 20px;
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            color: white;
+            padding: 16px 20px;
+            border-radius: 20px;
+            box-shadow: var(--shadow-large);
+            max-width: 280px;
+            z-index: 999;
+            animation: slideIn 0.5s ease;
+        }
+
+        @keyframes slideIn {
+            from {
+                transform: translateX(400px);
+                opacity: 0;
             }
+            to {
+                transform: translateX(0);
+                opacity: 1;
+            }
+        }
+
+        /* Consent Modal */
+        .consent-modal {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0,0,0,0.8);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 3000;
+            padding: 20px;
+        }
+
+        .consent-content {
+            background: var(--card);
+            border-radius: var(--border-radius-large);
+            padding: 30px;
+            max-width: 500px;
+            width: 100%;
+        }
+
+        .consent-title {
+            font-size: 24px;
+            font-weight: 700;
+            margin-bottom: 16px;
+        }
+
+        .consent-text {
+            font-size: 16px;
+            color: var(--gray);
+            margin-bottom: 24px;
+            line-height: 1.6;
+        }
+
+        .consent-checkbox {
+            display: flex;
+            align-items: flex-start;
+            gap: 12px;
+            margin-bottom: 24px;
+        }
+
+        .consent-checkbox input {
+            margin-top: 2px;
         }
 
         /* Share Modal */
@@ -435,38 +714,59 @@
             visibility: visible;
         }
 
-        /* Tab Navigation */
-        .tab-nav {
-            display: flex;
-            gap: 8px;
-            padding: 20px;
-            overflow-x: auto;
-            -webkit-overflow-scrolling: touch;
-        }
-
-        .tab-button {
-            padding: 10px 20px;
-            border-radius: 20px;
-            background: var(--background);
-            border: none;
-            font-size: 15px;
-            font-weight: 500;
-            cursor: pointer;
-            transition: all 0.2s;
-            white-space: nowrap;
-        }
-
-        .tab-button.active {
-            background: var(--primary);
-            color: white;
-        }
-
         .hidden {
             display: none !important;
+        }
+
+        /* Mobile Optimizations */
+        @media (max-width: 768px) {
+            .discovery-card {
+                padding: 20px;
+            }
+
+            .discovery-title {
+                font-size: 24px;
+            }
+
+            .interest-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+
+            .stats-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .schools-grid {
+                grid-template-columns: 1fr;
+            }
         }
     </style>
 </head>
 <body>
+    <!-- Consent Modal -->
+    <div class="consent-modal" id="consentModal">
+        <div class="consent-content">
+            <div class="consent-title">Welcome to Pathwise! 🎓</div>
+            <div class="consent-text">
+                We're here to help you navigate your college journey. Before we start, we need your permission to:
+                <br><br>
+                • Save your progress so you don't lose your work<br>
+                • Send you important deadline reminders<br>
+                • Provide personalized college recommendations<br>
+                • Keep your information secure and private
+            </div>
+            <div class="consent-checkbox">
+                <input type="checkbox" id="consentCheck">
+                <label for="consentCheck">I agree to let Pathwise help me with my college planning journey</label>
+            </div>
+            <div class="input-group">
+                <label class="input-label">Email (for deadline reminders)</label>
+                <input type="email" class="input-field" id="userEmail" placeholder="your.email@example.com">
+            </div>
+            <button class="button button-primary" style="width: 100%;" onclick="acceptConsent()">Let's Start!</button>
+        </div>
+    </div>
+
     <!-- Navigation Header -->
     <div class="nav-header">
         <button class="nav-back" id="backBtn" onclick="goBack()">
@@ -494,38 +794,38 @@
         <!-- Discovery Flow -->
         <div id="discoverySection" class="discovery-container">
             <div class="progress-bar">
-                <div class="progress-fill" id="progressBar" style="width: 25%"></div>
+                <div class="progress-fill" id="progressBar" style="width: 20%"></div>
             </div>
 
             <!-- Step 1: Welcome -->
             <div id="step1" class="discovery-card">
-                <div class="discovery-title">Welcome to Your College Journey</div>
-                <div class="discovery-subtitle">Let's find your perfect path to California colleges</div>
+                <div class="discovery-title">Let's Build Your Path 🚀</div>
+                <div class="discovery-subtitle">No cap, we're about to find your perfect college match</div>
                 
                 <div class="input-group">
                     <label class="input-label">First Name</label>
-                    <input type="text" class="input-field" id="firstName" placeholder="Enter your name">
+                    <input type="text" class="input-field" id="firstName" placeholder="What should we call you?">
                 </div>
 
                 <div class="input-group">
                     <label class="input-label">Current Grade</label>
                     <select class="input-field" id="gradeLevel">
                         <option value="">Select grade</option>
-                        <option value="9">9th Grade</option>
-                        <option value="10">10th Grade</option>
-                        <option value="11">11th Grade</option>
-                        <option value="12">12th Grade</option>
+                        <option value="9">Freshman (9th)</option>
+                        <option value="10">Sophomore (10th)</option>
+                        <option value="11">Junior (11th)</option>
+                        <option value="12">Senior (12th)</option>
                         <option value="transfer">Transfer Student</option>
                     </select>
                 </div>
 
-                <button class="button button-primary" onclick="nextStep()">Continue</button>
+                <button class="button button-primary" onclick="nextStep()">Let's Go →</button>
             </div>
 
             <!-- Step 2: Interests -->
             <div id="step2" class="discovery-card hidden">
-                <div class="discovery-title">What Interests You?</div>
-                <div class="discovery-subtitle">Select all that apply (or none if unsure)</div>
+                <div class="discovery-title">What's Your Vibe? ✨</div>
+                <div class="discovery-subtitle">Pick what hits different for you (or skip if you're still figuring it out)</div>
                 
                 <div class="interest-grid">
                     <div class="interest-pill" data-interest="stem">🔬 STEM</div>
@@ -535,17 +835,64 @@
                     <div class="interest-pill" data-interest="social">🤝 Social Sciences</div>
                     <div class="interest-pill" data-interest="humanities">📚 Humanities</div>
                     <div class="interest-pill" data-interest="education">🎓 Education</div>
-                    <div class="interest-pill" data-interest="unsure">❓ Not Sure</div>
+                    <div class="interest-pill" data-interest="unsure">❓ Still Vibing</div>
                 </div>
 
-                <button class="button button-primary" onclick="nextStep()">Continue</button>
-                <button class="button button-secondary" onclick="prevStep()">Back</button>
+                <button class="button button-primary" onclick="nextStep()">Continue →</button>
+                <button class="button button-secondary" onclick="prevStep()">← Back</button>
             </div>
 
-            <!-- Step 3: Academics -->
+            <!-- Step 3: Preferences -->
             <div id="step3" class="discovery-card hidden">
-                <div class="discovery-title">Academic Snapshot</div>
-                <div class="discovery-subtitle">Optional - helps with personalized recommendations</div>
+                <div class="discovery-title">What Matters Most? 💭</div>
+                <div class="discovery-subtitle">Real talk - what's actually important to you?</div>
+                
+                <div class="preference-grid">
+                    <div class="preference-card" data-preference="reputation">
+                        <div class="preference-icon">🏆</div>
+                        <div class="preference-text">
+                            <div class="preference-title">School Clout</div>
+                            <div class="preference-desc">That prestigious name recognition</div>
+                        </div>
+                    </div>
+                    <div class="preference-card" data-preference="cost">
+                        <div class="preference-icon">💰</div>
+                        <div class="preference-text">
+                            <div class="preference-title">Keep It Affordable</div>
+                            <div class="preference-desc">Not trying to be in debt forever</div>
+                        </div>
+                    </div>
+                    <div class="preference-card" data-preference="location">
+                        <div class="preference-icon">📍</div>
+                        <div class="preference-text">
+                            <div class="preference-title">Location Vibes</div>
+                            <div class="preference-desc">Close to home or new adventure</div>
+                        </div>
+                    </div>
+                    <div class="preference-card" data-preference="size">
+                        <div class="preference-icon">👥</div>
+                        <div class="preference-text">
+                            <div class="preference-title">Campus Size</div>
+                            <div class="preference-desc">Big energy or small community</div>
+                        </div>
+                    </div>
+                    <div class="preference-card" data-preference="sports">
+                        <div class="preference-icon">🏈</div>
+                        <div class="preference-text">
+                            <div class="preference-title">Sports & Spirit</div>
+                            <div class="preference-desc">Game days and campus culture</div>
+                        </div>
+                    </div>
+                </div>
+
+                <button class="button button-primary" onclick="nextStep()">Continue →</button>
+                <button class="button button-secondary" onclick="prevStep()">← Back</button>
+            </div>
+
+            <!-- Step 4: Academics -->
+            <div id="step4" class="discovery-card hidden">
+                <div class="discovery-title">Academic Check 📊</div>
+                <div class="discovery-subtitle">Where you at? (It's okay if you're still grinding)</div>
                 
                 <div class="input-group">
                     <label class="input-label">Current GPA (Optional)</label>
@@ -558,20 +905,20 @@
                 </div>
 
                 <div class="input-group">
-                    <label class="input-label">AP/Honors Courses Taken</label>
-                    <input type="number" class="input-field" id="apCourses" placeholder="e.g., 4" min="0">
+                    <label class="input-label">AP/Honors Classes</label>
+                    <input type="number" class="input-field" id="apCourses" placeholder="How many you taking?" min="0">
                 </div>
 
-                <button class="button button-primary" onclick="completeDiscovery()">See My Path</button>
-                <button class="button button-secondary" onclick="prevStep()">Back</button>
+                <button class="button button-primary" onclick="completeDiscovery()">Show My Matches 🎯</button>
+                <button class="button button-secondary" onclick="prevStep()">← Back</button>
             </div>
         </div>
 
         <!-- Dashboard -->
         <div id="dashboardSection" class="dashboard-container hidden">
             <div class="welcome-card">
-                <div class="welcome-title">Welcome back, <span id="userName">Student</span>!</div>
-                <div style="font-size: 17px; opacity: 0.9;">Your personalized college journey</div>
+                <div class="welcome-title">Yo <span id="userName">Student</span>! Let's secure that bag 💯</div>
+                <div style="font-size: 17px; opacity: 0.9;">Your personalized college roadmap is ready</div>
             </div>
 
             <!-- Stats Grid -->
@@ -599,35 +946,173 @@
             </div>
 
             <!-- Schools Tab -->
-            <div id="schoolsTab" class="schools-grid">
-                <!-- Schools will be populated here -->
+            <div id="schoolsTab">
+                <!-- Reach Schools -->
+                <div class="school-category">
+                    <div class="category-header">
+                        <div class="category-title">🎯 Reach Goals</div>
+                        <div class="category-badge badge-reach">Shoot your shot!</div>
+                    </div>
+                    <div class="schools-grid" id="reachSchools"></div>
+                </div>
+
+                <!-- Match Schools -->
+                <div class="school-category">
+                    <div class="category-header">
+                        <div class="category-title">✅ Perfect Matches</div>
+                        <div class="category-badge badge-match">You got this!</div>
+                    </div>
+                    <div class="schools-grid" id="matchSchools"></div>
+                </div>
+
+                <!-- Safety Schools -->
+                <div class="school-category">
+                    <div class="category-header">
+                        <div class="category-title">🛡️ Safety Net</div>
+                        <div class="category-badge badge-safety">Guaranteed W</div>
+                    </div>
+                    <div class="schools-grid" id="safetySchools"></div>
+                </div>
+
+                <button class="add-school-btn" onclick="addSchool()">+ Add Another School</button>
             </div>
 
-            <!-- Other tabs hidden by default -->
+            <!-- Financial Aid Tab -->
             <div id="financialTab" class="hidden">
-                <div class="discovery-card">
-                    <div class="discovery-title">Financial Aid Calculator</div>
-                    <div class="discovery-subtitle">Estimate your aid package</div>
-                    <!-- Financial aid content -->
+                <div class="aid-calculator">
+                    <div class="discovery-title">Let's Talk Money 💰</div>
+                    <div class="discovery-subtitle">See how much aid you might get (no cap)</div>
+                    
+                    <div class="input-group">
+                        <label class="input-label">Family Income</label>
+                        <input type="number" class="input-field" id="familyIncome" placeholder="Annual household income" value="75000">
+                    </div>
+                    
+                    <div class="input-group">
+                        <label class="input-label">Family Size</label>
+                        <input type="number" class="input-field" id="familySize" placeholder="How many people?" value="4">
+                    </div>
+                    
+                    <button class="button button-primary" onclick="calculateAid()">Calculate My Aid</button>
+                    
+                    <div class="aid-result hidden" id="aidResult">
+                        <div style="font-size: 20px; font-weight: 600; margin-bottom: 16px;">Estimated Financial Aid</div>
+                        <div style="font-size: 32px; font-weight: 700; color: var(--success);" id="totalAid">$0</div>
+                        <div style="margin-top: 16px; color: var(--gray);">
+                            <div>Pell Grant: <span id="pellGrant">$0</span></div>
+                            <div>Cal Grant: <span id="calGrant">$0</span></div>
+                            <div>Middle Class Scholarship: <span id="middleClass">$0</span></div>
+                        </div>
+                    </div>
                 </div>
             </div>
 
+            <!-- Documents Tab -->
             <div id="documentsTab" class="hidden">
                 <div class="discovery-card">
-                    <div class="discovery-title">Document Tracker</div>
-                    <div class="discovery-subtitle">Track your application materials</div>
-                    <!-- Documents content -->
+                    <div class="discovery-title">Document Checklist 📄</div>
+                    <div class="discovery-subtitle">Keep track of everything (we got you)</div>
+                    
+                    <div class="document-list">
+                        <div class="document-item">
+                            <div class="document-status status-complete">✓</div>
+                            <div style="flex: 1;">
+                                <div style="font-weight: 600;">Personal Information</div>
+                                <div style="font-size: 14px; color: var(--gray);">Basic profile completed</div>
+                            </div>
+                        </div>
+                        
+                        <div class="document-item">
+                            <div class="document-status status-pending">!</div>
+                            <div style="flex: 1;">
+                                <div style="font-weight: 600;">Official Transcripts</div>
+                                <div style="font-size: 14px; color: var(--gray);">Request from your school</div>
+                            </div>
+                        </div>
+                        
+                        <div class="document-item">
+                            <div class="document-status status-missing">×</div>
+                            <div style="flex: 1;">
+                                <div style="font-weight: 600;">Letters of Recommendation</div>
+                                <div style="font-size: 14px; color: var(--gray);">Need 2-3 teachers</div>
+                            </div>
+                        </div>
+                        
+                        <div class="document-item">
+                            <div class="document-status status-missing">×</div>
+                            <div style="flex: 1;">
+                                <div style="font-weight: 600;">Personal Statement</div>
+                                <div style="font-size: 14px; color: var(--gray);">Main essay (650 words)</div>
+                            </div>
+                        </div>
+                        
+                        <div class="document-item">
+                            <div class="document-status status-missing">×</div>
+                            <div style="flex: 1;">
+                                <div style="font-weight: 600;">FAFSA</div>
+                                <div style="font-size: 14px; color: var(--gray);">Opens October 1st</div>
+                            </div>
+                        </div>
+                    </div>
                 </div>
             </div>
 
+            <!-- Timeline Tab -->
             <div id="timelineTab" class="hidden">
                 <div class="discovery-card">
-                    <div class="discovery-title">Application Timeline</div>
-                    <div class="discovery-subtitle">Important dates and deadlines</div>
-                    <!-- Timeline content -->
+                    <div class="discovery-title">Your Timeline 📅</div>
+                    <div class="discovery-subtitle">Don't miss these dates (set those reminders!)</div>
+                    
+                    <div class="timeline-item">
+                        <div class="timeline-date">August 1, 2025</div>
+                        <div class="timeline-title">UC Application Opens</div>
+                        <div style="color: var(--gray);">Start working on those PIQs early</div>
+                    </div>
+                    
+                    <div class="timeline-item">
+                        <div class="timeline-date">October 1, 2025</div>
+                        <div class="timeline-title">FAFSA Opens</div>
+                        <div style="color: var(--gray);">File ASAP for maximum aid</div>
+                    </div>
+                    
+                    <div class="timeline-item">
+                        <div class="timeline-date">November 15, 2025</div>
+                        <div class="timeline-title">Priority Submission</div>
+                        <div style="color: var(--gray);">Submit early for 23% better chances</div>
+                    </div>
+                    
+                    <div class="timeline-item">
+                        <div class="timeline-date">November 30, 2025</div>
+                        <div class="timeline-title">UC/CSU Deadline</div>
+                        <div style="color: var(--gray);">Final deadline - no extensions!</div>
+                    </div>
+                    
+                    <div class="timeline-item">
+                        <div class="timeline-date">March 2, 2026</div>
+                        <div class="timeline-title">Cal Grant Deadline</div>
+                        <div style="color: var(--gray);">Don't miss out on free money</div>
+                    </div>
+                    
+                    <div class="timeline-item">
+                        <div class="timeline-date">March 15-30, 2026</div>
+                        <div class="timeline-title">Decisions Released</div>
+                        <div style="color: var(--gray);">Check your portals daily!</div>
+                    </div>
+                    
+                    <div class="timeline-item">
+                        <div class="timeline-date">May 1, 2026</div>
+                        <div class="timeline-title">Decision Day</div>
+                        <div style="color: var(--gray);">Submit your SIR to your chosen school</div>
+                    </div>
                 </div>
             </div>
         </div>
+    </div>
+
+    <!-- AI Assistant Bubble -->
+    <div class="ai-bubble hidden" id="aiBubble">
+        <div style="font-weight: 600; margin-bottom: 8px;">Hey! Need help? 🤖</div>
+        <div>You've been here a while. Want me to explain anything or answer questions?</div>
     </div>
 
     <!-- Share Modal -->
@@ -661,34 +1146,89 @@
             firstName: '',
             gradeLevel: '',
             interests: [],
+            preferences: [],
             gpa: null,
             sat: null,
-            apCourses: 0
+            apCourses: 0,
+            email: '',
+            consent: false,
+            selectedSchools: []
         };
 
         // California schools data
         const californiaSchools = [
-            { name: 'UC Berkeley', avgGPA: 4.25, avgSAT: 1450, type: 'reach' },
-            { name: 'UCLA', avgGPA: 4.26, avgSAT: 1445, type: 'reach' },
-            { name: 'UC San Diego', avgGPA: 4.16, avgSAT: 1410, type: 'match' },
-            { name: 'UC Davis', avgGPA: 4.13, avgSAT: 1350, type: 'match' },
-            { name: 'UC Irvine', avgGPA: 4.08, avgSAT: 1360, type: 'match' },
-            { name: 'UC Santa Barbara', avgGPA: 4.15, avgSAT: 1380, type: 'match' },
-            { name: 'Cal Poly SLO', avgGPA: 4.06, avgSAT: 1395, type: 'match' },
-            { name: 'San Diego State', avgGPA: 3.85, avgSAT: 1270, type: 'safety' },
-            { name: 'Cal State Long Beach', avgGPA: 3.75, avgSAT: 1200, type: 'safety' }
+            { id: 1, name: 'UC Berkeley', avgGPA: 4.25, avgSAT: 1450, type: 'reach', acceptanceRate: 14.5 },
+            { id: 2, name: 'UCLA', avgGPA: 4.26, avgSAT: 1445, type: 'reach', acceptanceRate: 12.3 },
+            { id: 3, name: 'UC San Diego', avgGPA: 4.16, avgSAT: 1410, type: 'reach', acceptanceRate: 31.5 },
+            { id: 4, name: 'UC Davis', avgGPA: 4.13, avgSAT: 1350, type: 'match', acceptanceRate: 37.6 },
+            { id: 5, name: 'UC Irvine', avgGPA: 4.08, avgSAT: 1360, type: 'match', acceptanceRate: 26.5 },
+            { id: 6, name: 'UC Santa Barbara', avgGPA: 4.15, avgSAT: 1380, type: 'match', acceptanceRate: 29.6 },
+            { id: 7, name: 'Cal Poly SLO', avgGPA: 4.06, avgSAT: 1395, type: 'match', acceptanceRate: 32.5 },
+            { id: 8, name: 'UC Santa Cruz', avgGPA: 3.96, avgSAT: 1295, type: 'safety', acceptanceRate: 51.3 },
+            { id: 9, name: 'San Diego State', avgGPA: 3.85, avgSAT: 1270, type: 'safety', acceptanceRate: 37.8 },
+            { id: 10, name: 'Cal State Long Beach', avgGPA: 3.75, avgSAT: 1200, type: 'safety', acceptanceRate: 42.0 }
         ];
+
+        let pageStartTime = Date.now();
+        let aiShown = false;
 
         // Check for existing user data
         window.onload = function() {
             const savedData = localStorage.getItem('pathwiseUserData');
-            if (savedData) {
-                userData = JSON.parse(savedData);
-                showDashboard();
+            const hasConsent = localStorage.getItem('pathwiseConsent');
+            
+            if (!hasConsent) {
+                document.getElementById('consentModal').style.display = 'flex';
             } else {
-                document.getElementById('backBtn').style.display = 'none';
+                document.getElementById('consentModal').style.display = 'none';
+                if (savedData) {
+                    userData = JSON.parse(savedData);
+                    showDashboard();
+                } else {
+                    document.getElementById('backBtn').style.display = 'none';
+                }
             }
+
+            // Start AI assistant timer
+            setInterval(checkTimeOnPage, 30000); // Check every 30 seconds
         };
+
+        // Consent handling
+        function acceptConsent() {
+            const checkbox = document.getElementById('consentCheck');
+            const email = document.getElementById('userEmail').value;
+            
+            if (!checkbox.checked) {
+                alert('Please check the box to continue');
+                return;
+            }
+            
+            userData.consent = true;
+            userData.email = email;
+            localStorage.setItem('pathwiseConsent', 'true');
+            if (email) {
+                localStorage.setItem('pathwiseEmail', email);
+            }
+            
+            document.getElementById('consentModal').style.display = 'none';
+            document.getElementById('backBtn').style.display = 'none';
+        }
+
+        // Time tracking for AI assistant
+        function checkTimeOnPage() {
+            const timeOnPage = (Date.now() - pageStartTime) / 1000;
+            if (timeOnPage > 60 && !aiShown && !document.getElementById('discoverySection').classList.contains('hidden')) {
+                showAIAssistant();
+            }
+        }
+
+        function showAIAssistant() {
+            aiShown = true;
+            document.getElementById('aiBubble').classList.remove('hidden');
+            setTimeout(() => {
+                document.getElementById('aiBubble').classList.add('hidden');
+            }, 10000); // Hide after 10 seconds
+        }
 
         // Interest selection
         document.querySelectorAll('.interest-pill').forEach(pill => {
@@ -696,13 +1236,32 @@
                 this.classList.toggle('selected');
                 const interest = this.dataset.interest;
                 if (this.classList.contains('selected')) {
-                    userData.interests.push(interest);
+                    if (!userData.interests.includes(interest)) {
+                        userData.interests.push(interest);
+                    }
                 } else {
                     userData.interests = userData.interests.filter(i => i !== interest);
                 }
             });
         });
 
+        // Preference selection
+        document.querySelectorAll('.preference-card').forEach(card => {
+            card.addEventListener('click', function() {
+                this.classList.toggle('selected');
+                const preference = this.dataset.preference;
+                if (this.classList.contains('selected')) {
+                    if (!userData.preferences.includes(preference)) {
+                        userData.preferences.push(preference);
+                    }
+                } else {
+                    userData.preferences = userData.preferences.filter(p => p !== preference);
+                }
+            });
+        });
+
+        const totalSteps = 4;
+        
         function nextStep() {
             if (currentStep === 1) {
                 userData.firstName = document.getElementById('firstName').value || 'Student';
@@ -713,6 +1272,7 @@
             currentStep++;
             document.getElementById(`step${currentStep}`).classList.remove('hidden');
             updateProgress();
+            pageStartTime = Date.now(); // Reset timer for AI assistant
         }
 
         function prevStep() {
@@ -723,7 +1283,7 @@
         }
 
         function updateProgress() {
-            const progress = (currentStep / 3) * 100;
+            const progress = (currentStep / totalSteps) * 100;
             document.getElementById('progressBar').style.width = progress + '%';
         }
 
@@ -756,20 +1316,32 @@
         }
 
         function generateSchoolRecommendations() {
-            const schoolsContainer = document.getElementById('schoolsTab');
-            schoolsContainer.innerHTML = '';
+            const reachContainer = document.getElementById('reachSchools');
+            const matchContainer = document.getElementById('matchSchools');
+            const safetyContainer = document.getElementById('safetySchools');
             
-            let matchedSchools = 0;
+            reachContainer.innerHTML = '';
+            matchContainer.innerHTML = '';
+            safetyContainer.innerHTML = '';
+            
+            let selectedCount = 0;
             
             californiaSchools.forEach(school => {
                 const matchScore = calculateMatchScore(school);
-                if (matchScore > 30) {
-                    matchedSchools++;
+                const category = categorizeSchool(school, matchScore);
+                
+                if (matchScore > 20 && selectedCount < 9) {
+                    selectedCount++;
+                    if (!userData.selectedSchools.includes(school.id)) {
+                        userData.selectedSchools.push(school.id);
+                    }
+                    
                     const matchLevel = matchScore > 70 ? 'high' : matchScore > 50 ? 'medium' : 'low';
                     const matchClass = matchScore > 70 ? 'match-high' : matchScore > 50 ? 'match-medium' : 'match-low';
                     
                     const schoolCard = `
-                        <div class="school-card">
+                        <div class="school-card" data-school-id="${school.id}">
+                            <div class="school-remove" onclick="removeSchool(${school.id})">×</div>
                             <div class="school-header">
                                 <div class="school-name">${school.name}</div>
                                 <div class="match-badge ${matchClass}">${matchScore}% match</div>
@@ -778,32 +1350,61 @@
                                 Avg GPA: ${school.avgGPA} | SAT: ${school.avgSAT}
                             </div>
                             <div style="font-size: 14px; color: var(--gray);">
-                                ${school.type === 'reach' ? '🎯 Reach School' : school.type === 'match' ? '✅ Match School' : '🛡️ Safety School'}
+                                Acceptance Rate: ${school.acceptanceRate}%
                             </div>
                         </div>
                     `;
-                    schoolsContainer.innerHTML += schoolCard;
+                    
+                    if (category === 'reach') {
+                        reachContainer.innerHTML += schoolCard;
+                    } else if (category === 'match') {
+                        matchContainer.innerHTML += schoolCard;
+                    } else {
+                        safetyContainer.innerHTML += schoolCard;
+                    }
                 }
             });
             
-            document.getElementById('schoolCount').textContent = matchedSchools;
+            document.getElementById('schoolCount').textContent = selectedCount;
+        }
+
+        function categorizeSchool(school, matchScore) {
+            if (!userData.gpa) return school.type;
+            
+            const gpaDiff = userData.gpa - school.avgGPA;
+            
+            if (gpaDiff < -0.3 || matchScore < 40) {
+                return 'reach';
+            } else if (gpaDiff > 0.3 || matchScore > 70) {
+                return 'safety';
+            } else {
+                return 'match';
+            }
         }
 
         function calculateMatchScore(school) {
-            let score = 50; // Base score
+            let score = 50;
             
             if (userData.gpa) {
                 const gpaDiff = userData.gpa - school.avgGPA;
-                score += gpaDiff * 20; // 20 points per GPA point difference
+                score += gpaDiff * 20;
             }
             
             if (userData.sat) {
                 const satDiff = (userData.sat - school.avgSAT) / 10;
-                score += satDiff; // 1 point per 10 SAT points difference
+                score += satDiff;
             }
             
             // Interest matching
-            if (userData.interests.includes('stem') && school.name.includes('UC')) {
+            if (userData.interests.includes('stem') && (school.name.includes('UC') || school.name.includes('Cal Poly'))) {
+                score += 10;
+            }
+            
+            // Preference matching
+            if (userData.preferences.includes('reputation') && school.type === 'reach') {
+                score += 10;
+            }
+            if (userData.preferences.includes('cost') && school.type === 'safety') {
                 score += 10;
             }
             
@@ -811,6 +1412,66 @@
             score += userData.apCourses * 2;
             
             return Math.max(0, Math.min(100, Math.round(score)));
+        }
+
+        function removeSchool(schoolId) {
+            userData.selectedSchools = userData.selectedSchools.filter(id => id !== schoolId);
+            localStorage.setItem('pathwiseUserData', JSON.stringify(userData));
+            generateSchoolRecommendations();
+        }
+
+        function addSchool() {
+            const availableSchools = californiaSchools.filter(s => !userData.selectedSchools.includes(s.id));
+            if (availableSchools.length > 0) {
+                const schoolNames = availableSchools.map(s => s.name).join('\n');
+                const choice = prompt(`Available schools:\n${schoolNames}\n\nEnter school name:`);
+                
+                const school = availableSchools.find(s => s.name.toLowerCase().includes(choice?.toLowerCase()));
+                if (school) {
+                    userData.selectedSchools.push(school.id);
+                    localStorage.setItem('pathwiseUserData', JSON.stringify(userData));
+                    generateSchoolRecommendations();
+                }
+            } else {
+                alert("You've added all available schools!");
+            }
+        }
+
+        function calculateAid() {
+            const income = parseInt(document.getElementById('familyIncome').value) || 75000;
+            const familySize = parseInt(document.getElementById('familySize').value) || 4;
+            
+            let pellGrant = 0;
+            let calGrant = 0;
+            let middleClass = 0;
+            
+            // Simplified Pell Grant calculation
+            if (income < 30000) {
+                pellGrant = 7395;
+            } else if (income < 50000) {
+                pellGrant = 5000;
+            } else if (income < 70000) {
+                pellGrant = 2000;
+            }
+            
+            // Cal Grant calculation
+            if (income < 80000 && userData.gpa >= 3.0) {
+                calGrant = 12570;
+            }
+            
+            // Middle Class Scholarship
+            if (income >= 80000 && income < 177000) {
+                const percentage = Math.max(0, 1 - ((income - 80000) / 97000));
+                middleClass = Math.round(13000 * percentage);
+            }
+            
+            const total = pellGrant + calGrant + middleClass;
+            
+            document.getElementById('pellGrant').textContent = `$${pellGrant.toLocaleString()}`;
+            document.getElementById('calGrant').textContent = `$${calGrant.toLocaleString()}`;
+            document.getElementById('middleClass').textContent = `$${middleClass.toLocaleString()}`;
+            document.getElementById('totalAid').textContent = `$${total.toLocaleString()}`;
+            document.getElementById('aidResult').classList.remove('hidden');
         }
 
         function goBack() {
@@ -827,8 +1488,9 @@
         }
 
         function resetApp() {
-            if (confirm('Reset all data and start over?')) {
+            if (confirm('This will reset all your data. Are you sure?')) {
                 localStorage.removeItem('pathwiseUserData');
+                localStorage.removeItem('pathwiseConsent');
                 location.reload();
             }
         }
@@ -845,7 +1507,7 @@
 
         function shareVia(method) {
             const url = window.location.href;
-            const text = 'Check out Pathwise - Smart college planning for California students!';
+            const text = 'Yo check out Pathwise - it\'s literally the best way to plan for California colleges! No cap 🎓';
             
             switch(method) {
                 case 'message':
@@ -858,30 +1520,25 @@
                     break;
                 case 'copy':
                     navigator.clipboard.writeText(url);
-                    alert('Link copied to clipboard!');
+                    alert('Link copied! Share it with your friends 📋');
                     break;
                 case 'email':
-                    window.location.href = `mailto:?subject=Check out Pathwise&body=${encodeURIComponent(text + ' ' + url)}`;
+                    window.location.href = `mailto:?subject=Check out Pathwise!&body=${encodeURIComponent(text + ' ' + url)}`;
                     break;
             }
             hideShare();
         }
 
         function showTab(tabName) {
-            // Hide all tabs
             document.querySelectorAll('[id$="Tab"]').forEach(tab => {
                 tab.classList.add('hidden');
             });
             
-            // Remove active class from all buttons
             document.querySelectorAll('.tab-button').forEach(btn => {
                 btn.classList.remove('active');
             });
             
-            // Show selected tab
             document.getElementById(tabName + 'Tab').classList.remove('hidden');
-            
-            // Add active class to clicked button
             event.target.classList.add('active');
         }
     </script>
