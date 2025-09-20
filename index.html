@@ -9,7 +9,7 @@
 <meta name="theme-color" content="#667eea" />
 
 <style>
-  /* Modern Design System */
+  /* Modern Design System - Enhanced */
   :root {
     --bg: #fafbfc;
     --bg-secondary: #f3f4f6;
@@ -28,12 +28,14 @@
     --warning: #ed8936;
     --danger: #f56565;
     --success: #48bb78;
+    --info: #4299e1;
     
     /* Gradients */
     --gradient-primary: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
     --gradient-secondary: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
     --gradient-success: linear-gradient(135deg, #11998e 0%, #38ef7d 100%);
     --gradient-warm: linear-gradient(135deg, #fa709a 0%, #fee140 100%);
+    --gradient-scholarship: linear-gradient(135deg, #FFD700 0%, #FFA500 100%);
     
     /* Effects */
     --glass: rgba(255, 255, 255, 0.7);
@@ -59,6 +61,7 @@
     --z-overlay: 300;
     --z-modal: 400;
     --z-toast: 500;
+    --z-swipe: 350;
   }
 
   /* Dark theme */
@@ -294,16 +297,34 @@
     background: var(--gradient-success);
     color: white;
   }
+  
+  .btn.scholarship {
+    background: var(--gradient-scholarship);
+    color: var(--ink);
+    font-weight: 700;
+  }
 
   .btn.ghost {
     background: transparent;
     box-shadow: none;
     border: 2px solid var(--border);
+    color: var(--ink);
+  }
+  
+  .btn.ghost:hover {
+    background: var(--card);
+    border-color: var(--primary);
   }
 
   .btn.icon {
     padding: 0.75rem;
     min-width: 44px;
+    background: var(--card);
+    color: var(--ink);
+  }
+  
+  .btn.icon:hover {
+    background: var(--bg-secondary);
   }
 
   .btn.danger {
@@ -335,6 +356,52 @@
   .btn:active::after {
     width: 300px;
     height: 300px;
+  }
+  
+  /* Better icon styling */
+  .btn svg {
+    pointer-events: none;
+    flex-shrink: 0;
+  }
+  
+  .btn.icon svg {
+    width: 20px;
+    height: 20px;
+  }
+  
+  /* Icon visibility control for theme button */
+  #themeBtn .theme-icon-moon,
+  #themeBtn .theme-icon-sun {
+    display: none;
+  }
+  
+  [data-theme="light"] #themeBtn .theme-icon-moon {
+    display: block;
+  }
+  
+  [data-theme="dark"] #themeBtn .theme-icon-sun {
+    display: block;
+  }
+  
+  /* Ensure icons are visible in both themes */
+  .btn.icon svg {
+    fill: var(--ink);
+  }
+  
+  .btn.primary svg,
+  .btn.success svg,
+  .btn.danger svg,
+  .btn.secondary svg {
+    fill: white;
+  }
+  
+  /* Fix for dark mode specifically */
+  [data-theme="dark"] .btn.icon svg {
+    fill: var(--ink);
+  }
+  
+  [data-theme="dark"] .btn.ghost svg {
+    fill: var(--ink);
   }
 
   /* Main Container */
@@ -559,6 +626,16 @@
     background: rgba(102, 126, 234, 0.15);
     color: var(--primary);
   }
+  
+  .badge.scholarship {
+    background: rgba(255, 215, 0, 0.15);
+    color: #B8860B;
+  }
+  
+  .badge.parent {
+    background: rgba(66, 153, 225, 0.15);
+    color: var(--info);
+  }
 
   .pill {
     position: absolute;
@@ -633,6 +710,310 @@
     display: flex;
     gap: 0.5rem;
     margin-top: 1rem;
+  }
+
+  /* NEW: Swipeable Discovery Interface */
+  .swipe-container {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    z-index: var(--z-swipe);
+    background: var(--bg);
+    display: none;
+    overflow: hidden;
+  }
+  
+  .swipe-container.active {
+    display: block;
+  }
+  
+  .swipe-header {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    z-index: 10;
+    padding: 1rem;
+    background: linear-gradient(to bottom, rgba(0,0,0,0.7), transparent);
+  }
+  
+  .swipe-close {
+    position: absolute;
+    top: 1rem;
+    right: 1rem;
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    background: rgba(255,255,255,0.2);
+    backdrop-filter: blur(10px);
+    border: none;
+    color: white;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  
+  .swipe-card-stack {
+    position: relative;
+    height: 100vh;
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  
+  .swipe-card {
+    position: absolute;
+    width: min(90vw, 400px);
+    height: 70vh;
+    border-radius: var(--radius-xl);
+    background: var(--card);
+    box-shadow: var(--shadow-xl);
+    overflow: hidden;
+    cursor: grab;
+    transition: transform 0.2s, opacity 0.2s;
+  }
+  
+  .swipe-card.dragging {
+    cursor: grabbing;
+    transition: none;
+  }
+  
+  .swipe-card.swiped-left {
+    transform: translateX(-150%) rotate(-30deg);
+    opacity: 0;
+  }
+  
+  .swipe-card.swiped-right {
+    transform: translateX(150%) rotate(30deg);
+    opacity: 0;
+  }
+  
+  .swipe-card-content {
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    position: relative;
+    background-size: cover;
+    background-position: center;
+  }
+  
+  .swipe-card-overlay {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    padding: 2rem;
+    background: linear-gradient(to top, rgba(0,0,0,0.8), transparent);
+    color: white;
+  }
+  
+  .swipe-card-name {
+    font-size: 2rem;
+    font-weight: 800;
+    margin-bottom: 0.5rem;
+  }
+  
+  .swipe-card-stats {
+    display: flex;
+    gap: 1rem;
+    margin-bottom: 1rem;
+  }
+  
+  .swipe-stat {
+    padding: 0.5rem 1rem;
+    background: rgba(255,255,255,0.2);
+    backdrop-filter: blur(10px);
+    border-radius: 999px;
+    font-size: 0.875rem;
+    font-weight: 600;
+  }
+  
+  .swipe-actions {
+    position: absolute;
+    bottom: 2rem;
+    left: 50%;
+    transform: translateX(-50%);
+    display: flex;
+    gap: 2rem;
+    z-index: 20;
+  }
+  
+  .swipe-action {
+    width: 60px;
+    height: 60px;
+    border-radius: 50%;
+    border: none;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: transform 0.2s;
+    box-shadow: var(--shadow-lg);
+  }
+  
+  .swipe-action:hover {
+    transform: scale(1.1);
+  }
+  
+  .swipe-action.reject {
+    background: white;
+    color: var(--danger);
+  }
+  
+  .swipe-action.info {
+    background: white;
+    color: var(--info);
+  }
+  
+  .swipe-action.accept {
+    background: var(--gradient-success);
+    color: white;
+  }
+  
+  /* NEW: Scholarship Matching Interface */
+  .scholarship-card {
+    background: var(--card);
+    border-radius: var(--radius-lg);
+    padding: 1.5rem;
+    border: 2px solid transparent;
+    background-clip: padding-box;
+    position: relative;
+    margin-bottom: 1rem;
+    transition: var(--transition);
+  }
+  
+  .scholarship-card::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    border-radius: var(--radius-lg);
+    padding: 2px;
+    background: var(--gradient-scholarship);
+    mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+    mask-composite: exclude;
+    -webkit-mask-composite: xor;
+    opacity: 0;
+    transition: opacity 0.3s;
+  }
+  
+  .scholarship-card:hover::before {
+    opacity: 1;
+  }
+  
+  .scholarship-card:hover {
+    transform: translateY(-2px);
+    box-shadow: var(--shadow-lg);
+  }
+  
+  .scholarship-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: start;
+    margin-bottom: 1rem;
+  }
+  
+  .scholarship-amount {
+    font-size: 1.75rem;
+    font-weight: 800;
+    background: var(--gradient-scholarship);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+  
+  .scholarship-match {
+    padding: 0.375rem 0.75rem;
+    border-radius: 999px;
+    background: var(--gradient-success);
+    color: white;
+    font-size: 0.75rem;
+    font-weight: 700;
+  }
+  
+  .scholarship-requirements {
+    display: flex;
+    gap: 0.5rem;
+    flex-wrap: wrap;
+    margin-top: 0.75rem;
+  }
+  
+  .requirement-chip {
+    padding: 0.25rem 0.5rem;
+    background: var(--bg-secondary);
+    border-radius: 999px;
+    font-size: 0.75rem;
+    color: var(--muted);
+  }
+  
+  .requirement-chip.met {
+    background: rgba(72, 187, 120, 0.1);
+    color: var(--success);
+  }
+  
+  /* NEW: Parent Portal Styles */
+  .parent-dashboard {
+    display: none;
+  }
+  
+  .parent-mode .parent-dashboard {
+    display: block;
+  }
+  
+  .parent-mode .student-only {
+    opacity: 0.5;
+    pointer-events: none;
+  }
+  
+  .parent-card {
+    background: linear-gradient(135deg, rgba(66, 153, 225, 0.1), rgba(102, 126, 234, 0.1));
+    border: 2px solid rgba(66, 153, 225, 0.2);
+  }
+  
+  .parent-stat-card {
+    background: var(--card);
+    padding: 1.5rem;
+    border-radius: var(--radius);
+    text-align: center;
+  }
+  
+  .parent-stat-value {
+    font-size: 2rem;
+    font-weight: 800;
+    color: var(--primary);
+  }
+  
+  .parent-stat-label {
+    color: var(--muted);
+    font-size: 0.875rem;
+    margin-top: 0.5rem;
+  }
+  
+  .parent-task {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    padding: 1rem;
+    background: var(--bg-secondary);
+    border-radius: var(--radius);
+    margin-bottom: 0.75rem;
+  }
+  
+  .parent-task-icon {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    background: var(--gradient-primary);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: white;
   }
 
   /* Progress Components */
@@ -987,6 +1368,12 @@
     0% { background-position: 200% 0; }
     100% { background-position: -200% 0; }
   }
+  
+  /* Focus Management */
+  :focus-visible {
+    outline: 3px solid var(--primary);
+    outline-offset: 2px;
+  }
 
   /* Utilities */
   .hidden { display: none !important; }
@@ -1037,6 +1424,11 @@
       padding: 0.625rem 1rem;
       font-size: 0.875rem;
     }
+    
+    .swipe-card {
+      width: 85vw;
+      height: 75vh;
+    }
   }
 
   /* Print Styles */
@@ -1048,7 +1440,8 @@
     
     .header,
     .ai-bubble,
-    .toast-container {
+    .toast-container,
+    .swipe-container {
       display: none;
     }
     
@@ -1070,31 +1463,6 @@
     clip: rect(0, 0, 0, 0);
     white-space: nowrap;
     border: 0;
-  }
-
-  /* Icon visibility control */
-  .theme-icon-moon,
-  .theme-icon-sun {
-    display: none;
-  }
-  
-  [data-theme="light"] .theme-icon-moon {
-    display: block;
-  }
-  
-  [data-theme="dark"] .theme-icon-sun {
-    display: block;
-  }
-  
-  /* Better icon styling */
-  .btn svg {
-    pointer-events: none;
-    flex-shrink: 0;
-  }
-  
-  .btn.icon svg {
-    width: 20px;
-    height: 20px;
   }
 
   /* Reduced Motion */
@@ -1129,26 +1497,38 @@
     </div>
     <nav class="header-actions" role="navigation" aria-label="Main navigation">
       <button id="backBtn" class="btn ghost hidden" aria-label="Back to planning">
-        <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor">
+        <svg width="16" height="16" viewBox="0 0 24 24">
           <path d="M20 11H7.83l5.59-5.59L12 4l-8 8 8 8 1.41-1.41L7.83 13H20v-2z"/>
         </svg>
         <span>Back</span>
       </button>
+      <button id="discoverBtn" class="btn primary" aria-label="Discover schools">
+        <svg width="20" height="20" viewBox="0 0 24 24">
+          <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z"/>
+        </svg>
+        <span class="hide-mobile">Discover</span>
+      </button>
+      <button id="parentModeBtn" class="btn ghost" aria-label="Parent Mode">
+        <svg width="20" height="20" viewBox="0 0 24 24">
+          <path d="M9 11H7v2h2v-2zm4 0h-2v2h2v-2zm4 0h-2v2h2v-2zm2-7h-1V2h-2v2H8V2H6v2H5c-1.11 0-1.99.9-1.99 2L3 20c0 1.1.89 2 2 2h14c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 16H5V9h14v11z"/>
+        </svg>
+        <span class="hide-mobile">Parent</span>
+      </button>
       <button id="profileBtn" class="btn icon" aria-label="Profile">
-        <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
+        <svg width="20" height="20" viewBox="0 0 24 24">
           <path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"/>
         </svg>
       </button>
       <button id="themeBtn" class="btn icon" aria-label="Toggle theme">
-        <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor" class="theme-icon-moon">
+        <svg width="20" height="20" viewBox="0 0 24 24" class="theme-icon-moon">
           <path d="M9 2c-1.05 0-2.05.16-3 .46 4.06 1.27 7 5.06 7 9.54 0 4.48-2.94 8.27-7 9.54.95.3 1.95.46 3 .46 5.52 0 10-4.48 10-10S14.52 2 9 2z"/>
         </svg>
-        <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor" class="theme-icon-sun hidden">
+        <svg width="20" height="20" viewBox="0 0 24 24" class="theme-icon-sun hidden">
           <path d="M6.76 4.84l-1.8-1.79-1.41 1.41 1.79 1.79 1.42-1.41zM4 10.5H1v2h3v-2zm9-9.95h-2V3.5h2V.55zm7.45 3.91l-1.41-1.41-1.79 1.79 1.41 1.41 1.79-1.79zm-3.21 13.7l1.79 1.8 1.41-1.41-1.8-1.79-1.4 1.4zM20 10.5v2h3v-2h-3zm-8-5c-3.31 0-6 2.69-6 6s2.69 6 6 6 6-2.69 6-6-2.69-6-6-6zm-1 16.95h2V19.5h-2v2.95zm-7.45-3.91l1.41 1.41 1.79-1.8-1.41-1.41-1.79 1.8z"/>
         </svg>
       </button>
       <button id="resetBtn" class="btn icon danger" aria-label="Reset all data">
-        <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
+        <svg width="20" height="20" viewBox="0 0 24 24">
           <path d="M12 5V1L7 6l5 5V7c3.31 0 6 2.69 6 6s-2.69 6-6 6-6-2.69-6-6H4c0 4.42 3.58 8 8 8s8-3.58 8-8-3.58-8-8-8z"/>
         </svg>
       </button>
@@ -1163,7 +1543,7 @@
   <section id="planningSection" aria-label="College planning form">
     <div class="card">
       <h1>Plan Your College Journey</h1>
-      <p class="text-muted mb-4">We'll match you with perfect schools and track everything for you.</p>
+      <p class="text-muted mb-4">We'll match you with perfect schools, scholarships, and track everything for you.</p>
       
       <form id="planningForm" novalidate>
         <div class="grid grid-cols-2 gap-4">
@@ -1204,7 +1584,7 @@
           <div class="field">
             <label for="income">Household Income (optional)</label>
             <input type="number" id="income" name="income" min="0" step="5000" placeholder="75000">
-            <span class="helper-text">Helps estimate financial aid</span>
+            <span class="helper-text">Helps estimate financial aid & scholarships</span>
           </div>
           
           <div class="field">
@@ -1285,15 +1665,19 @@
       </div>
       
       <div class="card">
-        <div class="text-muted text-sm">Days Until Deadline</div>
-        <div class="text-lg font-bold mt-2" id="daysLeft">--</div>
-        <div class="text-sm text-muted" id="nextDeadline">No deadlines set</div>
+        <div class="text-muted text-sm">Scholarships Matched</div>
+        <div class="text-lg font-bold mt-2" id="scholarshipCount">0</div>
+        <div class="text-sm text-muted" id="scholarshipValue">$0 potential</div>
       </div>
     </div>
     
     <!-- Navigation Tabs -->
     <nav class="tabs" role="tablist" aria-label="Dashboard sections">
       <button role="tab" class="tab active" data-tab="schools" aria-selected="true">Schools</button>
+      <button role="tab" class="tab" data-tab="scholarships" aria-selected="false">
+        Scholarships
+        <span class="badge scholarship" id="scholarshipBadge">NEW</span>
+      </button>
       <button role="tab" class="tab" data-tab="financial" aria-selected="false">Financial Aid</button>
       <button role="tab" class="tab" data-tab="documents" aria-selected="false">Documents</button>
       <button role="tab" class="tab" data-tab="timeline" aria-selected="false">Timeline</button>
@@ -1374,6 +1758,72 @@
         </div>
       </div>
       
+      <!-- NEW: Scholarships Tab -->
+      <div id="scholarshipsTab" class="hidden" role="tabpanel" aria-labelledby="scholarships-tab">
+        <div class="card mb-4">
+          <h2>Scholarship Opportunities</h2>
+          <p class="text-muted">Automatically matched based on your profile. One-click applications!</p>
+          
+          <div class="grid grid-cols-3 gap-4 mt-4">
+            <div class="parent-stat-card">
+              <div class="parent-stat-value" id="totalScholarships">0</div>
+              <div class="parent-stat-label">Matched Scholarships</div>
+            </div>
+            <div class="parent-stat-card">
+              <div class="parent-stat-value" id="appliedScholarships">0</div>
+              <div class="parent-stat-label">Applied</div>
+            </div>
+            <div class="parent-stat-card">
+              <div class="parent-stat-value" id="potentialAward">$0</div>
+              <div class="parent-stat-label">Potential Awards</div>
+            </div>
+          </div>
+        </div>
+        
+        <div id="scholarshipFilters" class="card mb-4">
+          <div class="grid grid-cols-4 gap-3">
+            <div class="field">
+              <label for="filterAmount">Min Amount</label>
+              <select id="filterAmount">
+                <option value="">Any Amount</option>
+                <option value="500">$500+</option>
+                <option value="1000">$1,000+</option>
+                <option value="5000">$5,000+</option>
+                <option value="10000">$10,000+</option>
+              </select>
+            </div>
+            <div class="field">
+              <label for="filterDeadline">Deadline</label>
+              <select id="filterDeadline">
+                <option value="">All Deadlines</option>
+                <option value="30">Next 30 Days</option>
+                <option value="60">Next 60 Days</option>
+                <option value="90">Next 90 Days</option>
+              </select>
+            </div>
+            <div class="field">
+              <label for="filterEssay">Essay Required</label>
+              <select id="filterEssay">
+                <option value="">Any</option>
+                <option value="no">No Essay</option>
+                <option value="yes">Essay Required</option>
+              </select>
+            </div>
+            <div class="field">
+              <label for="filterMatch">Match Score</label>
+              <select id="filterMatch">
+                <option value="">All Matches</option>
+                <option value="90">90%+ Match</option>
+                <option value="75">75%+ Match</option>
+                <option value="50">50%+ Match</option>
+              </select>
+            </div>
+          </div>
+        </div>
+        
+        <div id="scholarshipsList"></div>
+      </div>
+      
       <!-- Financial Aid Tab -->
       <div id="financialTab" class="hidden" role="tabpanel" aria-labelledby="financial-tab">
         <div class="card">
@@ -1413,8 +1863,113 @@
       </div>
     </div>
   </section>
+  
+  <!-- NEW: Parent Dashboard Section -->
+  <section id="parentDashboard" class="parent-dashboard hidden">
+    <div class="card parent-card mb-4">
+      <h2>Parent Dashboard</h2>
+      <p class="text-muted">Monitor your student's college application progress</p>
+    </div>
+    
+    <div class="grid grid-cols-4 gap-4 mb-6">
+      <div class="parent-stat-card">
+        <div class="parent-stat-value" id="parentStatApps">0</div>
+        <div class="parent-stat-label">Applications Started</div>
+      </div>
+      <div class="parent-stat-card">
+        <div class="parent-stat-value" id="parentStatDeadlines">0</div>
+        <div class="parent-stat-label">Upcoming Deadlines</div>
+      </div>
+      <div class="parent-stat-card">
+        <div class="parent-stat-value" id="parentStatAid">$0</div>
+        <div class="parent-stat-label">Est. Aid Package</div>
+      </div>
+      <div class="parent-stat-card">
+        <div class="parent-stat-value" id="parentStatCost">$0</div>
+        <div class="parent-stat-label">Avg. Net Cost</div>
+      </div>
+    </div>
+    
+    <div class="grid grid-cols-2 gap-4">
+      <div class="card">
+        <h3>Your Tasks</h3>
+        <div id="parentTasks">
+          <div class="parent-task">
+            <div class="parent-task-icon">📄</div>
+            <div>
+              <div class="font-bold">Complete FAFSA</div>
+              <div class="text-sm text-muted">Due October 1, 2025</div>
+            </div>
+            <button class="btn primary">Start</button>
+          </div>
+          <div class="parent-task">
+            <div class="parent-task-icon">💰</div>
+            <div>
+              <div class="font-bold">CSS Profile</div>
+              <div class="text-sm text-muted">Due November 15, 2025</div>
+            </div>
+            <button class="btn ghost">Learn More</button>
+          </div>
+          <div class="parent-task">
+            <div class="parent-task-icon">📊</div>
+            <div>
+              <div class="font-bold">Submit Tax Documents</div>
+              <div class="text-sm text-muted">Required for verification</div>
+            </div>
+            <button class="btn ghost">Upload</button>
+          </div>
+        </div>
+      </div>
+      
+      <div class="card">
+        <h3>Financial Planning</h3>
+        <div id="parentFinancial">
+          <div class="mb-4">
+            <label class="text-sm text-muted">Expected Family Contribution</label>
+            <div class="text-lg font-bold">$15,000 - $20,000</div>
+          </div>
+          <div class="mb-4">
+            <label class="text-sm text-muted">529 Plan Balance</label>
+            <input type="number" class="field" placeholder="Enter amount">
+          </div>
+          <div class="mb-4">
+            <label class="text-sm text-muted">Loan Calculator</label>
+            <button class="btn ghost w-full">Calculate Monthly Payments</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
 
 </main>
+
+<!-- NEW: Swipeable Discovery Interface -->
+<div id="swipeContainer" class="swipe-container">
+  <div class="swipe-header">
+    <button class="swipe-close" onclick="app.closeDiscovery()">✕</button>
+    <h2 style="color: white; text-align: center;">Discover Schools</h2>
+  </div>
+  
+  <div class="swipe-card-stack" id="swipeStack"></div>
+  
+  <div class="swipe-actions">
+    <button class="swipe-action reject" onclick="app.swipeLeft()">
+      <svg width="24" height="24" viewBox="0 0 24 24">
+        <path d="M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/>
+      </svg>
+    </button>
+    <button class="swipe-action info" onclick="app.showSchoolInfo()">
+      <svg width="24" height="24" viewBox="0 0 24 24">
+        <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-6h2v6zm0-8h-2V7h2v2z"/>
+      </svg>
+    </button>
+    <button class="swipe-action accept" onclick="app.swipeRight()">
+      <svg width="24" height="24" viewBox="0 0 24 24">
+        <path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/>
+      </svg>
+    </button>
+  </div>
+</div>
 
 <!-- AI Assistant Bubble -->
 <div id="aiBubble" class="ai-bubble hidden" role="button" tabindex="0" aria-label="AI Assistant">
@@ -1435,7 +1990,7 @@
 
 <script>
 // ============================================
-// ENHANCED PATHWISE APPLICATION
+// ENHANCED PATHWISE APPLICATION WITH WEEK 1 FEATURES
 // ============================================
 
 // State Management System
@@ -1445,17 +2000,27 @@ class AppState {
       user: null,
       schools: [],
       mySchools: [],
+      scholarships: [],
+      appliedScholarships: [],
       documents: {},
       achievements: [],
+      parentMode: false,
       filters: {
         state: '',
         type: '',
-        search: ''
+        search: '',
+        scholarship: {
+          amount: '',
+          deadline: '',
+          essay: '',
+          match: ''
+        }
       },
       ui: {
         currentSection: 'planning',
         currentTab: 'schools',
-        theme: 'light'
+        theme: 'light',
+        swipeIndex: 0
       }
     };
     this.listeners = new Map();
@@ -1525,7 +2090,6 @@ class AppState {
 
   handleStorageQuotaExceeded() {
     Toast.show('Storage full. Some data may not be saved.', 'warning');
-    // Implement cleanup logic
   }
 
   reset() {
@@ -1534,10 +2098,13 @@ class AppState {
       user: null,
       schools: [],
       mySchools: [],
+      scholarships: [],
+      appliedScholarships: [],
       documents: {},
       achievements: [],
-      filters: { state: '', type: '', search: '' },
-      ui: { currentSection: 'planning', currentTab: 'schools', theme }
+      parentMode: false,
+      filters: { state: '', type: '', search: '', scholarship: { amount: '', deadline: '', essay: '', match: '' } },
+      ui: { currentSection: 'planning', currentTab: 'schools', theme, swipeIndex: 0 }
     };
     localStorage.removeItem('pathwise_state');
     this.persist();
@@ -1545,30 +2112,113 @@ class AppState {
   }
 }
 
-// School Database
+// Enhanced School Database
 const SCHOOLS_DB = [
   // UC System
-  {id:'ucb',name:'UC Berkeley',state:'CA',system:'UC',type:'public',city:'Berkeley',avgGPA:4.25,avgSAT:1450,acceptRate:14.5,tuitionIn:14226,tuitionOut:46770,rank:22,size:'large',setting:'urban'},
-  {id:'ucla',name:'UCLA',state:'CA',system:'UC',type:'public',city:'Los Angeles',avgGPA:4.26,avgSAT:1445,acceptRate:12.3,tuitionIn:13401,tuitionOut:45975,rank:20,size:'large',setting:'urban'},
-  {id:'ucsd',name:'UC San Diego',state:'CA',system:'UC',type:'public',city:'La Jolla',avgGPA:4.16,avgSAT:1410,acceptRate:31.5,tuitionIn:14616,tuitionOut:47190,rank:34,size:'large',setting:'suburban'},
-  {id:'ucd',name:'UC Davis',state:'CA',system:'UC',type:'public',city:'Davis',avgGPA:4.13,avgSAT:1350,acceptRate:37.6,tuitionIn:14597,tuitionOut:47171,rank:38,size:'large',setting:'suburban'},
-  {id:'uci',name:'UC Irvine',state:'CA',system:'UC',type:'public',city:'Irvine',avgGPA:4.08,avgSAT:1360,acceptRate:26.5,tuitionIn:13727,tuitionOut:46301,rank:36,size:'large',setting:'suburban'},
-  {id:'ucsb',name:'UC Santa Barbara',state:'CA',system:'UC',type:'public',city:'Santa Barbara',avgGPA:4.15,avgSAT:1380,acceptRate:29.6,tuitionIn:14391,tuitionOut:46965,rank:32,size:'large',setting:'suburban'},
+  {id:'ucb',name:'UC Berkeley',state:'CA',system:'UC',type:'public',city:'Berkeley',avgGPA:4.25,avgSAT:1450,acceptRate:14.5,tuitionIn:14226,tuitionOut:46770,rank:22,size:'large',setting:'urban',image:'https://images.unsplash.com/photo-1564981797816-1043664bf78d?w=800'},
+  {id:'ucla',name:'UCLA',state:'CA',system:'UC',type:'public',city:'Los Angeles',avgGPA:4.26,avgSAT:1445,acceptRate:12.3,tuitionIn:13401,tuitionOut:45975,rank:20,size:'large',setting:'urban',image:'https://images.unsplash.com/photo-1504817343863-5092a923803e?w=800'},
+  {id:'ucsd',name:'UC San Diego',state:'CA',system:'UC',type:'public',city:'La Jolla',avgGPA:4.16,avgSAT:1410,acceptRate:31.5,tuitionIn:14616,tuitionOut:47190,rank:34,size:'large',setting:'suburban',image:'https://images.unsplash.com/photo-1559157693-c34c1656d76a?w=800'},
+  {id:'ucd',name:'UC Davis',state:'CA',system:'UC',type:'public',city:'Davis',avgGPA:4.13,avgSAT:1350,acceptRate:37.6,tuitionIn:14597,tuitionOut:47171,rank:38,size:'large',setting:'suburban',image:'https://images.unsplash.com/photo-1580982324076-d95230549339?w=800'},
+  {id:'uci',name:'UC Irvine',state:'CA',system:'UC',type:'public',city:'Irvine',avgGPA:4.08,avgSAT:1360,acceptRate:26.5,tuitionIn:13727,tuitionOut:46301,rank:36,size:'large',setting:'suburban',image:'https://images.unsplash.com/photo-1562774053-701939374585?w=800'},
+  {id:'ucsb',name:'UC Santa Barbara',state:'CA',system:'UC',type:'public',city:'Santa Barbara',avgGPA:4.15,avgSAT:1380,acceptRate:29.6,tuitionIn:14391,tuitionOut:46965,rank:32,size:'large',setting:'suburban',image:'https://images.unsplash.com/photo-1608023136037-626dad6c6188?w=800'},
   
   // CSU System
-  {id:'cpslo',name:'Cal Poly SLO',state:'CA',system:'CSU',type:'public',city:'San Luis Obispo',avgGPA:4.06,avgSAT:1395,acceptRate:32.5,tuitionIn:10377,tuitionOut:22257,rank:null,size:'large',setting:'suburban'},
-  {id:'sdsu',name:'San Diego State',state:'CA',system:'CSU',type:'public',city:'San Diego',avgGPA:3.85,avgSAT:1270,acceptRate:37.8,tuitionIn:7720,tuitionOut:19600,rank:null,size:'large',setting:'urban'},
+  {id:'cpslo',name:'Cal Poly SLO',state:'CA',system:'CSU',type:'public',city:'San Luis Obispo',avgGPA:4.06,avgSAT:1395,acceptRate:32.5,tuitionIn:10377,tuitionOut:22257,rank:null,size:'large',setting:'suburban',image:'https://images.unsplash.com/photo-1562774053-701939374585?w=800'},
+  {id:'sdsu',name:'San Diego State',state:'CA',system:'CSU',type:'public',city:'San Diego',avgGPA:3.85,avgSAT:1270,acceptRate:37.8,tuitionIn:7720,tuitionOut:19600,rank:null,size:'large',setting:'urban',image:'https://images.unsplash.com/photo-1559157693-c34c1656d76a?w=800'},
   
   // Private CA
-  {id:'stanford',name:'Stanford',state:'CA',system:'Private',type:'private',city:'Stanford',avgGPA:4.18,avgSAT:1520,acceptRate:4.0,tuitionIn:61650,tuitionOut:61650,rank:3,size:'medium',setting:'suburban'},
-  {id:'usc',name:'USC',state:'CA',system:'Private',type:'private',city:'Los Angeles',avgGPA:3.9,avgSAT:1460,acceptRate:10.5,tuitionIn:68337,tuitionOut:68337,rank:28,size:'large',setting:'urban'},
+  {id:'stanford',name:'Stanford',state:'CA',system:'Private',type:'private',city:'Stanford',avgGPA:4.18,avgSAT:1520,acceptRate:4.0,tuitionIn:61650,tuitionOut:61650,rank:3,size:'medium',setting:'suburban',image:'https://images.unsplash.com/photo-1562113729-74a629698c39?w=800'},
+  {id:'usc',name:'USC',state:'CA',system:'Private',type:'private',city:'Los Angeles',avgGPA:3.9,avgSAT:1460,acceptRate:10.5,tuitionIn:68337,tuitionOut:68337,rank:28,size:'large',setting:'urban',image:'https://images.unsplash.com/photo-1580684712214-b749e6c20b7a?w=800'},
   
   // NY Schools
-  {id:'columbia',name:'Columbia',state:'NY',system:'Ivy',type:'private',city:'New York',avgGPA:4.15,avgSAT:1530,acceptRate:5.0,tuitionIn:66600,tuitionOut:66600,rank:12,size:'medium',setting:'urban'},
-  {id:'nyu',name:'NYU',state:'NY',system:'Private',type:'private',city:'New York',avgGPA:3.8,avgSAT:1500,acceptRate:12.5,tuitionIn:58960,tuitionOut:58960,rank:35,size:'large',setting:'urban'},
-  
-  // Add more schools...
+  {id:'columbia',name:'Columbia',state:'NY',system:'Ivy',type:'private',city:'New York',avgGPA:4.15,avgSAT:1530,acceptRate:5.0,tuitionIn:66600,tuitionOut:66600,rank:12,size:'medium',setting:'urban',image:'https://images.unsplash.com/photo-1559135197-8a45ea74d367?w=800'},
+  {id:'nyu',name:'NYU',state:'NY',system:'Private',type:'private',city:'New York',avgGPA:3.8,avgSAT:1500,acceptRate:12.5,tuitionIn:58960,tuitionOut:58960,rank:35,size:'large',setting:'urban',image:'https://images.unsplash.com/photo-1519452635265-7b1fbfd1e4e0?w=800'},
 ];
+
+// NEW: Scholarship Database
+const SCHOLARSHIPS_DB = [
+  {id:'gates',name:'Gates Millennium Scholarship',amount:50000,deadline:new Date(2025,11,15),requirements:{gpa:3.3,income:60000,essay:true,minority:true},description:'Full cost of attendance for outstanding minority students'},
+  {id:'cocacola',name:'Coca-Cola Scholars',amount:20000,deadline:new Date(2025,9,31),requirements:{gpa:3.0,leadership:true,essay:true},description:'For students demonstrating leadership and academic excellence'},
+  {id:'merit',name:'National Merit Scholarship',amount:2500,deadline:new Date(2025,10,1),requirements:{psat:true},description:'Based on PSAT/NMSQT scores'},
+  {id:'jackie',name:'Jackie Robinson Foundation',amount:35000,deadline:new Date(2026,1,1),requirements:{gpa:3.0,minority:true,income:75000,essay:true},description:'For minority students showing leadership potential'},
+  {id:'dell',name:'Dell Scholars',amount:20000,deadline:new Date(2025,11,1),requirements:{gpa:2.4,income:50000,essay:true},description:'For students overcoming significant obstacles'},
+  {id:'amazon',name:'Amazon Future Engineer',amount:40000,deadline:new Date(2026,0,15),requirements:{gpa:3.0,interests:'stem',essay:true},description:'For students pursuing computer science'},
+  {id:'elks',name:'Elks National Foundation',amount:50000,deadline:new Date(2025,10,15),requirements:{gpa:3.5,essay:true,community:true},description:'Most Valuable Student scholarship'},
+  {id:'ronbrown',name:'Ron Brown Scholar',amount:40000,deadline:new Date(2026,0,9),requirements:{gpa:3.0,minority:true,leadership:true,essay:true},description:'For African American students with leadership skills'},
+  {id:'questbridge',name:'QuestBridge',amount:200000,deadline:new Date(2025,8,26),requirements:{income:65000,gpa:3.5},description:'Full four-year scholarship to partner colleges'},
+  {id:'regeneron',name:'Regeneron Science Talent Search',amount:250000,deadline:new Date(2025,10,10),requirements:{interests:'stem',research:true},description:'For exceptional young scientists'},
+];
+
+// NEW: Scholarship Matching Engine
+class ScholarshipEngine {
+  static matchScholarships(user) {
+    if (!user) return [];
+    
+    return SCHOLARSHIPS_DB.map(scholarship => {
+      let matchScore = 0;
+      let eligibility = true;
+      const metRequirements = [];
+      const unmetRequirements = [];
+      
+      // Check GPA requirement
+      if (scholarship.requirements.gpa) {
+        if (user.gpa >= scholarship.requirements.gpa) {
+          matchScore += 20;
+          metRequirements.push(`GPA ${scholarship.requirements.gpa}+`);
+        } else {
+          eligibility = false;
+          unmetRequirements.push(`Need GPA ${scholarship.requirements.gpa}+`);
+        }
+      }
+      
+      // Check income requirement
+      if (scholarship.requirements.income) {
+        if (!user.income || user.income <= scholarship.requirements.income) {
+          matchScore += 20;
+          metRequirements.push('Income eligible');
+        } else {
+          eligibility = false;
+          unmetRequirements.push('Over income limit');
+        }
+      }
+      
+      // Check interest alignment
+      if (scholarship.requirements.interests) {
+        if (user.interests === scholarship.requirements.interests) {
+          matchScore += 15;
+          metRequirements.push('Field match');
+        }
+      }
+      
+      // Essay requirement (doesn't affect eligibility)
+      if (scholarship.requirements.essay) {
+        metRequirements.push('Essay required');
+      }
+      
+      // Base match score for all eligible
+      if (eligibility) matchScore += 30;
+      
+      // Deadline urgency bonus
+      const daysUntilDeadline = Math.floor((scholarship.deadline - new Date()) / (1000 * 60 * 60 * 24));
+      if (daysUntilDeadline < 30) matchScore += 10;
+      
+      return {
+        ...scholarship,
+        matchScore: Math.min(100, matchScore),
+        eligible: eligibility,
+        metRequirements,
+        unmetRequirements,
+        daysUntilDeadline
+      };
+    }).sort((a, b) => b.matchScore - a.matchScore);
+  }
+  
+  static calculateTotalPotential(scholarships) {
+    return scholarships
+      .filter(s => s.eligible)
+      .reduce((sum, s) => sum + s.amount, 0);
+  }
+}
 
 // Validators
 const Validators = {
@@ -1681,6 +2331,18 @@ class AchievementSystem {
       icon: '✨',
       title: 'Profile Complete',
       description: 'Filled out all profile information'
+    },
+    scholarship_hunter: {
+      id: 'scholarship_hunter',
+      icon: '💰',
+      title: 'Scholarship Hunter',
+      description: 'Applied to 5+ scholarships'
+    },
+    swipe_master: {
+      id: 'swipe_master',
+      icon: '👆',
+      title: 'Discovery Pro',
+      description: 'Swiped through 20+ schools'
     }
   };
   
@@ -1688,6 +2350,7 @@ class AchievementSystem {
     const user = appState.get('user');
     const mySchools = appState.get('mySchools') || [];
     const achievements = appState.get('achievements') || [];
+    const appliedScholarships = appState.get('appliedScholarships') || [];
     
     // Check first school
     if (mySchools.length >= 1 && !achievements.includes('first_school')) {
@@ -1697,6 +2360,11 @@ class AchievementSystem {
     // Check five schools
     if (mySchools.length >= 5 && !achievements.includes('five_schools')) {
       this.unlock('five_schools', appState);
+    }
+    
+    // Check scholarship hunter
+    if (appliedScholarships.length >= 5 && !achievements.includes('scholarship_hunter')) {
+      this.unlock('scholarship_hunter', appState);
     }
     
     // Check balanced list
@@ -1724,6 +2392,8 @@ class AchievementSystem {
   
   static showNotification(achievement) {
     const container = document.getElementById('achievementsContainer');
+    if (!container) return;
+    
     const elem = document.createElement('div');
     elem.className = 'achievement new';
     elem.innerHTML = `
@@ -1767,9 +2437,19 @@ class AchievementSystem {
   }
   
   static hasBalancedList(schools, appState) {
-    // Check if user has at least one school in each category
-    // Implementation would check school categories
-    return false; // Placeholder
+    const user = appState.get('user');
+    if (!user || schools.length < 3) return false;
+    
+    const categories = { reach: 0, match: 0, safety: 0 };
+    schools.forEach(id => {
+      const school = SCHOOLS_DB.find(s => s.id === id);
+      if (school) {
+        const cat = SchoolMatcher.categorizeSchool(school, user);
+        categories[cat]++;
+      }
+    });
+    
+    return categories.reach > 0 && categories.match > 0 && categories.safety > 0;
   }
   
   static isProfileComplete(user) {
@@ -2010,10 +2690,180 @@ class DocumentTracker {
   }
 }
 
-// UI Controller
+// NEW: Swipeable Discovery Controller
+class SwipeController {
+  constructor(appState) {
+    this.appState = appState;
+    this.currentIndex = 0;
+    this.schools = [...SCHOOLS_DB];
+    this.swipedSchools = { liked: [], rejected: [] };
+    this.isDragging = false;
+    this.startX = 0;
+    this.currentX = 0;
+    this.currentCard = null;
+  }
+  
+  init() {
+    this.renderCards();
+    this.attachEventListeners();
+  }
+  
+  renderCards() {
+    const container = document.getElementById('swipeStack');
+    if (!container) return;
+    
+    container.innerHTML = '';
+    
+    // Show next 3 cards
+    for (let i = 0; i < Math.min(3, this.schools.length - this.currentIndex); i++) {
+      const school = this.schools[this.currentIndex + i];
+      const card = this.createCard(school, i);
+      container.appendChild(card);
+    }
+    
+    this.currentCard = container.querySelector('.swipe-card');
+  }
+  
+  createCard(school, stackPosition) {
+    const user = this.appState.get('user');
+    const matchScore = SchoolMatcher.calculateMatch(school, user);
+    
+    const card = document.createElement('div');
+    card.className = 'swipe-card';
+    card.dataset.schoolId = school.id;
+    card.style.zIndex = 100 - stackPosition;
+    card.style.transform = `scale(${1 - stackPosition * 0.05})`;
+    card.innerHTML = `
+      <div class="swipe-card-content" style="background-image: linear-gradient(to bottom, transparent, rgba(0,0,0,0.8)), url('${school.image}')">
+        <div class="swipe-card-overlay">
+          <div class="swipe-card-name">${school.name}</div>
+          <div class="swipe-card-stats">
+            <span class="swipe-stat">${matchScore}% match</span>
+            <span class="swipe-stat">${school.acceptRate}% accept</span>
+            <span class="swipe-stat">${(school.tuitionIn / 1000).toFixed(0)}k/yr</span>
+          </div>
+          <div style="margin-top: 1rem; font-size: 0.9rem;">
+            ${school.city}, ${school.state} • ${school.system}
+          </div>
+        </div>
+      </div>
+    `;
+    
+    return card;
+  }
+  
+  attachEventListeners() {
+    const container = document.getElementById('swipeStack');
+    if (!container) return;
+    
+    // Touch events
+    container.addEventListener('touchstart', (e) => this.handleStart(e.touches[0].clientX));
+    container.addEventListener('touchmove', (e) => this.handleMove(e.touches[0].clientX));
+    container.addEventListener('touchend', () => this.handleEnd());
+    
+    // Mouse events (for desktop)
+    container.addEventListener('mousedown', (e) => this.handleStart(e.clientX));
+    container.addEventListener('mousemove', (e) => this.handleMove(e.clientX));
+    container.addEventListener('mouseup', () => this.handleEnd());
+    container.addEventListener('mouseleave', () => this.handleEnd());
+  }
+  
+  handleStart(x) {
+    if (!this.currentCard) return;
+    this.isDragging = true;
+    this.startX = x;
+    this.currentCard.classList.add('dragging');
+  }
+  
+  handleMove(x) {
+    if (!this.isDragging || !this.currentCard) return;
+    
+    this.currentX = x - this.startX;
+    const rotation = this.currentX * 0.1;
+    
+    this.currentCard.style.transform = `translateX(${this.currentX}px) rotate(${rotation}deg)`;
+    
+    // Update opacity based on distance
+    const opacity = 1 - Math.abs(this.currentX) / 300;
+    this.currentCard.style.opacity = opacity;
+  }
+  
+  handleEnd() {
+    if (!this.isDragging || !this.currentCard) return;
+    
+    this.isDragging = false;
+    this.currentCard.classList.remove('dragging');
+    
+    const threshold = 100;
+    
+    if (Math.abs(this.currentX) > threshold) {
+      if (this.currentX > 0) {
+        this.swipeRight();
+      } else {
+        this.swipeLeft();
+      }
+    } else {
+      // Snap back
+      this.currentCard.style.transform = '';
+      this.currentCard.style.opacity = '';
+    }
+    
+    this.currentX = 0;
+  }
+  
+  swipeLeft() {
+    if (!this.currentCard) return;
+    
+    const schoolId = this.currentCard.dataset.schoolId;
+    this.swipedSchools.rejected.push(schoolId);
+    
+    this.currentCard.classList.add('swiped-left');
+    
+    setTimeout(() => {
+      this.currentIndex++;
+      this.renderCards();
+      this.checkForAchievements();
+    }, 300);
+  }
+  
+  swipeRight() {
+    if (!this.currentCard) return;
+    
+    const schoolId = this.currentCard.dataset.schoolId;
+    this.swipedSchools.liked.push(schoolId);
+    
+    // Add to my schools
+    const mySchools = this.appState.get('mySchools') || [];
+    if (!mySchools.includes(schoolId)) {
+      mySchools.push(schoolId);
+      this.appState.update('mySchools', mySchools);
+      Toast.show('School added to your list!', 'success');
+    }
+    
+    this.currentCard.classList.add('swiped-right');
+    
+    setTimeout(() => {
+      this.currentIndex++;
+      this.renderCards();
+      this.checkForAchievements();
+    }, 300);
+  }
+  
+  checkForAchievements() {
+    const totalSwiped = this.swipedSchools.liked.length + this.swipedSchools.rejected.length;
+    const achievements = this.appState.get('achievements') || [];
+    
+    if (totalSwiped >= 20 && !achievements.includes('swipe_master')) {
+      AchievementSystem.unlock('swipe_master', this.appState);
+    }
+  }
+}
+
+// Main UI Controller
 class UIController {
   constructor(appState) {
     this.appState = appState;
+    this.swipeController = new SwipeController(appState);
     this.initElements();
     this.bindEvents();
     this.setupSubscriptions();
@@ -2024,6 +2874,7 @@ class UIController {
     // Sections
     this.planningSection = document.getElementById('planningSection');
     this.dashboardSection = document.getElementById('dashboardSection');
+    this.parentDashboard = document.getElementById('parentDashboard');
     
     // Forms
     this.planningForm = document.getElementById('planningForm');
@@ -2034,6 +2885,8 @@ class UIController {
     this.themeBtn = document.getElementById('themeBtn');
     this.resetBtn = document.getElementById('resetBtn');
     this.profileBtn = document.getElementById('profileBtn');
+    this.discoverBtn = document.getElementById('discoverBtn');
+    this.parentModeBtn = document.getElementById('parentModeBtn');
     
     // AI
     this.aiBubble = document.getElementById('aiBubble');
@@ -2044,10 +2897,14 @@ class UIController {
     this.matchSchools = document.getElementById('matchSchools');
     this.safetySchools = document.getElementById('safetySchools');
     this.mySchoolsList = document.getElementById('mySchoolsList');
+    this.scholarshipsList = document.getElementById('scholarshipsList');
     this.aidEstimates = document.getElementById('aidEstimates');
     this.documentsList = document.getElementById('documentsList');
     this.timelineList = document.getElementById('timelineList');
     this.insightsContent = document.getElementById('insightsContent');
+    
+    // Discovery
+    this.swipeContainer = document.getElementById('swipeContainer');
   }
   
   bindEvents() {
@@ -2072,11 +2929,19 @@ class UIController {
     this.themeBtn.addEventListener('click', () => this.toggleTheme());
     this.resetBtn.addEventListener('click', () => this.confirmReset());
     this.profileBtn.addEventListener('click', () => this.showProfile());
+    this.discoverBtn.addEventListener('click', () => this.openDiscovery());
+    this.parentModeBtn.addEventListener('click', () => this.toggleParentMode());
     
     // Filters
     document.getElementById('filterState').addEventListener('change', () => this.filterSchools());
     document.getElementById('filterType').addEventListener('change', () => this.filterSchools());
     document.getElementById('searchSchool').addEventListener('input', debounce(() => this.filterSchools(), 300));
+    
+    // Scholarship filters
+    document.getElementById('filterAmount')?.addEventListener('change', () => this.filterScholarships());
+    document.getElementById('filterDeadline')?.addEventListener('change', () => this.filterScholarships());
+    document.getElementById('filterEssay')?.addEventListener('change', () => this.filterScholarships());
+    document.getElementById('filterMatch')?.addEventListener('change', () => this.filterScholarships());
     
     // AI Assistant
     this.aiBubble.addEventListener('click', () => this.handleAIClick());
@@ -2095,6 +2960,13 @@ class UIController {
       this.renderDocuments();
       this.renderTimeline();
       AchievementSystem.check(this.appState);
+    });
+    this.appState.subscribe('appliedScholarships', () => {
+      this.renderScholarships();
+      AchievementSystem.check(this.appState);
+    });
+    this.appState.subscribe('parentMode', (isParent) => {
+      this.updateParentMode(isParent);
     });
     this.appState.subscribe('ui.currentSection', (section) => {
       if (section === 'dashboard') this.showDashboard();
@@ -2168,7 +3040,7 @@ class UIController {
     this.appState.update('ui.currentSection', 'dashboard');
     
     Toast.show(`Welcome, ${user.firstName}! Let's find your perfect schools.`, 'success');
-    this.showAIMessage("Great profile! I'll help you build a balanced school list. Start by exploring the schools below!");
+    this.showAIMessage("Great profile! Check out the new Scholarships tab for automatic matching!");
     
     // Check initial achievements
     if (this.isProfileComplete(user)) {
@@ -2204,6 +3076,7 @@ class UIController {
   showPlanning() {
     this.planningSection.classList.remove('hidden');
     this.dashboardSection.classList.add('hidden');
+    this.parentDashboard.classList.add('hidden');
     this.backBtn.classList.add('hidden');
   }
   
@@ -2218,6 +3091,7 @@ class UIController {
     this.renderStats();
     this.renderSchools();
     this.renderMySchools();
+    this.renderScholarships();
     this.renderFinancialAid();
     this.renderDocuments();
     this.renderTimeline();
@@ -2227,6 +3101,7 @@ class UIController {
   renderStats() {
     const user = this.appState.get('user');
     const mySchools = this.appState.get('mySchools') || [];
+    const scholarships = ScholarshipEngine.matchScholarships(user);
     
     // Profile strength
     let profileStrength = 0;
@@ -2249,12 +3124,11 @@ class UIController {
     const schoolProgress = Math.min(100, (mySchools.length / 10) * 100);
     document.getElementById('schoolProgress').style.width = `${schoolProgress}%`;
     
-    // Days until deadline
-    const deadline = new Date(2025, 10, 30); // Nov 30, 2025
-    const today = new Date();
-    const days = Math.floor((deadline - today) / (1000 * 60 * 60 * 24));
-    document.getElementById('daysLeft').textContent = days > 0 ? days : 'Past';
-    document.getElementById('nextDeadline').textContent = 'UC/CSU Applications';
+    // Scholarship stats
+    const eligibleScholarships = scholarships.filter(s => s.eligible);
+    document.getElementById('scholarshipCount').textContent = eligibleScholarships.length;
+    const totalPotential = ScholarshipEngine.calculateTotalPotential(eligibleScholarships);
+    document.getElementById('scholarshipValue').textContent = `${totalPotential.toLocaleString()} potential`;
   }
   
   renderSchools() {
@@ -2304,515 +3178,3 @@ class UIController {
           </div>
         </div>
         <div class="school-meta">Tuition: ${tuition.toLocaleString()}/year</div>
-        <div class="school-actions">
-          <button class="btn ${isAdded ? 'success' : 'primary'}" 
-                  onclick="app.toggleSchool('${school.id}')"
-                  ${isAdded ? 'disabled' : ''}>
-            ${isAdded ? '✓ Added' : 'Add to List'}
-          </button>
-          <button class="btn ghost" onclick="app.showSchoolDetails('${school.id}')">Details</button>
-        </div>
-      </div>
-    `;
-  }
-  
-  createEmptyState(type) {
-    const messages = {
-      reach: 'No reach schools found. Try adjusting your profile!',
-      match: 'No match schools found. Update your stats to see matches.',
-      safety: 'No safety schools found. Great profile!'
-    };
-    
-    return `
-      <div class="empty-state">
-        <div class="empty-icon">🎯</div>
-        <p>${messages[type]}</p>
-      </div>
-    `;
-  }
-  
-  renderMySchools() {
-    const mySchoolIds = this.appState.get('mySchools') || [];
-    const user = this.appState.get('user');
-    
-    if (mySchoolIds.length === 0) {
-      this.mySchoolsList.innerHTML = `
-        <div class="empty-state">
-          <div class="empty-icon">📚</div>
-          <h3>No schools added yet</h3>
-          <p>Add schools from the lists above to build your application list.</p>
-        </div>
-      `;
-      return;
-    }
-    
-    const schoolCards = mySchoolIds.map(id => {
-      const school = SCHOOLS_DB.find(s => s.id === id);
-      if (!school) return '';
-      
-      const aid = FinancialAidCalculator.calculate(school, user);
-      
-      return `
-        <div class="card mb-4">
-          <div class="flex justify-between items-center">
-            <div>
-              <h4>${school.name}</h4>
-              <div class="text-muted text-sm">${school.city}, ${school.state}</div>
-            </div>
-            <div class="flex gap-2">
-              <div class="badge">Net: ${aid.netPrice.toLocaleString()}</div>
-              <button class="btn danger" onclick="app.removeSchool('${school.id}')">Remove</button>
-            </div>
-          </div>
-        </div>
-      `;
-    }).join('');
-    
-    this.mySchoolsList.innerHTML = schoolCards;
-  }
-  
-  renderFinancialAid() {
-    const mySchoolIds = this.appState.get('mySchools') || [];
-    const user = this.appState.get('user');
-    
-    if (mySchoolIds.length === 0) {
-      this.aidEstimates.innerHTML = `
-        <div class="empty-state">
-          <div class="empty-icon">💰</div>
-          <p>Add schools to see financial aid estimates.</p>
-        </div>
-      `;
-      return;
-    }
-    
-    const aidCards = mySchoolIds.map(id => {
-      const school = SCHOOLS_DB.find(s => s.id === id);
-      if (!school) return '';
-      
-      const aid = FinancialAidCalculator.calculate(school, user);
-      
-      const aidItems = aid.items.map(item => `
-        <div class="flex justify-between">
-          <span>${item.name}</span>
-          <span class="font-bold">${item.amount.toLocaleString()}</span>
-        </div>
-      `).join('');
-      
-      return `
-        <div class="card mb-4">
-          <h4>${school.name}</h4>
-          <div class="grid gap-2 mt-3">
-            ${aidItems}
-            <hr>
-            <div class="flex justify-between">
-              <span>Tuition</span>
-              <span>${aid.tuition.toLocaleString()}</span>
-            </div>
-            <div class="flex justify-between font-bold">
-              <span>Net Price</span>
-              <span class="text-lg">${aid.netPrice.toLocaleString()}</span>
-            </div>
-          </div>
-        </div>
-      `;
-    }).join('');
-    
-    this.aidEstimates.innerHTML = aidCards;
-  }
-  
-  renderDocuments() {
-    const mySchoolIds = this.appState.get('mySchools') || [];
-    const user = this.appState.get('user');
-    const documents = this.appState.get('documents') || DocumentTracker.generateDocuments(mySchoolIds, user);
-    
-    if (documents.length === 0) {
-      this.documentsList.innerHTML = `
-        <div class="empty-state">
-          <div class="empty-icon">📝</div>
-          <p>Add schools to generate your document checklist.</p>
-        </div>
-      `;
-      document.getElementById('docProgress').textContent = '0% Complete';
-      return;
-    }
-    
-    const progress = DocumentTracker.getProgress(documents);
-    document.getElementById('docProgress').textContent = `${progress}% Complete`;
-    
-    const docCards = documents.map(doc => {
-      const urgency = DocumentTracker.getUrgency(doc.due);
-      const daysLeft = Math.floor((doc.due - new Date()) / (1000 * 60 * 60 * 24));
-      
-      return `
-        <div class="card mb-3 ${urgency}">
-          <div class="flex justify-between items-center">
-            <div class="flex items-center gap-3">
-              <input type="checkbox" 
-                     id="doc-${doc.id}"
-                     ${doc.status === 'completed' ? 'checked' : ''}
-                     onchange="app.toggleDocument('${doc.id}')">
-              <label for="doc-${doc.id}">
-                <div class="font-bold">${doc.name}</div>
-                <div class="text-sm text-muted">Due ${doc.due.toLocaleDateString()} (${daysLeft} days)</div>
-              </label>
-            </div>
-            ${doc.id.includes('essays') ? `
-              <button class="btn ghost" onclick="app.showEssayHelp('${doc.schoolId}')">
-                Get Help
-              </button>
-            ` : ''}
-          </div>
-        </div>
-      `;
-    }).join('');
-    
-    this.documentsList.innerHTML = docCards;
-  }
-  
-  renderTimeline() {
-    const mySchoolIds = this.appState.get('mySchools') || [];
-    const user = this.appState.get('user');
-    const documents = this.appState.get('documents') || DocumentTracker.generateDocuments(mySchoolIds, user);
-    
-    if (documents.length === 0) {
-      this.timelineList.innerHTML = `
-        <div class="empty-state">
-          <div class="empty-icon">📅</div>
-          <p>Your timeline will appear here once you add schools.</p>
-        </div>
-      `;
-      return;
-    }
-    
-    // Sort by due date
-    const sorted = [...documents].sort((a, b) => a.due - b.due);
-    
-    const timelineItems = sorted.map(doc => {
-      const urgency = DocumentTracker.getUrgency(doc.due);
-      const daysLeft = Math.floor((doc.due - new Date()) / (1000 * 60 * 60 * 24));
-      
-      return `
-        <div class="timeline-item ${urgency}">
-          <div class="flex justify-between items-center">
-            <div>
-              <div class="font-bold">${doc.name}</div>
-              <div class="text-sm text-muted">${doc.due.toLocaleDateString()}</div>
-            </div>
-            <div class="badge">${daysLeft} days</div>
-          </div>
-        </div>
-      `;
-    }).join('');
-    
-    this.timelineList.innerHTML = timelineItems;
-  }
-  
-  renderInsights() {
-    const user = this.appState.get('user');
-    const mySchools = this.appState.get('mySchools') || [];
-    
-    const insights = [];
-    
-    // Balance check
-    const categories = { reach: 0, match: 0, safety: 0 };
-    mySchools.forEach(id => {
-      const school = SCHOOLS_DB.find(s => s.id === id);
-      if (school) {
-        const cat = SchoolMatcher.categorizeSchool(school, user);
-        categories[cat]++;
-      }
-    });
-    
-    if (mySchools.length > 0) {
-      if (categories.reach === 0) {
-        insights.push({
-          type: 'warning',
-          title: 'Add Reach Schools',
-          text: 'Consider adding some ambitious choices to your list.'
-        });
-      }
-      if (categories.safety === 0) {
-        insights.push({
-          type: 'warning',
-          title: 'Add Safety Schools',
-          text: 'Include some schools with higher acceptance chances for balance.'
-        });
-      }
-      if (categories.match > 5) {
-        insights.push({
-          type: 'info',
-          title: 'Well Matched',
-          text: 'You have great match schools! Consider narrowing down to your favorites.'
-        });
-      }
-    }
-    
-    // Financial insights
-    if (user?.income && mySchools.length > 0) {
-      const avgNetPrice = mySchools.reduce((sum, id) => {
-        const school = SCHOOLS_DB.find(s => s.id === id);
-        if (school) {
-          const aid = FinancialAidCalculator.calculate(school, user);
-          return sum + aid.netPrice;
-        }
-        return sum;
-      }, 0) / mySchools.length;
-      
-      insights.push({
-        type: 'info',
-        title: 'Average Net Price',
-        text: `Your average estimated cost is ${Math.round(avgNetPrice).toLocaleString()} per year.`
-      });
-    }
-    
-    if (insights.length === 0) {
-      insights.push({
-        type: 'info',
-        title: 'Getting Started',
-        text: 'Add schools to see personalized insights about your application strategy.'
-      });
-    }
-    
-    this.insightsContent.innerHTML = insights.map(insight => `
-      <div class="card mb-3">
-        <div class="badge ${insight.type}">${insight.type.toUpperCase()}</div>
-        <h4 class="mt-2">${insight.title}</h4>
-        <p class="text-muted">${insight.text}</p>
-      </div>
-    `).join('');
-  }
-  
-  toggleSchool(schoolId) {
-    const mySchools = this.appState.get('mySchools') || [];
-    
-    if (mySchools.includes(schoolId)) {
-      // Remove school
-      const updated = mySchools.filter(id => id !== schoolId);
-      this.appState.update('mySchools', updated);
-      Toast.show('School removed from list', 'info');
-    } else {
-      // Add school
-      const updated = [...mySchools, schoolId];
-      this.appState.update('mySchools', updated);
-      Toast.show('School added to list!', 'success');
-      
-      // Check achievements
-      AchievementSystem.check(this.appState);
-    }
-    
-    this.renderSchools();
-  }
-  
-  removeSchool(schoolId) {
-    const mySchools = this.appState.get('mySchools') || [];
-    const updated = mySchools.filter(id => id !== schoolId);
-    this.appState.update('mySchools', updated);
-    this.renderSchools();
-    Toast.show('School removed', 'info');
-  }
-  
-  showSchoolDetails(schoolId) {
-    const school = SCHOOLS_DB.find(s => s.id === schoolId);
-    if (!school) return;
-    
-    // This would open a modal with detailed school information
-    Toast.show(`Showing details for ${school.name}`, 'info');
-  }
-  
-  toggleDocument(docId) {
-    const documents = this.appState.get('documents') || [];
-    const doc = documents.find(d => d.id === docId);
-    if (doc) {
-      doc.status = doc.status === 'completed' ? 'pending' : 'completed';
-      this.appState.update('documents', [...documents]);
-      
-      if (doc.status === 'completed') {
-        Toast.show('Document marked complete!', 'success');
-        AchievementSystem.celebrate();
-      }
-    }
-  }
-  
-  showEssayHelp(schoolId) {
-    this.showAIMessage(`I can help you brainstorm essay topics for this school! Consider writing about your unique experiences and what makes you a great fit.`);
-  }
-  
-  switchTab(tabName) {
-    // Update active tab
-    this.tabs.forEach(tab => {
-      tab.classList.toggle('active', tab.dataset.tab === tabName);
-      tab.setAttribute('aria-selected', tab.dataset.tab === tabName);
-    });
-    
-    // Show corresponding content
-    const tabContents = ['schoolsTab', 'financialTab', 'documentsTab', 'timelineTab', 'insightsTab'];
-    tabContents.forEach(id => {
-      const element = document.getElementById(id);
-      element.classList.toggle('hidden', !id.startsWith(tabName));
-    });
-    
-    this.appState.update('ui.currentTab', tabName);
-  }
-  
-  filterSchools() {
-    // Get filter values
-    const state = document.getElementById('filterState').value;
-    const type = document.getElementById('filterType').value;
-    const search = document.getElementById('searchSchool').value.toLowerCase();
-    
-    this.appState.update('filters', { state, type, search });
-    
-    // Re-render with filters
-    this.renderSchools();
-  }
-  
-  toggleTheme() {
-    const current = this.appState.get('ui.theme') || 'light';
-    const next = current === 'light' ? 'dark' : 'light';
-    
-    document.documentElement.setAttribute('data-theme', next);
-    this.appState.update('ui.theme', next);
-    
-    // Icons are now handled via CSS visibility
-    Toast.show(`Switched to ${next} mode`, 'info');
-  }
-  
-  applyTheme() {
-    const theme = this.appState.get('ui.theme') || 'light';
-    document.documentElement.setAttribute('data-theme', theme);
-    // Icons are now handled via CSS visibility
-  }
-  
-  confirmReset() {
-    if (confirm('This will delete all your data. Are you sure?')) {
-      this.appState.reset();
-      Toast.show('All data has been reset', 'info');
-    }
-  }
-  
-  showProfile() {
-    const user = this.appState.get('user');
-    if (!user) {
-      Toast.show('Complete the planning form first', 'warning');
-      return;
-    }
-    
-    const modal = document.getElementById('profileModal');
-    const content = document.getElementById('profileContent');
-    
-    content.innerHTML = `
-      <div class="grid gap-3">
-        <div><strong>Name:</strong> ${user.firstName}</div>
-        <div><strong>Grade:</strong> ${user.grade}</div>
-        <div><strong>State:</strong> ${user.homeState}</div>
-        <div><strong>GPA:</strong> ${user.gpa || 'Not provided'}</div>
-        <div><strong>SAT:</strong> ${user.sat || 'Not provided'}</div>
-        <div><strong>AP Courses:</strong> ${user.ap || 0}</div>
-      </div>
-    `;
-    
-    modal.classList.add('active');
-  }
-  
-  closeModals() {
-    document.querySelectorAll('.modal-overlay').forEach(modal => {
-      modal.classList.remove('active');
-    });
-  }
-  
-  handleAIClick() {
-    const suggestions = [
-      "Let me help you find schools that match your profile!",
-      "Have you considered adding more safety schools?",
-      "Your essay deadlines are coming up - need help brainstorming?",
-      "Based on your interests, you might like these programs...",
-      "Don't forget to complete your FAFSA by October 1st!"
-    ];
-    
-    const random = suggestions[Math.floor(Math.random() * suggestions.length)];
-    this.showAIMessage(random);
-  }
-  
-  showAIMessage(message) {
-    this.aiMessage.textContent = message;
-    this.aiBubble.classList.remove('hidden');
-    
-    setTimeout(() => {
-      this.aiBubble.classList.add('hidden');
-    }, 8000);
-  }
-}
-
-// Helper Functions
-function debounce(func, wait) {
-  let timeout;
-  return function executedFunction(...args) {
-    const later = () => {
-      clearTimeout(timeout);
-      func(...args);
-    };
-    clearTimeout(timeout);
-    timeout = setTimeout(later, wait);
-  };
-}
-
-function closeModal(modalId) {
-  document.getElementById(modalId).classList.remove('active');
-}
-
-// Initialize Application
-const appState = new AppState();
-const ui = new UIController(appState);
-
-// Global app object for inline handlers
-window.app = {
-  toggleSchool: (id) => ui.toggleSchool(id),
-  removeSchool: (id) => ui.removeSchool(id),
-  showSchoolDetails: (id) => ui.showSchoolDetails(id),
-  toggleDocument: (id) => ui.toggleDocument(id),
-  showEssayHelp: (id) => ui.showEssayHelp(id)
-};
-
-// Check if returning user
-document.addEventListener('DOMContentLoaded', () => {
-  const user = appState.get('user');
-  if (user) {
-    appState.update('ui.currentSection', 'dashboard');
-    Toast.show(`Welcome back, ${user.firstName}!`, 'success');
-  }
-  
-  // Show AI helper after delay
-  setTimeout(() => {
-    if (!user) {
-      ui.showAIMessage("Hi! I'm here to help you navigate college applications. Let's start by filling out your profile!");
-    }
-  }, 3000);
-});
-
-// Native Bridge Support (if needed)
-window.PathwiseBridge = {
-  getState: () => JSON.stringify(appState.state),
-  setState: (state) => {
-    appState.state = { ...appState.state, ...JSON.parse(state) };
-    appState.persist();
-  },
-  reset: () => appState.reset()
-};
-
-// Performance monitoring
-if ('PerformanceObserver' in window) {
-  const perfObserver = new PerformanceObserver((list) => {
-    for (const entry of list.getEntries()) {
-      if (entry.duration > 100) {
-        console.warn('Slow interaction:', entry.name, entry.duration);
-      }
-    }
-  });
-  perfObserver.observe({ entryTypes: ['measure'] });
-}
-
-console.log('🎓 Pathwise loaded successfully!');
-</script>
-
-</body>
-</html>
