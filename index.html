@@ -107,47 +107,6 @@
     overflow-x: hidden;
   }
 
-  /* Animated Background */
-  .bg-animation {
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    z-index: -1;
-    opacity: 0.03;
-    pointer-events: none;
-  }
-
-  .bg-animation::before,
-  .bg-animation::after {
-    content: '';
-    position: absolute;
-    width: 400px;
-    height: 400px;
-    border-radius: 50%;
-    background: var(--gradient-primary);
-    animation: float 20s ease-in-out infinite;
-  }
-
-  .bg-animation::before {
-    top: -200px;
-    left: -200px;
-    animation-delay: 0s;
-  }
-
-  .bg-animation::after {
-    bottom: -200px;
-    right: -200px;
-    animation-delay: 10s;
-  }
-
-  @keyframes float {
-    0%, 100% { transform: translate(0, 0) rotate(0deg); }
-    33% { transform: translate(100px, 100px) rotate(120deg); }
-    66% { transform: translate(-100px, 50px) rotate(240deg); }
-  }
-
   /* Typography */
   h1, h2, h3, h4, h5, h6 {
     font-weight: 700;
@@ -159,79 +118,31 @@
   h2 { font-size: 2rem; }
   h3 { font-size: 1.5rem; }
   h4 { font-size: 1.25rem; }
-  h5 { font-size: 1.125rem; }
 
-  @media (max-width: 640px) {
-    h1 { font-size: 2rem; }
-    h2 { font-size: 1.5rem; }
-    h3 { font-size: 1.25rem; }
-  }
-
-  /* Header */
-  .header {
-    position: sticky;
-    top: 0;
-    z-index: var(--z-sticky);
-    backdrop-filter: blur(var(--blur));
-    -webkit-backdrop-filter: blur(var(--blur));
-    background: var(--glass);
-    border-bottom: 1px solid var(--border);
-    transition: var(--transition);
-  }
-
-  .header-inner {
+  /* Main Container */
+  .container {
     max-width: 1200px;
     margin: 0 auto;
-    padding: 1rem;
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    gap: 1rem;
+    padding: 1.5rem 1rem;
   }
 
-  .brand {
-    display: flex;
-    align-items: center;
-    gap: 0.75rem;
-    font-weight: 800;
-    font-size: 1.25rem;
-    cursor: pointer;
-    transition: var(--transition-fast);
-  }
-
-  .brand:hover {
-    transform: translateY(-1px);
-  }
-
-  .brand-logo {
-    width: 40px;
-    height: 40px;
-    border-radius: 12px;
-    background: var(--gradient-primary);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    box-shadow: var(--shadow-sm);
-    animation: pulse 2s ease infinite;
+  /* Cards */
+  .card {
+    background: var(--card);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    border-radius: var(--radius-lg);
+    padding: 1.5rem;
+    box-shadow: var(--shadow);
+    border: 1px solid var(--border);
+    transition: var(--transition);
     position: relative;
     overflow: hidden;
   }
-  
-  .brand-logo svg {
-    width: 24px;
-    height: 24px;
-    fill: white;
-  }
 
-  @keyframes pulse {
-    0%, 100% { transform: scale(1); }
-    50% { transform: scale(1.05); }
-  }
-
-  .header-actions {
-    display: flex;
-    align-items: center;
-    gap: 0.5rem;
+  .card:hover {
+    box-shadow: var(--shadow-lg);
+    transform: translateY(-2px);
   }
 
   /* Buttons */
@@ -264,203 +175,57 @@
     box-shadow: var(--shadow);
   }
 
-  .btn:active {
-    transform: translateY(0);
-    box-shadow: var(--shadow-sm);
-  }
-
-  .btn:focus-visible {
-    outline: 3px solid var(--primary);
-    outline-offset: 2px;
-  }
-
   .btn.primary {
     background: var(--gradient-primary);
     color: white;
     box-shadow: var(--shadow-colored);
-    animation: gradient-shift 3s ease infinite;
-    background-size: 200% 200%;
   }
 
-  @keyframes gradient-shift {
-    0% { background-position: 0% 50%; }
-    50% { background-position: 100% 50%; }
-    100% { background-position: 0% 50%; }
+  /* Header */
+  .header {
+    position: sticky;
+    top: 0;
+    z-index: var(--z-sticky);
+    backdrop-filter: blur(var(--blur));
+    -webkit-backdrop-filter: blur(var(--blur));
+    background: var(--glass);
+    border-bottom: 1px solid var(--border);
+    transition: var(--transition);
   }
 
-  .btn.secondary {
-    background: var(--gradient-secondary);
-    color: white;
-  }
-
-  .btn.success {
-    background: var(--gradient-success);
-    color: white;
-  }
-  
-  .btn.scholarship {
-    background: var(--gradient-scholarship);
-    color: var(--ink);
-    font-weight: 700;
-  }
-
-  .btn.ghost {
-    background: transparent;
-    box-shadow: none;
-    border: 2px solid var(--border);
-    color: var(--ink);
-  }
-  
-  .btn.ghost:hover {
-    background: var(--card);
-    border-color: var(--primary);
-  }
-
-  .btn.icon {
-    padding: 0.75rem;
-    min-width: 44px;
-    background: var(--card);
-    color: var(--ink);
-  }
-  
-  .btn.icon:hover {
-    background: var(--bg-secondary);
-  }
-
-  .btn.danger {
-    background: var(--gradient-secondary);
-    color: white;
-  }
-
-  .btn.disabled,
-  .btn:disabled {
-    opacity: 0.5;
-    cursor: not-allowed;
-    pointer-events: none;
-  }
-
-  /* Ripple Effect */
-  .btn::after {
-    content: '';
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    width: 0;
-    height: 0;
-    border-radius: 50%;
-    background: rgba(255, 255, 255, 0.5);
-    transform: translate(-50%, -50%);
-    transition: width 0.5s, height 0.5s;
-  }
-
-  .btn:active::after {
-    width: 300px;
-    height: 300px;
-  }
-  
-  /* Better icon styling */
-  .btn svg {
-    pointer-events: none;
-    flex-shrink: 0;
-  }
-  
-  .btn.icon svg {
-    width: 20px;
-    height: 20px;
-  }
-  
-  /* Icon visibility control for theme button */
-  #themeBtn .theme-icon-moon,
-  #themeBtn .theme-icon-sun {
-    display: none;
-  }
-  
-  [data-theme="light"] #themeBtn .theme-icon-moon {
-    display: block;
-  }
-  
-  [data-theme="dark"] #themeBtn .theme-icon-sun {
-    display: block;
-  }
-  
-  /* Ensure icons are visible in both themes */
-  .btn.icon svg {
-    fill: var(--ink);
-  }
-  
-  .btn.primary svg,
-  .btn.success svg,
-  .btn.danger svg,
-  .btn.secondary svg {
-    fill: white;
-  }
-  
-  /* Fix for dark mode specifically */
-  [data-theme="dark"] .btn.icon svg {
-    fill: var(--ink);
-  }
-  
-  [data-theme="dark"] .btn.ghost svg {
-    fill: var(--ink);
-  }
-
-  /* Main Container */
-  .container {
+  .header-inner {
     max-width: 1200px;
     margin: 0 auto;
-    padding: 1.5rem 1rem;
-  }
-
-  /* Cards */
-  .card {
-    background: var(--card);
-    backdrop-filter: blur(10px);
-    -webkit-backdrop-filter: blur(10px);
-    border-radius: var(--radius-lg);
-    padding: 1.5rem;
-    box-shadow: var(--shadow);
-    border: 1px solid var(--border);
-    transition: var(--transition);
-    position: relative;
-    overflow: hidden;
-  }
-
-  .card:hover {
-    box-shadow: var(--shadow-lg);
-    transform: translateY(-2px);
-  }
-
-  .card::before {
-    content: '';
-    position: absolute;
-    top: 0;
-    left: 0;
-    right: 0;
-    height: 4px;
-    background: var(--gradient-primary);
-    opacity: 0;
-    transition: opacity 0.3s;
-  }
-
-  .card:hover::before {
-    opacity: 1;
-  }
-
-  /* Grid System */
-  .grid {
-    display: grid;
+    padding: 1rem;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
     gap: 1rem;
   }
 
-  @media (min-width: 640px) {
-    .grid-cols-2 { grid-template-columns: repeat(2, 1fr); }
-    .grid-cols-3 { grid-template-columns: repeat(3, 1fr); }
-    .grid-cols-4 { grid-template-columns: repeat(4, 1fr); }
+  .brand {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    font-weight: 800;
+    font-size: 1.25rem;
+    cursor: pointer;
   }
 
-  @media (min-width: 1024px) {
-    .lg\:grid-cols-3 { grid-template-columns: repeat(3, 1fr); }
-    .lg\:grid-cols-4 { grid-template-columns: repeat(4, 1fr); }
+  .brand-logo {
+    width: 40px;
+    height: 40px;
+    border-radius: 12px;
+    background: var(--gradient-primary);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  
+  .brand-logo svg {
+    width: 24px;
+    height: 24px;
+    fill: white;
   }
 
   /* Form Elements */
@@ -479,8 +244,7 @@
   }
 
   .field input,
-  .field select,
-  .field textarea {
+  .field select {
     width: 100%;
     padding: 0.875rem 1rem;
     font-size: 1rem;
@@ -495,111 +259,24 @@
   }
 
   .field input:focus,
-  .field select:focus,
-  .field textarea:focus {
+  .field select:focus {
     border-color: var(--primary);
     background: var(--card);
     box-shadow: 0 0 0 4px rgba(102, 126, 234, 0.1);
   }
 
-  .field.error input,
-  .field.error select {
-    border-color: var(--danger);
-    background: rgba(245, 101, 101, 0.05);
+  /* Grid System */
+  .grid {
+    display: grid;
+    gap: 1rem;
   }
 
-  .field .error-msg {
-    color: var(--danger);
-    font-size: 0.875rem;
-    margin-top: 0.25rem;
-    display: flex;
-    align-items: center;
-    gap: 0.25rem;
-    animation: shake 0.5s;
+  @media (min-width: 640px) {
+    .grid-cols-2 { grid-template-columns: repeat(2, 1fr); }
+    .grid-cols-3 { grid-template-columns: repeat(3, 1fr); }
   }
 
-  @keyframes shake {
-    0%, 100% { transform: translateX(0); }
-    25% { transform: translateX(-5px); }
-    75% { transform: translateX(5px); }
-  }
-
-  .field .helper-text {
-    color: var(--muted);
-    font-size: 0.875rem;
-    margin-top: 0.25rem;
-  }
-
-  /* Checkbox & Radio */
-  .checkbox-wrapper,
-  .radio-wrapper {
-    display: flex;
-    align-items: center;
-    gap: 0.75rem;
-    cursor: pointer;
-    padding: 0.5rem;
-    border-radius: var(--radius);
-    transition: var(--transition-fast);
-  }
-
-  .checkbox-wrapper:hover,
-  .radio-wrapper:hover {
-    background: var(--bg-secondary);
-  }
-
-  .checkbox-wrapper input[type="checkbox"],
-  .radio-wrapper input[type="radio"] {
-    width: 20px;
-    height: 20px;
-    accent-color: var(--primary);
-    cursor: pointer;
-  }
-
-  /* Tabs */
-  .tabs {
-    display: flex;
-    gap: 0.5rem;
-    padding: 0.5rem;
-    background: var(--bg-secondary);
-    border-radius: var(--radius-lg);
-    overflow-x: auto;
-    margin-bottom: 1.5rem;
-    scrollbar-width: none;
-    -webkit-overflow-scrolling: touch;
-  }
-
-  .tabs::-webkit-scrollbar {
-    display: none;
-  }
-
-  .tab {
-    padding: 0.75rem 1.5rem;
-    border-radius: var(--radius);
-    background: transparent;
-    color: var(--muted);
-    font-weight: 600;
-    cursor: pointer;
-    transition: var(--transition);
-    white-space: nowrap;
-    position: relative;
-    user-select: none;
-    min-height: 44px;
-    display: flex;
-    align-items: center;
-  }
-
-  .tab:hover {
-    background: var(--card);
-    color: var(--ink);
-  }
-
-  .tab.active {
-    background: var(--gradient-primary);
-    color: white;
-    box-shadow: var(--shadow-colored);
-  }
-
-  /* Badges & Pills */
+  /* Badges */
   .badge {
     display: inline-flex;
     align-items: center;
@@ -612,45 +289,20 @@
     letter-spacing: 0.025em;
   }
 
-  .badge.reach {
-    background: rgba(245, 101, 101, 0.15);
-    color: var(--danger);
-  }
-
-  .badge.match {
-    background: rgba(72, 187, 120, 0.15);
-    color: var(--success);
-  }
-
-  .badge.safety {
-    background: rgba(102, 126, 234, 0.15);
-    color: var(--primary);
-  }
-  
   .badge.scholarship {
     background: rgba(255, 215, 0, 0.15);
     color: #B8860B;
   }
-  
-  .badge.parent {
-    background: rgba(66, 153, 225, 0.15);
-    color: var(--info);
-  }
 
-  .pill {
-    position: absolute;
-    top: 1rem;
-    right: 1rem;
-    padding: 0.375rem 0.75rem;
-    border-radius: 999px;
-    background: var(--gradient-primary);
-    color: white;
-    font-size: 0.75rem;
-    font-weight: 700;
-    box-shadow: var(--shadow-sm);
-  }
+  /* Utilities */
+  .hidden { display: none !important; }
+  .text-muted { color: var(--muted); }
+  .mb-4 { margin-bottom: 1rem; }
+  .mt-6 { margin-top: 1.5rem; }
+  .gap-3 { gap: 0.75rem; }
+  .flex { display: flex; }
 
-  /* School Cards */
+  /* School Card */
   .school-card {
     background: var(--card);
     border-radius: var(--radius-lg);
@@ -658,545 +310,10 @@
     border: 1px solid var(--border);
     box-shadow: var(--shadow-sm);
     transition: var(--transition);
-    position: relative;
-    cursor: pointer;
-    overflow: hidden;
-  }
-
-  .school-card:hover {
-    transform: translateY(-4px) scale(1.02);
-    box-shadow: var(--shadow-lg);
-    border-color: var(--primary);
-  }
-
-  .school-card h4 {
-    margin-bottom: 0.5rem;
-    color: var(--ink);
-  }
-
-  .school-meta {
-    color: var(--muted);
-    font-size: 0.875rem;
-    margin-bottom: 0.75rem;
-  }
-
-  .school-stats {
-    display: flex;
-    gap: 1rem;
-    margin: 0.75rem 0;
-    padding: 0.75rem;
-    background: var(--bg-secondary);
-    border-radius: var(--radius);
-  }
-
-  .stat-item {
-    display: flex;
-    flex-direction: column;
-    gap: 0.25rem;
-  }
-
-  .stat-label {
-    font-size: 0.75rem;
-    color: var(--muted);
-    text-transform: uppercase;
-  }
-
-  .stat-value {
-    font-weight: 700;
-    color: var(--ink);
-  }
-
-  .school-actions {
-    display: flex;
-    gap: 0.5rem;
-    margin-top: 1rem;
-  }
-
-  /* NEW: Swipeable Discovery Interface */
-  .swipe-container {
-    position: fixed;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    z-index: var(--z-swipe);
-    background: var(--bg);
-    display: none;
-    overflow: hidden;
-  }
-  
-  .swipe-container.active {
-    display: block;
-  }
-  
-  .swipe-header {
-    position: absolute;
-    top: 0;
-    left: 0;
-    right: 0;
-    z-index: 10;
-    padding: 1rem;
-    background: linear-gradient(to bottom, rgba(0,0,0,0.7), transparent);
-  }
-  
-  .swipe-close {
-    position: absolute;
-    top: 1rem;
-    right: 1rem;
-    width: 40px;
-    height: 40px;
-    border-radius: 50%;
-    background: rgba(255,255,255,0.2);
-    backdrop-filter: blur(10px);
-    border: none;
-    color: white;
-    cursor: pointer;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-  }
-  
-  .swipe-card-stack {
-    position: relative;
-    height: 100vh;
-    width: 100%;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-  }
-  
-  .swipe-card {
-    position: absolute;
-    width: min(90vw, 400px);
-    height: 70vh;
-    border-radius: var(--radius-xl);
-    background: var(--card);
-    box-shadow: var(--shadow-xl);
-    overflow: hidden;
-    cursor: grab;
-    transition: transform 0.2s, opacity 0.2s;
-  }
-  
-  .swipe-card.dragging {
-    cursor: grabbing;
-    transition: none;
-  }
-  
-  .swipe-card.swiped-left {
-    transform: translateX(-150%) rotate(-30deg);
-    opacity: 0;
-  }
-  
-  .swipe-card.swiped-right {
-    transform: translateX(150%) rotate(30deg);
-    opacity: 0;
-  }
-  
-  .swipe-card-content {
-    height: 100%;
-    display: flex;
-    flex-direction: column;
-    position: relative;
-    background-size: cover;
-    background-position: center;
-  }
-  
-  .swipe-card-overlay {
-    position: absolute;
-    bottom: 0;
-    left: 0;
-    right: 0;
-    padding: 2rem;
-    background: linear-gradient(to top, rgba(0,0,0,0.8), transparent);
-    color: white;
-  }
-  
-  .swipe-card-name {
-    font-size: 2rem;
-    font-weight: 800;
-    margin-bottom: 0.5rem;
-  }
-  
-  .swipe-card-stats {
-    display: flex;
-    gap: 1rem;
     margin-bottom: 1rem;
   }
-  
-  .swipe-stat {
-    padding: 0.5rem 1rem;
-    background: rgba(255,255,255,0.2);
-    backdrop-filter: blur(10px);
-    border-radius: 999px;
-    font-size: 0.875rem;
-    font-weight: 600;
-  }
-  
-  .swipe-actions {
-    position: absolute;
-    bottom: 2rem;
-    left: 50%;
-    transform: translateX(-50%);
-    display: flex;
-    gap: 2rem;
-    z-index: 20;
-  }
-  
-  .swipe-action {
-    width: 60px;
-    height: 60px;
-    border-radius: 50%;
-    border: none;
-    cursor: pointer;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    transition: transform 0.2s;
-    box-shadow: var(--shadow-lg);
-  }
-  
-  .swipe-action:hover {
-    transform: scale(1.1);
-  }
-  
-  .swipe-action.reject {
-    background: white;
-    color: var(--danger);
-  }
-  
-  .swipe-action.info {
-    background: white;
-    color: var(--info);
-  }
-  
-  .swipe-action.accept {
-    background: var(--gradient-success);
-    color: white;
-  }
-  
-  /* NEW: Scholarship Matching Interface */
-  .scholarship-card {
-    background: var(--card);
-    border-radius: var(--radius-lg);
-    padding: 1.5rem;
-    border: 2px solid transparent;
-    background-clip: padding-box;
-    position: relative;
-    margin-bottom: 1rem;
-    transition: var(--transition);
-  }
-  
-  .scholarship-card::before {
-    content: '';
-    position: absolute;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    border-radius: var(--radius-lg);
-    padding: 2px;
-    background: var(--gradient-scholarship);
-    mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
-    mask-composite: exclude;
-    -webkit-mask-composite: xor;
-    opacity: 0;
-    transition: opacity 0.3s;
-  }
-  
-  .scholarship-card:hover::before {
-    opacity: 1;
-  }
-  
-  .scholarship-card:hover {
-    transform: translateY(-2px);
-    box-shadow: var(--shadow-lg);
-  }
-  
-  .scholarship-header {
-    display: flex;
-    justify-content: space-between;
-    align-items: start;
-    margin-bottom: 1rem;
-  }
-  
-  .scholarship-amount {
-    font-size: 1.75rem;
-    font-weight: 800;
-    background: var(--gradient-scholarship);
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
-    background-clip: text;
-  }
-  
-  .scholarship-match {
-    padding: 0.375rem 0.75rem;
-    border-radius: 999px;
-    background: var(--gradient-success);
-    color: white;
-    font-size: 0.75rem;
-    font-weight: 700;
-  }
-  
-  .scholarship-requirements {
-    display: flex;
-    gap: 0.5rem;
-    flex-wrap: wrap;
-    margin-top: 0.75rem;
-  }
-  
-  .requirement-chip {
-    padding: 0.25rem 0.5rem;
-    background: var(--bg-secondary);
-    border-radius: 999px;
-    font-size: 0.75rem;
-    color: var(--muted);
-  }
-  
-  .requirement-chip.met {
-    background: rgba(72, 187, 120, 0.1);
-    color: var(--success);
-  }
-  
-  /* NEW: Parent Portal Styles */
-  .parent-dashboard {
-    display: none;
-  }
-  
-  .parent-mode .parent-dashboard {
-    display: block;
-  }
-  
-  .parent-mode .student-only {
-    opacity: 0.5;
-    pointer-events: none;
-  }
-  
-  .parent-card {
-    background: linear-gradient(135deg, rgba(66, 153, 225, 0.1), rgba(102, 126, 234, 0.1));
-    border: 2px solid rgba(66, 153, 225, 0.2);
-  }
-  
-  .parent-stat-card {
-    background: var(--card);
-    padding: 1.5rem;
-    border-radius: var(--radius);
-    text-align: center;
-  }
-  
-  .parent-stat-value {
-    font-size: 2rem;
-    font-weight: 800;
-    color: var(--primary);
-  }
-  
-  .parent-stat-label {
-    color: var(--muted);
-    font-size: 0.875rem;
-    margin-top: 0.5rem;
-  }
-  
-  .parent-task {
-    display: flex;
-    align-items: center;
-    gap: 1rem;
-    padding: 1rem;
-    background: var(--bg-secondary);
-    border-radius: var(--radius);
-    margin-bottom: 0.75rem;
-  }
-  
-  .parent-task-icon {
-    width: 40px;
-    height: 40px;
-    border-radius: 50%;
-    background: var(--gradient-primary);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    color: white;
-  }
 
-  /* Progress Components */
-  .progress-ring {
-    width: 80px;
-    height: 80px;
-  }
-
-  .progress-ring circle {
-    transition: stroke-dashoffset 0.5s ease;
-  }
-
-  .progress-text {
-    font-size: 1.25rem;
-    font-weight: 700;
-    fill: var(--ink);
-  }
-
-  .progress-bar {
-    height: 8px;
-    background: var(--bg-secondary);
-    border-radius: 999px;
-    overflow: hidden;
-    position: relative;
-  }
-
-  .progress-bar-fill {
-    height: 100%;
-    background: var(--gradient-primary);
-    border-radius: 999px;
-    transition: width 0.5s ease;
-    position: relative;
-    overflow: hidden;
-  }
-
-  .progress-bar-fill::after {
-    content: '';
-    position: absolute;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.3), transparent);
-    animation: shimmer 2s infinite;
-  }
-
-  @keyframes shimmer {
-    0% { transform: translateX(-100%); }
-    100% { transform: translateX(100%); }
-  }
-
-  /* Timeline */
-  .timeline {
-    position: relative;
-    padding-left: 2rem;
-  }
-
-  .timeline::before {
-    content: '';
-    position: absolute;
-    left: 0;
-    top: 0;
-    bottom: 0;
-    width: 2px;
-    background: var(--border);
-  }
-
-  .timeline-item {
-    position: relative;
-    padding: 1rem;
-    margin-bottom: 1rem;
-    background: var(--card);
-    border-radius: var(--radius);
-    border: 1px solid var(--border);
-    transition: var(--transition);
-  }
-
-  .timeline-item:hover {
-    transform: translateX(4px);
-    box-shadow: var(--shadow);
-  }
-
-  .timeline-item::before {
-    content: '';
-    position: absolute;
-    left: -2rem;
-    top: 50%;
-    transform: translateY(-50%);
-    width: 12px;
-    height: 12px;
-    border-radius: 50%;
-    background: var(--primary);
-    border: 2px solid var(--bg);
-    z-index: 1;
-  }
-
-  .timeline-item.urgent-high::before {
-    background: var(--danger);
-    animation: pulse-danger 1s infinite;
-  }
-
-  @keyframes pulse-danger {
-    0%, 100% { box-shadow: 0 0 0 0 rgba(245, 101, 101, 0.7); }
-    50% { box-shadow: 0 0 0 8px rgba(245, 101, 101, 0); }
-  }
-
-  .timeline-item.urgent-medium::before {
-    background: var(--warning);
-  }
-
-  .timeline-item.urgent-low::before {
-    background: var(--success);
-  }
-
-  /* Empty States */
-  .empty-state {
-    text-align: center;
-    padding: 3rem 1.5rem;
-  }
-
-  .empty-icon {
-    font-size: 4rem;
-    margin-bottom: 1rem;
-    animation: bounce 2s ease infinite;
-  }
-
-  @keyframes bounce {
-    0%, 100% { transform: translateY(0); }
-    50% { transform: translateY(-10px); }
-  }
-
-  .empty-state h3 {
-    color: var(--ink);
-    margin-bottom: 0.5rem;
-  }
-
-  .empty-state p {
-    color: var(--muted);
-    margin-bottom: 1.5rem;
-  }
-
-  /* Modals */
-  .modal-overlay {
-    position: fixed;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    background: rgba(0, 0, 0, 0.5);
-    backdrop-filter: blur(4px);
-    z-index: var(--z-modal);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    padding: 1rem;
-    opacity: 0;
-    visibility: hidden;
-    transition: opacity 0.3s, visibility 0.3s;
-  }
-
-  .modal-overlay.active {
-    opacity: 1;
-    visibility: visible;
-  }
-
-  .modal {
-    background: var(--card);
-    border-radius: var(--radius-xl);
-    padding: 2rem;
-    max-width: 500px;
-    width: 100%;
-    max-height: 90vh;
-    overflow-y: auto;
-    box-shadow: var(--shadow-xl);
-    transform: scale(0.9);
-    transition: transform 0.3s;
-  }
-
-  .modal-overlay.active .modal {
-    transform: scale(1);
-  }
-
-  /* Toast Notifications */
+  /* Toast */
   .toast-container {
     position: fixed;
     top: 1rem;
@@ -1226,2089 +343,283 @@
   .toast.show {
     transform: translateX(0);
   }
-
-  .toast.success {
-    border-left-color: var(--success);
-  }
-
-  .toast.error {
-    border-left-color: var(--danger);
-  }
-
-  .toast.warning {
-    border-left-color: var(--warning);
-  }
-
-  /* AI Assistant */
-  .ai-bubble {
-    position: fixed;
-    right: 1.5rem;
-    bottom: 1.5rem;
-    z-index: var(--z-overlay);
-    background: var(--gradient-primary);
-    color: white;
-    padding: 1rem 1.5rem;
-    border-radius: var(--radius-lg);
-    box-shadow: var(--shadow-xl);
-    cursor: pointer;
-    transition: var(--transition);
-    animation: slide-up 0.5s ease;
-    max-width: 300px;
-  }
-
-  .ai-bubble:hover {
-    transform: translateY(-4px);
-    box-shadow: 0 30px 80px rgba(102, 126, 234, 0.3);
-  }
-
-  .ai-bubble.minimized {
-    width: 60px;
-    height: 60px;
-    padding: 0;
-    border-radius: 50%;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-size: 1.5rem;
-  }
-
-  @keyframes slide-up {
-    from {
-      opacity: 0;
-      transform: translateY(20px);
-    }
-    to {
-      opacity: 1;
-      transform: translateY(0);
-    }
-  }
-
-  /* Achievements */
-  .achievement {
-    display: flex;
-    align-items: center;
-    gap: 1rem;
-    padding: 1rem;
-    background: var(--card);
-    border-radius: var(--radius);
-    border: 1px solid var(--border);
-    margin-bottom: 0.75rem;
-    transition: var(--transition);
-    animation: slide-in 0.5s ease;
-  }
-
-  @keyframes slide-in {
-    from {
-      opacity: 0;
-      transform: translateX(-20px);
-    }
-    to {
-      opacity: 1;
-      transform: translateX(0);
-    }
-  }
-
-  .achievement-icon {
-    font-size: 2rem;
-  }
-
-  .achievement-content h4 {
-    margin-bottom: 0.25rem;
-  }
-
-  .achievement-content p {
-    color: var(--muted);
-    font-size: 0.875rem;
-  }
-
-  .achievement.new {
-    background: linear-gradient(135deg, rgba(102, 126, 234, 0.1) 0%, rgba(118, 75, 162, 0.1) 100%);
-    border-color: var(--primary);
-  }
-
-  /* Confetti */
-  .confetti-container {
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    pointer-events: none;
-    z-index: var(--z-toast);
-  }
-
-  .confetti {
-    position: absolute;
-    width: 10px;
-    height: 10px;
-    background: var(--primary);
-    animation: confetti-fall 3s ease-out forwards;
-  }
-
-  @keyframes confetti-fall {
-    0% {
-      transform: translateY(-100vh) rotate(0deg);
-      opacity: 1;
-    }
-    100% {
-      transform: translateY(100vh) rotate(720deg);
-      opacity: 0;
-    }
-  }
-
-  /* Loading States */
-  .skeleton {
-    background: linear-gradient(90deg, var(--bg-secondary) 25%, var(--border) 50%, var(--bg-secondary) 75%);
-    background-size: 200% 100%;
-    animation: skeleton-loading 1.5s infinite;
-    border-radius: var(--radius);
-  }
-
-  @keyframes skeleton-loading {
-    0% { background-position: 200% 0; }
-    100% { background-position: -200% 0; }
-  }
-  
-  /* Focus Management */
-  :focus-visible {
-    outline: 3px solid var(--primary);
-    outline-offset: 2px;
-  }
-
-  /* Utilities */
-  .hidden { display: none !important; }
-  .flex { display: flex; }
-  .flex-col { flex-direction: column; }
-  .items-center { align-items: center; }
-  .justify-between { justify-content: space-between; }
-  .justify-center { justify-content: center; }
-  .gap-1 { gap: 0.25rem; }
-  .gap-2 { gap: 0.5rem; }
-  .gap-3 { gap: 0.75rem; }
-  .gap-4 { gap: 1rem; }
-  .mt-2 { margin-top: 0.5rem; }
-  .mt-4 { margin-top: 1rem; }
-  .mt-6 { margin-top: 1.5rem; }
-  .mb-4 { margin-bottom: 1rem; }
-  .text-center { text-align: center; }
-  .text-muted { color: var(--muted); }
-  .font-bold { font-weight: 700; }
-  .text-sm { font-size: 0.875rem; }
-  .text-lg { font-size: 1.125rem; }
-  .w-full { width: 100%; }
-
-  /* Responsive */
-  @media (max-width: 640px) {
-    .container {
-      padding: 1rem 0.75rem;
-    }
-    
-    .card {
-      padding: 1.25rem;
-    }
-    
-    .hide-mobile {
-      display: none;
-    }
-    
-    .school-stats {
-      flex-direction: column;
-      gap: 0.5rem;
-    }
-    
-    .tabs {
-      padding: 0.375rem;
-    }
-    
-    .tab {
-      padding: 0.625rem 1rem;
-      font-size: 0.875rem;
-    }
-    
-    .swipe-card {
-      width: 85vw;
-      height: 75vh;
-    }
-  }
-
-  /* Print Styles */
-  @media print {
-    body {
-      background: white;
-      color: black;
-    }
-    
-    .header,
-    .ai-bubble,
-    .toast-container,
-    .swipe-container {
-      display: none;
-    }
-    
-    .card {
-      box-shadow: none;
-      border: 1px solid #ddd;
-      page-break-inside: avoid;
-    }
-  }
-
-  /* Accessibility */
-  .sr-only {
-    position: absolute;
-    width: 1px;
-    height: 1px;
-    padding: 0;
-    margin: -1px;
-    overflow: hidden;
-    clip: rect(0, 0, 0, 0);
-    white-space: nowrap;
-    border: 0;
-  }
-
-  /* Reduced Motion */
-  @media (prefers-reduced-motion: reduce) {
-    *,
-    *::before,
-    *::after {
-      animation-duration: 0.01ms !important;
-      animation-iteration-count: 1 !important;
-      transition-duration: 0.01ms !important;
-      scroll-behavior: auto !important;
-    }
-  }
 </style>
 </head>
 <body>
 
-<!-- Background Animation -->
-<div class="bg-animation" aria-hidden="true"></div>
-
 <!-- Header -->
-<header class="header" role="banner">
+<header class="header">
   <div class="header-inner">
-    <div class="brand" role="button" tabindex="0" aria-label="Pathwise Home">
-      <div class="brand-logo" aria-hidden="true">
-        <!-- Graduation cap SVG icon -->
+    <div class="brand">
+      <div class="brand-logo">
         <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
           <path d="M12 3L1 9l4 2.18v6L12 21l7-3.82v-6l2-1.09V17h2V9L12 3zm6.82 6L12 12.72 5.18 9 12 5.28 18.82 9zM17 15.99l-5 2.73-5-2.73v-3.72L12 15l5-2.73v3.72z"/>
         </svg>
       </div>
       <span>Pathwise</span>
     </div>
-    <nav class="header-actions" role="navigation" aria-label="Main navigation">
-      <button id="backBtn" class="btn ghost hidden" aria-label="Back to planning">
-        <svg width="16" height="16" viewBox="0 0 24 24">
-          <path d="M20 11H7.83l5.59-5.59L12 4l-8 8 8 8 1.41-1.41L7.83 13H20v-2z"/>
-        </svg>
-        <span>Back</span>
-      </button>
-      <button id="discoverBtn" class="btn primary" aria-label="Discover schools">
-        <svg width="20" height="20" viewBox="0 0 24 24">
-          <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z"/>
-        </svg>
-        <span class="hide-mobile">Discover</span>
-      </button>
-      <button id="parentModeBtn" class="btn ghost" aria-label="Parent Mode">
-        <svg width="20" height="20" viewBox="0 0 24 24">
-          <path d="M9 11H7v2h2v-2zm4 0h-2v2h2v-2zm4 0h-2v2h2v-2zm2-7h-1V2h-2v2H8V2H6v2H5c-1.11 0-1.99.9-1.99 2L3 20c0 1.1.89 2 2 2h14c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 16H5V9h14v11z"/>
-        </svg>
-        <span class="hide-mobile">Parent</span>
-      </button>
-      <button id="profileBtn" class="btn icon" aria-label="Profile">
-        <svg width="20" height="20" viewBox="0 0 24 24">
-          <path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"/>
-        </svg>
-      </button>
-      <button id="themeBtn" class="btn icon" aria-label="Toggle theme">
-        <svg width="20" height="20" viewBox="0 0 24 24" class="theme-icon-moon">
-          <path d="M9 2c-1.05 0-2.05.16-3 .46 4.06 1.27 7 5.06 7 9.54 0 4.48-2.94 8.27-7 9.54.95.3 1.95.46 3 .46 5.52 0 10-4.48 10-10S14.52 2 9 2z"/>
-        </svg>
-        <svg width="20" height="20" viewBox="0 0 24 24" class="theme-icon-sun hidden">
-          <path d="M6.76 4.84l-1.8-1.79-1.41 1.41 1.79 1.79 1.42-1.41zM4 10.5H1v2h3v-2zm9-9.95h-2V3.5h2V.55zm7.45 3.91l-1.41-1.41-1.79 1.79 1.41 1.41 1.79-1.79zm-3.21 13.7l1.79 1.8 1.41-1.41-1.8-1.79-1.4 1.4zM20 10.5v2h3v-2h-3zm-8-5c-3.31 0-6 2.69-6 6s2.69 6 6 6 6-2.69 6-6-2.69-6-6-6zm-1 16.95h2V19.5h-2v2.95zm-7.45-3.91l1.41 1.41 1.79-1.8-1.41-1.41-1.79 1.8z"/>
-        </svg>
-      </button>
-      <button id="resetBtn" class="btn icon danger" aria-label="Reset all data">
-        <svg width="20" height="20" viewBox="0 0 24 24">
-          <path d="M12 5V1L7 6l5 5V7c3.31 0 6 2.69 6 6s-2.69 6-6 6-6-2.69-6-6H4c0 4.42 3.58 8 8 8s8-3.58 8-8-3.58-8-8-8z"/>
-        </svg>
-      </button>
+    <nav class="header-actions">
+      <button id="backBtn" class="btn hidden" onclick="showPlanning()">← Back</button>
     </nav>
   </div>
 </header>
 
 <!-- Main Content -->
-<main class="container" role="main">
+<main class="container">
 
   <!-- Planning Section -->
-  <section id="planningSection" aria-label="College planning form">
+  <section id="planningSection">
     <div class="card">
       <h1>Plan Your College Journey</h1>
-      <p class="text-muted mb-4">We'll match you with perfect schools, scholarships, and track everything for you.</p>
+      <p class="text-muted mb-4">We'll match you with perfect schools and scholarships.</p>
       
-      <form id="planningForm" novalidate>
+      <form id="planningForm">
         <div class="grid grid-cols-2 gap-4">
           <div class="field">
             <label for="firstName">First Name *</label>
-            <input type="text" id="firstName" name="firstName" required aria-required="true" autocomplete="given-name">
-            <span class="helper-text">How should we call you?</span>
+            <input type="text" id="firstName" name="firstName" required>
           </div>
           
           <div class="field">
             <label for="grade">Current Grade *</label>
-            <select id="grade" name="grade" required aria-required="true">
+            <select id="grade" name="grade" required>
               <option value="">Select grade...</option>
               <option value="9">9th Grade</option>
               <option value="10">10th Grade</option>
               <option value="11">11th Grade</option>
               <option value="12">12th Grade</option>
-              <option value="transfer">Transfer Student</option>
-              <option value="gap">Gap Year</option>
             </select>
           </div>
           
           <div class="field">
             <label for="homeState">Home State *</label>
-            <select id="homeState" name="homeState" required aria-required="true">
+            <select id="homeState" name="homeState" required>
               <option value="">Select state...</option>
               <option value="CA">California</option>
               <option value="NY">New York</option>
               <option value="TX">Texas</option>
-              <option value="MA">Massachusetts</option>
-              <option value="IL">Illinois</option>
-              <option value="FL">Florida</option>
-              <option value="PA">Pennsylvania</option>
-              <option value="other">Other State</option>
             </select>
           </div>
           
           <div class="field">
-            <label for="income">Household Income (optional)</label>
+            <label for="income">Household Income</label>
             <input type="number" id="income" name="income" min="0" step="5000" placeholder="75000">
-            <span class="helper-text">Helps estimate financial aid & scholarships</span>
           </div>
           
           <div class="field">
             <label for="gpa">GPA</label>
             <input type="number" id="gpa" name="gpa" min="0" max="5" step="0.01" placeholder="3.85">
-            <span class="helper-text">Weighted or unweighted</span>
           </div>
           
           <div class="field">
-            <label for="sat">SAT Score (optional)</label>
+            <label for="sat">SAT Score</label>
             <input type="number" id="sat" name="sat" min="400" max="1600" step="10" placeholder="1400">
-            <span class="helper-text">Many schools are test-optional</span>
           </div>
           
           <div class="field">
             <label for="ap">AP/Honors Courses</label>
             <input type="number" id="ap" name="ap" min="0" max="30" placeholder="5">
-            <span class="helper-text">Total count taken or planned</span>
           </div>
           
           <div class="field">
             <label for="interests">Academic Interests</label>
             <select id="interests" name="interests">
               <option value="">Not sure yet...</option>
-              <option value="stem">STEM (Science, Tech, Engineering, Math)</option>
-              <option value="business">Business & Economics</option>
-              <option value="arts">Arts & Design</option>
-              <option value="humanities">Humanities & Social Sciences</option>
-              <option value="health">Health & Medicine</option>
-              <option value="education">Education</option>
+              <option value="stem">STEM</option>
+              <option value="business">Business</option>
+              <option value="arts">Arts</option>
             </select>
           </div>
         </div>
         
         <div class="flex gap-3 mt-6">
-          <button type="submit" class="btn primary">
-            Find My Matches <span aria-hidden="true">→</span>
-          </button>
-          <div id="matchCounter" class="badge" aria-live="polite">0 potential matches</div>
+          <button type="submit" class="btn primary">Find My Matches →</button>
+          <div id="matchCounter" class="badge">0 potential matches</div>
         </div>
       </form>
     </div>
-    
-    <!-- Achievement Notifications -->
-    <div id="achievementsContainer" class="mt-6" aria-live="polite"></div>
   </section>
 
   <!-- Dashboard Section -->
-  <section id="dashboardSection" class="hidden" aria-label="College application dashboard">
-    
-    <!-- Stats Cards -->
-    <div class="grid grid-cols-3 gap-4 mb-6">
-      <div class="card">
-        <div class="text-muted text-sm">Profile Strength</div>
-        <div class="flex items-center gap-3 mt-2">
-          <svg width="60" height="60" class="progress-ring">
-            <defs>
-              <linearGradient id="gradient">
-                <stop offset="0%" stop-color="#667eea"/>
-                <stop offset="100%" stop-color="#764ba2"/>
-              </linearGradient>
-            </defs>
-            <circle r="25" cx="30" cy="30" fill="transparent" stroke="var(--border)" stroke-width="5"/>
-            <circle id="profileProgress" r="25" cx="30" cy="30" fill="transparent" stroke="url(#gradient)" 
-                    stroke-width="5" stroke-dasharray="157" stroke-dashoffset="157" 
-                    transform="rotate(-90 30 30)" stroke-linecap="round"/>
-            <text x="30" y="35" text-anchor="middle" class="progress-text" id="profilePercent">0%</text>
-          </svg>
-        </div>
-      </div>
-      
-      <div class="card">
-        <div class="text-muted text-sm">Schools Added</div>
-        <div class="text-lg font-bold mt-2" id="schoolCount">0</div>
-        <div class="progress-bar mt-2">
-          <div class="progress-bar-fill" id="schoolProgress" style="width: 0%"></div>
-        </div>
-      </div>
-      
-      <div class="card">
-        <div class="text-muted text-sm">Scholarships Matched</div>
-        <div class="text-lg font-bold mt-2" id="scholarshipCount">0</div>
-        <div class="text-sm text-muted" id="scholarshipValue">$0 potential</div>
-      </div>
-    </div>
-    
-    <!-- Navigation Tabs -->
-    <nav class="tabs" role="tablist" aria-label="Dashboard sections">
-      <button role="tab" class="tab active" data-tab="schools" aria-selected="true">Schools</button>
-      <button role="tab" class="tab" data-tab="scholarships" aria-selected="false">
-        Scholarships
-        <span class="badge scholarship" id="scholarshipBadge">NEW</span>
-      </button>
-      <button role="tab" class="tab" data-tab="financial" aria-selected="false">Financial Aid</button>
-      <button role="tab" class="tab" data-tab="documents" aria-selected="false">Documents</button>
-      <button role="tab" class="tab" data-tab="timeline" aria-selected="false">Timeline</button>
-      <button role="tab" class="tab" data-tab="insights" aria-selected="false">Insights</button>
-    </nav>
-    
-    <!-- Tab Content -->
-    <div class="tab-content">
-      
-      <!-- Schools Tab -->
-      <div id="schoolsTab" role="tabpanel" aria-labelledby="schools-tab">
-        <div class="card mb-4">
-          <h2>Find Your Perfect Schools</h2>
-          
-          <!-- Filters -->
-          <div class="grid grid-cols-3 gap-3 mt-4">
-            <div class="field">
-              <label for="filterState">State</label>
-              <select id="filterState">
-                <option value="">All States</option>
-                <option value="CA">California</option>
-                <option value="NY">New York</option>
-                <option value="TX">Texas</option>
-                <option value="MA">Massachusetts</option>
-                <option value="IL">Illinois</option>
-              </select>
-            </div>
-            
-            <div class="field">
-              <label for="filterType">School Type</label>
-              <select id="filterType">
-                <option value="">All Types</option>
-                <option value="public">Public</option>
-                <option value="private">Private</option>
-                <option value="UC">UC System</option>
-                <option value="CSU">CSU System</option>
-              </select>
-            </div>
-            
-            <div class="field">
-              <label for="searchSchool">Search</label>
-              <input type="text" id="searchSchool" placeholder="School name or city...">
-            </div>
-          </div>
-        </div>
-        
-        <!-- School Categories -->
-        <div id="schoolCategories">
-          <div class="mb-6">
-            <h3 class="flex items-center gap-2 mb-3">
-              <span class="badge reach">REACH</span>
-              Dream big - these are ambitious choices
-            </h3>
-            <div id="reachSchools" class="grid grid-cols-3 gap-3"></div>
-          </div>
-          
-          <div class="mb-6">
-            <h3 class="flex items-center gap-2 mb-3">
-              <span class="badge match">MATCH</span>
-              Great fit - you're right in the range
-            </h3>
-            <div id="matchSchools" class="grid grid-cols-3 gap-3"></div>
-          </div>
-          
-          <div class="mb-6">
-            <h3 class="flex items-center gap-2 mb-3">
-              <span class="badge safety">SAFETY</span>
-              Solid options - high acceptance chances
-            </h3>
-            <div id="safetySchools" class="grid grid-cols-3 gap-3"></div>
-          </div>
-        </div>
-        
-        <!-- My Schools List -->
-        <div class="card">
-          <h3>My School List</h3>
-          <div id="mySchoolsList" class="mt-4"></div>
-        </div>
-      </div>
-      
-      <!-- NEW: Scholarships Tab -->
-      <div id="scholarshipsTab" class="hidden" role="tabpanel" aria-labelledby="scholarships-tab">
-        <div class="card mb-4">
-          <h2>Scholarship Opportunities</h2>
-          <p class="text-muted">Automatically matched based on your profile. One-click applications!</p>
-          
-          <div class="grid grid-cols-3 gap-4 mt-4">
-            <div class="parent-stat-card">
-              <div class="parent-stat-value" id="totalScholarships">0</div>
-              <div class="parent-stat-label">Matched Scholarships</div>
-            </div>
-            <div class="parent-stat-card">
-              <div class="parent-stat-value" id="appliedScholarships">0</div>
-              <div class="parent-stat-label">Applied</div>
-            </div>
-            <div class="parent-stat-card">
-              <div class="parent-stat-value" id="potentialAward">$0</div>
-              <div class="parent-stat-label">Potential Awards</div>
-            </div>
-          </div>
-        </div>
-        
-        <div id="scholarshipFilters" class="card mb-4">
-          <div class="grid grid-cols-4 gap-3">
-            <div class="field">
-              <label for="filterAmount">Min Amount</label>
-              <select id="filterAmount">
-                <option value="">Any Amount</option>
-                <option value="500">$500+</option>
-                <option value="1000">$1,000+</option>
-                <option value="5000">$5,000+</option>
-                <option value="10000">$10,000+</option>
-              </select>
-            </div>
-            <div class="field">
-              <label for="filterDeadline">Deadline</label>
-              <select id="filterDeadline">
-                <option value="">All Deadlines</option>
-                <option value="30">Next 30 Days</option>
-                <option value="60">Next 60 Days</option>
-                <option value="90">Next 90 Days</option>
-              </select>
-            </div>
-            <div class="field">
-              <label for="filterEssay">Essay Required</label>
-              <select id="filterEssay">
-                <option value="">Any</option>
-                <option value="no">No Essay</option>
-                <option value="yes">Essay Required</option>
-              </select>
-            </div>
-            <div class="field">
-              <label for="filterMatch">Match Score</label>
-              <select id="filterMatch">
-                <option value="">All Matches</option>
-                <option value="90">90%+ Match</option>
-                <option value="75">75%+ Match</option>
-                <option value="50">50%+ Match</option>
-              </select>
-            </div>
-          </div>
-        </div>
-        
-        <div id="scholarshipsList"></div>
-      </div>
-      
-      <!-- Financial Aid Tab -->
-      <div id="financialTab" class="hidden" role="tabpanel" aria-labelledby="financial-tab">
-        <div class="card">
-          <h2>Financial Aid Estimates</h2>
-          <p class="text-muted mb-4">Based on your profile and each school's aid programs.</p>
-          <div id="aidEstimates"></div>
-        </div>
-      </div>
-      
-      <!-- Documents Tab -->
-      <div id="documentsTab" class="hidden" role="tabpanel" aria-labelledby="documents-tab">
-        <div class="card">
-          <h2>Application Documents</h2>
-          <div class="flex justify-between items-center mb-4">
-            <p class="text-muted">Track all your requirements in one place.</p>
-            <div class="badge" id="docProgress">0% Complete</div>
-          </div>
-          <div id="documentsList"></div>
-        </div>
-      </div>
-      
-      <!-- Timeline Tab -->
-      <div id="timelineTab" class="hidden" role="tabpanel" aria-labelledby="timeline-tab">
-        <div class="card">
-          <h2>Application Timeline</h2>
-          <p class="text-muted mb-4">Never miss a deadline.</p>
-          <div class="timeline" id="timelineList"></div>
-        </div>
-      </div>
-      
-      <!-- Insights Tab -->
-      <div id="insightsTab" class="hidden" role="tabpanel" aria-labelledby="insights-tab">
-        <div class="card">
-          <h2>Your Insights</h2>
-          <div id="insightsContent"></div>
-        </div>
-      </div>
-    </div>
-  </section>
-  
-  <!-- NEW: Parent Dashboard Section -->
-  <section id="parentDashboard" class="parent-dashboard hidden">
-    <div class="card parent-card mb-4">
-      <h2>Parent Dashboard</h2>
-      <p class="text-muted">Monitor your student's college application progress</p>
-    </div>
-    
-    <div class="grid grid-cols-4 gap-4 mb-6">
-      <div class="parent-stat-card">
-        <div class="parent-stat-value" id="parentStatApps">0</div>
-        <div class="parent-stat-label">Applications Started</div>
-      </div>
-      <div class="parent-stat-card">
-        <div class="parent-stat-value" id="parentStatDeadlines">0</div>
-        <div class="parent-stat-label">Upcoming Deadlines</div>
-      </div>
-      <div class="parent-stat-card">
-        <div class="parent-stat-value" id="parentStatAid">$0</div>
-        <div class="parent-stat-label">Est. Aid Package</div>
-      </div>
-      <div class="parent-stat-card">
-        <div class="parent-stat-value" id="parentStatCost">$0</div>
-        <div class="parent-stat-label">Avg. Net Cost</div>
-      </div>
-    </div>
-    
-    <div class="grid grid-cols-2 gap-4">
-      <div class="card">
-        <h3>Your Tasks</h3>
-        <div id="parentTasks">
-          <div class="parent-task">
-            <div class="parent-task-icon">📄</div>
-            <div>
-              <div class="font-bold">Complete FAFSA</div>
-              <div class="text-sm text-muted">Due October 1, 2025</div>
-            </div>
-            <button class="btn primary">Start</button>
-          </div>
-          <div class="parent-task">
-            <div class="parent-task-icon">💰</div>
-            <div>
-              <div class="font-bold">CSS Profile</div>
-              <div class="text-sm text-muted">Due November 15, 2025</div>
-            </div>
-            <button class="btn ghost">Learn More</button>
-          </div>
-          <div class="parent-task">
-            <div class="parent-task-icon">📊</div>
-            <div>
-              <div class="font-bold">Submit Tax Documents</div>
-              <div class="text-sm text-muted">Required for verification</div>
-            </div>
-            <button class="btn ghost">Upload</button>
-          </div>
-        </div>
-      </div>
-      
-      <div class="card">
-        <h3>Financial Planning</h3>
-        <div id="parentFinancial">
-          <div class="mb-4">
-            <label class="text-sm text-muted">Expected Family Contribution</label>
-            <div class="text-lg font-bold">$15,000 - $20,000</div>
-          </div>
-          <div class="mb-4">
-            <label class="text-sm text-muted">529 Plan Balance</label>
-            <input type="number" class="field" placeholder="Enter amount">
-          </div>
-          <div class="mb-4">
-            <label class="text-sm text-muted">Loan Calculator</label>
-            <button class="btn ghost w-full">Calculate Monthly Payments</button>
-          </div>
-        </div>
-      </div>
+  <section id="dashboardSection" class="hidden">
+    <div class="card">
+      <h2>Your Matches</h2>
+      <div id="schoolsList"></div>
     </div>
   </section>
 
 </main>
 
-<!-- NEW: Swipeable Discovery Interface -->
-<div id="swipeContainer" class="swipe-container">
-  <div class="swipe-header">
-    <button class="swipe-close" onclick="app.closeDiscovery()">✕</button>
-    <h2 style="color: white; text-align: center;">Discover Schools</h2>
-  </div>
-  
-  <div class="swipe-card-stack" id="swipeStack"></div>
-  
-  <div class="swipe-actions">
-    <button class="swipe-action reject" onclick="app.swipeLeft()">
-      <svg width="24" height="24" viewBox="0 0 24 24">
-        <path d="M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/>
-      </svg>
-    </button>
-    <button class="swipe-action info" onclick="app.showSchoolInfo()">
-      <svg width="24" height="24" viewBox="0 0 24 24">
-        <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-6h2v6zm0-8h-2V7h2v2z"/>
-      </svg>
-    </button>
-    <button class="swipe-action accept" onclick="app.swipeRight()">
-      <svg width="24" height="24" viewBox="0 0 24 24">
-        <path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/>
-      </svg>
-    </button>
-  </div>
-</div>
-
-<!-- AI Assistant Bubble -->
-<div id="aiBubble" class="ai-bubble hidden" role="button" tabindex="0" aria-label="AI Assistant">
-  <p id="aiMessage">Need help picking schools? I'm here to guide you! 🎯</p>
-</div>
-
 <!-- Toast Container -->
-<div class="toast-container" id="toastContainer" aria-live="polite" aria-atomic="true"></div>
-
-<!-- Profile Modal -->
-<div class="modal-overlay" id="profileModal" role="dialog" aria-modal="true" aria-labelledby="profileTitle">
-  <div class="modal">
-    <h2 id="profileTitle">Your Profile</h2>
-    <div id="profileContent"></div>
-    <button class="btn ghost mt-4" onclick="closeModal('profileModal')">Close</button>
-  </div>
-</div>
+<div class="toast-container" id="toastContainer"></div>
 
 <script>
-// ============================================
-// ENHANCED PATHWISE APPLICATION WITH WEEK 1 FEATURES
-// ============================================
-
-// State Management System
-class AppState {
-  constructor() {
-    this.state = {
-      user: null,
-      schools: [],
-      mySchools: [],
-      scholarships: [],
-      appliedScholarships: [],
-      documents: {},
-      achievements: [],
-      parentMode: false,
-      filters: {
-        state: '',
-        type: '',
-        search: '',
-        scholarship: {
-          amount: '',
-          deadline: '',
-          essay: '',
-          match: ''
-        }
-      },
-      ui: {
-        currentSection: 'planning',
-        currentTab: 'schools',
-        theme: 'light',
-        swipeIndex: 0
-      }
-    };
-    this.listeners = new Map();
-    this.loadState();
-  }
-
-  subscribe(key, callback) {
-    if (!this.listeners.has(key)) {
-      this.listeners.set(key, new Set());
-    }
-    this.listeners.get(key).add(callback);
-    return () => this.listeners.get(key).delete(callback);
-  }
-
-  update(key, value) {
-    const oldValue = this.getNestedValue(key);
-    this.setNestedValue(key, value);
-    this.notify(key, value, oldValue);
-    this.persist();
-  }
-
-  get(key) {
-    return this.getNestedValue(key);
-  }
-
-  notify(key, newValue, oldValue) {
-    if (this.listeners.has(key)) {
-      this.listeners.get(key).forEach(cb => cb(newValue, oldValue));
-    }
-  }
-
-  getNestedValue(path) {
-    return path.split('.').reduce((obj, key) => obj?.[key], this.state);
-  }
-
-  setNestedValue(path, value) {
-    const keys = path.split('.');
-    const lastKey = keys.pop();
-    const target = keys.reduce((obj, key) => {
-      if (!obj[key]) obj[key] = {};
-      return obj[key];
-    }, this.state);
-    target[lastKey] = value;
-  }
-
-  persist() {
-    try {
-      localStorage.setItem('pathwise_state', JSON.stringify(this.state));
-    } catch (e) {
-      if (e.name === 'QuotaExceededError') {
-        this.handleStorageQuotaExceeded();
-      }
-      console.error('Failed to save state:', e);
-    }
-  }
-
-  loadState() {
-    try {
-      const saved = localStorage.getItem('pathwise_state');
-      if (saved) {
-        this.state = { ...this.state, ...JSON.parse(saved) };
-      }
-    } catch (e) {
-      console.error('Failed to load state:', e);
-    }
-  }
-
-  handleStorageQuotaExceeded() {
-    Toast.show('Storage full. Some data may not be saved.', 'warning');
-  }
-
-  reset() {
-    const theme = this.state.ui.theme;
-    this.state = {
-      user: null,
-      schools: [],
-      mySchools: [],
-      scholarships: [],
-      appliedScholarships: [],
-      documents: {},
-      achievements: [],
-      parentMode: false,
-      filters: { state: '', type: '', search: '', scholarship: { amount: '', deadline: '', essay: '', match: '' } },
-      ui: { currentSection: 'planning', currentTab: 'schools', theme, swipeIndex: 0 }
-    };
-    localStorage.removeItem('pathwise_state');
-    this.persist();
-    location.reload();
-  }
-}
-
-// Enhanced School Database
+// Simple schools database
 const SCHOOLS_DB = [
-  // UC System
-  {id:'ucb',name:'UC Berkeley',state:'CA',system:'UC',type:'public',city:'Berkeley',avgGPA:4.25,avgSAT:1450,acceptRate:14.5,tuitionIn:14226,tuitionOut:46770,rank:22,size:'large',setting:'urban',image:'https://images.unsplash.com/photo-1564981797816-1043664bf78d?w=800'},
-  {id:'ucla',name:'UCLA',state:'CA',system:'UC',type:'public',city:'Los Angeles',avgGPA:4.26,avgSAT:1445,acceptRate:12.3,tuitionIn:13401,tuitionOut:45975,rank:20,size:'large',setting:'urban',image:'https://images.unsplash.com/photo-1504817343863-5092a923803e?w=800'},
-  {id:'ucsd',name:'UC San Diego',state:'CA',system:'UC',type:'public',city:'La Jolla',avgGPA:4.16,avgSAT:1410,acceptRate:31.5,tuitionIn:14616,tuitionOut:47190,rank:34,size:'large',setting:'suburban',image:'https://images.unsplash.com/photo-1559157693-c34c1656d76a?w=800'},
-  {id:'ucd',name:'UC Davis',state:'CA',system:'UC',type:'public',city:'Davis',avgGPA:4.13,avgSAT:1350,acceptRate:37.6,tuitionIn:14597,tuitionOut:47171,rank:38,size:'large',setting:'suburban',image:'https://images.unsplash.com/photo-1580982324076-d95230549339?w=800'},
-  {id:'uci',name:'UC Irvine',state:'CA',system:'UC',type:'public',city:'Irvine',avgGPA:4.08,avgSAT:1360,acceptRate:26.5,tuitionIn:13727,tuitionOut:46301,rank:36,size:'large',setting:'suburban',image:'https://images.unsplash.com/photo-1562774053-701939374585?w=800'},
-  {id:'ucsb',name:'UC Santa Barbara',state:'CA',system:'UC',type:'public',city:'Santa Barbara',avgGPA:4.15,avgSAT:1380,acceptRate:29.6,tuitionIn:14391,tuitionOut:46965,rank:32,size:'large',setting:'suburban',image:'https://images.unsplash.com/photo-1608023136037-626dad6c6188?w=800'},
-  
-  // CSU System
-  {id:'cpslo',name:'Cal Poly SLO',state:'CA',system:'CSU',type:'public',city:'San Luis Obispo',avgGPA:4.06,avgSAT:1395,acceptRate:32.5,tuitionIn:10377,tuitionOut:22257,rank:null,size:'large',setting:'suburban',image:'https://images.unsplash.com/photo-1562774053-701939374585?w=800'},
-  {id:'sdsu',name:'San Diego State',state:'CA',system:'CSU',type:'public',city:'San Diego',avgGPA:3.85,avgSAT:1270,acceptRate:37.8,tuitionIn:7720,tuitionOut:19600,rank:null,size:'large',setting:'urban',image:'https://images.unsplash.com/photo-1559157693-c34c1656d76a?w=800'},
-  
-  // Private CA
-  {id:'stanford',name:'Stanford',state:'CA',system:'Private',type:'private',city:'Stanford',avgGPA:4.18,avgSAT:1520,acceptRate:4.0,tuitionIn:61650,tuitionOut:61650,rank:3,size:'medium',setting:'suburban',image:'https://images.unsplash.com/photo-1562113729-74a629698c39?w=800'},
-  {id:'usc',name:'USC',state:'CA',system:'Private',type:'private',city:'Los Angeles',avgGPA:3.9,avgSAT:1460,acceptRate:10.5,tuitionIn:68337,tuitionOut:68337,rank:28,size:'large',setting:'urban',image:'https://images.unsplash.com/photo-1580684712214-b749e6c20b7a?w=800'},
-  
-  // NY Schools
-  {id:'columbia',name:'Columbia',state:'NY',system:'Ivy',type:'private',city:'New York',avgGPA:4.15,avgSAT:1530,acceptRate:5.0,tuitionIn:66600,tuitionOut:66600,rank:12,size:'medium',setting:'urban',image:'https://images.unsplash.com/photo-1559135197-8a45ea74d367?w=800'},
-  {id:'nyu',name:'NYU',state:'NY',system:'Private',type:'private',city:'New York',avgGPA:3.8,avgSAT:1500,acceptRate:12.5,tuitionIn:58960,tuitionOut:58960,rank:35,size:'large',setting:'urban',image:'https://images.unsplash.com/photo-1519452635265-7b1fbfd1e4e0?w=800'},
+  {id:'ucb',name:'UC Berkeley',state:'CA',avgGPA:4.25,avgSAT:1450,tuitionIn:14226},
+  {id:'ucla',name:'UCLA',state:'CA',avgGPA:4.26,avgSAT:1445,tuitionIn:13401},
+  {id:'ucsd',name:'UC San Diego',state:'CA',avgGPA:4.16,avgSAT:1410,tuitionIn:14616},
+  {id:'stanford',name:'Stanford',state:'CA',avgGPA:4.18,avgSAT:1520,tuitionIn:61650},
+  {id:'nyu',name:'NYU',state:'NY',avgGPA:3.8,avgSAT:1500,tuitionIn:58960},
+  {id:'columbia',name:'Columbia',state:'NY',avgGPA:4.15,avgSAT:1530,tuitionIn:66600}
 ];
 
-// NEW: Scholarship Database
+// Simple scholarships database  
 const SCHOLARSHIPS_DB = [
-  {id:'gates',name:'Gates Millennium Scholarship',amount:50000,deadline:new Date(2025,11,15),requirements:{gpa:3.3,income:60000,essay:true,minority:true},description:'Full cost of attendance for outstanding minority students'},
-  {id:'cocacola',name:'Coca-Cola Scholars',amount:20000,deadline:new Date(2025,9,31),requirements:{gpa:3.0,leadership:true,essay:true},description:'For students demonstrating leadership and academic excellence'},
-  {id:'merit',name:'National Merit Scholarship',amount:2500,deadline:new Date(2025,10,1),requirements:{psat:true},description:'Based on PSAT/NMSQT scores'},
-  {id:'jackie',name:'Jackie Robinson Foundation',amount:35000,deadline:new Date(2026,1,1),requirements:{gpa:3.0,minority:true,income:75000,essay:true},description:'For minority students showing leadership potential'},
-  {id:'dell',name:'Dell Scholars',amount:20000,deadline:new Date(2025,11,1),requirements:{gpa:2.4,income:50000,essay:true},description:'For students overcoming significant obstacles'},
-  {id:'amazon',name:'Amazon Future Engineer',amount:40000,deadline:new Date(2026,0,15),requirements:{gpa:3.0,interests:'stem',essay:true},description:'For students pursuing computer science'},
-  {id:'elks',name:'Elks National Foundation',amount:50000,deadline:new Date(2025,10,15),requirements:{gpa:3.5,essay:true,community:true},description:'Most Valuable Student scholarship'},
-  {id:'ronbrown',name:'Ron Brown Scholar',amount:40000,deadline:new Date(2026,0,9),requirements:{gpa:3.0,minority:true,leadership:true,essay:true},description:'For African American students with leadership skills'},
-  {id:'questbridge',name:'QuestBridge',amount:200000,deadline:new Date(2025,8,26),requirements:{income:65000,gpa:3.5},description:'Full four-year scholarship to partner colleges'},
-  {id:'regeneron',name:'Regeneron Science Talent Search',amount:250000,deadline:new Date(2025,10,10),requirements:{interests:'stem',research:true},description:'For exceptional young scientists'},
+  {name:'Gates Scholarship',requirements:{income:60000,gpa:3.3}},
+  {name:'Coca-Cola Scholars',requirements:{gpa:3.0}},
+  {name:'Dell Scholars',requirements:{income:50000,gpa:2.4}},
+  {name:'National Merit',requirements:{sat:1400}}
 ];
 
-// NEW: Scholarship Matching Engine
-class ScholarshipEngine {
-  static matchScholarships(user) {
-    if (!user) return [];
-    
-    return SCHOLARSHIPS_DB.map(scholarship => {
-      let matchScore = 0;
-      let eligibility = true;
-      const metRequirements = [];
-      const unmetRequirements = [];
-      
-      // Check GPA requirement
-      if (scholarship.requirements.gpa) {
-        if (user.gpa >= scholarship.requirements.gpa) {
-          matchScore += 20;
-          metRequirements.push(`GPA ${scholarship.requirements.gpa}+`);
-        } else {
-          eligibility = false;
-          unmetRequirements.push(`Need GPA ${scholarship.requirements.gpa}+`);
-        }
-      }
-      
-      // Check income requirement
-      if (scholarship.requirements.income) {
-        if (!user.income || user.income <= scholarship.requirements.income) {
-          matchScore += 20;
-          metRequirements.push('Income eligible');
-        } else {
-          eligibility = false;
-          unmetRequirements.push('Over income limit');
-        }
-      }
-      
-      // Check interest alignment
-      if (scholarship.requirements.interests) {
-        if (user.interests === scholarship.requirements.interests) {
-          matchScore += 15;
-          metRequirements.push('Field match');
-        }
-      }
-      
-      // Essay requirement (doesn't affect eligibility)
-      if (scholarship.requirements.essay) {
-        metRequirements.push('Essay required');
-      }
-      
-      // Base match score for all eligible
-      if (eligibility) matchScore += 30;
-      
-      // Deadline urgency bonus
-      const daysUntilDeadline = Math.floor((scholarship.deadline - new Date()) / (1000 * 60 * 60 * 24));
-      if (daysUntilDeadline < 30) matchScore += 10;
-      
-      return {
-        ...scholarship,
-        matchScore: Math.min(100, matchScore),
-        eligible: eligibility,
-        metRequirements,
-        unmetRequirements,
-        daysUntilDeadline
-      };
-    }).sort((a, b) => b.matchScore - a.matchScore);
-  }
+// Toast notification
+function showToast(message, type = 'info') {
+  const container = document.getElementById('toastContainer');
+  const toast = document.createElement('div');
+  toast.className = `toast ${type}`;
+  toast.textContent = message;
+  container.appendChild(toast);
   
-  static calculateTotalPotential(scholarships) {
-    return scholarships
-      .filter(s => s.eligible)
-      .reduce((sum, s) => sum + s.amount, 0);
-  }
+  setTimeout(() => toast.classList.add('show'), 10);
+  setTimeout(() => {
+    toast.classList.remove('show');
+    setTimeout(() => toast.remove(), 300);
+  }, 3000);
 }
 
-// Validators
-const Validators = {
-  gpa: (val) => {
-    const n = parseFloat(val);
-    if (isNaN(n) || n < 0 || n > 5) {
-      return { valid: false, error: 'GPA must be between 0.0 and 5.0' };
-    }
-    return { valid: true, value: n };
-  },
+// Update match counter
+function updateMatchCounter() {
+  const gpa = parseFloat(document.getElementById('gpa').value) || 0;
+  const sat = parseInt(document.getElementById('sat').value) || 0;
+  const state = document.getElementById('homeState').value || '';
+  const income = parseInt(document.getElementById('income').value) || 999999;
   
-  sat: (val) => {
-    if (!val) return { valid: true, value: null };
-    const n = parseInt(val);
-    if (isNaN(n) || n < 400 || n > 1600) {
-      return { valid: false, error: 'SAT score must be between 400 and 1600' };
-    }
-    return { valid: true, value: n };
-  },
+  let schoolMatches = 0;
+  let scholarshipMatches = 0;
   
-  income: (val) => {
-    if (!val) return { valid: true, value: null };
-    const n = parseInt(val);
-    if (isNaN(n) || n < 0) {
-      return { valid: false, error: 'Income must be a positive number' };
-    }
-    return { valid: true, value: n };
-  },
-  
-  ap: (val) => {
-    const n = parseInt(val) || 0;
-    if (n < 0 || n > 30) {
-      return { valid: false, error: 'AP courses must be between 0 and 30' };
-    }
-    return { valid: true, value: n };
-  },
-  
-  required: (val, fieldName) => {
-    if (!val || val.trim() === '') {
-      return { valid: false, error: `${fieldName} is required` };
-    }
-    return { valid: true, value: val.trim() };
-  }
-};
-
-// Toast Notification System
-class Toast {
-  static show(message, type = 'info', duration = 3000) {
-    const container = document.getElementById('toastContainer');
-    const toast = document.createElement('div');
-    toast.className = `toast ${type}`;
-    toast.innerHTML = `
-      <span class="toast-icon">${this.getIcon(type)}</span>
-      <span>${message}</span>
-    `;
-    
-    container.appendChild(toast);
-    
-    // Trigger reflow for animation
-    toast.offsetHeight;
-    
-    setTimeout(() => toast.classList.add('show'), 10);
-    
-    setTimeout(() => {
-      toast.classList.remove('show');
-      setTimeout(() => toast.remove(), 300);
-    }, duration);
-  }
-  
-  static getIcon(type) {
-    const icons = {
-      success: '<svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M9 16.2L4.8 12l-1.4 1.4L9 19 21 7l-1.4-1.4L9 16.2z"/></svg>',
-      error: '<svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>',
-      warning: '<svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M1 21h22L12 2 1 21zm12-3h-2v-2h2v2zm0-4h-2v-4h2v4z"/></svg>',
-      info: '<svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-6h2v6zm0-8h-2V7h2v2z"/></svg>'
-    };
-    return icons[type] || icons.info;
-  }
-}
-
-// Achievement System
-class AchievementSystem {
-  static ACHIEVEMENTS = {
-    first_school: {
-      id: 'first_school',
-      icon: '🎯',
-      title: 'First Pick',
-      description: 'Added your first school to the list'
-    },
-    five_schools: {
-      id: 'five_schools',
-      icon: '🔥',
-      title: 'On Fire',
-      description: 'Added 5 schools to your list'
-    },
-    balanced_list: {
-      id: 'balanced_list',
-      icon: '⚖️',
-      title: 'Perfectly Balanced',
-      description: 'Have reach, match, and safety schools'
-    },
-    early_bird: {
-      id: 'early_bird',
-      icon: '🏃',
-      title: 'Early Bird',
-      description: 'Started planning 6+ months before deadline'
-    },
-    profile_complete: {
-      id: 'profile_complete',
-      icon: '✨',
-      title: 'Profile Complete',
-      description: 'Filled out all profile information'
-    },
-    scholarship_hunter: {
-      id: 'scholarship_hunter',
-      icon: '💰',
-      title: 'Scholarship Hunter',
-      description: 'Applied to 5+ scholarships'
-    },
-    swipe_master: {
-      id: 'swipe_master',
-      icon: '👆',
-      title: 'Discovery Pro',
-      description: 'Swiped through 20+ schools'
-    }
-  };
-  
-  static check(appState) {
-    const user = appState.get('user');
-    const mySchools = appState.get('mySchools') || [];
-    const achievements = appState.get('achievements') || [];
-    const appliedScholarships = appState.get('appliedScholarships') || [];
-    
-    // Check first school
-    if (mySchools.length >= 1 && !achievements.includes('first_school')) {
-      this.unlock('first_school', appState);
-    }
-    
-    // Check five schools
-    if (mySchools.length >= 5 && !achievements.includes('five_schools')) {
-      this.unlock('five_schools', appState);
-    }
-    
-    // Check scholarship hunter
-    if (appliedScholarships.length >= 5 && !achievements.includes('scholarship_hunter')) {
-      this.unlock('scholarship_hunter', appState);
-    }
-    
-    // Check balanced list
-    if (this.hasBalancedList(mySchools, appState) && !achievements.includes('balanced_list')) {
-      this.unlock('balanced_list', appState);
-    }
-    
-    // Check profile complete
-    if (this.isProfileComplete(user) && !achievements.includes('profile_complete')) {
-      this.unlock('profile_complete', appState);
-    }
-  }
-  
-  static unlock(achievementId, appState) {
-    const achievement = this.ACHIEVEMENTS[achievementId];
-    if (!achievement) return;
-    
-    const achievements = appState.get('achievements') || [];
-    achievements.push(achievementId);
-    appState.update('achievements', achievements);
-    
-    this.showNotification(achievement);
-    this.celebrate();
-  }
-  
-  static showNotification(achievement) {
-    const container = document.getElementById('achievementsContainer');
-    if (!container) return;
-    
-    const elem = document.createElement('div');
-    elem.className = 'achievement new';
-    elem.innerHTML = `
-      <div class="achievement-icon">${achievement.icon}</div>
-      <div class="achievement-content">
-        <h4>${achievement.title}</h4>
-        <p>${achievement.description}</p>
-      </div>
-    `;
-    
-    container.appendChild(elem);
-    
-    setTimeout(() => {
-      elem.classList.remove('new');
-    }, 3000);
-    
-    Toast.show(`Achievement Unlocked: ${achievement.title}`, 'success');
-  }
-  
-  static celebrate() {
-    // Haptic feedback
-    if ('vibrate' in navigator) {
-      navigator.vibrate([100, 50, 100]);
-    }
-    
-    // Confetti animation
-    const container = document.createElement('div');
-    container.className = 'confetti-container';
-    
-    for (let i = 0; i < 50; i++) {
-      const confetti = document.createElement('div');
-      confetti.className = 'confetti';
-      confetti.style.left = Math.random() * 100 + '%';
-      confetti.style.animationDelay = Math.random() * 3 + 's';
-      confetti.style.backgroundColor = `hsl(${Math.random() * 360}, 100%, 50%)`;
-      container.appendChild(confetti);
-    }
-    
-    document.body.appendChild(container);
-    setTimeout(() => container.remove(), 5000);
-  }
-  
-  static hasBalancedList(schools, appState) {
-    const user = appState.get('user');
-    if (!user || schools.length < 3) return false;
-    
-    const categories = { reach: 0, match: 0, safety: 0 };
-    schools.forEach(id => {
-      const school = SCHOOLS_DB.find(s => s.id === id);
-      if (school) {
-        const cat = SchoolMatcher.categorizeSchool(school, user);
-        categories[cat]++;
-      }
-    });
-    
-    return categories.reach > 0 && categories.match > 0 && categories.safety > 0;
-  }
-  
-  static isProfileComplete(user) {
-    if (!user) return false;
-    return !!(user.firstName && user.grade && user.homeState && user.gpa);
-  }
-}
-
-// School Matching Algorithm
-class SchoolMatcher {
-  static calculateMatch(school, user) {
-    if (!user) return 50;
-    
+  // Count matching schools
+  SCHOOLS_DB.forEach(school => {
     let score = 50;
-    
-    // GPA comparison (±40 points)
-    if (user.gpa) {
-      const gpaDiff = (user.gpa - school.avgGPA) * 20;
-      score += Math.max(-40, Math.min(40, gpaDiff));
-    }
-    
-    // SAT comparison (±20 points)
-    if (user.sat && school.avgSAT) {
-      const satDiff = (user.sat - school.avgSAT) / 10;
-      score += Math.max(-20, Math.min(20, satDiff));
-    }
-    
-    // AP/Honors bonus (up to 15 points)
-    if (user.ap) {
-      score += Math.min(15, user.ap * 1.5);
-    }
-    
-    // Interest alignment bonus (up to 10 points)
-    if (user.interests) {
-      score += this.getInterestBonus(school, user.interests);
-    }
-    
-    // In-state bonus (5 points)
-    if (user.homeState === school.state) {
-      score += 5;
-    }
-    
-    return Math.max(0, Math.min(100, Math.round(score)));
-  }
+    if (gpa > 0) score += (gpa - school.avgGPA) * 20;
+    if (sat > 0) score += (sat - school.avgSAT) / 10;
+    if (state === school.state) score += 10;
+    if (score >= 40) schoolMatches++;
+  });
   
-  static getInterestBonus(school, interest) {
-    const bonuses = {
-      stem: ['stanford', 'caltech', 'ucb', 'ucla'],
-      business: ['usc', 'nyu', 'columbia'],
-      arts: ['nyu', 'usc', 'ucla']
-    };
-    
-    const schoolsForInterest = bonuses[interest] || [];
-    return schoolsForInterest.includes(school.id) ? 10 : 0;
-  }
+  // Count scholarships
+  SCHOLARSHIPS_DB.forEach(s => {
+    let eligible = true;
+    if (s.requirements.gpa && gpa < s.requirements.gpa) eligible = false;
+    if (s.requirements.income && income > s.requirements.income) eligible = false;
+    if (s.requirements.sat && sat < s.requirements.sat) eligible = false;
+    if (eligible && gpa > 0) scholarshipMatches++;
+  });
   
-  static categorizeSchool(school, user) {
-    const matchScore = this.calculateMatch(school, user);
-    const gpaDiff = user.gpa ? user.gpa - school.avgGPA : 0;
-    
-    if (matchScore < 40 || gpaDiff < -0.3) {
-      return 'reach';
-    } else if (matchScore > 70 || gpaDiff > 0.3) {
-      return 'safety';
-    } else {
-      return 'match';
-    }
+  // Update display
+  const counter = document.getElementById('matchCounter');
+  if (schoolMatches > 0 || scholarshipMatches > 0) {
+    counter.textContent = `${schoolMatches} schools, ${scholarshipMatches} scholarships`;
+  } else {
+    counter.textContent = '0 potential matches';
   }
 }
 
-// Financial Aid Calculator
-class FinancialAidCalculator {
-  static PELL_GRANT_TABLE = [
-    { maxIncome: 30000, amount: 7395 },
-    { maxIncome: 45000, amount: 4500 },
-    { maxIncome: 60000, amount: 1500 },
-    { maxIncome: 75000, amount: 500 }
-  ];
+// Form submission
+function handleFormSubmit(e) {
+  e.preventDefault();
   
-  static STATE_GRANTS = {
-    CA: {
-      calGrantA: { minGPA: 3.0, maxIncome: 125000, ucAmount: 12570, csuAmount: 5742, privateAmount: 9850 },
-      middleClass: { maxIncome: 217000, amount: 2500 }
-    },
-    NY: {
-      tap: [
-        { maxIncome: 80000, amount: 5500 },
-        { maxIncome: 100000, amount: 3000 }
-      ]
-    }
+  const firstName = document.getElementById('firstName').value;
+  const grade = document.getElementById('grade').value;
+  const homeState = document.getElementById('homeState').value;
+  
+  if (!firstName || !grade || !homeState) {
+    showToast('Please fill in required fields', 'error');
+    return;
+  }
+  
+  // Save data
+  const userData = {
+    firstName,
+    grade,
+    homeState,
+    gpa: parseFloat(document.getElementById('gpa').value) || 0,
+    sat: parseInt(document.getElementById('sat').value) || 0
   };
+  localStorage.setItem('pathwise_user', JSON.stringify(userData));
   
-  static calculate(school, user) {
-    if (!user || !user.income) {
-      return { items: [], total: 0, netPrice: school.tuitionIn };
-    }
-    
-    const items = [];
-    let totalAid = 0;
-    
-    // Calculate Pell Grant
-    const pellAmount = this.calculatePellGrant(user.income);
-    if (pellAmount > 0) {
-      items.push({ name: 'Federal Pell Grant', amount: pellAmount });
-      totalAid += pellAmount;
-    }
-    
-    // Calculate state grants
-    if (user.homeState === school.state) {
-      const stateAid = this.calculateStateGrant(school, user);
-      if (stateAid.amount > 0) {
-        items.push({ name: stateAid.name, amount: stateAid.amount });
-        totalAid += stateAid.amount;
-      }
-    }
-    
-    // Calculate institutional aid (simplified)
-    if (school.type === 'private' && user.income < 100000) {
-      const instAid = Math.round((100000 - user.income) / 100 * 50);
-      items.push({ name: 'Institutional Aid (est.)', amount: instAid });
-      totalAid += instAid;
-    }
-    
-    const tuition = user.homeState === school.state ? school.tuitionIn : school.tuitionOut;
-    const netPrice = Math.max(0, tuition - totalAid);
-    
-    return { items, total: totalAid, netPrice, tuition };
-  }
+  // Navigate
+  document.getElementById('planningSection').classList.add('hidden');
+  document.getElementById('dashboardSection').classList.remove('hidden');
+  document.getElementById('backBtn').classList.remove('hidden');
   
-  static calculatePellGrant(income) {
-    for (const bracket of this.PELL_GRANT_TABLE) {
-      if (income <= bracket.maxIncome) {
-        return bracket.amount;
-      }
-    }
-    return 0;
-  }
-  
-  static calculateStateGrant(school, user) {
-    const grants = this.STATE_GRANTS[user.homeState];
-    if (!grants) return { name: '', amount: 0 };
-    
-    if (user.homeState === 'CA') {
-      const { calGrantA, middleClass } = grants;
-      
-      if (user.gpa >= calGrantA.minGPA && user.income <= calGrantA.maxIncome) {
-        let amount = 0;
-        if (school.system === 'UC') amount = calGrantA.ucAmount;
-        else if (school.system === 'CSU') amount = calGrantA.csuAmount;
-        else if (school.type === 'private') amount = calGrantA.privateAmount;
-        
-        if (amount > 0) {
-          return { name: 'Cal Grant A', amount };
-        }
-      }
-      
-      if (user.income <= middleClass.maxIncome) {
-        return { name: 'Middle Class Scholarship', amount: middleClass.amount };
-      }
-    }
-    
-    return { name: '', amount: 0 };
-  }
+  // Show matches
+  showMatches();
+  showToast(`Welcome, ${firstName}!`, 'success');
 }
 
-// Document Tracker
-class DocumentTracker {
-  static generateDocuments(schools, user) {
-    const docs = new Map();
-    
-    // Common documents
-    docs.set('fafsa', {
-      id: 'fafsa',
-      name: 'FAFSA',
-      due: new Date(2025, 9, 1), // Oct 1, 2025
-      status: 'pending',
-      universal: true
-    });
-    
-    docs.set('profile', {
-      id: 'profile',
-      name: 'Personal Statement',
-      due: new Date(2025, 10, 15), // Nov 15, 2025
-      status: 'pending',
-      universal: true
-    });
-    
-    // School-specific documents
-    schools.forEach(schoolId => {
-      const school = SCHOOLS_DB.find(s => s.id === schoolId);
-      if (!school) return;
-      
-      // Application
-      docs.set(`${schoolId}_app`, {
-        id: `${schoolId}_app`,
-        name: `${school.name} Application`,
-        due: new Date(2025, 10, 30), // Nov 30 for UC/CSU, adjust as needed
-        status: 'pending',
-        schoolId
-      });
-      
-      // Essays
-      docs.set(`${schoolId}_essays`, {
-        id: `${schoolId}_essays`,
-        name: `${school.name} Essays`,
-        due: new Date(2025, 10, 15),
-        status: 'pending',
-        schoolId
-      });
-      
-      // Transcripts
-      docs.set(`${schoolId}_transcript`, {
-        id: `${schoolId}_transcript`,
-        name: `${school.name} Transcript`,
-        due: new Date(2025, 10, 1),
-        status: 'pending',
-        schoolId
-      });
-    });
-    
-    return Array.from(docs.values());
-  }
+// Show matches
+function showMatches() {
+  const userData = JSON.parse(localStorage.getItem('pathwise_user') || '{}');
+  const list = document.getElementById('schoolsList');
   
-  static getProgress(documents) {
-    const total = documents.length;
-    const completed = documents.filter(d => d.status === 'completed').length;
-    return total > 0 ? Math.round((completed / total) * 100) : 0;
-  }
-  
-  static getUrgency(dueDate) {
-    const now = new Date();
-    const days = Math.floor((dueDate - now) / (1000 * 60 * 60 * 24));
-    
-    if (days < 0) return 'overdue';
-    if (days <= 7) return 'urgent-high';
-    if (days <= 30) return 'urgent-medium';
-    return 'urgent-low';
-  }
-}
-
-// NEW: Swipeable Discovery Controller
-class SwipeController {
-  constructor(appState) {
-    this.appState = appState;
-    this.currentIndex = 0;
-    this.schools = [...SCHOOLS_DB];
-    this.swipedSchools = { liked: [], rejected: [] };
-    this.isDragging = false;
-    this.startX = 0;
-    this.currentX = 0;
-    this.currentCard = null;
-  }
-  
-  init() {
-    this.renderCards();
-    this.attachEventListeners();
-  }
-  
-  renderCards() {
-    const container = document.getElementById('swipeStack');
-    if (!container) return;
-    
-    container.innerHTML = '';
-    
-    // Show next 3 cards
-    for (let i = 0; i < Math.min(3, this.schools.length - this.currentIndex); i++) {
-      const school = this.schools[this.currentIndex + i];
-      const card = this.createCard(school, i);
-      container.appendChild(card);
-    }
-    
-    this.currentCard = container.querySelector('.swipe-card');
-  }
-  
-  createCard(school, stackPosition) {
-    const user = this.appState.get('user');
-    const matchScore = SchoolMatcher.calculateMatch(school, user);
-    
-    const card = document.createElement('div');
-    card.className = 'swipe-card';
-    card.dataset.schoolId = school.id;
-    card.style.zIndex = 100 - stackPosition;
-    card.style.transform = `scale(${1 - stackPosition * 0.05})`;
-    card.innerHTML = `
-      <div class="swipe-card-content" style="background-image: linear-gradient(to bottom, transparent, rgba(0,0,0,0.8)), url('${school.image}')">
-        <div class="swipe-card-overlay">
-          <div class="swipe-card-name">${school.name}</div>
-          <div class="swipe-card-stats">
-            <span class="swipe-stat">${matchScore}% match</span>
-            <span class="swipe-stat">${school.acceptRate}% accept</span>
-            <span class="swipe-stat">${(school.tuitionIn / 1000).toFixed(0)}k/yr</span>
-          </div>
-          <div style="margin-top: 1rem; font-size: 0.9rem;">
-            ${school.city}, ${school.state} • ${school.system}
-          </div>
-        </div>
-      </div>
-    `;
-    
-    return card;
-  }
-  
-  attachEventListeners() {
-    const container = document.getElementById('swipeStack');
-    if (!container) return;
-    
-    // Touch events
-    container.addEventListener('touchstart', (e) => this.handleStart(e.touches[0].clientX));
-    container.addEventListener('touchmove', (e) => this.handleMove(e.touches[0].clientX));
-    container.addEventListener('touchend', () => this.handleEnd());
-    
-    // Mouse events (for desktop)
-    container.addEventListener('mousedown', (e) => this.handleStart(e.clientX));
-    container.addEventListener('mousemove', (e) => this.handleMove(e.clientX));
-    container.addEventListener('mouseup', () => this.handleEnd());
-    container.addEventListener('mouseleave', () => this.handleEnd());
-  }
-  
-  handleStart(x) {
-    if (!this.currentCard) return;
-    this.isDragging = true;
-    this.startX = x;
-    this.currentCard.classList.add('dragging');
-  }
-  
-  handleMove(x) {
-    if (!this.isDragging || !this.currentCard) return;
-    
-    this.currentX = x - this.startX;
-    const rotation = this.currentX * 0.1;
-    
-    this.currentCard.style.transform = `translateX(${this.currentX}px) rotate(${rotation}deg)`;
-    
-    // Update opacity based on distance
-    const opacity = 1 - Math.abs(this.currentX) / 300;
-    this.currentCard.style.opacity = opacity;
-  }
-  
-  handleEnd() {
-    if (!this.isDragging || !this.currentCard) return;
-    
-    this.isDragging = false;
-    this.currentCard.classList.remove('dragging');
-    
-    const threshold = 100;
-    
-    if (Math.abs(this.currentX) > threshold) {
-      if (this.currentX > 0) {
-        this.swipeRight();
-      } else {
-        this.swipeLeft();
-      }
-    } else {
-      // Snap back
-      this.currentCard.style.transform = '';
-      this.currentCard.style.opacity = '';
-    }
-    
-    this.currentX = 0;
-  }
-  
-  swipeLeft() {
-    if (!this.currentCard) return;
-    
-    const schoolId = this.currentCard.dataset.schoolId;
-    this.swipedSchools.rejected.push(schoolId);
-    
-    this.currentCard.classList.add('swiped-left');
-    
-    setTimeout(() => {
-      this.currentIndex++;
-      this.renderCards();
-      this.checkForAchievements();
-    }, 300);
-  }
-  
-  swipeRight() {
-    if (!this.currentCard) return;
-    
-    const schoolId = this.currentCard.dataset.schoolId;
-    this.swipedSchools.liked.push(schoolId);
-    
-    // Add to my schools
-    const mySchools = this.appState.get('mySchools') || [];
-    if (!mySchools.includes(schoolId)) {
-      mySchools.push(schoolId);
-      this.appState.update('mySchools', mySchools);
-      Toast.show('School added to your list!', 'success');
-    }
-    
-    this.currentCard.classList.add('swiped-right');
-    
-    setTimeout(() => {
-      this.currentIndex++;
-      this.renderCards();
-      this.checkForAchievements();
-    }, 300);
-  }
-  
-  checkForAchievements() {
-    const totalSwiped = this.swipedSchools.liked.length + this.swipedSchools.rejected.length;
-    const achievements = this.appState.get('achievements') || [];
-    
-    if (totalSwiped >= 20 && !achievements.includes('swipe_master')) {
-      AchievementSystem.unlock('swipe_master', this.appState);
-    }
-  }
-}
-
-// Main UI Controller
-class UIController {
-  constructor(appState) {
-    this.appState = appState;
-    this.swipeController = new SwipeController(appState);
-    this.initElements();
-    this.bindEvents();
-    this.setupSubscriptions();
-    this.applyTheme();
-  }
-  
-  initElements() {
-    // Sections
-    this.planningSection = document.getElementById('planningSection');
-    this.dashboardSection = document.getElementById('dashboardSection');
-    this.parentDashboard = document.getElementById('parentDashboard');
-    
-    // Forms
-    this.planningForm = document.getElementById('planningForm');
-    
-    // Navigation
-    this.tabs = document.querySelectorAll('.tab');
-    this.backBtn = document.getElementById('backBtn');
-    this.themeBtn = document.getElementById('themeBtn');
-    this.resetBtn = document.getElementById('resetBtn');
-    this.profileBtn = document.getElementById('profileBtn');
-    this.discoverBtn = document.getElementById('discoverBtn');
-    this.parentModeBtn = document.getElementById('parentModeBtn');
-    
-    // AI
-    this.aiBubble = document.getElementById('aiBubble');
-    this.aiMessage = document.getElementById('aiMessage');
-    
-    // Containers
-    this.reachSchools = document.getElementById('reachSchools');
-    this.matchSchools = document.getElementById('matchSchools');
-    this.safetySchools = document.getElementById('safetySchools');
-    this.mySchoolsList = document.getElementById('mySchoolsList');
-    this.scholarshipsList = document.getElementById('scholarshipsList');
-    this.aidEstimates = document.getElementById('aidEstimates');
-    this.documentsList = document.getElementById('documentsList');
-    this.timelineList = document.getElementById('timelineList');
-    this.insightsContent = document.getElementById('insightsContent');
-    
-    // Discovery
-    this.swipeContainer = document.getElementById('swipeContainer');
-  }
-  
-  bindEvents() {
-    console.log('Binding events...');
-    
-    // Form submission - ensure form exists
-    if (this.planningForm) {
-      console.log('Setting up form submit handler');
-      
-      // Remove any existing submit handlers
-      const newForm = this.planningForm.cloneNode(true);
-      this.planningForm.parentNode.replaceChild(newForm, this.planningForm);
-      this.planningForm = newForm;
-      
-      // Add fresh submit handler
-      this.planningForm.addEventListener('submit', (e) => {
-        e.preventDefault();
-        console.log('Form submit triggered!');
-        this.handlePlanningSubmit();
-      });
-      
-      // Setup input handlers for live preview
-      const inputs = this.planningForm.querySelectorAll('input, select');
-      console.log(`Found ${inputs.length} form inputs`);
-      
-      inputs.forEach(input => {
-        // For text inputs
-        if (input.type === 'text' || input.type === 'number' || input.type === 'email') {
-          input.addEventListener('input', () => {
-            console.log(`Input changed: ${input.name} = ${input.value}`);
-            this.updateMatchPreview();
-          });
-        }
-        
-        // For select dropdowns
-        if (input.tagName === 'SELECT') {
-          input.addEventListener('change', () => {
-            console.log(`Select changed: ${input.name} = ${input.value}`);
-            this.updateMatchPreview();
-          });
-        }
-        
-        // Validation on blur
-        input.addEventListener('blur', () => {
-          this.validateField(input);
-        });
-      });
-    } else {
-      console.error('Planning form not found!');
-    }
-    
-    // Navigation buttons
-    if (this.tabs) {
-      this.tabs.forEach(tab => {
-        tab.addEventListener('click', () => this.switchTab(tab.dataset.tab));
-      });
-    }
-    
-    if (this.backBtn) {
-      this.backBtn.addEventListener('click', () => this.showPlanning());
-    }
-    
-    if (this.themeBtn) {
-      this.themeBtn.addEventListener('click', () => this.toggleTheme());
-    }
-    
-    if (this.resetBtn) {
-      this.resetBtn.addEventListener('click', () => this.confirmReset());
-    }
-    
-    if (this.profileBtn) {
-      this.profileBtn.addEventListener('click', () => this.showProfile());
-    }
-    
-    if (this.discoverBtn) {
-      this.discoverBtn.addEventListener('click', () => this.openDiscovery());
-    }
-    
-    if (this.parentModeBtn) {
-      this.parentModeBtn.addEventListener('click', () => this.toggleParentMode());
-    }
-    
-    // School filters - check if elements exist before adding listeners
-    const filterState = document.getElementById('filterState');
-    const filterType = document.getElementById('filterType');
-    const searchSchool = document.getElementById('searchSchool');
-    
-    if (filterState) {
-      filterState.addEventListener('change', () => this.filterSchools());
-    }
-    if (filterType) {
-      filterType.addEventListener('change', () => this.filterSchools());
-    }
-    if (searchSchool) {
-      searchSchool.addEventListener('input', debounce(() => this.filterSchools(), 300));
-    }
-    
-    // Scholarship filters - check if elements exist
-    const filterAmount = document.getElementById('filterAmount');
-    const filterDeadline = document.getElementById('filterDeadline');
-    const filterEssay = document.getElementById('filterEssay');
-    const filterMatch = document.getElementById('filterMatch');
-    
-    if (filterAmount) {
-      filterAmount.addEventListener('change', () => this.filterScholarships());
-    }
-    if (filterDeadline) {
-      filterDeadline.addEventListener('change', () => this.filterScholarships());
-    }
-    if (filterEssay) {
-      filterEssay.addEventListener('change', () => this.filterScholarships());
-    }
-    if (filterMatch) {
-      filterMatch.addEventListener('change', () => this.filterScholarships());
-    }
-    
-    // AI Assistant
-    if (this.aiBubble) {
-      this.aiBubble.addEventListener('click', () => this.handleAIClick());
-    }
-    
-    // Keyboard navigation
-    document.addEventListener('keydown', (e) => {
-      if (e.key === 'Escape') this.closeModals();
-    });
-    
-    console.log('Event binding complete');
-  }
-  
-  setupSubscriptions() {
-    this.appState.subscribe('user', () => this.renderProfile());
-    this.appState.subscribe('mySchools', () => {
-      this.renderMySchools();
-      this.renderFinancialAid();
-      this.renderDocuments();
-      this.renderTimeline();
-      AchievementSystem.check(this.appState);
-    });
-    this.appState.subscribe('appliedScholarships', () => {
-      this.renderScholarships();
-      AchievementSystem.check(this.appState);
-    });
-    this.appState.subscribe('parentMode', (isParent) => {
-      this.updateParentMode(isParent);
-    });
-    this.appState.subscribe('ui.currentSection', (section) => {
-      if (section === 'dashboard') this.showDashboard();
-      else this.showPlanning();
-    });
-  }
-  
-  validateField(input) {
-    const field = input.closest('.field');
-    const name = input.name;
-    const value = input.value;
-    
-    // Remove previous error
-    field.classList.remove('error');
-    const existingError = field.querySelector('.error-msg');
-    if (existingError) existingError.remove();
-    
-    // Validate based on field type
-    let result = { valid: true };
-    
-    if (input.hasAttribute('required')) {
-      result = Validators.required(value, input.labels[0]?.textContent || name);
-    }
-    
-    if (result.valid && name in Validators) {
-      result = Validators[name](value);
-    }
-    
-    if (!result.valid) {
-      field.classList.add('error');
-      const error = document.createElement('div');
-      error.className = 'error-msg';
-      error.textContent = result.error;
-      field.appendChild(error);
-      return false;
-    }
-    
-    return true;
-  }
-  
-  handlePlanningSubmit() {
-    const form = this.planningForm;
-    const inputs = form.querySelectorAll('input, select');
-    let isValid = true;
-    
-    inputs.forEach(input => {
-      if (!this.validateField(input)) {
-        isValid = false;
-      }
-    });
-    
-    if (!isValid) {
-      Toast.show('Please correct the errors in the form', 'error');
-      return;
-    }
-    
-    // Create user profile
-    const formData = new FormData(form);
-    const user = {
-      firstName: formData.get('firstName'),
-      grade: formData.get('grade'),
-      homeState: formData.get('homeState'),
-      income: parseInt(formData.get('income')) || null,
-      gpa: parseFloat(formData.get('gpa')) || null,
-      sat: parseInt(formData.get('sat')) || null,
-      ap: parseInt(formData.get('ap')) || 0,
-      interests: formData.get('interests') || null
-    };
-    
-    this.appState.update('user', user);
-    this.appState.update('ui.currentSection', 'dashboard');
-    
-    Toast.show(`Welcome, ${user.firstName}! Let's find your perfect schools.`, 'success');
-    this.showAIMessage("Great profile! Check out the new Scholarships tab for automatic matching!");
-    
-    // Check initial achievements
-    if (this.isProfileComplete(user)) {
-      AchievementSystem.unlock('profile_complete', this.appState);
-    }
-  }
-  
-  isProfileComplete(user) {
-    return !!(user.firstName && user.grade && user.homeState && user.gpa);
-  }
-  
-  updateMatchPreview() {
-    console.log('updateMatchPreview called');
-    
-    const form = document.getElementById('planningForm');
-    if (!form) {
-      console.error('Form not found');
-      return;
-    }
-    
-    // Get form values directly
-    const formData = {
-      gpa: parseFloat(document.getElementById('gpa')?.value) || null,
-      sat: parseInt(document.getElementById('sat')?.value) || null,
-      ap: parseInt(document.getElementById('ap')?.value) || 0,
-      interests: document.getElementById('interests')?.value || null,
-      homeState: document.getElementById('homeState')?.value || null,
-      income: parseInt(document.getElementById('income')?.value) || null,
-      grade: document.getElementById('grade')?.value || null,
-      firstName: document.getElementById('firstName')?.value || null
-    };
-    
-    console.log('Form data:', formData);
-    
-    let schoolMatches = 0;
-    let scholarshipMatches = 0;
-    
-    // Count matching schools
-    SCHOOLS_DB.forEach(school => {
-      const score = SchoolMatcher.calculateMatch(school, formData);
-      if (score >= 40) {
-        schoolMatches++;
-      }
-    });
-    
-    // Count eligible scholarships
-    if (formData.gpa || formData.income) {
-      const scholarships = ScholarshipEngine.matchScholarships(formData);
-      scholarshipMatches = scholarships.filter(s => s.eligible).length;
-    }
-    
-    // Update the counter
-    const matchCounter = document.getElementById('matchCounter');
-    if (matchCounter) {
-      let text = '';
-      if (schoolMatches > 0 && scholarshipMatches > 0) {
-        text = `${schoolMatches} schools, ${scholarshipMatches} scholarships`;
-        matchCounter.classList.add('scholarship');
-      } else if (schoolMatches > 0) {
-        text = `${schoolMatches} potential matches`;
-        matchCounter.classList.remove('scholarship');
-      } else {
-        text = '0 potential matches';
-        matchCounter.classList.remove('scholarship');
-      }
-      
-      console.log('Setting match counter to:', text);
-      matchCounter.textContent = text;
-    } else {
-      console.error('Match counter element not found');
-    }
-  }
-  
-  showPlanning() {
-    this.planningSection.classList.remove('hidden');
-    this.dashboardSection.classList.add('hidden');
-    this.parentDashboard.classList.add('hidden');
-    this.backBtn.classList.add('hidden');
-  }
-  
-  showDashboard() {
-    this.planningSection.classList.add('hidden');
-    this.dashboardSection.classList.remove('hidden');
-    this.backBtn.classList.remove('hidden');
-    this.renderDashboard();
-  }
-  
-  renderDashboard() {
-    this.renderStats();
-    this.renderSchools();
-    this.renderMySchools();
-    this.renderScholarships();
-    this.renderFinancialAid();
-    this.renderDocuments();
-    this.renderTimeline();
-    this.renderInsights();
-  }
-  
-  renderStats() {
-    const user = this.appState.get('user');
-    const mySchools = this.appState.get('mySchools') || [];
-    const scholarships = ScholarshipEngine.matchScholarships(user);
-    
-    // Profile strength
-    let profileStrength = 0;
-    if (user) {
-      if (user.firstName) profileStrength += 20;
-      if (user.grade) profileStrength += 20;
-      if (user.homeState) profileStrength += 20;
-      if (user.gpa) profileStrength += 20;
-      if (user.sat || user.ap) profileStrength += 20;
-    }
-    
-    const progressCircle = document.getElementById('profileProgress');
-    const circumference = 2 * Math.PI * 25;
-    const offset = circumference - (profileStrength / 100) * circumference;
-    progressCircle.style.strokeDashoffset = offset;
-    document.getElementById('profilePercent').textContent = `${profileStrength}%`;
-    
-    // School count
-    document.getElementById('schoolCount').textContent = mySchools.length;
-    const schoolProgress = Math.min(100, (mySchools.length / 10) * 100);
-    document.getElementById('schoolProgress').style.width = `${schoolProgress}%`;
-    
-    // Scholarship stats
-    const eligibleScholarships = scholarships.filter(s => s.eligible);
-    document.getElementById('scholarshipCount').textContent = eligibleScholarships.length;
-    const totalPotential = ScholarshipEngine.calculateTotalPotential(eligibleScholarships);
-    document.getElementById('scholarshipValue').textContent = `${totalPotential.toLocaleString()} potential`;
-  }
-  
-  renderSchools() {
-    const user = this.appState.get('user');
-    const mySchoolIds = this.appState.get('mySchools') || [];
-    const filters = this.appState.get('filters') || {};
-    
-    const reach = [];
-    const match = [];
-    const safety = [];
-    
-    SCHOOLS_DB.forEach(school => {
-      // Apply filters
-      if (filters.state && school.state !== filters.state) return;
-      if (filters.type) {
-        if (filters.type === 'public' && school.type !== 'public') return;
-        if (filters.type === 'private' && school.type !== 'private') return;
-        if (filters.type !== 'public' && filters.type !== 'private' && school.system !== filters.type) return;
-      }
-      if (filters.search && !school.name.toLowerCase().includes(filters.search.toLowerCase()) && 
-          !school.city.toLowerCase().includes(filters.search.toLowerCase())) return;
-      
-      const category = SchoolMatcher.categorizeSchool(school, user);
-      const card = this.createSchoolCard(school, mySchoolIds.includes(school.id));
-      
-      if (category === 'reach') reach.push(card);
-      else if (category === 'match') match.push(card);
-      else safety.push(card);
-    });
-    
-    this.reachSchools.innerHTML = reach.length ? reach.join('') : this.createEmptyState('reach');
-    this.matchSchools.innerHTML = match.length ? match.join('') : this.createEmptyState('match');
-    this.safetySchools.innerHTML = safety.length ? safety.join('') : this.createEmptyState('safety');
-  }
-  
-  createSchoolCard(school, isAdded) {
-    const user = this.appState.get('user');
-    const matchScore = SchoolMatcher.calculateMatch(school, user);
-    const tuition = user?.homeState === school.state ? school.tuitionIn : school.tuitionOut;
-    
-    return `
-      <div class="school-card" data-school-id="${school.id}">
-        <span class="pill">${matchScore}% match</span>
+  let html = '<h3>Your Matched Schools:</h3>';
+  SCHOOLS_DB.forEach(school => {
+    let score = 50;
+    if (userData.gpa) score += (userData.gpa - school.avgGPA) * 20;
+    if (userData.sat) score += (userData.sat - school.avgSAT) / 10;
+    if (userData.homeState === school.state) score += 10;
+    
+    if (score >= 40) {
+      html += `<div class="school-card">
         <h4>${school.name}</h4>
-        <div class="school-meta">${school.city}, ${school.state} • ${school.system}</div>
-        <div class="school-stats">
-          <div class="stat-item">
-            <span class="stat-label">GPA</span>
-            <span class="stat-value">${school.avgGPA}</span>
-          </div>
-          <div class="stat-item">
-            <span class="stat-label">SAT</span>
-            <span class="stat-value">${school.avgSAT}</span>
-          </div>
-          <div class="stat-item">
-            <span class="stat-label">Accept</span>
-            <span class="stat-value">${school.acceptRate}%</span>
-          </div>
-        </div>
-        <div class="school-meta">Tuition: ${tuition.toLocaleString()}/year</div>
+        <p>Match Score: ${Math.round(score)}%</p>
+        <p>Tuition: $${school.tuitionIn.toLocaleString()}</p>
+      </div>`;
+    }
+  });
+  
+  list.innerHTML = html;
+}
+
+// Back to planning
+function showPlanning() {
+  document.getElementById('dashboardSection').classList.add('hidden');
+  document.getElementById('planningSection').classList.remove('hidden');
+  document.getElementById('backBtn').classList.add('hidden');
+}
+
+// Initialize on load
+document.addEventListener('DOMContentLoaded', function() {
+  console.log('Pathwise initializing...');
+  
+  // Set up form
+  const form = document.getElementById('planningForm');
+  form.onsubmit = handleFormSubmit;
+  
+  // Set up input listeners
+  const inputs = form.querySelectorAll('input, select');
+  inputs.forEach(input => {
+    input.oninput = updateMatchCounter;
+    input.onchange = updateMatchCounter;
+  });
+  
+  // Check for returning user
+  const saved = localStorage.getItem('pathwise_user');
+  if (saved) {
+    const userData = JSON.parse(saved);
+    document.getElementById('firstName').value = userData.firstName || '';
+    document.getElementById('grade').value = userData.grade || '';
+    document.getElementById('homeState').value = userData.homeState || '';
+    document.getElementById('gpa').value = userData.gpa || '';
+    document.getElementById('sat').value = userData.sat || '';
+  }
+  
+  // Initial update
+  updateMatchCounter();
+  
+  console.log('Pathwise ready!');
+});
+</script>
+
+</body>
+</html>
