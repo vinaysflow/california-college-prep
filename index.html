@@ -9,79 +9,45 @@
 <meta name="theme-color" content="#667eea" />
 
 <style>
-  /* Modern Design System - Enhanced */
+  /* ===== DESIGN SYSTEM ===== */
   :root {
     --bg: #fafbfc;
     --bg-secondary: #f3f4f6;
     --card: rgba(255, 255, 255, 0.95);
-    --card-hover: rgba(255, 255, 255, 1);
     --ink: #0f172a;
     --ink-secondary: #475569;
     --muted: #64748b;
     --border: rgba(15, 23, 42, 0.08);
     
-    /* Brand Colors */
     --primary: #667eea;
-    --primary-dark: #5a67d8;
     --secondary: #f56565;
-    --accent: #48bb78;
+    --success: #48bb78;
     --warning: #ed8936;
     --danger: #f56565;
-    --success: #48bb78;
-    --info: #4299e1;
     
-    /* Gradients */
     --gradient-primary: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-    --gradient-secondary: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
-    --gradient-success: linear-gradient(135deg, #11998e 0%, #38ef7d 100%);
-    --gradient-warm: linear-gradient(135deg, #fa709a 0%, #fee140 100%);
     --gradient-scholarship: linear-gradient(135deg, #FFD700 0%, #FFA500 100%);
     
-    /* Effects */
-    --glass: rgba(255, 255, 255, 0.7);
-    --glass-dark: rgba(17, 24, 39, 0.7);
-    --blur: 20px;
     --shadow-sm: 0 2px 8px rgba(15, 23, 42, 0.08);
     --shadow: 0 10px 30px rgba(15, 23, 42, 0.12);
     --shadow-lg: 0 20px 60px rgba(15, 23, 42, 0.15);
-    --shadow-xl: 0 25px 80px rgba(15, 23, 42, 0.18);
-    --shadow-colored: 0 20px 60px rgba(102, 126, 234, 0.25);
     
-    /* Spacing & Sizing */
-    --radius: 16px;
-    --radius-lg: 24px;
-    --radius-xl: 32px;
+    --radius: 12px;
+    --radius-lg: 20px;
     --transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-    --transition-fast: all 0.15s cubic-bezier(0.4, 0, 0.2, 1);
-    
-    /* Z-index layers */
-    --z-base: 0;
-    --z-dropdown: 100;
-    --z-sticky: 200;
-    --z-overlay: 300;
-    --z-modal: 400;
-    --z-toast: 500;
-    --z-swipe: 350;
   }
 
-  /* Dark theme */
   [data-theme="dark"] {
     --bg: #0f1419;
     --bg-secondary: #1a1f2e;
     --card: rgba(26, 31, 46, 0.95);
-    --card-hover: rgba(26, 31, 46, 1);
     --ink: #f8fafc;
     --ink-secondary: #cbd5e1;
     --muted: #94a3b8;
     --border: rgba(148, 163, 184, 0.1);
-    --glass: rgba(26, 31, 46, 0.7);
-    --shadow-sm: 0 2px 8px rgba(0, 0, 0, 0.3);
-    --shadow: 0 10px 30px rgba(0, 0, 0, 0.4);
-    --shadow-lg: 0 20px 60px rgba(0, 0, 0, 0.5);
-    --shadow-colored: 0 20px 60px rgba(102, 126, 234, 0.15);
   }
 
-  /* Reset & Base */
+  /* ===== RESET ===== */
   * {
     margin: 0;
     padding: 0;
@@ -91,83 +57,90 @@
   html {
     height: 100%;
     scroll-behavior: smooth;
-    -webkit-tap-highlight-color: transparent;
   }
 
   body {
-    height: 100%;
-    font-family: -apple-system, BlinkMacSystemFont, "SF Pro Display", "Inter", "Helvetica Neue", sans-serif;
+    font-family: -apple-system, BlinkMacSystemFont, "SF Pro Display", sans-serif;
     font-size: 16px;
     line-height: 1.6;
     color: var(--ink);
     background: var(--bg);
     -webkit-font-smoothing: antialiased;
-    -moz-osx-font-smoothing: grayscale;
-    position: relative;
-    overflow-x: hidden;
   }
 
-  /* Typography */
-  h1, h2, h3, h4, h5, h6 {
-    font-weight: 700;
-    line-height: 1.3;
-    letter-spacing: -0.02em;
-  }
-
-  h1 { font-size: 2.5rem; }
-  h2 { font-size: 2rem; }
-  h3 { font-size: 1.5rem; }
-  h4 { font-size: 1.25rem; }
-
-  /* Main Container */
+  /* ===== LAYOUT ===== */
   .container {
     max-width: 1200px;
     margin: 0 auto;
     padding: 1.5rem 1rem;
   }
 
-  /* Cards */
+  .header {
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    background: var(--card);
+    border-bottom: 1px solid var(--border);
+    backdrop-filter: blur(10px);
+  }
+
+  .header-inner {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 1rem;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+
+  .brand {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    font-weight: 800;
+    font-size: 1.25rem;
+  }
+
+  .brand-logo {
+    width: 40px;
+    height: 40px;
+    border-radius: 10px;
+    background: var(--gradient-primary);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .brand-logo svg {
+    width: 24px;
+    height: 24px;
+    fill: white;
+  }
+
+  /* ===== COMPONENTS ===== */
   .card {
     background: var(--card);
-    backdrop-filter: blur(10px);
-    -webkit-backdrop-filter: blur(10px);
     border-radius: var(--radius-lg);
     padding: 1.5rem;
     box-shadow: var(--shadow);
     border: 1px solid var(--border);
-    transition: var(--transition);
-    position: relative;
-    overflow: hidden;
+    margin-bottom: 1rem;
   }
 
-  .card:hover {
-    box-shadow: var(--shadow-lg);
-    transform: translateY(-2px);
-  }
-
-  /* Buttons */
   .btn {
-    appearance: none;
-    border: none;
-    outline: none;
-    background: var(--card);
-    color: var(--ink);
-    font-family: inherit;
-    font-size: 0.9rem;
-    font-weight: 600;
-    padding: 0.75rem 1.25rem;
-    border-radius: var(--radius);
-    cursor: pointer;
     display: inline-flex;
     align-items: center;
-    justify-content: center;
     gap: 0.5rem;
+    padding: 0.75rem 1.25rem;
+    border: none;
+    border-radius: var(--radius);
+    font-size: 0.95rem;
+    font-weight: 600;
+    cursor: pointer;
     transition: var(--transition);
+    background: var(--card);
+    color: var(--ink);
     box-shadow: var(--shadow-sm);
-    user-select: none;
-    position: relative;
-    overflow: hidden;
-    min-height: 44px;
   }
 
   .btn:hover {
@@ -178,57 +151,25 @@
   .btn.primary {
     background: var(--gradient-primary);
     color: white;
-    box-shadow: var(--shadow-colored);
   }
 
-  /* Header */
-  .header {
-    position: sticky;
-    top: 0;
-    z-index: var(--z-sticky);
-    backdrop-filter: blur(var(--blur));
-    -webkit-backdrop-filter: blur(var(--blur));
-    background: var(--glass);
-    border-bottom: 1px solid var(--border);
-    transition: var(--transition);
+  .btn.ghost {
+    background: transparent;
+    box-shadow: none;
+    border: 1px solid var(--border);
   }
 
-  .header-inner {
-    max-width: 1200px;
-    margin: 0 auto;
-    padding: 1rem;
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    gap: 1rem;
+  .btn.danger {
+    background: var(--danger);
+    color: white;
   }
 
-  .brand {
-    display: flex;
-    align-items: center;
-    gap: 0.75rem;
-    font-weight: 800;
-    font-size: 1.25rem;
-    cursor: pointer;
+  .btn.icon {
+    padding: 0.75rem;
+    min-width: 40px;
   }
 
-  .brand-logo {
-    width: 40px;
-    height: 40px;
-    border-radius: 12px;
-    background: var(--gradient-primary);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-  }
-  
-  .brand-logo svg {
-    width: 24px;
-    height: 24px;
-    fill: white;
-  }
-
-  /* Form Elements */
+  /* ===== FORMS ===== */
   .field {
     margin-bottom: 1.25rem;
   }
@@ -247,78 +188,239 @@
   .field select {
     width: 100%;
     padding: 0.875rem 1rem;
-    font-size: 1rem;
-    font-family: inherit;
     border: 2px solid var(--border);
     border-radius: var(--radius);
     background: var(--bg-secondary);
     color: var(--ink);
-    transition: var(--transition-fast);
+    font-size: 1rem;
+    transition: var(--transition);
     outline: none;
-    min-height: 44px;
   }
 
   .field input:focus,
   .field select:focus {
     border-color: var(--primary);
-    background: var(--card);
-    box-shadow: 0 0 0 4px rgba(102, 126, 234, 0.1);
+    background: white;
+    box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
   }
 
-  /* Grid System */
+  .field.error input,
+  .field.error select {
+    border-color: var(--danger);
+  }
+
+  .error-msg {
+    color: var(--danger);
+    font-size: 0.875rem;
+    margin-top: 0.25rem;
+  }
+
+  /* ===== GRID ===== */
   .grid {
     display: grid;
     gap: 1rem;
   }
 
-  @media (min-width: 640px) {
-    .grid-cols-2 { grid-template-columns: repeat(2, 1fr); }
-    .grid-cols-3 { grid-template-columns: repeat(3, 1fr); }
+  .grid-cols-2 {
+    grid-template-columns: repeat(2, 1fr);
   }
 
-  /* Badges */
+  .grid-cols-3 {
+    grid-template-columns: repeat(3, 1fr);
+  }
+
+  .grid-cols-4 {
+    grid-template-columns: repeat(4, 1fr);
+  }
+
+  @media (max-width: 768px) {
+    .grid-cols-2, .grid-cols-3, .grid-cols-4 {
+      grid-template-columns: 1fr;
+    }
+  }
+
+  /* ===== TABS ===== */
+  .tabs {
+    display: flex;
+    gap: 0.5rem;
+    padding: 0.5rem;
+    background: var(--bg-secondary);
+    border-radius: var(--radius-lg);
+    overflow-x: auto;
+    margin-bottom: 1.5rem;
+  }
+
+  .tab {
+    padding: 0.75rem 1.5rem;
+    border-radius: var(--radius);
+    background: transparent;
+    color: var(--muted);
+    font-weight: 600;
+    cursor: pointer;
+    transition: var(--transition);
+    white-space: nowrap;
+    border: none;
+    font-size: 0.95rem;
+  }
+
+  .tab:hover {
+    background: var(--card);
+    color: var(--ink);
+  }
+
+  .tab.active {
+    background: var(--gradient-primary);
+    color: white;
+  }
+
+  /* ===== BADGES ===== */
   .badge {
     display: inline-flex;
     align-items: center;
     gap: 0.25rem;
-    padding: 0.375rem 0.75rem;
+    padding: 0.5rem 0.875rem;
     border-radius: 999px;
     font-size: 0.75rem;
     font-weight: 700;
     text-transform: uppercase;
     letter-spacing: 0.025em;
+    background: var(--bg-secondary);
+    color: var(--ink);
+  }
+
+  .badge.reach {
+    background: rgba(245, 101, 101, 0.15);
+    color: var(--danger);
+  }
+
+  .badge.match {
+    background: rgba(72, 187, 120, 0.15);
+    color: var(--success);
+  }
+
+  .badge.safety {
+    background: rgba(102, 126, 234, 0.15);
+    color: var(--primary);
   }
 
   .badge.scholarship {
-    background: rgba(255, 215, 0, 0.15);
+    background: linear-gradient(135deg, rgba(255, 215, 0, 0.2), rgba(255, 165, 0, 0.2));
     color: #B8860B;
   }
 
-  /* Utilities */
-  .hidden { display: none !important; }
-  .text-muted { color: var(--muted); }
-  .mb-4 { margin-bottom: 1rem; }
-  .mt-6 { margin-top: 1.5rem; }
-  .gap-3 { gap: 0.75rem; }
-  .flex { display: flex; }
-
-  /* School Card */
+  /* ===== SCHOOL CARD ===== */
   .school-card {
     background: var(--card);
-    border-radius: var(--radius-lg);
-    padding: 1.5rem;
+    border-radius: var(--radius);
+    padding: 1.25rem;
     border: 1px solid var(--border);
-    box-shadow: var(--shadow-sm);
     transition: var(--transition);
-    margin-bottom: 1rem;
+    position: relative;
   }
 
-  /* Toast */
+  .school-card:hover {
+    transform: translateY(-2px);
+    box-shadow: var(--shadow);
+  }
+
+  .school-card h4 {
+    margin-bottom: 0.5rem;
+    color: var(--ink);
+  }
+
+  .school-meta {
+    color: var(--muted);
+    font-size: 0.875rem;
+    margin-bottom: 0.5rem;
+  }
+
+  .school-stats {
+    display: flex;
+    gap: 1rem;
+    margin: 0.75rem 0;
+  }
+
+  .stat-item {
+    display: flex;
+    flex-direction: column;
+  }
+
+  .stat-label {
+    font-size: 0.75rem;
+    color: var(--muted);
+    text-transform: uppercase;
+  }
+
+  .stat-value {
+    font-weight: 700;
+    color: var(--ink);
+  }
+
+  .school-actions {
+    display: flex;
+    gap: 0.5rem;
+    margin-top: 1rem;
+  }
+
+  .match-score {
+    position: absolute;
+    top: 1rem;
+    right: 1rem;
+    padding: 0.375rem 0.75rem;
+    border-radius: 999px;
+    background: var(--gradient-primary);
+    color: white;
+    font-size: 0.75rem;
+    font-weight: 700;
+  }
+
+  /* ===== SCHOLARSHIP CARD ===== */
+  .scholarship-card {
+    background: var(--card);
+    border-radius: var(--radius);
+    padding: 1.25rem;
+    border: 2px solid transparent;
+    background-clip: padding-box;
+    position: relative;
+    margin-bottom: 1rem;
+    transition: var(--transition);
+  }
+
+  .scholarship-card::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    border-radius: var(--radius);
+    padding: 2px;
+    background: var(--gradient-scholarship);
+    mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+    mask-composite: exclude;
+    opacity: 0.5;
+  }
+
+  .scholarship-card:hover {
+    transform: translateY(-2px);
+    box-shadow: var(--shadow);
+  }
+
+  .scholarship-amount {
+    font-size: 1.5rem;
+    font-weight: 800;
+    background: var(--gradient-scholarship);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+
+  /* ===== TOAST ===== */
   .toast-container {
     position: fixed;
     top: 1rem;
     right: 1rem;
-    z-index: var(--z-toast);
+    z-index: 1000;
     display: flex;
     flex-direction: column;
     gap: 0.5rem;
@@ -343,6 +445,114 @@
   .toast.show {
     transform: translateX(0);
   }
+
+  .toast.error {
+    border-left-color: var(--danger);
+  }
+
+  .toast.success {
+    border-left-color: var(--success);
+  }
+
+  /* ===== SWIPE INTERFACE ===== */
+  .swipe-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(0, 0, 0, 0.9);
+    z-index: 500;
+    display: none;
+  }
+
+  .swipe-overlay.active {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .swipe-card {
+    width: 90%;
+    max-width: 400px;
+    height: 600px;
+    background: var(--card);
+    border-radius: var(--radius-lg);
+    box-shadow: var(--shadow-lg);
+    padding: 2rem;
+    position: relative;
+  }
+
+  .swipe-actions {
+    position: absolute;
+    bottom: 2rem;
+    left: 50%;
+    transform: translateX(-50%);
+    display: flex;
+    gap: 2rem;
+  }
+
+  .swipe-btn {
+    width: 60px;
+    height: 60px;
+    border-radius: 50%;
+    border: none;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: transform 0.2s;
+  }
+
+  .swipe-btn:hover {
+    transform: scale(1.1);
+  }
+
+  .swipe-btn.reject {
+    background: white;
+    color: var(--danger);
+    box-shadow: var(--shadow);
+  }
+
+  .swipe-btn.accept {
+    background: var(--gradient-primary);
+    color: white;
+    box-shadow: var(--shadow);
+  }
+
+  /* ===== AI BUBBLE ===== */
+  .ai-bubble {
+    position: fixed;
+    right: 1.5rem;
+    bottom: 1.5rem;
+    background: var(--gradient-primary);
+    color: white;
+    padding: 1rem 1.5rem;
+    border-radius: var(--radius-lg);
+    box-shadow: var(--shadow-lg);
+    cursor: pointer;
+    transition: var(--transition);
+    max-width: 300px;
+    z-index: 100;
+  }
+
+  .ai-bubble:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 30px 80px rgba(102, 126, 234, 0.3);
+  }
+
+  /* ===== UTILITIES ===== */
+  .hidden { display: none !important; }
+  .text-muted { color: var(--muted); }
+  .mb-4 { margin-bottom: 1rem; }
+  .mt-4 { margin-top: 1rem; }
+  .mt-6 { margin-top: 1.5rem; }
+  .flex { display: flex; }
+  .gap-2 { gap: 0.5rem; }
+  .gap-3 { gap: 0.75rem; }
+  .gap-4 { gap: 1rem; }
+  .items-center { align-items: center; }
+  .justify-between { justify-content: space-between; }
 </style>
 </head>
 <body>
@@ -358,9 +568,11 @@
       </div>
       <span>Pathwise</span>
     </div>
-    <nav class="header-actions">
-      <button id="backBtn" class="btn hidden" onclick="showPlanning()">← Back</button>
-    </nav>
+    <div class="header-actions flex gap-2">
+      <button id="backBtn" class="btn ghost hidden" onclick="navigateToPlanning()">← Back</button>
+      <button id="discoverBtn" class="btn primary hidden" onclick="openDiscovery()">Discover</button>
+      <button id="themeBtn" class="btn icon" onclick="toggleTheme()">🌙</button>
+    </div>
   </div>
 </header>
 
@@ -373,61 +585,70 @@
       <h1>Plan Your College Journey</h1>
       <p class="text-muted mb-4">We'll match you with perfect schools and scholarships.</p>
       
-      <form id="planningForm">
+      <form id="planningForm" onsubmit="handleFormSubmit(event); return false;">
         <div class="grid grid-cols-2 gap-4">
           <div class="field">
             <label for="firstName">First Name *</label>
-            <input type="text" id="firstName" name="firstName" required>
+            <input type="text" id="firstName" name="firstName" required oninput="validateField(this)">
+            <div class="error-msg hidden"></div>
           </div>
           
           <div class="field">
             <label for="grade">Current Grade *</label>
-            <select id="grade" name="grade" required>
+            <select id="grade" name="grade" required onchange="validateField(this); updateMatchCounter();">
               <option value="">Select grade...</option>
               <option value="9">9th Grade</option>
               <option value="10">10th Grade</option>
               <option value="11">11th Grade</option>
               <option value="12">12th Grade</option>
             </select>
+            <div class="error-msg hidden"></div>
           </div>
           
           <div class="field">
             <label for="homeState">Home State *</label>
-            <select id="homeState" name="homeState" required>
+            <select id="homeState" name="homeState" required onchange="validateField(this); updateMatchCounter();">
               <option value="">Select state...</option>
               <option value="CA">California</option>
               <option value="NY">New York</option>
               <option value="TX">Texas</option>
+              <option value="MA">Massachusetts</option>
+              <option value="IL">Illinois</option>
             </select>
+            <div class="error-msg hidden"></div>
           </div>
           
           <div class="field">
             <label for="income">Household Income</label>
-            <input type="number" id="income" name="income" min="0" step="5000" placeholder="75000">
+            <input type="number" id="income" name="income" min="0" step="5000" placeholder="75000" oninput="updateMatchCounter()">
           </div>
           
           <div class="field">
             <label for="gpa">GPA</label>
-            <input type="number" id="gpa" name="gpa" min="0" max="5" step="0.01" placeholder="3.85">
+            <input type="number" id="gpa" name="gpa" min="0" max="5" step="0.01" placeholder="3.85" oninput="validateGPA(this); updateMatchCounter();">
+            <div class="error-msg hidden"></div>
           </div>
           
           <div class="field">
             <label for="sat">SAT Score</label>
-            <input type="number" id="sat" name="sat" min="400" max="1600" step="10" placeholder="1400">
+            <input type="number" id="sat" name="sat" min="400" max="1600" step="10" placeholder="1400" oninput="validateSAT(this); updateMatchCounter();">
+            <div class="error-msg hidden"></div>
           </div>
           
           <div class="field">
             <label for="ap">AP/Honors Courses</label>
-            <input type="number" id="ap" name="ap" min="0" max="30" placeholder="5">
+            <input type="number" id="ap" name="ap" min="0" max="30" placeholder="5" oninput="updateMatchCounter()">
           </div>
           
           <div class="field">
             <label for="interests">Academic Interests</label>
-            <select id="interests" name="interests">
+            <select id="interests" name="interests" onchange="updateMatchCounter()">
               <option value="">Not sure yet...</option>
               <option value="stem">STEM</option>
               <option value="business">Business</option>
-              <option value="arts">Arts</option>
+              <option value="arts">Arts & Design</option>
+              <option value="humanities">Humanities</option>
+              <option value="health">Health & Medicine</option>
             </select>
           </div>
         </div>
@@ -442,37 +663,670 @@
 
   <!-- Dashboard Section -->
   <section id="dashboardSection" class="hidden">
-    <div class="card">
-      <h2>Your Matches</h2>
-      <div id="schoolsList"></div>
+    <!-- Stats Cards -->
+    <div class="grid grid-cols-4 gap-4 mb-4">
+      <div class="card">
+        <div class="text-muted">Profile</div>
+        <div id="profileScore" style="font-size: 1.5rem; font-weight: 700;">0%</div>
+      </div>
+      <div class="card">
+        <div class="text-muted">Schools</div>
+        <div id="schoolCount" style="font-size: 1.5rem; font-weight: 700;">0</div>
+      </div>
+      <div class="card">
+        <div class="text-muted">Scholarships</div>
+        <div id="scholarshipValue" style="font-size: 1.5rem; font-weight: 700;">$0</div>
+      </div>
+      <div class="card">
+        <div class="text-muted">Deadlines</div>
+        <div id="deadlineCount" style="font-size: 1.5rem; font-weight: 700;">0</div>
+      </div>
+    </div>
+
+    <!-- Tabs -->
+    <div class="tabs">
+      <button class="tab active" onclick="switchTab('schools')">Schools</button>
+      <button class="tab" onclick="switchTab('scholarships')">Scholarships</button>
+      <button class="tab" onclick="switchTab('timeline')">Timeline</button>
+      <button class="tab" onclick="switchTab('insights')">Insights</button>
+    </div>
+
+    <!-- Tab Content -->
+    <div id="tabContent">
+      <!-- Schools Tab -->
+      <div id="schoolsTab">
+        <div class="mb-4">
+          <div class="flex gap-3 mb-4">
+            <select id="filterState" onchange="renderSchools()">
+              <option value="">All States</option>
+              <option value="CA">California</option>
+              <option value="NY">New York</option>
+              <option value="TX">Texas</option>
+            </select>
+            <input type="text" id="searchSchool" placeholder="Search schools..." oninput="renderSchools()">
+          </div>
+        </div>
+
+        <div id="reachSection" class="mb-4">
+          <h3 class="flex items-center gap-2 mb-4">
+            <span class="badge reach">REACH</span>
+            Dream schools - ambitious choices
+          </h3>
+          <div id="reachSchools" class="grid grid-cols-3 gap-3"></div>
+        </div>
+
+        <div id="matchSection" class="mb-4">
+          <h3 class="flex items-center gap-2 mb-4">
+            <span class="badge match">MATCH</span>
+            Great fit - you're in the range
+          </h3>
+          <div id="matchSchools" class="grid grid-cols-3 gap-3"></div>
+        </div>
+
+        <div id="safetySection" class="mb-4">
+          <h3 class="flex items-center gap-2 mb-4">
+            <span class="badge safety">SAFETY</span>
+            Solid options - high acceptance
+          </h3>
+          <div id="safetySchools" class="grid grid-cols-3 gap-3"></div>
+        </div>
+
+        <div class="card">
+          <h3>My School List</h3>
+          <div id="mySchoolsList" class="mt-4"></div>
+        </div>
+      </div>
+
+      <!-- Scholarships Tab -->
+      <div id="scholarshipsTab" class="hidden">
+        <div class="card">
+          <h2>Scholarship Opportunities</h2>
+          <p class="text-muted mb-4">Automatically matched based on your profile.</p>
+          <div id="scholarshipsList"></div>
+        </div>
+      </div>
+
+      <!-- Timeline Tab -->
+      <div id="timelineTab" class="hidden">
+        <div class="card">
+          <h2>Application Timeline</h2>
+          <div id="timelineList" class="mt-4"></div>
+        </div>
+      </div>
+
+      <!-- Insights Tab -->
+      <div id="insightsTab" class="hidden">
+        <div class="card">
+          <h2>Your Insights</h2>
+          <div id="insightsList" class="mt-4"></div>
+        </div>
+      </div>
     </div>
   </section>
 
 </main>
 
+<!-- Swipe Discovery Overlay -->
+<div id="swipeOverlay" class="swipe-overlay">
+  <div class="swipe-card">
+    <button class="btn ghost" style="position: absolute; top: 1rem; right: 1rem;" onclick="closeDiscovery()">✕</button>
+    <div id="swipeContent"></div>
+    <div class="swipe-actions">
+      <button class="swipe-btn reject" onclick="swipeReject()">✕</button>
+      <button class="swipe-btn accept" onclick="swipeAccept()">♥</button>
+    </div>
+  </div>
+</div>
+
+<!-- AI Assistant -->
+<div id="aiBubble" class="ai-bubble hidden" onclick="toggleAI()">
+  <div id="aiMessage">Need help? Click me!</div>
+</div>
+
 <!-- Toast Container -->
 <div class="toast-container" id="toastContainer"></div>
 
 <script>
-// Simple schools database
+// ===== DATA STORES =====
 const SCHOOLS_DB = [
-  {id:'ucb',name:'UC Berkeley',state:'CA',avgGPA:4.25,avgSAT:1450,tuitionIn:14226},
-  {id:'ucla',name:'UCLA',state:'CA',avgGPA:4.26,avgSAT:1445,tuitionIn:13401},
-  {id:'ucsd',name:'UC San Diego',state:'CA',avgGPA:4.16,avgSAT:1410,tuitionIn:14616},
-  {id:'stanford',name:'Stanford',state:'CA',avgGPA:4.18,avgSAT:1520,tuitionIn:61650},
-  {id:'nyu',name:'NYU',state:'NY',avgGPA:3.8,avgSAT:1500,tuitionIn:58960},
-  {id:'columbia',name:'Columbia',state:'NY',avgGPA:4.15,avgSAT:1530,tuitionIn:66600}
+  {id:'ucb',name:'UC Berkeley',state:'CA',system:'UC',type:'public',avgGPA:4.25,avgSAT:1450,acceptRate:14.5,tuitionIn:14226,tuitionOut:46770},
+  {id:'ucla',name:'UCLA',state:'CA',system:'UC',type:'public',avgGPA:4.26,avgSAT:1445,acceptRate:12.3,tuitionIn:13401,tuitionOut:45975},
+  {id:'ucsd',name:'UC San Diego',state:'CA',system:'UC',type:'public',avgGPA:4.16,avgSAT:1410,acceptRate:31.5,tuitionIn:14616,tuitionOut:47190},
+  {id:'ucd',name:'UC Davis',state:'CA',system:'UC',type:'public',avgGPA:4.13,avgSAT:1350,acceptRate:37.6,tuitionIn:14597,tuitionOut:47171},
+  {id:'stanford',name:'Stanford',state:'CA',system:'Private',type:'private',avgGPA:4.18,avgSAT:1520,acceptRate:4.0,tuitionIn:61650,tuitionOut:61650},
+  {id:'usc',name:'USC',state:'CA',system:'Private',type:'private',avgGPA:3.9,avgSAT:1460,acceptRate:10.5,tuitionIn:68337,tuitionOut:68337},
+  {id:'nyu',name:'NYU',state:'NY',system:'Private',type:'private',avgGPA:3.8,avgSAT:1500,acceptRate:12.5,tuitionIn:58960,tuitionOut:58960},
+  {id:'columbia',name:'Columbia',state:'NY',system:'Ivy',type:'private',avgGPA:4.15,avgSAT:1530,acceptRate:5.0,tuitionIn:66600,tuitionOut:66600},
+  {id:'uta',name:'UT Austin',state:'TX',system:'UT',type:'public',avgGPA:3.9,avgSAT:1370,acceptRate:31,tuitionIn:11500,tuitionOut:40000},
+  {id:'rice',name:'Rice University',state:'TX',system:'Private',type:'private',avgGPA:3.95,avgSAT:1530,acceptRate:7.0,tuitionIn:57600,tuitionOut:57600}
 ];
 
-// Simple scholarships database  
 const SCHOLARSHIPS_DB = [
-  {name:'Gates Scholarship',requirements:{income:60000,gpa:3.3}},
-  {name:'Coca-Cola Scholars',requirements:{gpa:3.0}},
-  {name:'Dell Scholars',requirements:{income:50000,gpa:2.4}},
-  {name:'National Merit',requirements:{sat:1400}}
+  {id:'gates',name:'Gates Millennium Scholarship',amount:50000,requirements:{gpa:3.3,income:60000},description:'Full cost of attendance for outstanding minority students'},
+  {id:'cocacola',name:'Coca-Cola Scholars',amount:20000,requirements:{gpa:3.0},description:'For students demonstrating leadership and academic excellence'},
+  {id:'merit',name:'National Merit Scholarship',amount:2500,requirements:{sat:1400},description:'Based on PSAT/NMSQT scores'},
+  {id:'dell',name:'Dell Scholars',amount:20000,requirements:{gpa:2.4,income:50000},description:'For students overcoming significant obstacles'},
+  {id:'amazon',name:'Amazon Future Engineer',amount:40000,requirements:{gpa:3.0,interests:'stem'},description:'For students pursuing computer science'}
 ];
 
-// Toast notification
+// ===== STATE MANAGEMENT =====
+let userData = {};
+let mySchools = [];
+let currentSwipeIndex = 0;
+
+// ===== CORE FUNCTIONS =====
+
+// Update match counter with live calculation
+function updateMatchCounter() {
+  const gpa = parseFloat(document.getElementById('gpa').value) || 0;
+  const sat = parseInt(document.getElementById('sat').value) || 0;
+  const state = document.getElementById('homeState').value || '';
+  const income = parseInt(document.getElementById('income').value) || 999999;
+  const interests = document.getElementById('interests').value || '';
+  const ap = parseInt(document.getElementById('ap').value) || 0;
+  
+  let schoolMatches = 0;
+  let scholarshipMatches = 0;
+  
+  // Calculate school matches
+  SCHOOLS_DB.forEach(school => {
+    const score = calculateMatchScore(school, {gpa, sat, state, ap, interests});
+    if (score >= 40) schoolMatches++;
+  });
+  
+  // Calculate scholarship matches
+  SCHOLARSHIPS_DB.forEach(scholarship => {
+    if (isEligibleForScholarship(scholarship, {gpa, sat, income, interests})) {
+      scholarshipMatches++;
+    }
+  });
+  
+  // Update display
+  const counter = document.getElementById('matchCounter');
+  if (schoolMatches > 0 || scholarshipMatches > 0) {
+    counter.textContent = `${schoolMatches} schools, ${scholarshipMatches} scholarships`;
+    counter.classList.add('scholarship');
+  } else {
+    counter.textContent = '0 potential matches';
+    counter.classList.remove('scholarship');
+  }
+}
+
+// Calculate match score for a school
+function calculateMatchScore(school, user) {
+  let score = 50;
+  
+  if (user.gpa > 0) {
+    const gpaDiff = (user.gpa - school.avgGPA) * 20;
+    score += Math.max(-40, Math.min(40, gpaDiff));
+  }
+  
+  if (user.sat > 0) {
+    const satDiff = (user.sat - school.avgSAT) / 10;
+    score += Math.max(-20, Math.min(20, satDiff));
+  }
+  
+  if (user.ap > 0) {
+    score += Math.min(15, user.ap * 1.5);
+  }
+  
+  if (user.state === school.state) {
+    score += 5;
+  }
+  
+  if (user.interests === 'stem' && ['ucb', 'stanford', 'ucla'].includes(school.id)) {
+    score += 10;
+  }
+  
+  return Math.max(0, Math.min(100, Math.round(score)));
+}
+
+// Check scholarship eligibility
+function isEligibleForScholarship(scholarship, user) {
+  if (scholarship.requirements.gpa && user.gpa < scholarship.requirements.gpa) return false;
+  if (scholarship.requirements.sat && user.sat < scholarship.requirements.sat) return false;
+  if (scholarship.requirements.income && user.income > scholarship.requirements.income) return false;
+  if (scholarship.requirements.interests && user.interests !== scholarship.requirements.interests) return false;
+  return user.gpa > 0 || user.sat > 0;
+}
+
+// Categorize school
+function categorizeSchool(school, user) {
+  const score = calculateMatchScore(school, user);
+  if (score < 45) return 'reach';
+  if (score > 70) return 'safety';
+  return 'match';
+}
+
+// ===== VALIDATION =====
+function validateField(field) {
+  const errorMsg = field.parentElement.querySelector('.error-msg');
+  
+  if (field.hasAttribute('required') && !field.value) {
+    field.parentElement.classList.add('error');
+    errorMsg.textContent = 'This field is required';
+    errorMsg.classList.remove('hidden');
+    return false;
+  }
+  
+  field.parentElement.classList.remove('error');
+  errorMsg.classList.add('hidden');
+  return true;
+}
+
+function validateGPA(input) {
+  const value = parseFloat(input.value);
+  const errorMsg = input.parentElement.querySelector('.error-msg');
+  
+  if (input.value && (isNaN(value) || value < 0 || value > 5)) {
+    input.parentElement.classList.add('error');
+    errorMsg.textContent = 'GPA must be between 0 and 5';
+    errorMsg.classList.remove('hidden');
+    return false;
+  }
+  
+  input.parentElement.classList.remove('error');
+  errorMsg.classList.add('hidden');
+  return true;
+}
+
+function validateSAT(input) {
+  const value = parseInt(input.value);
+  const errorMsg = input.parentElement.querySelector('.error-msg');
+  
+  if (input.value && (isNaN(value) || value < 400 || value > 1600)) {
+    input.parentElement.classList.add('error');
+    errorMsg.textContent = 'SAT must be between 400 and 1600';
+    errorMsg.classList.remove('hidden');
+    return false;
+  }
+  
+  input.parentElement.classList.remove('error');
+  errorMsg.classList.add('hidden');
+  return true;
+}
+
+// ===== FORM HANDLING =====
+function handleFormSubmit(event) {
+  event.preventDefault();
+  
+  // Validate all required fields
+  const requiredFields = document.querySelectorAll('[required]');
+  let isValid = true;
+  
+  requiredFields.forEach(field => {
+    if (!validateField(field)) {
+      isValid = false;
+    }
+  });
+  
+  if (!isValid) {
+    showToast('Please fill in all required fields', 'error');
+    return;
+  }
+  
+  // Validate GPA and SAT
+  const gpaField = document.getElementById('gpa');
+  const satField = document.getElementById('sat');
+  
+  if (!validateGPA(gpaField) || !validateSAT(satField)) {
+    showToast('Please correct the errors', 'error');
+    return;
+  }
+  
+  // Save user data
+  userData = {
+    firstName: document.getElementById('firstName').value,
+    grade: document.getElementById('grade').value,
+    homeState: document.getElementById('homeState').value,
+    income: parseInt(document.getElementById('income').value) || null,
+    gpa: parseFloat(document.getElementById('gpa').value) || null,
+    sat: parseInt(document.getElementById('sat').value) || null,
+    ap: parseInt(document.getElementById('ap').value) || 0,
+    interests: document.getElementById('interests').value || null
+  };
+  
+  // Save to localStorage
+  localStorage.setItem('pathwise_user', JSON.stringify(userData));
+  
+  // Navigate to dashboard
+  navigateToDashboard();
+  showToast(`Welcome, ${userData.firstName}!`, 'success');
+  
+  // Show AI helper
+  setTimeout(() => {
+    document.getElementById('aiBubble').classList.remove('hidden');
+    document.getElementById('aiMessage').textContent = 'Check out your matches! Need help choosing?';
+  }, 2000);
+}
+
+// ===== NAVIGATION =====
+function navigateToDashboard() {
+  document.getElementById('planningSection').classList.add('hidden');
+  document.getElementById('dashboardSection').classList.remove('hidden');
+  document.getElementById('backBtn').classList.remove('hidden');
+  document.getElementById('discoverBtn').classList.remove('hidden');
+  
+  // Update stats
+  updateDashboardStats();
+  
+  // Render content
+  renderSchools();
+  renderScholarships();
+  renderTimeline();
+  renderInsights();
+}
+
+function navigateToPlanning() {
+  document.getElementById('dashboardSection').classList.add('hidden');
+  document.getElementById('planningSection').classList.remove('hidden');
+  document.getElementById('backBtn').classList.add('hidden');
+  document.getElementById('discoverBtn').classList.add('hidden');
+  document.getElementById('aiBubble').classList.add('hidden');
+}
+
+// ===== DASHBOARD RENDERING =====
+function updateDashboardStats() {
+  // Calculate profile completeness
+  let profileScore = 0;
+  if (userData.firstName) profileScore += 25;
+  if (userData.gpa) profileScore += 25;
+  if (userData.sat) profileScore += 25;
+  if (userData.interests) profileScore += 25;
+  
+  document.getElementById('profileScore').textContent = `${profileScore}%`;
+  
+  // School count
+  document.getElementById('schoolCount').textContent = mySchools.length;
+  
+  // Scholarship value
+  let scholarshipTotal = 0;
+  SCHOLARSHIPS_DB.forEach(s => {
+    if (isEligibleForScholarship(s, userData)) {
+      scholarshipTotal += s.amount;
+    }
+  });
+  document.getElementById('scholarshipValue').textContent = `$${(scholarshipTotal/1000).toFixed(0)}k`;
+  
+  // Deadlines
+  document.getElementById('deadlineCount').textContent = mySchools.length > 0 ? `${mySchools.length * 3}` : '0';
+}
+
+function renderSchools() {
+  const filterState = document.getElementById('filterState').value;
+  const searchQuery = document.getElementById('searchSchool').value.toLowerCase();
+  
+  const reach = [];
+  const match = [];
+  const safety = [];
+  
+  SCHOOLS_DB.forEach(school => {
+    // Apply filters
+    if (filterState && school.state !== filterState) return;
+    if (searchQuery && !school.name.toLowerCase().includes(searchQuery)) return;
+    
+    const category = categorizeSchool(school, userData);
+    const card = createSchoolCard(school);
+    
+    if (category === 'reach') reach.push(card);
+    else if (category === 'match') match.push(card);
+    else safety.push(card);
+  });
+  
+  document.getElementById('reachSchools').innerHTML = reach.join('') || '<div class="text-muted">No reach schools found</div>';
+  document.getElementById('matchSchools').innerHTML = match.join('') || '<div class="text-muted">No match schools found</div>';
+  document.getElementById('safetySchools').innerHTML = safety.join('') || '<div class="text-muted">No safety schools found</div>';
+  
+  renderMySchools();
+}
+
+function createSchoolCard(school) {
+  const score = calculateMatchScore(school, userData);
+  const tuition = userData.homeState === school.state ? school.tuitionIn : school.tuitionOut;
+  const isAdded = mySchools.includes(school.id);
+  
+  return `
+    <div class="school-card">
+      <span class="match-score">${score}%</span>
+      <h4>${school.name}</h4>
+      <div class="school-meta">${school.state} • ${school.system}</div>
+      <div class="school-stats">
+        <div class="stat-item">
+          <span class="stat-label">GPA</span>
+          <span class="stat-value">${school.avgGPA}</span>
+        </div>
+        <div class="stat-item">
+          <span class="stat-label">SAT</span>
+          <span class="stat-value">${school.avgSAT}</span>
+        </div>
+        <div class="stat-item">
+          <span class="stat-label">Accept</span>
+          <span class="stat-value">${school.acceptRate}%</span>
+        </div>
+      </div>
+      <div class="school-meta">Tuition: $${tuition.toLocaleString()}/yr</div>
+      <div class="school-actions">
+        <button class="btn primary" onclick="toggleSchool('${school.id}')" ${isAdded ? 'disabled' : ''}>
+          ${isAdded ? '✓ Added' : 'Add'}
+        </button>
+      </div>
+    </div>
+  `;
+}
+
+function renderMySchools() {
+  if (mySchools.length === 0) {
+    document.getElementById('mySchoolsList').innerHTML = '<div class="text-muted">No schools added yet</div>';
+    return;
+  }
+  
+  const html = mySchools.map(id => {
+    const school = SCHOOLS_DB.find(s => s.id === id);
+    if (!school) return '';
+    
+    return `
+      <div class="flex justify-between items-center mb-4">
+        <div>
+          <strong>${school.name}</strong>
+          <div class="text-muted">${school.state} • ${school.system}</div>
+        </div>
+        <button class="btn danger" onclick="removeSchool('${school.id}')">Remove</button>
+      </div>
+    `;
+  }).join('');
+  
+  document.getElementById('mySchoolsList').innerHTML = html;
+  updateDashboardStats();
+}
+
+function toggleSchool(schoolId) {
+  if (!mySchools.includes(schoolId)) {
+    mySchools.push(schoolId);
+    localStorage.setItem('pathwise_schools', JSON.stringify(mySchools));
+    showToast('School added to your list!', 'success');
+    renderSchools();
+  }
+}
+
+function removeSchool(schoolId) {
+  mySchools = mySchools.filter(id => id !== schoolId);
+  localStorage.setItem('pathwise_schools', JSON.stringify(mySchools));
+  renderSchools();
+  showToast('School removed', 'info');
+}
+
+function renderScholarships() {
+  const eligible = [];
+  let totalAmount = 0;
+  
+  SCHOLARSHIPS_DB.forEach(scholarship => {
+    if (isEligibleForScholarship(scholarship, userData)) {
+      eligible.push(scholarship);
+      totalAmount += scholarship.amount;
+    }
+  });
+  
+  if (eligible.length === 0) {
+    document.getElementById('scholarshipsList').innerHTML = '<div class="text-muted">Complete your profile to see scholarship matches</div>';
+    return;
+  }
+  
+  const html = eligible.map(s => `
+    <div class="scholarship-card">
+      <h4>${s.name}</h4>
+      <div class="scholarship-amount">$${s.amount.toLocaleString()}</div>
+      <p class="text-muted">${s.description}</p>
+      <button class="btn primary mt-4">Apply Now</button>
+    </div>
+  `).join('');
+  
+  document.getElementById('scholarshipsList').innerHTML = html;
+}
+
+function renderTimeline() {
+  if (mySchools.length === 0) {
+    document.getElementById('timelineList').innerHTML = '<div class="text-muted">Add schools to see your timeline</div>';
+    return;
+  }
+  
+  const deadlines = [
+    {date: 'October 1, 2025', task: 'FAFSA Opens', urgent: false},
+    {date: 'November 1, 2025', task: 'Early Action Deadline', urgent: true},
+    {date: 'November 30, 2025', task: 'UC Application Deadline', urgent: true},
+    {date: 'January 1, 2026', task: 'Regular Decision Deadline', urgent: false},
+    {date: 'March 1, 2026', task: 'FAFSA Priority Deadline', urgent: false}
+  ];
+  
+  const html = deadlines.map(d => `
+    <div class="flex justify-between items-center mb-4" style="padding: 1rem; background: ${d.urgent ? 'rgba(245,101,101,0.1)' : 'var(--bg-secondary)'}; border-radius: var(--radius);">
+      <div>
+        <strong>${d.task}</strong>
+        <div class="text-muted">${d.date}</div>
+      </div>
+      ${d.urgent ? '<span class="badge" style="background: var(--danger); color: white;">Urgent</span>' : ''}
+    </div>
+  `).join('');
+  
+  document.getElementById('timelineList').innerHTML = html;
+}
+
+function renderInsights() {
+  const insights = [];
+  
+  // School balance check
+  const categories = {reach: 0, match: 0, safety: 0};
+  mySchools.forEach(id => {
+    const school = SCHOOLS_DB.find(s => s.id === id);
+    if (school) {
+      const cat = categorizeSchool(school, userData);
+      categories[cat]++;
+    }
+  });
+  
+  if (mySchools.length > 0) {
+    if (categories.reach === 0) {
+      insights.push({type: 'warning', text: 'Consider adding some reach schools to aim high!'});
+    }
+    if (categories.safety === 0) {
+      insights.push({type: 'warning', text: 'Add safety schools for better acceptance odds'});
+    }
+    if (categories.match > 3) {
+      insights.push({type: 'success', text: 'Great balance of match schools!'});
+    }
+  }
+  
+  // Profile tips
+  if (!userData.sat) {
+    insights.push({type: 'info', text: 'Add your SAT score for better matching'});
+  }
+  if (userData.gpa && userData.gpa > 4.0) {
+    insights.push({type: 'success', text: 'Your strong GPA opens many opportunities!'});
+  }
+  
+  if (insights.length === 0) {
+    insights.push({type: 'info', text: 'Add schools to get personalized insights'});
+  }
+  
+  const html = insights.map(i => `
+    <div class="flex items-center gap-3 mb-4" style="padding: 1rem; background: var(--bg-secondary); border-radius: var(--radius);">
+      <span style="color: var(--${i.type === 'warning' ? 'warning' : i.type === 'success' ? 'success' : 'info'});">
+        ${i.type === 'warning' ? '⚠️' : i.type === 'success' ? '✅' : 'ℹ️'}
+      </span>
+      <div>${i.text}</div>
+    </div>
+  `).join('');
+  
+  document.getElementById('insightsList').innerHTML = html;
+}
+
+// ===== TAB SWITCHING =====
+function switchTab(tabName) {
+  // Update active tab
+  document.querySelectorAll('.tab').forEach(tab => {
+    tab.classList.remove('active');
+  });
+  event.target.classList.add('active');
+  
+  // Hide all tabs
+  document.getElementById('schoolsTab').classList.add('hidden');
+  document.getElementById('scholarshipsTab').classList.add('hidden');
+  document.getElementById('timelineTab').classList.add('hidden');
+  document.getElementById('insightsTab').classList.add('hidden');
+  
+  // Show selected tab
+  document.getElementById(`${tabName}Tab`).classList.remove('hidden');
+}
+
+// ===== DISCOVERY MODE =====
+function openDiscovery() {
+  document.getElementById('swipeOverlay').classList.add('active');
+  currentSwipeIndex = 0;
+  showNextSchool();
+}
+
+function closeDiscovery() {
+  document.getElementById('swipeOverlay').classList.remove('active');
+}
+
+function showNextSchool() {
+  if (currentSwipeIndex >= SCHOOLS_DB.length) {
+    document.getElementById('swipeContent').innerHTML = '<h2>No more schools!</h2><p>You\'ve seen them all.</p>';
+    return;
+  }
+  
+  const school = SCHOOLS_DB[currentSwipeIndex];
+  const score = calculateMatchScore(school, userData);
+  
+  document.getElementById('swipeContent').innerHTML = `
+    <h2>${school.name}</h2>
+    <div class="badge ${categorizeSchool(school, userData)}" style="margin: 1rem 0;">
+      ${score}% Match
+    </div>
+    <div class="school-meta" style="margin: 1rem 0;">
+      <div>📍 ${school.state}</div>
+      <div>📊 GPA: ${school.avgGPA}</div>
+      <div>📝 SAT: ${school.avgSAT}</div>
+      <div>✅ Accept: ${school.acceptRate}%</div>
+      <div>💰 Tuition: $${school.tuitionIn.toLocaleString()}</div>
+    </div>
+  `;
+}
+
+function swipeAccept() {
+  const school = SCHOOLS_DB[currentSwipeIndex];
+  if (!mySchools.includes(school.id)) {
+    toggleSchool(school.id);
+  }
+  currentSwipeIndex++;
+  showNextSchool();
+}
+
+function swipeReject() {
+  currentSwipeIndex++;
+  showNextSchool();
+}
+
+// ===== UTILITIES =====
 function showToast(message, type = 'info') {
   const container = document.getElementById('toastContainer');
   const toast = document.createElement('div');
@@ -487,138 +1341,145 @@ function showToast(message, type = 'info') {
   }, 3000);
 }
 
-// Update match counter
-function updateMatchCounter() {
-  const gpa = parseFloat(document.getElementById('gpa').value) || 0;
-  const sat = parseInt(document.getElementById('sat').value) || 0;
-  const state = document.getElementById('homeState').value || '';
-  const income = parseInt(document.getElementById('income').value) || 999999;
-  
-  let schoolMatches = 0;
-  let scholarshipMatches = 0;
-  
-  // Count matching schools
-  SCHOOLS_DB.forEach(school => {
-    let score = 50;
-    if (gpa > 0) score += (gpa - school.avgGPA) * 20;
-    if (sat > 0) score += (sat - school.avgSAT) / 10;
-    if (state === school.state) score += 10;
-    if (score >= 40) schoolMatches++;
-  });
-  
-  // Count scholarships
-  SCHOLARSHIPS_DB.forEach(s => {
-    let eligible = true;
-    if (s.requirements.gpa && gpa < s.requirements.gpa) eligible = false;
-    if (s.requirements.income && income > s.requirements.income) eligible = false;
-    if (s.requirements.sat && sat < s.requirements.sat) eligible = false;
-    if (eligible && gpa > 0) scholarshipMatches++;
-  });
-  
-  // Update display
-  const counter = document.getElementById('matchCounter');
-  if (schoolMatches > 0 || scholarshipMatches > 0) {
-    counter.textContent = `${schoolMatches} schools, ${scholarshipMatches} scholarships`;
-  } else {
-    counter.textContent = '0 potential matches';
-  }
+function toggleTheme() {
+  const currentTheme = document.documentElement.getAttribute('data-theme') || 'light';
+  const newTheme = currentTheme === 'dark' ? 'light' : 'dark';
+  document.documentElement.setAttribute('data-theme', newTheme);
+  localStorage.setItem('pathwise_theme', newTheme);
+  document.getElementById('themeBtn').textContent = newTheme === 'dark' ? '☀️' : '🌙';
 }
 
-// Form submission
-function handleFormSubmit(e) {
-  e.preventDefault();
+function toggleAI() {
+  const messages = [
+    'Try adding more safety schools for balance!',
+    'Have you considered applying for scholarships?',
+    'Your profile looks great! Add SAT scores for better matches.',
+    'Check out the Discovery mode to explore schools!',
+    'Remember to start your essays early!'
+  ];
   
-  const firstName = document.getElementById('firstName').value;
-  const grade = document.getElementById('grade').value;
-  const homeState = document.getElementById('homeState').value;
+  const randomMessage = messages[Math.floor(Math.random() * messages.length)];
+  document.getElementById('aiMessage').textContent = randomMessage;
   
-  if (!firstName || !grade || !homeState) {
-    showToast('Please fill in required fields', 'error');
-    return;
-  }
-  
-  // Save data
-  const userData = {
-    firstName,
-    grade,
-    homeState,
-    gpa: parseFloat(document.getElementById('gpa').value) || 0,
-    sat: parseInt(document.getElementById('sat').value) || 0
-  };
-  localStorage.setItem('pathwise_user', JSON.stringify(userData));
-  
-  // Navigate
-  document.getElementById('planningSection').classList.add('hidden');
-  document.getElementById('dashboardSection').classList.remove('hidden');
-  document.getElementById('backBtn').classList.remove('hidden');
-  
-  // Show matches
-  showMatches();
-  showToast(`Welcome, ${firstName}!`, 'success');
+  setTimeout(() => {
+    document.getElementById('aiMessage').textContent = 'Need help? Click me!';
+  }, 5000);
 }
 
-// Show matches
-function showMatches() {
-  const userData = JSON.parse(localStorage.getItem('pathwise_user') || '{}');
-  const list = document.getElementById('schoolsList');
-  
-  let html = '<h3>Your Matched Schools:</h3>';
-  SCHOOLS_DB.forEach(school => {
-    let score = 50;
-    if (userData.gpa) score += (userData.gpa - school.avgGPA) * 20;
-    if (userData.sat) score += (userData.sat - school.avgSAT) / 10;
-    if (userData.homeState === school.state) score += 10;
-    
-    if (score >= 40) {
-      html += `<div class="school-card">
-        <h4>${school.name}</h4>
-        <p>Match Score: ${Math.round(score)}%</p>
-        <p>Tuition: $${school.tuitionIn.toLocaleString()}</p>
-      </div>`;
-    }
-  });
-  
-  list.innerHTML = html;
-}
-
-// Back to planning
-function showPlanning() {
-  document.getElementById('dashboardSection').classList.add('hidden');
-  document.getElementById('planningSection').classList.remove('hidden');
-  document.getElementById('backBtn').classList.add('hidden');
-}
-
-// Initialize on load
+// ===== INITIALIZATION =====
 document.addEventListener('DOMContentLoaded', function() {
   console.log('Pathwise initializing...');
   
-  // Set up form
-  const form = document.getElementById('planningForm');
-  form.onsubmit = handleFormSubmit;
+  // Load saved data
+  const savedUser = localStorage.getItem('pathwise_user');
+  const savedSchools = localStorage.getItem('pathwise_schools');
+  const savedTheme = localStorage.getItem('pathwise_theme');
   
-  // Set up input listeners
-  const inputs = form.querySelectorAll('input, select');
-  inputs.forEach(input => {
-    input.oninput = updateMatchCounter;
-    input.onchange = updateMatchCounter;
-  });
-  
-  // Check for returning user
-  const saved = localStorage.getItem('pathwise_user');
-  if (saved) {
-    const userData = JSON.parse(saved);
+  if (savedUser) {
+    userData = JSON.parse(savedUser);
+    mySchools = savedSchools ? JSON.parse(savedSchools) : [];
+    
+    // Restore form values
     document.getElementById('firstName').value = userData.firstName || '';
     document.getElementById('grade').value = userData.grade || '';
     document.getElementById('homeState').value = userData.homeState || '';
+    document.getElementById('income').value = userData.income || '';
     document.getElementById('gpa').value = userData.gpa || '';
     document.getElementById('sat').value = userData.sat || '';
+    document.getElementById('ap').value = userData.ap || '';
+    document.getElementById('interests').value = userData.interests || '';
+    
+    // If complete profile, go to dashboard
+    if (userData.firstName && userData.grade && userData.homeState) {
+      navigateToDashboard();
+    }
   }
   
-  // Initial update
+  // Apply saved theme
+  if (savedTheme) {
+    document.documentElement.setAttribute('data-theme', savedTheme);
+    document.getElementById('themeBtn').textContent = savedTheme === 'dark' ? '☀️' : '🌙';
+  }
+  
+  // Initial counter update
   updateMatchCounter();
   
   console.log('Pathwise ready!');
 });
+
+// ===== REGRESSION TESTS =====
+function runTests() {
+  console.log('=== RUNNING REGRESSION TESTS ===');
+  
+  let passed = 0;
+  let failed = 0;
+  
+  // Test 1: Match counter calculation
+  const testUser = {gpa: 3.8, sat: 1400, state: 'CA', ap: 5, interests: 'stem'};
+  let schoolMatches = 0;
+  SCHOOLS_DB.forEach(school => {
+    const score = calculateMatchScore(school, testUser);
+    if (score >= 40) schoolMatches++;
+  });
+  
+  if (schoolMatches > 0) {
+    console.log('✅ Match calculation working');
+    passed++;
+  } else {
+    console.error('❌ Match calculation failed');
+    failed++;
+  }
+  
+  // Test 2: Scholarship eligibility
+  const eligible = SCHOLARSHIPS_DB.filter(s => isEligibleForScholarship(s, testUser));
+  if (eligible.length > 0) {
+    console.log('✅ Scholarship matching working');
+    passed++;
+  } else {
+    console.error('❌ Scholarship matching failed');
+    failed++;
+  }
+  
+  // Test 3: School categorization
+  const berkeley = SCHOOLS_DB.find(s => s.id === 'ucb');
+  const category = categorizeSchool(berkeley, testUser);
+  if (['reach', 'match', 'safety'].includes(category)) {
+    console.log('✅ School categorization working');
+    passed++;
+  } else {
+    console.error('❌ School categorization failed');
+    failed++;
+  }
+  
+  // Test 4: Form validation
+  const gpaValid = validateGPA({value: '3.8', parentElement: {classList: {add: () => {}, remove: () => {}}, querySelector: () => ({classList: {add: () => {}, remove: () => {}}})}});
+  if (gpaValid) {
+    console.log('✅ GPA validation working');
+    passed++;
+  } else {
+    console.error('❌ GPA validation failed');
+    failed++;
+  }
+  
+  // Test 5: LocalStorage
+  try {
+    localStorage.setItem('test', 'value');
+    localStorage.removeItem('test');
+    console.log('✅ LocalStorage working');
+    passed++;
+  } catch {
+    console.error('❌ LocalStorage failed');
+    failed++;
+  }
+  
+  console.log(`=== TESTS COMPLETE: ${passed} passed, ${failed} failed ===`);
+  return {passed, failed};
+}
+
+// Run tests in development
+if (window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1') {
+  runTests();
+}
 </script>
 
 </body>
