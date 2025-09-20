@@ -1,180 +1,780 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" class="h-full scroll-smooth">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no" />
+  <meta name="mobile-web-app-capable" content="yes" />
   <title>Pathwise – Your College Journey</title>
-  <link rel="stylesheet" href="style.css">
+
+  <!-- Tailwind (CDN) -->
+  <script src="https://cdn.tailwindcss.com"></script>
+
+  <!-- Tailwind config (brand colors) -->
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            brand: {
+              primary: "#007AFF",
+              secondary: "#5856D6",
+              success: "#34C759",
+              warning: "#FF9500",
+              danger: "#FF3B30"
+            }
+          },
+          boxShadow: {
+            soft: "0 8px 30px rgba(0,0,0,0.08)"
+          }
+        }
+      },
+      darkMode: "class"
+    }
+  </script>
+
+  <style>
+    /* Small, tasteful animations */
+    @keyframes slideUp { from {transform: translateY(16px); opacity: 0;} to {transform: translateY(0); opacity: 1;} }
+    @keyframes pulseOnce { 0% {transform: scale(1)} 50% {transform: scale(1.05)} 100% {transform: scale(1)} }
+    .animate-slideUp { animation: slideUp .35s ease both; }
+    .animate-pulseOnce { animation: pulseOnce .25s ease both; }
+    /* Hide default number spinners on iOS/Chrome */
+    input[type="number"]::-webkit-outer-spin-button,
+    input[type="number"]::-webkit-inner-spin-button { -webkit-appearance: none; margin: 0; }
+    input[type="number"] { -moz-appearance: textfield; }
+  </style>
 </head>
-<body>
-  <!-- Consent Modal -->
-  <div id="consentModal" class="modal">
-    <!-- ... content ... -->
+
+<body class="h-full bg-slate-50 text-slate-900 dark:bg-slate-950 dark:text-slate-100">
+  <!-- ===========================
+       Consent & Email Modal
+  ============================ -->
+  <div id="consentModal" class="fixed inset-0 z-[70] hidden">
+    <div class="absolute inset-0 bg-black/60"></div>
+    <div class="relative mx-auto w-full max-w-lg p-4 sm:p-6 animate-slideUp">
+      <div class="rounded-2xl bg-white p-6 shadow-soft dark:bg-slate-900">
+        <div class="flex items-start gap-3">
+          <div class="h-10 w-10 rounded-xl bg-gradient-to-br from-brand.primary to-brand.secondary text-white grid place-items-center text-lg">🔒</div>
+          <div class="flex-1">
+            <h3 class="text-xl font-semibold">Welcome to Pathwise</h3>
+            <p class="mt-1 text-sm text-slate-500 dark:text-slate-400">
+              We store your progress in your browser. Add your email if you want deadline reminders.
+              We don’t sell or share your data. Ever.
+            </p>
+          </div>
+        </div>
+
+        <div class="mt-4">
+          <label class="text-xs font-medium text-slate-500 dark:text-slate-400">Email for reminders (optional)</label>
+          <input id="consentEmail" type="email" placeholder="you@email.com"
+                 class="mt-1 w-full rounded-xl border border-slate-200 bg-slate-50 px-3 py-2 text-sm outline-none ring-brand.primary/0 focus:border-brand.primary focus:ring-2 focus:ring-brand.primary/20 dark:border-slate-700 dark:bg-slate-800" />
+        </div>
+
+        <div class="mt-6 grid gap-3 sm:grid-cols-2">
+          <button id="consentAccept" class="rounded-xl bg-gradient-to-r from-brand.primary to-brand.secondary px-4 py-2.5 text-white font-semibold">Yes, let’s go!</button>
+          <button id="consentDecline" class="rounded-xl border border-slate-200 bg-white px-4 py-2.5 font-semibold dark:border-slate-700 dark:bg-slate-800">No thanks</button>
+        </div>
+      </div>
+    </div>
   </div>
 
-  <!-- Navigation -->
-  <header class="nav-header">
-    <h1>Pathwise</h1>
-    <nav>
-      <button class="tab-button active" data-tab="dashboard">🏠 Dashboard</button>
-      <button class="tab-button" data-tab="planning">📝 Planning</button>
-      <button class="tab-button" data-tab="documents">📑 Documents</button>
-      <button class="tab-button" data-tab="timeline">📅 Timeline</button>
-      <button class="tab-button" data-tab="financial">💰 Financial Aid</button>
-    </nav>
+  <!-- ===========================
+       Nav / Header
+  ============================ -->
+  <header class="sticky top-0 z-50 bg-white/80 backdrop-blur supports-[backdrop-filter]:backdrop-blur border-b border-slate-200 dark:bg-slate-950/70 dark:border-slate-800">
+    <div class="mx-auto flex max-w-6xl items-center justify-between px-4 py-3">
+      <div class="flex items-center gap-2">
+        <button id="backBtn" class="hidden rounded-lg border border-slate-200 px-2 py-1 text-brand.primary hover:bg-slate-100 dark:border-slate-700 dark:hover:bg-slate-800">
+          ← Back
+        </button>
+        <h1 class="text-xl font-semibold bg-gradient-to-r from-brand.primary to-brand.secondary bg-clip-text text-transparent">Pathwise</h1>
+      </div>
+
+      <nav class="flex gap-2 overflow-x-auto">
+        <button class="tab-btn rounded-full px-3 py-1.5 text-sm font-semibold border border-slate-200 bg-white dark:bg-slate-900 dark:border-slate-700" data-tab="dashboard">🏠 Dashboard</button>
+        <button class="tab-btn rounded-full px-3 py-1.5 text-sm font-semibold border border-slate-200 bg-white dark:bg-slate-900 dark:border-slate-700" data-tab="planning">📝 Planning</button>
+        <button class="tab-btn rounded-full px-3 py-1.5 text-sm font-semibold border border-slate-200 bg-white dark:bg-slate-900 dark:border-slate-700" data-tab="documents">📄 Documents</button>
+        <button class="tab-btn rounded-full px-3 py-1.5 text-sm font-semibold border border-slate-200 bg-white dark:bg-slate-900 dark:border-slate-700" data-tab="timeline">📅 Timeline</button>
+        <button class="tab-btn rounded-full px-3 py-1.5 text-sm font-semibold border border-slate-200 bg-white dark:bg-slate-900 dark:border-slate-700" data-tab="financial">💸 Financial Aid</button>
+      </nav>
+
+      <div class="flex items-center gap-2">
+        <button id="shareBtn" class="rounded-lg border border-slate-200 px-2 py-1 text-sm hover:bg-slate-100 dark:border-slate-700 dark:hover:bg-slate-800">Share</button>
+        <button id="themeToggle" class="rounded-lg border border-slate-200 px-2 py-1 text-sm hover:bg-slate-100 dark:border-slate-700 dark:hover:bg-slate-800">🌙</button>
+      </div>
+    </div>
   </header>
 
-  <!-- Main Content -->
-  <main>
-    <section id="dashboard" class="tab active">
-      <h2>Welcome back, <span id="userName">Student</span>!</h2>
-      <div id="statsGrid"></div>
-      <div id="achievements"></div>
+  <!-- ===========================
+       Onboarding / Discovery
+  ============================ -->
+  <main class="mx-auto max-w-6xl px-4 pb-20">
+    <section id="onboarding" class="mt-6">
+      <div class="mx-auto max-w-xl">
+        <!-- Progress -->
+        <div class="mb-4">
+          <div class="flex items-center justify-between text-xs text-slate-500 dark:text-slate-400">
+            <span id="progressLabel">Getting started</span>
+            <span id="progressPct">20%</span>
+          </div>
+          <div class="mt-1 h-2 w-full rounded-full bg-slate-200 dark:bg-slate-800">
+            <div id="progressBar" class="h-2 w-[20%] rounded-full bg-gradient-to-r from-brand.primary to-brand.secondary transition-all"></div>
+          </div>
+        </div>
+
+        <!-- Step 1 -->
+        <div id="step1" class="animate-slideUp rounded-2xl border border-slate-200 bg-white p-5 shadow-soft dark:border-slate-800 dark:bg-slate-900">
+          <h2 class="text-2xl font-bold">Let’s get started</h2>
+          <p class="mt-1 text-slate-500 dark:text-slate-400">Tell us a little about you.</p>
+
+          <div class="mt-4 grid gap-4">
+            <div>
+              <label class="text-xs font-semibold text-slate-500 dark:text-slate-400">First name <span class="text-brand.danger">*</span></label>
+              <input id="firstName" type="text" placeholder="What should we call you?"
+                     class="mt-1 w-full rounded-xl border border-slate-200 bg-slate-50 px-3 py-2 outline-none focus:border-brand.primary focus:ring-2 focus:ring-brand.primary/20 dark:border-slate-700 dark:bg-slate-800" />
+              <p id="nameError" class="mt-1 hidden text-xs text-brand.danger">Please enter your name.</p>
+            </div>
+
+            <div>
+              <label class="text-xs font-semibold text-slate-500 dark:text-slate-400">Current grade <span class="text-brand.danger">*</span></label>
+              <select id="gradeLevel" class="mt-1 w-full rounded-xl border border-slate-200 bg-slate-50 px-3 py-2 outline-none focus:border-brand.primary focus:ring-2 focus:ring-brand.primary/20 dark:border-slate-700 dark:bg-slate-800">
+                <option value="">Select your grade</option>
+                <option value="9">Freshman (9th)</option>
+                <option value="10">Sophomore (10th)</option>
+                <option value="11">Junior (11th)</option>
+                <option value="12">Senior (12th)</option>
+                <option value="transfer">Transfer</option>
+              </select>
+              <p id="gradeError" class="mt-1 hidden text-xs text-brand.danger">Please select a grade.</p>
+            </div>
+          </div>
+
+          <div class="mt-5 flex gap-3">
+            <button id="step1Next" class="flex-1 rounded-xl bg-gradient-to-r from-brand.primary to-brand.secondary px-4 py-2.5 font-semibold text-white">Continue →</button>
+          </div>
+        </div>
+
+        <!-- Step 2 -->
+        <div id="step2" class="mt-4 hidden animate-slideUp rounded-2xl border border-slate-200 bg-white p-5 shadow-soft dark:border-slate-800 dark:bg-slate-900">
+          <h2 class="text-2xl font-bold">What’s your vibe?</h2>
+          <p class="mt-1 text-slate-500 dark:text-slate-400">Pick as many as you want.</p>
+
+          <div class="mt-3 grid grid-cols-2 gap-2 sm:grid-cols-4">
+            <!-- pills -->
+            <button data-interest="stem" class="interest rounded-full border border-slate-200 bg-slate-50 px-3 py-2 text-sm font-semibold hover:border-brand.primary hover:bg-white dark:border-slate-700 dark:bg-slate-800">🔬 STEM</button>
+            <button data-interest="arts" class="interest rounded-full border border-slate-200 bg-slate-50 px-3 py-2 text-sm font-semibold hover:border-brand.primary hover:bg-white dark:border-slate-700 dark:bg-slate-800">🎨 Arts</button>
+            <button data-interest="business" class="interest rounded-full border border-slate-200 bg-slate-50 px-3 py-2 text-sm font-semibold hover:border-brand.primary hover:bg-white dark:border-slate-700 dark:bg-slate-800">💼 Business</button>
+            <button data-interest="health" class="interest rounded-full border border-slate-200 bg-slate-50 px-3 py-2 text-sm font-semibold hover:border-brand.primary hover:bg-white dark:border-slate-700 dark:bg-slate-800">🏥 Health</button>
+            <button data-interest="social" class="interest rounded-full border border-slate-200 bg-slate-50 px-3 py-2 text-sm font-semibold hover:border-brand.primary hover:bg-white dark:border-slate-700 dark:bg-slate-800">🤝 Social</button>
+            <button data-interest="humanities" class="interest rounded-full border border-slate-200 bg-slate-50 px-3 py-2 text-sm font-semibold hover:border-brand.primary hover:bg-white dark:border-slate-700 dark:bg-slate-800">📚 Humanities</button>
+            <button data-interest="education" class="interest rounded-full border border-slate-200 bg-slate-50 px-3 py-2 text-sm font-semibold hover:border-brand.primary hover:bg-white dark:border-slate-700 dark:bg-slate-800">🎓 Education</button>
+            <button data-interest="unsure" class="interest rounded-full border border-slate-200 bg-slate-50 px-3 py-2 text-sm font-semibold hover:border-brand.primary hover:bg-white dark:border-slate-700 dark:bg-slate-800">🤔 Not sure</button>
+          </div>
+
+          <div class="mt-5 flex gap-3">
+            <button class="rounded-xl border border-slate-200 px-4 py-2.5 font-semibold dark:border-slate-700" id="step2Back">← Back</button>
+            <button class="flex-1 rounded-xl bg-gradient-to-r from-brand.primary to-brand.secondary px-4 py-2.5 font-semibold text-white" id="step2Next">Continue →</button>
+          </div>
+        </div>
+
+        <!-- Step 3 -->
+        <div id="step3" class="mt-4 hidden animate-slideUp rounded-2xl border border-slate-200 bg-white p-5 shadow-soft dark:border-slate-800 dark:bg-slate-900">
+          <h2 class="text-2xl font-bold">What matters most?</h2>
+          <p class="mt-1 text-slate-500 dark:text-slate-400">Pick your priorities.</p>
+
+          <div class="mt-3 grid gap-3">
+            <button data-preference="reputation" class="pref w-full rounded-xl border border-slate-200 bg-slate-50 p-3 text-left font-semibold hover:border-brand.primary hover:bg-white dark:border-slate-700 dark:bg-slate-800">🏆 School reputation</button>
+            <button data-preference="cost" class="pref w-full rounded-xl border border-slate-200 bg-slate-50 p-3 text-left font-semibold hover:border-brand.primary hover:bg-white dark:border-slate-700 dark:bg-slate-800">💰 Affordability</button>
+            <button data-preference="location" class="pref w-full rounded-xl border border-slate-200 bg-slate-50 p-3 text-left font-semibold hover:border-brand.primary hover:bg-white dark:border-slate-700 dark:bg-slate-800">📍 Location vibes</button>
+            <button data-preference="size" class="pref w-full rounded-xl border border-slate-200 bg-slate-50 p-3 text-left font-semibold hover:border-brand.primary hover:bg-white dark:border-slate-700 dark:bg-slate-800">👥 Campus size</button>
+          </div>
+
+          <div class="mt-5 flex gap-3">
+            <button class="rounded-xl border border-slate-200 px-4 py-2.5 font-semibold dark:border-slate-700" id="step3Back">← Back</button>
+            <button class="flex-1 rounded-xl bg-gradient-to-r from-brand.primary to-brand.secondary px-4 py-2.5 font-semibold text-white" id="step3Next">Continue →</button>
+          </div>
+        </div>
+
+        <!-- Step 4 -->
+        <div id="step4" class="mt-4 hidden animate-slideUp rounded-2xl border border-slate-200 bg-white p-5 shadow-soft dark:border-slate-800 dark:bg-slate-900">
+          <h2 class="text-2xl font-bold">Academic snapshot</h2>
+          <p class="mt-1 text-slate-500 dark:text-slate-400">Optional, but helps accuracy.</p>
+
+          <div class="mt-4 grid gap-4 sm:grid-cols-3">
+            <div>
+              <label class="text-xs font-semibold text-slate-500 dark:text-slate-400">GPA (0–5)</label>
+              <input id="gpa" type="number" step="0.01" min="0" max="5" class="mt-1 w-full rounded-xl border border-slate-200 bg-slate-50 px-3 py-2 outline-none focus:border-brand.primary focus:ring-2 focus:ring-brand.primary/20 dark:border-slate-700 dark:bg-slate-800">
+            </div>
+            <div>
+              <label class="text-xs font-semibold text-slate-500 dark:text-slate-400">SAT (400–1600)</label>
+              <input id="sat" type="number" step="10" min="400" max="1600" class="mt-1 w-full rounded-xl border border-slate-200 bg-slate-50 px-3 py-2 outline-none focus:border-brand.primary focus:ring-2 focus:ring-brand.primary/20 dark:border-slate-700 dark:bg-slate-800">
+            </div>
+            <div>
+              <label class="text-xs font-semibold text-slate-500 dark:text-slate-400">AP/Honors courses</label>
+              <input id="ap" type="number" min="0" class="mt-1 w-full rounded-xl border border-slate-200 bg-slate-50 px-3 py-2 outline-none focus:border-brand.primary focus:ring-2 focus:ring-brand.primary/20 dark:border-slate-700 dark:bg-slate-800">
+            </div>
+          </div>
+
+          <p id="matchPreview" class="mt-2 text-sm text-slate-500 dark:text-slate-400">Enter GPA/SAT to preview matches…</p>
+
+          <div class="mt-5 flex gap-3">
+            <button class="rounded-xl border border-slate-200 px-4 py-2.5 font-semibold dark:border-slate-700" id="step4Back">← Back</button>
+            <button class="flex-1 rounded-xl bg-gradient-to-r from-brand.primary to-brand.secondary px-4 py-2.5 font-semibold text-white" id="finishBtn">See my matches →</button>
+          </div>
+        </div>
+      </div>
     </section>
 
-    <section id="planning" class="tab">
-      <h2>Planning</h2>
-      <ul id="todoList"></ul>
-      <input id="newTask" placeholder="Add a task...">
-      <button onclick="addTask()">Add</button>
-    </section>
+    <!-- ===========================
+         Dashboard + Tabs
+    ============================ -->
+    <section id="app" class="mt-6 hidden">
+      <!-- Welcome -->
+      <div class="rounded-2xl bg-gradient-to-r from-brand.primary to-brand.secondary p-6 text-white">
+        <h2 class="text-2xl font-bold">Welcome back, <span id="userName">Student</span> 👋</h2>
+        <p class="mt-1 opacity-90">Your personalized California college roadmap is ready.</p>
+      </div>
 
-    <section id="documents" class="tab">
-      <h2>Documents Checklist</h2>
-      <div id="documentChecklist"></div>
-    </section>
+      <!-- Stats -->
+      <div class="mt-4 grid gap-4 sm:grid-cols-3">
+        <div class="rounded-2xl border border-slate-200 bg-white p-5 shadow-soft dark:border-slate-800 dark:bg-slate-900">
+          <p class="text-xs font-semibold text-slate-500 dark:text-slate-400">Your GPA</p>
+          <p id="statGPA" class="mt-1 text-3xl font-bold">—</p>
+        </div>
+        <div class="rounded-2xl border border-slate-200 bg-white p-5 shadow-soft dark:border-slate-800 dark:bg-slate-900">
+          <p class="text-xs font-semibold text-slate-500 dark:text-slate-400">Target schools</p>
+          <p id="statSchools" class="mt-1 text-3xl font-bold">—</p>
+        </div>
+        <div class="rounded-2xl border border-slate-200 bg-white p-5 shadow-soft dark:border-slate-800 dark:bg-slate-900">
+          <p class="text-xs font-semibold text-slate-500 dark:text-slate-400">Days to UC/CSU deadline</p>
+          <p id="daysLeft" class="mt-1 text-3xl font-bold">—</p>
+        </div>
+      </div>
 
-    <section id="timeline" class="tab">
-      <h2>Timeline</h2>
-      <div id="timelineItems"></div>
-    </section>
+      <!-- Tabbed content -->
+      <div class="mt-6 space-y-6">
+        <!-- Schools (default tab) -->
+        <div id="tab-dashboard" class="tab-pane">
+          <h3 class="mb-3 text-xl font-semibold">🎯 Your schools</h3>
 
-    <section id="financial" class="tab">
-      <h2>Financial Aid Estimate</h2>
-      <div id="financialAid"></div>
+          <div id="schoolsWrap" class="space-y-8">
+            <!-- Buckets get injected here -->
+          </div>
+        </div>
+
+        <!-- Planning -->
+        <div id="tab-planning" class="tab-pane hidden">
+          <h3 class="mb-3 text-xl font-semibold">📝 Planning</h3>
+          <div class="rounded-2xl border border-slate-200 bg-white p-5 shadow-soft dark:border-slate-800 dark:bg-slate-900">
+            <div class="flex items-center gap-2">
+              <input id="newTask" type="text" placeholder="Add a task…" class="w-full rounded-xl border border-slate-200 bg-slate-50 px-3 py-2 text-sm outline-none focus:border-brand.primary focus:ring-2 focus:ring-brand.primary/20 dark:border-slate-700 dark:bg-slate-800">
+              <button id="addTask" class="rounded-xl bg-brand.primary px-3 py-2 text-sm font-semibold text-white">Add</button>
+            </div>
+            <ul id="todoList" class="mt-3 space-y-2"></ul>
+          </div>
+        </div>
+
+        <!-- Documents -->
+        <div id="tab-documents" class="tab-pane hidden">
+          <h3 class="mb-3 text-xl font-semibold">📄 Documents checklist</h3>
+          <div id="docsList" class="grid gap-3 sm:grid-cols-2">
+            <!-- Items injected -->
+          </div>
+
+          <div class="mt-4 rounded-2xl border border-slate-200 bg-white p-4 text-sm shadow-soft dark:border-slate-800 dark:bg-slate-900">
+            <p><span class="font-semibold">Progress:</span> <span id="docProgressPct">0%</span></p>
+            <div class="mt-2 h-2 rounded-full bg-slate-200 dark:bg-slate-800">
+              <div id="docProgressBar" class="h-2 w-0 rounded-full bg-gradient-to-r from-brand.warning to-brand.danger"></div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Timeline -->
+        <div id="tab-timeline" class="tab-pane hidden">
+          <h3 class="mb-3 text-xl font-semibold">📅 Timeline</h3>
+          <div id="timelineList" class="grid gap-3">
+            <!-- items injected -->
+          </div>
+        </div>
+
+        <!-- Financial Aid -->
+        <div id="tab-financial" class="tab-pane hidden">
+          <h3 class="mb-3 text-xl font-semibold">💸 Financial Aid</h3>
+
+          <div class="rounded-2xl border border-slate-200 bg-white p-5 shadow-soft dark:border-slate-800 dark:bg-slate-900">
+            <div class="grid gap-4 sm:grid-cols-3">
+              <div>
+                <label class="text-xs font-semibold text-slate-500 dark:text-slate-400">Family income (USD)</label>
+                <input id="faIncome" type="number" value="75000" class="mt-1 w-full rounded-xl border border-slate-200 bg-slate-50 px-3 py-2 outline-none focus:border-brand.primary focus:ring-2 focus:ring-brand.primary/20 dark:border-slate-700 dark:bg-slate-800">
+              </div>
+              <div>
+                <label class="text-xs font-semibold text-slate-500 dark:text-slate-400">Household size</label>
+                <input id="faHousehold" type="number" value="4" class="mt-1 w-full rounded-xl border border-slate-200 bg-slate-50 px-3 py-2 outline-none focus:border-brand.primary focus:ring-2 focus:ring-brand.primary/20 dark:border-slate-700 dark:bg-slate-800">
+              </div>
+              <div>
+                <label class="text-xs font-semibold text-slate-500 dark:text-slate-400">Students in college</label>
+                <input id="faStudents" type="number" value="1" class="mt-1 w-full rounded-xl border border-slate-200 bg-slate-50 px-3 py-2 outline-none focus:border-brand.primary focus:ring-2 focus:ring-brand.primary/20 dark:border-slate-700 dark:bg-slate-800">
+              </div>
+            </div>
+
+            <button id="calcAid" class="mt-4 w-full rounded-xl bg-brand.primary py-2.5 font-semibold text-white sm:w-auto sm:px-6">Calculate</button>
+
+            <div id="aidResult" class="mt-4 grid gap-3 sm:grid-cols-3">
+              <!-- cards injected -->
+            </div>
+
+            <p class="mt-3 text-xs text-slate-500 dark:text-slate-400">Estimates use 2024–2025 guidelines for CA residents; actual awards depend on FAFSA/CADAA and campus policies.</p>
+          </div>
+        </div>
+      </div>
     </section>
   </main>
 
-  <!-- Theme Toggle + AI Helper -->
-  <div id="themeToggle">🌙</div>
-  <div id="aiHelper" class="hidden">Need help? 👋</div>
+  <!-- ===========================
+       AI Helper Bubble
+  ============================ -->
+  <div id="aiBubble" class="fixed bottom-6 right-4 z-[60] hidden">
+    <div class="relative max-w-xs rounded-2xl bg-gradient-to-br from-brand.primary to-brand.secondary p-3 text-sm text-white shadow-soft">
+      <button id="aiClose" class="absolute -right-2 -top-2 grid h-6 w-6 place-items-center rounded-full bg-black/70 text-xs">✕</button>
+      <p id="aiText" class="pr-6">Need help? I can guide you.</p>
+    </div>
+  </div>
 
-  <script src="script.js"></script>
+  <!-- ===========================
+       Achievement Toast
+  ============================ -->
+  <div id="toaster" class="fixed top-4 right-4 z-[60] space-y-2"></div>
+
+  <script>
+    /***********************
+     * STATE & CONSTANTS
+     ***********************/
+    const deadline = new Date('November 30, 2025');
+    const $ = (sel) => document.querySelector(sel);
+    const $$ = (sel) => document.querySelectorAll(sel);
+
+    let state = {
+      firstName: "",
+      gradeLevel: "",
+      interests: [],
+      preferences: [],
+      gpa: null,
+      sat: null,
+      ap: 0,
+      email: "",
+      consent: false,
+      tasks: [],
+      docs: {
+        profile: true,
+        transcripts: false,
+        recommendations: false,
+        personal_statement: false,
+        fafsa: false,
+      }
+    };
+
+    const schools = [
+      { id:1, name:"UC Berkeley", gpa:4.25, sat:1450, rate:14.5, tuition:14226 },
+      { id:2, name:"UCLA", gpa:4.26, sat:1445, rate:12.3, tuition:13401 },
+      { id:3, name:"UC San Diego", gpa:4.16, sat:1410, rate:31.5, tuition:14616 },
+      { id:4, name:"UC Davis", gpa:4.13, sat:1350, rate:37.6, tuition:14597 },
+      { id:5, name:"UC Irvine", gpa:4.08, sat:1360, rate:26.5, tuition:13727 },
+      { id:6, name:"UC Santa Barbara", gpa:4.15, sat:1380, rate:29.6, tuition:14391 },
+      { id:7, name:"Cal Poly SLO", gpa:4.06, sat:1395, rate:32.5, tuition:10377 },
+      { id:8, name:"UC Santa Cruz", gpa:3.96, sat:1295, rate:51.3, tuition:13991 },
+      { id:9, name:"San Diego State", gpa:3.85, sat:1270, rate:37.8, tuition:7720 }
+    ];
+
+    /***********************
+     * UTILITIES
+     ***********************/
+    const save = () => localStorage.setItem("pathwise", JSON.stringify(state));
+    const load = () => {
+      const raw = localStorage.getItem("pathwise");
+      if (!raw) return;
+      try { state = { ...state, ...JSON.parse(raw) }; } catch {}
+    };
+
+    const setTheme = (mode) => {
+      if (mode === "dark") document.documentElement.classList.add("dark");
+      else document.documentElement.classList.remove("dark");
+      localStorage.setItem("theme", mode);
+      $("#themeToggle").textContent = mode === "dark" ? "☀️" : "🌙";
+    };
+
+    const toast = (title, msg) => {
+      const div = document.createElement("div");
+      div.className = "animate-slideUp rounded-xl border border-slate-200 bg-white p-3 shadow-soft dark:border-slate-800 dark:bg-slate-900";
+      div.innerHTML = `<p class="font-semibold">${title}</p><p class="text-sm text-slate-500 dark:text-slate-400">${msg}</p>`;
+      $("#toaster").appendChild(div);
+      setTimeout(()=>div.remove(), 3000);
+    };
+
+    const dayDiff = (a,b) => Math.max(0, Math.ceil((a-b)/86400000));
+
+    /***********************
+     * ON LOAD
+     ***********************/
+    (function init(){
+      // theme
+      setTheme(localStorage.getItem("theme") || "light");
+
+      // consent
+      load();
+      if (!state.consent) $("#consentModal").classList.remove("hidden");
+
+      // if user already onboarded show app
+      if (state.firstName) {
+        $("#onboarding").classList.add("hidden");
+        $("#app").classList.remove("hidden");
+        $("#backBtn").classList.remove("hidden");
+        hydrateApp();
+      }
+
+      // events
+      $("#consentAccept").onclick = () => {
+        state.consent = true;
+        const email = $("#consentEmail").value.trim();
+        if (email) state.email = email;
+        save();
+        $("#consentModal").classList.add("hidden");
+        toast("Journey started", "Welcome to Pathwise!");
+      };
+      $("#consentDecline").onclick = () => $("#consentModal").classList.add("hidden");
+      $("#themeToggle").onclick = () => setTheme(document.documentElement.classList.contains("dark") ? "light" : "dark");
+      $("#shareBtn").onclick = () => {
+        const text = "Check out Pathwise – smart CA college planning";
+        if (navigator.share) navigator.share({ title:"Pathwise", text, url: location.href });
+        else { navigator.clipboard.writeText(location.href); toast("Link copied", "Share it with friends!"); }
+      };
+
+      // onboarding nav
+      $("#step1Next").onclick = () => {
+        const name = $("#firstName").value.trim();
+        const grade = $("#gradeLevel").value;
+        let ok = true;
+        if (!name) { $("#nameError").classList.remove("hidden"); ok=false; } else $("#nameError").classList.add("hidden");
+        if (!grade){ $("#gradeError").classList.remove("hidden"); ok=false; } else $("#gradeError").classList.add("hidden");
+        if (!ok) return;
+        state.firstName = name; state.gradeLevel = grade; save();
+        gotoStep(2);
+      };
+      $("#step2Back").onclick = () => gotoStep(1);
+      $("#step2Next").onclick = () => {
+        if (state.interests.length===0) { showAI("Pick a couple interests—or 'Not sure' works too!"); return; }
+        gotoStep(3);
+      };
+      $("#step3Back").onclick = () => gotoStep(2);
+      $("#step3Next").onclick = () => {
+        if (state.preferences.length===0) { showAI("Choose 1–2 priorities so we can tailor picks."); return; }
+        gotoStep(4);
+      };
+      $("#step4Back").onclick = () => gotoStep(3);
+      $("#finishBtn").onclick = finishOnboarding;
+      ["gpa","sat","ap"].forEach(id => $(`#${id}`).addEventListener("input", previewMatches));
+
+      // interest / preference toggles
+      $$(".interest").forEach(btn=>{
+        btn.onclick = () => {
+          const k = btn.dataset.interest;
+          btn.classList.toggle("ring-2");
+          btn.classList.toggle("ring-brand.primary/40");
+          if (btn.classList.contains("ring-2")) {
+            if (k!=="unsure") {
+              // turn off "unsure"
+              const u = document.querySelector('[data-interest="unsure"]');
+              if (u) { u.classList.remove("ring-2","ring-brand.primary/40"); state.interests = state.interests.filter(x=>x!=="unsure"); }
+            }
+            if (!state.interests.includes(k)) state.interests.push(k);
+          } else {
+            state.interests = state.interests.filter(x=>x!==k);
+          }
+          save();
+        };
+      });
+      $$(".pref").forEach(btn=>{
+        btn.onclick = () => {
+          const k = btn.dataset.preference;
+          btn.classList.toggle("ring-2");
+          btn.classList.toggle("ring-brand.primary/40");
+          if (btn.classList.contains("ring-2")) {
+            if (!state.preferences.includes(k)) state.preferences.push(k);
+          } else {
+            state.preferences = state.preferences.filter(x=>x!==k);
+          }
+          save();
+        };
+      });
+
+      // tabs
+      $$(".tab-btn").forEach(b=>{
+        b.onclick = (e) => {
+          const tab = b.dataset.tab;
+          $$(".tab-btn").forEach(x=>x.classList.remove("bg-brand.primary","text-white"));
+          b.classList.add("bg-brand.primary","text-white");
+          $$(".tab-pane").forEach(p=>p.classList.add("hidden"));
+          $(`#tab-${tab}`).classList.remove("hidden");
+          if (tab==="financial") calcAid(); // keep financial tab fresh
+        };
+      });
+      // default selected tab
+      document.querySelector('[data-tab="dashboard"]').click();
+
+      // planning
+      $("#addTask").onclick = () => {
+        const val = $("#newTask").value.trim();
+        if (!val) return;
+        state.tasks.push({ text: val, done:false });
+        $("#newTask").value = "";
+        save(); renderTasks();
+      };
+
+      // AI bubble timer
+      setTimeout(()=> showAI("Need help choosing schools? I can explain reach/match/safety."), 7000);
+      $("#aiClose").onclick = () => $("#aiBubble").classList.add("hidden");
+      $("#backBtn").onclick = () => {
+        // reset to onboarding from app
+        $("#app").classList.add("hidden");
+        $("#onboarding").classList.remove("hidden");
+        document.documentElement.scrollTop = 0;
+      };
+    })();
+
+    /***********************
+     * ONBOARDING HELPERS
+     ***********************/
+    function gotoStep(n){
+      // progress
+      const pct = [20,40,60,80,100][n-1] || 20;
+      $("#progressPct").textContent = pct + "%";
+      $("#progressBar").style.width = pct + "%";
+      $("#progressLabel").textContent = [
+        "Getting started","Building your profile","Priorities","Almost there","Ready"
+      ][n-1] || "Getting started";
+
+      // swap cards
+      [1,2,3,4].forEach(i=> $("#step"+i).classList.toggle("hidden", i!==n));
+      document.documentElement.scrollTop = 0;
+    }
+
+    function previewMatches(){
+      const gpa = parseFloat($("#gpa").value)||0;
+      const sat = parseInt($("#sat").value)||0;
+      let count=0;
+      for (const s of schools){
+        const score = matchScore(s,gpa,sat,(parseInt($("#ap").value)||0));
+        if (score>=50) count++;
+      }
+      $("#matchPreview").textContent = gpa || sat ? `~${count} likely matches so far` : "Enter GPA/SAT to preview matches…";
+    }
+
+    function finishOnboarding(){
+      state.gpa = parseFloat($("#gpa").value) || null;
+      state.sat = parseInt($("#sat").value) || null;
+      state.ap = parseInt($("#ap").value) || 0;
+      save();
+
+      $("#onboarding").classList.add("hidden");
+      $("#app").classList.remove("hidden");
+      $("#backBtn").classList.remove("hidden");
+      hydrateApp();
+      toast("Profile complete","Your college journey begins!");
+    }
+
+    /***********************
+     * APP RENDER
+     ***********************/
+    function hydrateApp(){
+      $("#userName").textContent = state.firstName || "Student";
+      $("#statGPA").textContent = state.gpa ? state.gpa.toFixed(2) : "—";
+      $("#daysLeft").textContent = dayDiff(deadline, new Date());
+      renderSchools();
+      renderTasks();
+      renderDocs();
+      renderTimeline();
+      calcAid();
+    }
+
+    function matchScore(school, gpa = state.gpa, sat = state.sat, ap = state.ap){
+      let score = 50;
+      if (gpa) score += (gpa - school.gpa) * 20;
+      if (sat) score += (sat - school.sat) / 10;
+      if (state.interests.includes("stem") && (school.name.includes("UC") || school.name.includes("Poly"))) score += 6;
+      if (state.preferences.includes("reputation") && school.rate < 30) score += 6;
+      if (state.preferences.includes("cost") && school.tuition < 12000) score += 8;
+      score += (ap||0) * 1.5;
+      return Math.max(0, Math.min(100, Math.round(score)));
+    }
+
+    function bucketBy(score){
+      if (score < 45) return "reach";
+      if (score > 70) return "safety";
+      return "match";
+    }
+
+    function renderSchools(){
+      const buckets = { reach:[], match:[], safety:[] };
+      schools.forEach(s=>{
+        const score = matchScore(s);
+        const bucket = bucketBy(score);
+        buckets[bucket].push(card(s, score));
+      });
+
+      const bucketUI = (title, note, color, key) => `
+        <div>
+          <div class="mb-2 flex items-center gap-2">
+            <div class="rounded-full bg-${color}-100 px-2 py-0.5 text-xs font-bold text-${color}-700 dark:bg-${color}-900/40 dark:text-${color}-200">${title}</div>
+            <span class="text-sm text-slate-500 dark:text-slate-400">${note}</span>
+          </div>
+          <div class="grid gap-3 sm:grid-cols-2">${buckets[key].join("") || emptyCard()}</div>
+        </div>
+      `;
+
+      $("#schoolsWrap").innerHTML =
+        bucketUI("Reach","Shoot your shot 🚀","rose","reach") +
+        bucketUI("Match","You got this ✅","green","match") +
+        bucketUI("Safety","Solid backup 🛡️","blue","safety");
+
+      $("#statSchools").textContent = (buckets.reach.length + buckets.match.length + buckets.safety.length).toString();
+    }
+
+    function card(s, score){
+      const level = score>70 ? "High" : score>50 ? "Medium" : "Low";
+      const badge = score>70 ? "bg-green-100 text-green-700 dark:bg-green-900/40 dark:text-green-200"
+                  : score>50 ? "bg-amber-100 text-amber-700 dark:bg-amber-900/40 dark:text-amber-200"
+                  : "bg-rose-100 text-rose-700 dark:bg-rose-900/40 dark:text-rose-200";
+      return `
+        <div class="rounded-2xl border border-slate-200 bg-white p-4 shadow-soft dark:border-slate-800 dark:bg-slate-900">
+          <div class="flex items-start justify-between">
+            <div>
+              <p class="text-lg font-bold">${s.name}</p>
+              <p class="text-xs text-slate-500 dark:text-slate-400">Acceptance: ${s.rate}%</p>
+            </div>
+            <span class="rounded-full px-2 py-0.5 text-xs font-bold ${badge}">${score}% match</span>
+          </div>
+          <div class="mt-3 grid grid-cols-3 gap-2 text-xs">
+            <div class="rounded-xl border border-slate-200 p-2 dark:border-slate-700">
+              <p class="font-semibold">Avg GPA</p><p>${s.gpa}</p>
+            </div>
+            <div class="rounded-xl border border-slate-200 p-2 dark:border-slate-700">
+              <p class="font-semibold">Avg SAT</p><p>${s.sat}</p>
+            </div>
+            <div class="rounded-xl border border-slate-200 p-2 dark:border-slate-700">
+              <p class="font-semibold">Tuition</p><p>$${s.tuition.toLocaleString()}/yr</p>
+            </div>
+          </div>
+        </div>
+      `;
+    }
+    function emptyCard(){
+      return `<div class="rounded-2xl border border-dashed border-slate-300 p-4 text-sm text-slate-500 dark:border-slate-700 dark:text-slate-400">No schools in this bucket yet. Adjust GPA/SAT or preferences.</div>`;
+    }
+
+    function renderTasks(){
+      const ul = $("#todoList");
+      ul.innerHTML = "";
+      state.tasks.forEach((t,i)=>{
+        const li = document.createElement("li");
+        li.className = "flex items-center justify-between rounded-xl border border-slate-200 bg-white p-3 text-sm dark:border-slate-800 dark:bg-slate-900";
+        li.innerHTML = `
+          <label class="flex items-center gap-2">
+            <input type="checkbox" ${t.done?"checked":""} class="h-4 w-4 rounded border-slate-300 text-brand.primary focus:ring-brand.primary">
+            <span class="${t.done?"line-through text-slate-400":""}">${t.text}</span>
+          </label>
+          <button class="text-slate-400 hover:text-brand.danger">🗑️</button>
+        `;
+        const [checkbox, del] = li.querySelectorAll("input,button");
+        checkbox.onchange = (e)=>{ state.tasks[i].done = e.target.checked; save(); renderTasks(); };
+        del.onclick = ()=>{ state.tasks.splice(i,1); save(); renderTasks(); };
+        ul.appendChild(li);
+      });
+    }
+
+    function renderDocs(){
+      const wrap = $("#docsList");
+      wrap.innerHTML = "";
+      const items = [
+        ["profile","Personal info","Completed","success"],
+        ["transcripts","Transcripts","Request from counselor by Oct 15","warning"],
+        ["recommendations","Recommendation letters","Need 2–3 teachers","danger"],
+        ["personal_statement","Personal statement","4 UC PIQs","danger"],
+        ["fafsa","FAFSA/CADAA","Opens Oct 1, 2025","danger"]
+      ];
+      let done = 0;
+      items.forEach(([key,title,desc,theme])=>{
+        const on = !!state.docs[key];
+        if (on) done++;
+        wrap.insertAdjacentHTML("beforeend", `
+          <div class="flex items-start gap-3 rounded-2xl border border-slate-200 bg-white p-4 shadow-soft dark:border-slate-800 dark:bg-slate-900">
+            <input type="checkbox" ${on?"checked":""} class="mt-0.5 h-4 w-4 rounded border-slate-300 text-brand.primary focus:ring-brand.primary">
+            <div class="flex-1">
+              <p class="font-semibold">${title}</p>
+              <p class="text-sm text-slate-500 dark:text-slate-400">${desc}</p>
+            </div>
+            <span class="rounded-full px-2 py-0.5 text-xs font-bold ${
+              theme==="success" ? "bg-green-100 text-green-700 dark:bg-green-900/40 dark:text-green-200" :
+              theme==="warning" ? "bg-amber-100 text-amber-700 dark:bg-amber-900/40 dark:text-amber-200" :
+              "bg-rose-100 text-rose-700 dark:bg-rose-900/40 dark:text-rose-200"
+            }">${on?"Done":"Pending"}</span>
+          </div>
+        `);
+        const cb = wrap.lastElementChild.querySelector("input");
+        cb.onchange = () => { state.docs[key] = cb.checked; save(); renderDocs(); };
+      });
+      const pct = Math.round(done / items.length * 100);
+      $("#docProgressPct").textContent = pct + "%";
+      $("#docProgressBar").style.width = pct + "%";
+    }
+
+    function renderTimeline(){
+      const list = $("#timelineList");
+      const items = [
+        { date:"Aug 1, 2025", title:"UC application opens", color:"brand" , tip:"Start PIQs + activities list" },
+        { date:"Oct 1, 2025", title:"FAFSA/CADAA opens", color:"green", tip:"Submit ASAP for max aid" },
+        { date:"Nov 15, 2025", title:"Priority submission", color:"amber", tip:"Early submission suggests interest" },
+        { date:"Nov 30, 2025", title:"UC/CSU deadline", color:"rose", tip:"No extensions; submit!" },
+        { date:"Mar 15–30, 2026", title:"Decisions released", color:"brand", tip:"Check portals" }
+      ];
+      list.innerHTML = items.map(i=>`
+        <div class="rounded-2xl border border-slate-200 bg-white p-4 shadow-soft dark:border-slate-800 dark:bg-slate-900">
+          <p class="text-xs text-slate-500 dark:text-slate-400">${i.date}</p>
+          <p class="text-lg font-bold">${i.title}</p>
+          <p class="text-sm text-slate-500 dark:text-slate-400">${i.tip}</p>
+        </div>
+      `).join("");
+    }
+
+    /***********************
+     * FINANCIAL AID
+     ***********************/
+    function calcAid(){
+      const income = parseInt($("#faIncome").value)||0;
+      const gpa = state.gpa || 3.2;
+      // Very simple heuristics (budget friendly demo)
+      const pell = income < 65000 ? (income < 50000 ? 7395 : 3500) : 0;
+      const calGrant = (income < 80000 && gpa >= 3.0) ? 12570 : 0;
+      const mcs = (income >= 80000 && income <= 177000) ? Math.max(0, 3000 - Math.floor((income-80000)/5000)*250) : 0;
+      const total = pell + calGrant + mcs;
+
+      const card = (label, amount) => `
+        <div class="rounded-2xl border border-slate-200 bg-white p-4 text-center shadow-soft dark:border-slate-800 dark:bg-slate-900">
+          <p class="text-xs text-slate-500 dark:text-slate-400">${label}</p>
+          <p class="mt-1 text-2xl font-bold">$${amount.toLocaleString()}</p>
+        </div>
+      `;
+      $("#aidResult").innerHTML = card("Pell Grant", pell) + card("Cal Grant A/B", calGrant) + card("Middle Class Scholarship", mcs) +
+        `<div class="sm:col-span-3 mt-2 rounded-2xl border border-slate-200 bg-slate-50 p-4 text-center font-semibold dark:border-slate-800 dark:bg-slate-900">Estimated annual aid: $${total.toLocaleString()}</div>`;
+    }
+    $("#calcAid")?.addEventListener("click", calcAid);
+
+    /***********************
+     * AI BUBBLE
+     ***********************/
+    function showAI(text){
+      $("#aiText").textContent = text;
+      $("#aiBubble").classList.remove("hidden");
+      setTimeout(()=> $("#aiBubble").classList.add("hidden"), 9000);
+    }
+  </script>
 </body>
 </html>
-:root {
-  --primary: #007AFF;
-  --secondary: #5856D6;
-  --background: #F2F2F7;
-  --card: #fff;
-  --text: #1C1C1E;
-}
-
-[data-theme="dark"] {
-  --background: #000;
-  --card: #1C1C1E;
-  --text: #F2F2F7;
-}
-
-body {
-  font-family: system-ui, sans-serif;
-  margin: 0;
-  background: var(--background);
-  color: var(--text);
-  transition: background 0.3s, color 0.3s;
-}
-
-.nav-header {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  padding: 1rem;
-  background: var(--card);
-  position: sticky;
-  top: 0;
-  z-index: 100;
-}
-
-.tab-button {
-  background: none;
-  border: none;
-  margin: 0 0.5rem;
-  padding: 0.5rem 1rem;
-  cursor: pointer;
-  border-radius: 8px;
-}
-
-.tab-button.active {
-  background: var(--primary);
-  color: #fff;
-}
-
-.tab {
-  display: none;
-  padding: 1rem;
-}
-
-.tab.active {
-  display: block;
-}
-
-#themeToggle {
-  position: fixed;
-  bottom: 1rem;
-  left: 1rem;
-  background: var(--card);
-  padding: 0.5rem;
-  border-radius: 50%;
-  cursor: pointer;
-}
-
-#aiHelper {
-  position: fixed;
-  bottom: 5rem;
-  right: 1rem;
-  background: var(--primary);
-  color: #fff;
-  padding: 1rem;
-  border-radius: 12px;
-}
-// Theme toggle
-const themeToggle = document.getElementById("themeToggle");
-themeToggle.addEventListener("click", () => {
-  const newTheme = document.documentElement.getAttribute("data-theme") === "dark" ? "light" : "dark";
-  document.documentElement.setAttribute("data-theme", newTheme);
-  themeToggle.textContent = newTheme === "dark" ? "☀️" : "🌙";
-  localStorage.setItem("theme", newTheme);
-});
-
-// Tab switching
-document.querySelectorAll(".tab-button").forEach(btn => {
-  btn.addEventListener("click", e => {
-    document.querySelectorAll(".tab, .tab-button").forEach(el => el.classList.remove("active"));
-    const tab = e.target.dataset.tab;
-    document.getElementById(tab).classList.add("active");
-    e.target.classList.add("active");
-  });
-});
-
-// Planning tasks
-function addTask() {
-  const input = document.getElementById("newTask");
-  const task = input.value.trim();
-  if (!task) return;
-  const li = document.createElement("li");
-  li.textContent = task;
-  document.getElementById("todoList").appendChild(li);
-  input.value = "";
-}
-
-// AI helper demo
-setTimeout(() => {
-  const aiHelper = document.getElementById("aiHelper");
-  aiHelper.classList.remove("hidden");
-  setTimeout(() => aiHelper.classList.add("hidden"), 6000);
-}, 5000);
-
-// Load theme on startup
-const savedTheme = localStorage.getItem("theme") || "light";
-document.documentElement.setAttribute("data-theme", savedTheme);
-themeToggle.textContent = savedTheme === "dark" ? "☀️" : "🌙";
