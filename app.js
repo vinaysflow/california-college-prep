@@ -1,60 +1,70 @@
 import express from "express";
 import cors from "cors";
 import bodyParser from "body-parser";
-import OpenAI from "openai";
 import path from "path";
 import { fileURLToPath } from "url";
+import OpenAI from "openai";
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
 const app = express();
+const PORT = process.env.PORT || 3000;
+
 app.use(cors());
 app.use(bodyParser.json());
 
-// --- OpenAI Setup ---
-const openai = new OpenAI({
-  apiKey: process.env.OPENAI_API_KEY,
-});
+// Serve static frontend (public/index.html)
+app.use(express.static(path.join(__dirname, "public")));
 
-// --- APIs ---
-app.post("/api/match", (req, res) => {
-  const recos = {
-    reach: [{ name: "Stanford University" }, { name: "MIT" }],
-    match: [{ name: "UC Davis" }, { name: "University of Washington" }],
-    safety: [{ name: "San Jose State University" }, { name: "Cal State Fullerton" }]
-  };
-  res.json({ recos });
-});
+// Init OpenAI client if key available
+let openai = null;
+if (process.env.OPENAI_API_KEY) {
+  openai = new OpenAI({ apiKey: process.env.OPENAI_API_KEY });
+}
 
+// --------- API ROUTES ----------
+
+// Scholarships
 app.post("/api/scholarships", (req, res) => {
+  const profile = req.body;
+  // Basic mocked response
   const scholarships = [
-    { name: "Tech Trailblazers", amount: 7500 },
-    { name: "First Gen Leaders", amount: 5000 }
+    { name: "Tech Trailblazers", amount: 7500, due: "2025-11-01", criteria: "STEM majors" },
+    { name: "First Gen Leaders", amount: 5000, due: "2025-12-01", criteria: "First-generation students" }
   ];
   res.json({ scholarships });
 });
 
+// Match schools
+app.post("/api/match", (req, res) => {
+  const profile = req.body;
+  // Just echo back buckets (frontend also has its own engine)
+  const recos = { reach: [], match: [], safety: [] };
+  res.json({ recos });
+});
+
+// AI Chat
 app.post("/api/ai/chat", async (req, res) => {
+  const { message } = req.body;
+  if (!openai) {
+    return res.json({ response: `Local AI fallback: ${message}` });
+  }
+
   try {
-    const { message } = req.body;
     const completion = await openai.chat.completions.create({
       model: "gpt-4o-mini",
-      messages: [
-        { role: "system", content: "You are a helpful college planning assistant for Gen Alpha students." },
-        { role: "user", content: message }
-      ]
+      messages: [{ role: "user", content: message }]
     });
-    res.json({ response: completion.choices[0].message.content });
+    const reply = completion.choices[0].message.content;
+    res.json({ response: reply });
   } catch (err) {
-    res.status(500).json({ error: "OpenAI call failed" });
+    console.error(err);
+    res.json({ response: "Error contacting OpenAI" });
   }
 });
 
-// --- Serve Frontend ---
-app.get("/", (req, res) => {
-  res.sendFile(path.join(__dirname, "index.html"));
+// Start server
+app.listen(PORT, () => {
+  console.log(`✅ App running at http://localhost:${PORT}`);
 });
-
-// --- Start ---
-app.listen(3000, () => console.log("✅ App running at http://localhost:3000"));

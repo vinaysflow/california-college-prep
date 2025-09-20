@@ -1,145 +1,374 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+  <meta charset="UTF-8"/>
+  <meta
+    name="viewport"
+    content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"
+  />
   <title>CollegeQuest - Your AI College Planning Assistant</title>
+
+  <!-- =========================
+       GEN-ALPHA THEME & UI
+       ========================= -->
   <style>
-    /* === GEN ALPHA THEME / GLASSMORPHISM === */
-    * { margin: 0; padding: 0; box-sizing: border-box; }
-    :root {
-      --primary: linear-gradient(135deg, #667EEA 0%, #764BA2 100%);
-      --secondary: linear-gradient(135deg, #F093FB 0%, #F5576C 100%);
-      --success: linear-gradient(135deg, #00C896 0%, #00B4D8 100%);
-      --dark: #0F0F1E;
-      --light: #FFFFFF;
-      --glass: rgba(255, 255, 255, 0.1);
-      --border: rgba(255, 255, 255, 0.2);
-      --text-primary: #FFFFFF;
-      --text-secondary: rgba(255, 255, 255, 0.7);
+    /* Reset & Vars */
+    *{margin:0;padding:0;box-sizing:border-box;-webkit-font-smoothing:antialiased;-moz-osx-font-smoothing:grayscale;}
+    :root{
+      --primary:linear-gradient(135deg,#667EEA 0%,#764BA2 100%);
+      --secondary:linear-gradient(135deg,#F093FB 0%,#F5576C 100%);
+      --success:linear-gradient(135deg,#00C896 0%,#00B4D8 100%);
+      --warning:linear-gradient(135deg,#FFB700 0%,#FF6B6B 100%);
+      --info:linear-gradient(135deg,#4FACFE 0%,#00F2FE 100%);
+      --dark:#0F0F1E; --light:#FFFFFF;
+      --glass:rgba(255,255,255,0.1); --glass-dark:rgba(0,0,0,0.3);
+      --blur:20px; --text-primary:#FFFFFF; --text-secondary:rgba(255,255,255,0.7);
+      --border:rgba(255,255,255,0.1); --glow-purple:#764BA2; --glow-blue:#667EEA;
+      --ease-bounce:cubic-bezier(0.68,-0.55,0.265,1.55); --ease-smooth:cubic-bezier(0.4,0,0.2,1);
     }
-    body { font-family: 'Segoe UI', sans-serif; background: var(--dark); color: var(--text-primary); min-height: 100vh; }
-    .animated-bg {
-      position: fixed; inset: 0; z-index: -1;
-      background: radial-gradient(circle at 20% 50%, rgba(102,126,234,0.3), transparent 50%),
-                  radial-gradient(circle at 80% 80%, rgba(118,75,162,0.3), transparent 50%),
-                  radial-gradient(circle at 40% 20%, rgba(240,147,251,0.3), transparent 50%);
-      animation: backgroundShift 20s ease infinite;
+    [data-theme="light"]{
+      --dark:#FFFFFF; --light:#0F0F1E; --glass:rgba(0,0,0,0.05); --glass-dark:rgba(255,255,255,0.8);
+      --text-primary:#0F0F1E; --text-secondary:rgba(0,0,0,0.6); --border:rgba(0,0,0,0.1);
     }
-    @keyframes backgroundShift { 0%,100% {transform:scale(1);} 50%{transform:scale(1.1);} }
-    .container { max-width: 1400px; margin: 0 auto; padding: 20px; }
+    body{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,"Helvetica Neue",Arial,sans-serif;background:var(--dark);color:var(--text-primary);min-height:100vh;overflow-x:hidden;}
 
-    /* === HEADER === */
-    header { display: flex; justify-content: space-between; align-items: center; padding: 20px 0; }
-    .logo { font-size: 28px; font-weight: 800; background: var(--primary);
-            -webkit-background-clip:text; -webkit-text-fill-color:transparent; }
+    /* Animated Background */
+    .animated-bg{position:fixed;inset:0;z-index:-1;
+      background:
+        radial-gradient(circle at 20% 50%, rgba(102,126,234,0.3) 0%, transparent 50%),
+        radial-gradient(circle at 80% 80%, rgba(118,75,162,0.3) 0%, transparent 50%),
+        radial-gradient(circle at 40% 20%, rgba(240,147,251,0.3) 0%, transparent 50%);
+      animation:backgroundShift 20s ease infinite;}
+    @keyframes backgroundShift{0%,100%{transform:rotate(0) scale(1);}50%{transform:rotate(180deg) scale(1.1);} }
 
-    /* === NAVIGATION === */
-    .nav-tabs { display: flex; gap: 10px; padding: 5px; background: var(--glass);
-                border-radius: 50px; margin-bottom: 30px; overflow-x:auto; }
-    .nav-tab { padding: 12px 24px; border-radius: 50px; cursor: pointer;
-               background: transparent; color: var(--text-secondary); font-weight: 600; }
-    .nav-tab.active { background: var(--primary); color: white; }
+    /* Layout */
+    .container{max-width:1400px;margin:0 auto;padding:20px;position:relative;z-index:1;}
+    header{display:flex;justify-content:space-between;align-items:center;padding:20px 0;margin-bottom:20px;}
+    .logo{font-size:28px;font-weight:800;background:var(--primary);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;display:flex;align-items:center;gap:10px;}
 
-    /* === CARDS & BUTTONS === */
-    .card { background: var(--glass); border-radius: 20px; padding: 20px; margin-bottom: 15px; border: 1px solid var(--border); }
-    .btn { padding: 10px 20px; border-radius: 50px; cursor: pointer; border: none; font-weight: 600; }
-    .btn-primary { background: var(--primary); color: white; }
-    .btn-glass { background: var(--glass); color: white; border: 1px solid var(--border); }
+    /* Tabs */
+    .nav-tabs{display:flex;gap:10px;padding:5px;background:var(--glass);border-radius:50px;backdrop-filter:blur(10px);margin-bottom:20px;overflow-x:auto;scrollbar-width:none;}
+    .nav-tabs::-webkit-scrollbar{display:none;}
+    .nav-tab{padding:12px 18px;border:none;background:transparent;color:var(--text-secondary);font-weight:600;border-radius:50px;cursor:pointer;transition:all .3s var(--ease-smooth);white-space:nowrap;font-size:14px;}
+    .nav-tab.active{background:var(--primary);color:#fff;box-shadow:0 4px 15px rgba(102,126,234,.3);}
+    .nav-tab:hover:not(.active){background:var(--glass);}
 
-    /* === FORMS === */
-    .form-group { margin-bottom: 20px; }
-    .form-label { font-size: 12px; text-transform: uppercase; margin-bottom: 6px; display: block; }
-    .form-input { width: 100%; padding: 12px 15px; border-radius: 12px; border: 1px solid var(--border);
-                  background: var(--glass); color: var(--text-primary); }
+    /* Cards & Buttons */
+    .card{background:var(--glass);backdrop-filter:blur(var(--blur));-webkit-backdrop-filter:blur(var(--blur));
+      border-radius:20px;border:1px solid var(--border);padding:20px;transition:all .3s var(--ease-smooth);}
+    .card:hover{transform:translateY(-3px);box-shadow:0 20px 40px rgba(102,126,234,.2);border-color:rgba(102,126,234,.5);}
+    .btn{padding:12px 20px;border:none;border-radius:50px;font-weight:600;font-size:14px;cursor:pointer;transition:all .3s var(--ease-bounce);display:inline-flex;align-items:center;gap:8px;}
+    .btn-primary{background:var(--primary);color:#fff;box-shadow:0 4px 15px rgba(102,126,234,.3);}
+    .btn-primary:hover{transform:translateY(-2px) scale(1.05);box-shadow:0 6px 25px rgba(102,126,234,.5);}
+    .btn-success{background:var(--success);color:#fff;}
+    .btn-glass{background:var(--glass);backdrop-filter:blur(10px);color:var(--text-primary);border:1px solid var(--border);}
 
-    /* === CHAT === */
-    .ai-chat-container { background: var(--glass); border-radius: 20px; display:flex; flex-direction:column; height:400px; }
-    .chat-messages { flex:1; overflow-y:auto; padding:15px; display:flex; flex-direction:column; gap:10px; }
-    .message { max-width:70%; padding:10px 15px; border-radius:15px; }
-    .message.user { align-self:flex-end; background: var(--primary); color:white; }
-    .message.ai { align-self:flex-start; background: var(--glass); border:1px solid var(--border); }
-    .chat-input-container { display:flex; gap:10px; padding:15px; border-top:1px solid var(--border); }
-    .chat-input { flex:1; padding:10px 15px; border-radius:25px; border:1px solid var(--border); background: var(--glass); color:var(--text-primary);}
-    .chat-send { width:48px; height:48px; border-radius:50%; background: var(--primary); color:white; display:flex; align-items:center; justify-content:center; }
+    /* Form */
+    .form-row{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:12px;}
+    .form-group{margin-bottom:12px;}
+    .form-label{display:block;margin-bottom:6px;font-weight:600;font-size:12px;text-transform:uppercase;letter-spacing:1px;color:var(--text-secondary);}
+    .form-input,.form-select,.form-textarea{
+      width:100%;padding:12px 14px;background:var(--glass);border:2px solid var(--border);border-radius:15px;color:var(--text-primary);font-size:16px;transition:all .3s var(--ease-smooth);}
+    .form-input:focus,.form-select:focus,.form-textarea:focus{outline:none;border-color:var(--glow-purple);box-shadow:0 0 20px rgba(118,75,162,.2);}
 
-    /* === GRID === */
-    .schools-grid { display:grid; grid-template-columns:repeat(auto-fill, minmax(280px,1fr)); gap:20px; }
-    .school-card { border-radius:15px; overflow:hidden; background:var(--glass); }
-    .school-card img { width:100%; height:180px; object-fit:cover; }
-    .school-content { padding:15px; }
+    /* Grids & Stats */
+    .stats-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:16px;margin-bottom:20px;}
+    .stat-card{text-align:center;position:relative;overflow:hidden;}
+    .stat-icon{font-size:28px;margin-bottom:8px;}
+    .stat-number{font-size:28px;font-weight:800;background:var(--primary);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;}
+    .stat-description{font-size:12px;color:var(--text-secondary);text-transform:uppercase;letter-spacing:1px;margin-top:6px;}
 
-    /* === SOCIAL FEED === */
-    .social-feed { background: var(--glass); border-radius:20px; padding:20px; }
-    .social-post { display:flex; gap:10px; border-bottom:1px solid var(--border); padding:10px 0; }
-    .social-avatar { width:40px; height:40px; border-radius:50%; background:var(--primary); color:white; display:flex; align-items:center; justify-content:center; }
+    .progress-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(250px,1fr));gap:16px;margin-bottom:20px;}
+    .progress-ring{width:120px;height:120px;margin:0 auto 12px;position:relative;}
+    .progress-ring svg{transform:rotate(-90deg);}
+    .progress-ring-bg{fill:none;stroke:var(--border);stroke-width:8;}
+    .progress-ring-fill{fill:none;stroke:url(#gradient);stroke-width:8;stroke-linecap:round;transition:stroke-dashoffset 1s var(--ease-smooth);}
+    .progress-value{position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);font-size:22px;font-weight:700;}
+    .progress-label{font-size:14px;color:var(--text-secondary);text-align:center;}
 
+    /* Schools Grid */
+    .schools-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:16px;}
+    .school-card{background:var(--glass);border-radius:18px;overflow:hidden;transition:all .3s var(--ease-smooth);cursor:pointer;border:1px solid var(--border);}
+    .school-card:hover{transform:translateY(-4px);box-shadow:0 20px 40px rgba(0,0,0,.2);}
+    .school-image{width:100%;height:180px;object-fit:cover;}
+    .school-content{padding:16px;}
+    .school-name{font-size:18px;font-weight:700;margin-bottom:6px;}
+    .school-location{color:var(--text-secondary);font-size:13px;margin-bottom:10px;}
+    .school-stats{display:flex;justify-content:space-between;font-size:13px;}
+    .school-stat{text-align:center;}
+    .stat-value{font-weight:700;display:block;margin-bottom:3px;}
+    .stat-label{color:var(--text-secondary);font-size:10px;text-transform:uppercase;}
+
+    /* Compare */
+    .comparison-container{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-bottom:16px;}
+    .comparison-card{background:var(--glass);border-radius:20px;padding:16px;border:2px solid var(--border);}
+    .comparison-card.recommended{box-shadow:0 0 30px rgba(102,126,234,.2);border-color:rgba(102,126,234,.5);}
+    .comparison-header{display:flex;justify-content:space-between;align-items:center;margin-bottom:10px;}
+    .comparison-title{font-size:18px;font-weight:700;}
+    .comparison-badge{padding:6px 10px;border-radius:16px;font-size:10px;font-weight:700;text-transform:uppercase;background:var(--success);color:#fff;}
+    .comparison-metric{display:flex;justify-content:space-between;align-items:center;padding:8px 0;border-bottom:1px solid var(--border);}
+    .comparison-metric:last-child{border-bottom:none;}
+    .metric-label{color:var(--text-secondary);font-size:13px;}
+    .metric-value{font-weight:600;font-size:15px;}
+    .metric-value.positive{color:#00C896;}
+    .metric-value.negative{color:#FF6B6B;}
+
+    /* AI Chat */
+    .ai-chat-container{height:460px;display:flex;flex-direction:column;background:var(--glass);border-radius:20px;overflow:hidden;border:1px solid var(--border);}
+    .chat-header{background:var(--primary);color:#fff;padding:16px;display:flex;align-items:center;gap:12px;}
+    .chat-messages{flex:1;overflow-y:auto;padding:16px;display:flex;flex-direction:column;gap:10px;}
+    .message{max-width:75%;padding:12px 16px;border-radius:18px;animation:messageSlide .3s var(--ease-smooth);}
+    .message.user{align-self:flex-end;background:var(--primary);color:#fff;}
+    .message.ai{align-self:flex-start;background:var(--glass);border:1px solid var(--border);}
+    @keyframes messageSlide{from{opacity:0;transform:translateY(10px);}to{opacity:1;transform:translateY(0);}}
+    .chat-input-container{padding:14px;border-top:1px solid var(--border);display:flex;gap:10px;}
+    .chat-input{flex:1;padding:12px 16px;background:var(--glass);border:1px solid var(--border);border-radius:50px;color:var(--text-primary);font-size:14px;}
+    .chat-send{width:48px;height:48px;border-radius:50%;background:var(--primary);border:none;color:#fff;display:flex;align-items:center;justify-content:center;cursor:pointer;transition:all .3s var(--ease-smooth);}
+    .chat-send:hover{transform:scale(1.08);}
+
+    /* Social */
+    .social-feed{max-height:480px;overflow-y:auto;padding:16px;background:var(--glass);border-radius:20px;border:1px solid var(--border);}
+    .social-post{padding:12px;border-bottom:1px solid var(--border);display:flex;gap:12px;}
+    .social-post:last-child{border-bottom:none;}
+    .social-avatar{width:40px;height:40px;border-radius:50%;background:var(--primary);display:flex;align-items:center;justify-content:center;color:#fff;font-weight:600;}
+    .social-name{font-weight:600;margin-bottom:4px;}
+    .social-text{color:var(--text-secondary);font-size:14px;margin-bottom:8px;}
+    .social-actions{display:flex;gap:12px;font-size:12px;color:var(--text-secondary);}
+
+    /* Toast */
+    .toast{position:fixed;bottom:100px;left:50%;transform:translateX(-50%) translateY(100px);background:var(--glass-dark);backdrop-filter:blur(20px);color:#fff;padding:14px 20px;border-radius:50px;box-shadow:0 10px 30px rgba(0,0,0,.3);z-index:3000;opacity:0;transition:all .3s var(--ease-bounce);border:1px solid rgba(255,255,255,.1);}
+    .toast.show{transform:translateX(-50%) translateY(0);opacity:1;}
+
+    /* Responsive */
+    @media (max-width:900px){.comparison-container{grid-template-columns:1fr;}.schools-grid{grid-template-columns:1fr;}}
+    @media (max-width:768px){
+      .container{padding:15px;}
+      .nav-tab{padding:10px 14px;font-size:12px;}
+      .message{max-width:85%;}
+    }
   </style>
 </head>
+
 <body>
   <div class="animated-bg"></div>
   <div class="container">
-
-    <!-- === HEADER === -->
+    <!-- Header -->
     <header>
-      <div class="logo">🎓 CollegeQuest</div>
+      <div class="logo">CollegeQuest</div>
       <div>
         <button class="btn btn-glass" onclick="toggleTheme()">🌙</button>
         <button class="btn btn-primary" onclick="showOnboarding()">Get Started</button>
       </div>
     </header>
 
-    <!-- === NAVIGATION === -->
-    <div class="nav-tabs">
-      <button class="nav-tab active" onclick="showTab('planning')">Planning</button>
-      <button class="nav-tab" onclick="showTab('dashboard')">Dashboard</button>
-      <button class="nav-tab" onclick="showTab('compare')">Compare</button>
-      <button class="nav-tab" onclick="showTab('ai-assistant')">AI Assistant</button>
-      <button class="nav-tab" onclick="showTab('schools')">Schools</button>
-      <button class="nav-tab" onclick="showTab('applications')">Applications</button>
-      <button class="nav-tab" onclick="showTab('scholarships')">Scholarships</button>
-      <button class="nav-tab" onclick="showTab('community')">Community</button>
+    <!-- Navigation -->
+    <div class="nav-tabs" id="navTabs">
+      <button class="nav-tab active" onclick="showTab('planning', this)">Planning</button>
+      <button class="nav-tab" onclick="showTab('dashboard', this)">Dashboard</button>
+      <button class="nav-tab" onclick="showTab('compare', this)">In vs Out of State</button>
+      <button class="nav-tab" onclick="showTab('ai-assistant', this)">AI Assistant</button>
+      <button class="nav-tab" onclick="showTab('schools', this)">Schools</button>
+      <button class="nav-tab" onclick="showTab('applications', this)">Applications</button>
+      <button class="nav-tab" onclick="showTab('scholarships', this)">Scholarships</button>
+      <button class="nav-tab" onclick="showTab('community', this)">Community</button>
+      <!-- hidden test trigger: show with ?test=1 -->
+      <button class="nav-tab" style="display:none" id="runTestsBtn" onclick="TestRunner.runAll()">Run Tests</button>
     </div>
 
-    <!-- === MAIN CONTENT === -->
+    <!-- Main -->
     <main id="mainContent">
-
-      <!-- PLANNING TAB -->
+      <!-- ====================
+           PLANNING (ENTRY)
+           ==================== -->
       <div id="planning-tab" class="tab-content">
-        <h2>📋 College Planning Wizard</h2>
-        <form id="planningForm">
-          <div class="form-group"><label class="form-label">GPA</label><input type="number" id="gpa" class="form-input" step="0.1" min="0" max="4" required></div>
-          <div class="form-group"><label class="form-label">SAT Score</label><input type="number" id="sat" class="form-input" min="400" max="1600" required></div>
-          <div class="form-group"><label class="form-label">Residency</label>
-            <select id="residency" class="form-input"><option value="in-state">In-State</option><option value="out-of-state">Out-of-State</option></select>
-          </div>
-          <div class="form-group"><label class="form-label">Budget (per year)</label><input type="number" id="budget" class="form-input" required></div>
-          <div class="form-group"><label class="form-label">Intended Major</label><input type="text" id="major" class="form-input" placeholder="e.g., Computer Science"></div>
-          <button type="submit" class="btn btn-primary">Get Recommendations →</button>
-        </form>
-        <div id="recommendations" style="margin-top:20px; display:none;">
-          <h3>🎯 School Recommendations</h3><div id="recosContainer"></div>
-          <h3 style="margin-top:20px;">💰 Scholarship Matches</h3><div id="scholarshipsContainer"></div>
+        <div class="card" style="margin-bottom:16px;">
+          <h2 style="margin-bottom:10px;">📋 College Planning Wizard</h2>
+          <p style="color:var(--text-secondary);margin-bottom:12px;">Start here. We’ll compute reach/match/safety, find scholarships, and set up your dashboard.</p>
+
+          <form id="planningForm">
+            <div class="form-row">
+              <div class="form-group">
+                <label class="form-label">Residency</label>
+                <select id="residency" class="form-select">
+                  <option value="in-state">In-State</option>
+                  <option value="out-of-state">Out-of-State</option>
+                </select>
+              </div>
+              <div class="form-group">
+                <label class="form-label">Home State (2-letter)</label>
+                <input type="text" id="homeState" class="form-input" placeholder="e.g., CA" maxlength="2">
+              </div>
+              <div class="form-group">
+                <label class="form-label">GPA (unweighted)</label>
+                <input type="number" id="gpa" class="form-input" step="0.01" min="0" max="4" required>
+              </div>
+              <div class="form-group">
+                <label class="form-label">SAT</label>
+                <input type="number" id="sat" class="form-input" min="400" max="1600" placeholder="Optional">
+              </div>
+              <div class="form-group">
+                <label class="form-label">Budget (USD/year)</label>
+                <input type="number" id="budget" class="form-input" placeholder="e.g., 40000">
+              </div>
+              <div class="form-group">
+                <label class="form-label">Intended Major</label>
+                <input type="text" id="major" class="form-input" placeholder="e.g., Computer Science">
+              </div>
+            </div>
+
+            <!-- Gen-Alpha preferences -->
+            <div class="form-row">
+              <div class="form-group">
+                <label class="form-label">Campus Vibe</label>
+                <select id="vibe" class="form-select">
+                  <option>Collaborative</option><option>Competitive</option>
+                  <option>Project-based</option><option>Research-focused</option>
+                </select>
+              </div>
+              <div class="form-group">
+                <label class="form-label">Setting</label>
+                <select id="setting" class="form-select">
+                  <option>Urban</option><option>Suburban</option><option>Rural</option>
+                </select>
+              </div>
+              <div class="form-group">
+                <label class="form-label">Size</label>
+                <select id="size" class="form-select">
+                  <option>Small (&lt;5k)</option><option>Medium (5k–15k)</option><option>Large (&gt;15k)</option>
+                </select>
+              </div>
+              <div class="form-group">
+                <label class="form-label">Internships Priority</label>
+                <select id="intern" class="form-select">
+                  <option>Essential</option><option>Nice-to-have</option>
+                </select>
+              </div>
+              <div class="form-group">
+                <label class="form-label">Study Abroad</label>
+                <select id="abroad" class="form-select">
+                  <option>Must have</option><option>Nice-to-have</option>
+                </select>
+              </div>
+              <div class="form-group">
+                <label class="form-label">DEI Priority</label>
+                <select id="dei" class="form-select">
+                  <option>High</option><option>Medium</option><option>Low</option>
+                </select>
+              </div>
+            </div>
+
+            <div style="display:flex;gap:10px;">
+              <button type="submit" class="btn btn-primary">🚀 Get Recommendations</button>
+              <button type="button" class="btn btn-glass" onclick="resetPlanning()">Reset</button>
+            </div>
+          </form>
+        </div>
+
+        <div class="card" id="recommendations" style="display:none;">
+          <h3 style="margin-bottom:10px;">🎯 School Recommendations</h3>
+          <div id="schoolBuckets"></div>
+
+          <h3 style="margin:16px 0 10px;">💰 Scholarship Matches</h3>
+          <div id="scholarshipList"></div>
         </div>
       </div>
 
-      <!-- DASHBOARD TAB -->
+      <!-- ====================
+           DASHBOARD
+           ==================== -->
       <div id="dashboard-tab" class="tab-content" style="display:none;">
-        <h2>Dashboard</h2>
-        <div class="card">🎯 Applications Progress (coming soon)</div>
+        <div class="stats-grid">
+          <div class="stat-card"><div class="stat-icon">🎯</div><div class="stat-number" id="statMatched">0</div><div class="stat-description">Matched Schools</div></div>
+          <div class="stat-card"><div class="stat-icon">💰</div><div class="stat-number" id="statSavings">$0</div><div class="stat-description">Potential Savings</div></div>
+          <div class="stat-card"><div class="stat-icon">📝</div><div class="stat-number" id="statApps">0/0</div><div class="stat-description">Apps Submitted</div></div>
+          <div class="stat-card"><div class="stat-icon">⏰</div><div class="stat-number" id="statDays">—</div><div class="stat-description">Days to Next Deadline</div></div>
+        </div>
+
+        <div class="progress-grid">
+          <div class="card progress-card">
+            <div class="progress-ring">
+              <svg width="120" height="120">
+                <defs>
+                  <linearGradient id="gradient" x1="0%" y1="0%" x2="100%" y2="100%">
+                    <stop offset="0%" style="stop-color:#667EEA;stop-opacity:1" />
+                    <stop offset="100%" style="stop-color:#764BA2;stop-opacity:1" />
+                  </linearGradient>
+                </defs>
+                <circle cx="60" cy="60" r="50" class="progress-ring-bg"></circle>
+                <circle id="ringApps" cx="60" cy="60" r="50" class="progress-ring-fill" stroke-dasharray="314" stroke-dashoffset="314"></circle>
+              </svg>
+              <div class="progress-value" id="valApps">0%</div>
+            </div>
+            <div class="progress-label">Application Progress</div>
+          </div>
+
+          <div class="card progress-card">
+            <div class="progress-ring">
+              <svg width="120" height="120">
+                <circle cx="60" cy="60" r="50" class="progress-ring-bg"></circle>
+                <circle id="ringProfile" cx="60" cy="60" r="50" class="progress-ring-fill" stroke-dasharray="314" stroke-dashoffset="314"></circle>
+              </svg>
+              <div class="progress-value" id="valProfile">0%</div>
+            </div>
+            <div class="progress-label">Profile Complete</div>
+          </div>
+
+          <div class="card progress-card">
+            <div class="progress-ring">
+              <svg width="120" height="120">
+                <circle cx="60" cy="60" r="50" class="progress-ring-bg"></circle>
+                <circle id="ringEssays" cx="60" cy="60" r="50" class="progress-ring-fill" stroke-dasharray="314" stroke-dashoffset="314"></circle>
+              </svg>
+              <div class="progress-value" id="valEssays">0%</div>
+            </div>
+            <div class="progress-label">Essays Written</div>
+          </div>
+        </div>
       </div>
 
-      <!-- COMPARE TAB -->
+      <!-- ====================
+           COMPARE
+           ==================== -->
       <div id="compare-tab" class="tab-content" style="display:none;">
-        <h2>Compare In-State vs Out-of-State</h2>
-        <div class="card">💡 AI Insight: Out-of-state gives stronger alumni network, but higher cost.</div>
+        <h2 style="margin-bottom:12px;">In-State vs Out-of-State Analysis</h2>
+        <div class="comparison-container">
+          <div class="comparison-card" id="cardIn">
+            <div class="comparison-header">
+              <div class="comparison-title">🏠 In-State Option</div>
+            </div>
+            <div id="inMetrics"></div>
+          </div>
+
+          <div class="comparison-card recommended" id="cardOut">
+            <div class="comparison-header">
+              <div class="comparison-title">✈️ Out-of-State Option</div>
+              <span class="comparison-badge">AI Recommended</span>
+            </div>
+            <div id="outMetrics"></div>
+          </div>
+        </div>
+
+        <div class="card" id="compareInsight">
+          <h3 style="margin-bottom:10px;">💡 AI Insight</h3>
+          <p id="compareText" style="line-height:1.6;">Add a plan in the Planning tab to see insight here.</p>
+        </div>
       </div>
 
-      <!-- AI ASSISTANT TAB -->
+      <!-- ====================
+           AI ASSISTANT
+           ==================== -->
       <div id="ai-assistant-tab" class="tab-content" style="display:none;">
-        <h2>AI College Assistant</h2>
         <div class="ai-chat-container">
-          <div class="chat-messages" id="chatMessages"></div>
+          <div class="chat-header">
+            <div class="chat-avatar">🤖</div>
+            <div>
+              <div style="font-weight:600;">AI College Assistant</div>
+              <div style="font-size:12px;opacity:.8;">Powered by backend (fallback local)</div>
+            </div>
+          </div>
+          <div class="chat-messages" id="chatMessages">
+            <div class="message ai">Hi! Ask me about schools, essays, scholarships, or strategy. I’ll use your plan if available.</div>
+          </div>
           <div class="chat-input-container">
             <input type="text" class="chat-input" id="chatInput" placeholder="Ask me anything..." onkeypress="handleChatEnter(event)">
             <button class="chat-send" onclick="sendChatMessage()">➤</button>
@@ -147,83 +376,536 @@
         </div>
       </div>
 
-      <!-- SCHOOLS TAB -->
+      <!-- ====================
+           SCHOOLS
+           ==================== -->
       <div id="schools-tab" class="tab-content" style="display:none;">
-        <h2>Schools</h2>
-        <div class="schools-grid">
-          <div class="school-card"><img src="https://images.unsplash.com/photo-1569330803634-e380c6b3d18f?w=400"><div class="school-content"><b>Harvard University</b><p>Cambridge, MA</p></div></div>
-          <div class="school-card"><img src="https://images.unsplash.com/photo-1562113367-a26dd523e0c5?w=400"><div class="school-content"><b>Stanford University</b><p>Stanford, CA</p></div></div>
-          <div class="school-card"><img src="https://images.unsplash.com/photo-1583223230879-9714f2e2b5b3?w=400"><div class="school-content"><b>UC Berkeley</b><p>Berkeley, CA</p></div></div>
-        </div>
+        <h2 style="margin-bottom:12px;">Schools</h2>
+        <div class="schools-grid" id="schoolsGrid"></div>
       </div>
 
-      <!-- APPLICATIONS TAB -->
+      <!-- ====================
+           APPLICATIONS
+           ==================== -->
       <div id="applications-tab" class="tab-content" style="display:none;">
-        <h2>Applications</h2>
-        <div class="card">📝 Tracker coming soon</div>
+        <h2 style="margin-bottom:12px;">Applications</h2>
+        <div id="appsList" class="card">No applications yet. Add from Schools or Planning.</div>
       </div>
 
-      <!-- SCHOLARSHIPS TAB -->
+      <!-- ====================
+           SCHOLARSHIPS
+           ==================== -->
       <div id="scholarships-tab" class="tab-content" style="display:none;">
-        <h2>Scholarships</h2>
-        <div class="card">💰 Browse awards and deadlines (auto-populated after planning)</div>
+        <h2 style="margin-bottom:12px;">Scholarships</h2>
+        <div id="scholarshipsAll"></div>
       </div>
 
-      <!-- COMMUNITY TAB -->
+      <!-- ====================
+           COMMUNITY
+           ==================== -->
       <div id="community-tab" class="tab-content" style="display:none;">
-        <h2>Community</h2>
+        <h2 style="margin-bottom:12px;">Community</h2>
         <div class="social-feed">
-          <div class="social-post"><div class="social-avatar">JD</div><div><b>Jessica Davis</b><p>Just got accepted to UCLA! 🎉</p></div></div>
-          <div class="social-post"><div class="social-avatar">MR</div><div><b>Mike Rodriguez</b><p>Pro tip: Start essays early! 📝</p></div></div>
+          <div class="social-post">
+            <div class="social-avatar">JD</div>
+            <div class="social-content">
+              <div class="social-name">Jessica Davis</div>
+              <div class="social-text">Just got accepted to UCLA! 🎉 Don’t give up, your dream school is waiting!</div>
+              <div class="social-actions"><span>❤️ 234</span><span>💬 45</span><span>↗️ Share</span></div>
+            </div>
+          </div>
+          <div class="social-post">
+            <div class="social-avatar">MR</div>
+            <div class="social-content">
+              <div class="social-name">Mike Rodriguez</div>
+              <div class="social-text">Pro tip: Start your essays early! I wrote 15 drafts of my Common App essay and it paid off.</div>
+              <div class="social-actions"><span>❤️ 156</span><span>💬 23</span><span>↗️ Share</span></div>
+            </div>
+          </div>
         </div>
       </div>
     </main>
   </div>
 
+  <!-- =========================
+       APP SCRIPT (FUNCTIONAL)
+       ========================= -->
   <script>
-    const AppState = { recos:{}, scholarships:[], currentTab:'planning' };
+    // ---------- Config ----------
+    const API_BASE = "http://localhost:3000/api";
+    const API_CONFIG = { USE_BACKEND: true };
 
-    function showTab(tabName) {
-      document.querySelectorAll('.tab-content').forEach(t=>t.style.display='none');
-      document.querySelectorAll('.nav-tab').forEach(t=>t.classList.remove('active'));
-      document.getElementById(`${tabName}-tab`).style.display='block';
-      event.target.classList.add('active');
-      AppState.currentTab=tabName;
+    async function detectBackend(){
+      try{
+        const res = await fetch(API_BASE + "/scholarships", {
+          method:"POST", headers:{"Content-Type":"application/json"},
+          body: JSON.stringify({ ping:true })
+        });
+        if(!res.ok) throw new Error("bad");
+        showToast("Backend detected ✔︎");
+        API_CONFIG.USE_BACKEND = true;
+      }catch{
+        API_CONFIG.USE_BACKEND = false;
+        showToast("Backend not found — using local engine.");
+      }
+    }
+    detectBackend();
+
+    // ---------- State ----------
+    const AppState = {
+      currentTab: "planning",
+      profile: null,
+      matches: { reach: [], match: [], safety: [] },
+      scholarships: [],
+      applications: [],
+    };
+
+    // ---------- Mock Data (for local fallback/compute) ----------
+    const SchoolDB = [
+      { id:1, name:"Stanford University", state:"CA", ranking:3, acceptRate:0.04,
+        tuitionIn:56000, tuitionOut:56000, fees:2000, roomBoard:18000, gradSalary:110000,
+        setting:"Suburban", size:"Medium (5k–15k)", vibe:"Competitive", majors:["Computer Science","Business","Physics"], testOptional:true,
+        deadlines:{ea:"2025-11-01", rd:"2026-01-03"} },
+      { id:2, name:"MIT", state:"MA", ranking:1, acceptRate:0.07,
+        tuitionIn:58000, tuitionOut:58000, fees:2200, roomBoard:19000, gradSalary:115000,
+        setting:"Urban", size:"Small (<5k)", vibe:"Research-focused", majors:["Computer Science","EE","Math"], testOptional:false,
+        deadlines:{ea:"2025-11-01", rd:"2026-01-05"} },
+      { id:3, name:"UC Davis", state:"CA", ranking:38, acceptRate:0.48,
+        tuitionIn:15000, tuitionOut:34000, fees:2500, roomBoard:17000, gradSalary:82000,
+        setting:"Suburban", size:"Large (>15k)", vibe:"Collaborative", majors:["Biology","CS","Economics"], testOptional:true,
+        deadlines:{rd:"2025-11-30"} },
+      { id:4, name:"University of Washington", state:"WA", ranking:40, acceptRate:0.47,
+        tuitionIn:13000, tuitionOut:37000, fees:2400, roomBoard:17500, gradSalary:85000,
+        setting:"Urban", size:"Large (>15k)", vibe:"Project-based", majors:["CS","Information","Design"], testOptional:true,
+        deadlines:{rd:"2025-12-01"} },
+      { id:5, name:"San Jose State University", state:"CA", ranking:150, acceptRate:0.80,
+        tuitionIn:9000, tuitionOut:19000, fees:1800, roomBoard:16000, gradSalary:78000,
+        setting:"Urban", size:"Large (>15k)", vibe:"Collaborative", majors:["CS","Business","Design"], testOptional:true,
+        deadlines:{rd:"2025-12-15"} },
+      { id:6, name:"Cal State Fullerton", state:"CA", ranking:160, acceptRate:0.75,
+        tuitionIn:8500, tuitionOut:18000, fees:1700, roomBoard:15000, gradSalary:72000,
+        setting:"Suburban", size:"Large (>15k)", vibe:"Collaborative", majors:["Business","Psychology","CS"], testOptional:true,
+        deadlines:{rd:"2025-12-10"} }
+    ];
+    const ScholarshipDB = [
+      { id:"sch-tt", name:"Tech Trailblazers", amount:7500, criteria:"STEM majors, GPA ≥ 3.5", due:"2025-11-01", tags:["STEM","Merit"] },
+      { id:"sch-fg", name:"First Gen Leaders", amount:5000, criteria:"First-generation students", due:"2025-12-01", tags:["DEI","Need"] },
+      { id:"sch-wb", name:"Women in Business", amount:6000, criteria:"Business majors, female applicants", due:"2025-10-20", tags:["Business","Women"] },
+      { id:"sch-cs", name:"Code for Good", amount:4000, criteria:"CS majors, community impact", due:"2025-11-15", tags:["CS","Service"] }
+    ];
+
+    // ---------- Computation helpers ----------
+    function computeCost4Y(s, residency, travel=(residency==='in-state'?500:2500)){
+      const tuition = (residency==='in-state' && s.tuitionIn) ? s.tuitionIn : (s.tuitionOut ?? s.tuitionIn);
+      const yearly = tuition + s.fees + s.roomBoard + travel;
+      return yearly * 4;
+    }
+    function roiScore(s, residency){
+      const cost = computeCost4Y(s, residency);
+      const earnings10y = s.gradSalary * 10;
+      return ((earnings10y - cost) / cost);
+    }
+    function difficultyScore(s){
+      const r = (201 - Math.min(s.ranking ?? 200, 200)); // 1..200 -> 200..1
+      return (1 - s.acceptRate) * 100 + r;
+    }
+    function studentStrength({gpa, sat}){
+      const g = (gpa ?? 0) / 4 * 100;
+      const s = (sat ? (sat - 400) / 1200 : 0.5) * 100; // assume midpoint if no SAT
+      return (g*0.6 + s*0.4);
+    }
+    function bucketizeSchools(profile){
+      const strength = studentStrength(profile);
+      const byFit = SchoolDB
+        .filter(s => !profile.major || (s.majors||[]).some(m => m.toLowerCase().includes(profile.major.toLowerCase())))
+        .sort((a,b) => {
+          let af=0, bf=0;
+          if (profile.setting && a.setting===profile.setting) af+=5;
+          if (profile.setting && b.setting===profile.setting) bf+=5;
+          if (profile.size && a.size===profile.size) af+=3;
+          if (profile.size && b.size===profile.size) bf+=3;
+          if (profile.vibe && a.vibe===profile.vibe) af+=2;
+          if (profile.vibe && b.vibe===profile.vibe) bf+=2;
+          af += roiScore(a, profile.residency) * 10;
+          bf += roiScore(b, profile.residency) * 10;
+          return bf-af;
+        });
+
+      const reach=[], match=[], safety=[];
+      for(const s of byFit){
+        const d = difficultyScore(s);
+        if (d > strength + 25) reach.push(s);
+        else if (d > strength - 10) match.push(s);
+        else safety.push(s);
+      }
+      return { reach: reach.slice(0,6), match: match.slice(0,6), safety: safety.slice(0,6) };
+    }
+    function matchScholarships(profile){
+      const res = ScholarshipDB.filter(s => {
+        if (profile.major && s.criteria.toLowerCase().includes("cs") && !/cs|computer/.test(profile.major.toLowerCase())) return false;
+        if (profile.gpa && s.criteria.includes("≥ 3.5") && profile.gpa < 3.5) return false;
+        if (profile.dei === "High" && s.tags?.includes("DEI")) return true;
+        return true;
+      });
+      return res.slice(0,8);
     }
 
-    // Planning form → backend calls
-    document.getElementById("planningForm").addEventListener("submit", async (e)=>{
+    // ---------- Applications tracker ----------
+    class ApplicationTracker {
+      constructor(){ this.apps=[]; }
+      addSchool(s){
+        if (this.apps.find(a=>a.schoolId===s.id)) return;
+        const tasks=[
+          {name:"Complete Common App", required:true, status:"pending"},
+          {name:"Submit transcripts", required:true, status:"pending"},
+          {name:"Request recommendations", required:true, status:"pending"},
+          {name:"Write supplemental essays", required:true, status:"pending"},
+          {name:"Submit test scores", required:!s.testOptional, status:"pending"},
+          {name:"Complete CSS Profile", required:s.ranking<50, status:"pending"},
+          {name:"Pay application fee", required:true, status:"pending"},
+        ];
+        const deadline = s.deadlines?.ea || s.deadlines?.rd || "2025-12-15";
+        this.apps.push({ id:Date.now()+Math.random(), schoolId:s.id, name:s.name, deadline, tasks, submitted:false, createdAt:new Date() });
+        renderApplications();
+        renderDashboardStats();
+      }
+      progress(app){
+        const req = app.tasks.filter(t=>t.required).length||1;
+        const done = app.tasks.filter(t=>t.required && t.status==="completed").length;
+        return Math.round(100*done/req);
+      }
+      nextDeadlineDays(){
+        const up = this.apps
+          .map(a=>({name:a.name, deadline:a.deadline, days: Math.ceil((new Date(a.deadline)-new Date())/(1000*3600*24))}))
+          .filter(d=>d.days>0)
+          .sort((a,b)=>a.days-b.days)[0];
+        return up?.days ?? "—";
+      }
+    }
+    const AppTracker = new ApplicationTracker();
+
+    // ---------- UI helpers ----------
+    function showTab(tabName, el){
+      document.querySelectorAll('.tab-content').forEach(tab=>tab.style.display='none');
+      document.querySelectorAll('.nav-tab').forEach(btn=>btn.classList.remove('active'));
+      const selected = document.getElementById(`${tabName}-tab`);
+      if (selected) selected.style.display='block';
+      if (el) el.classList.add('active');
+      AppState.currentTab = tabName;
+    }
+    function showToast(message){
+      const toast=document.createElement('div'); toast.className='toast'; toast.textContent=message; document.body.appendChild(toast);
+      setTimeout(()=>{ toast.classList.add('show'); setTimeout(()=>{ toast.classList.remove('show'); setTimeout(()=>toast.remove(),300); }, 2500); },100);
+    }
+    function toggleTheme(){
+      const current=document.body.getAttribute('data-theme');
+      const next = current==='light' ? 'dark':'light';
+      document.body.setAttribute('data-theme', next);
+      localStorage.setItem('theme', next);
+    }
+    function showOnboarding(){ showToast('Onboarding coming soon'); }
+    function resetPlanning(){ document.getElementById('planningForm').reset(); document.getElementById('recommendations').style.display='none'; showToast('Form reset'); }
+
+    // ---------- Rendering ----------
+    function renderMatches(){
+      const cont = document.getElementById('schoolBuckets');
+      const section = (title, arr) => `
+        <div class="card" style="margin-bottom:12px;">
+          <h4 style="margin-bottom:8px;">${title}</h4>
+          ${arr.length?arr.map(s=>`
+            <div style="display:flex; justify-content:space-between; align-items:center; padding:8px 0; border-bottom:1px solid var(--border);">
+              <div>
+                <div style="font-weight:600;">${s.name}</div>
+                <div style="font-size:12px; color:var(--text-secondary);">Accept: ${(s.acceptRate*100).toFixed(0)}% • Est. 4y Cost: $${computeCost4Y(s, AppState.profile.residency).toLocaleString()}</div>
+              </div>
+              <div style="display:flex;gap:8px;">
+                <button class="btn btn-glass" onclick='addApplication(${s.id})'>Add</button>
+                <button class="btn btn-primary" onclick='viewCompare(${s.id})'>Compare</button>
+              </div>
+            </div>
+          `).join('') : `<div style="color:var(--text-secondary);">No schools found for this bucket.</div>`}
+        </div>`;
+      cont.innerHTML = section("Reach", AppState.matches.reach) + section("Match", AppState.matches.match) + section("Safety", AppState.matches.safety);
+
+      // Schools grid
+      const grid = document.getElementById('schoolsGrid');
+      grid.innerHTML = [...AppState.matches.reach, ...AppState.matches.match, ...AppState.matches.safety].map(s=>`
+        <div class="school-card">
+          <img class="school-image" src="https://picsum.photos/seed/${encodeURIComponent(s.name)}/600/400" alt="${s.name}">
+          <div class="school-content">
+            <div class="school-name">${s.name}</div>
+            <div class="school-location">${s.state}</div>
+            <div class="school-stats">
+              <div class="school-stat"><span class="stat-value">${(s.acceptRate*100).toFixed(0)}%</span><span class="stat-label">Accept</span></div>
+              <div class="school-stat"><span class="stat-value">#${s.ranking}</span><span class="stat-label">Rank</span></div>
+              <div class="school-stat"><span class="stat-value">$${(s.tuitionOut??s.tuitionIn).toLocaleString()}</span><span class="stat-label">Tuition</span></div>
+            </div>
+            <div style="margin-top:10px; display:flex; gap:8px;">
+              <button class="btn btn-glass" onclick='addApplication(${s.id})'>Add</button>
+              <button class="btn btn-primary" onclick='viewCompare(${s.id})'>Compare</button>
+            </div>
+          </div>
+        </div>`).join('');
+    }
+    function renderScholarships(){
+      const list = document.getElementById('scholarshipList');
+      list.innerHTML = AppState.scholarships.map(s=>`
+        <div class="card" style="margin-bottom:10px;">
+          <div style="display:flex; justify-content:space-between; align-items:center;">
+            <div>
+              <b>${s.name}</b>
+              <div style="font-size:12px; color:var(--text-secondary);">${s.criteria || ""} ${s.due?("• Due "+s.due):""}</div>
+            </div>
+            <div><span class="btn btn-success">$${Number(s.amount||0).toLocaleString()}</span></div>
+          </div>
+        </div>`).join('');
+
+      // Fill Scholarships tab too
+      document.getElementById('scholarshipsAll').innerHTML = list.innerHTML || `<div class="card">No scholarships yet. Generate a plan first.</div>`;
+    }
+    function renderApplications(){
+      const el = document.getElementById('appsList');
+      if (!AppTracker.apps.length) { el.innerHTML = `No applications yet. Add from Schools or Planning.`; return; }
+      el.innerHTML = AppTracker.apps.map(app=>{
+        const prog = AppTracker.progress(app);
+        return `<div class="card" style="margin-bottom:12px;">
+          <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:8px;">
+            <div>
+              <b>${app.name}</b>
+              <div style="font-size:12px; color:var(--text-secondary);">Deadline: ${app.deadline}</div>
+            </div>
+            <div>${prog}%</div>
+          </div>
+          <div>${app.tasks.map((t,i)=>`
+            <label style="display:flex; align-items:center; gap:8px; margin:6px 0;">
+              <input type="checkbox" ${t.status==='completed'?'checked':''} onchange='toggleTask("${app.id}", ${i}, this.checked)'>
+              <span>${t.name}${t.required?' *':''}</span>
+            </label>`).join('')}
+          </div>
+          <div style="margin-top:8px;">
+            <button class="btn btn-primary" onclick='markSubmitted("${app.id}")'>Mark Submitted</button>
+          </div>
+        </div>`;
+      }).join('');
+    }
+    function renderDashboardStats(){
+      const total = AppTracker.apps.length;
+      const submitted = AppTracker.apps.filter(a=>a.submitted).length;
+      const matched = AppState.matches.reach.length + AppState.matches.match.length + AppState.matches.safety.length;
+      document.getElementById('statMatched').textContent = matched;
+      document.getElementById('statApps').textContent = `${submitted}/${total}`;
+      document.getElementById('statDays').textContent = AppTracker.nextDeadlineDays();
+
+      const all = [...AppState.matches.reach, ...AppState.matches.match, ...AppState.matches.safety];
+      if (all.length){
+        const costs = all.map(s=>computeCost4Y(s, AppState.profile.residency));
+        const min = Math.min(...costs), avg = costs.reduce((a,b)=>a+b,0)/costs.length;
+        const savings = Math.max(0, Math.round(avg - min));
+        document.getElementById('statSavings').textContent = `$${savings.toLocaleString()}`;
+      } else {
+        document.getElementById('statSavings').textContent = `$0`;
+      }
+
+      const appsProg = total? Math.round(100*submitted/total):0;
+      setRing('ringApps','valApps', appsProg);
+      setRing('ringProfile','valProfile', AppState.profile? 70: 20);
+      const essayProg = Math.min(100, AppTracker.apps.reduce((acc,a)=>acc + (a.tasks.find(t=>/essay/i.test(t.name) && t.status==='completed')?1:0), 0)*20);
+      setRing('ringEssays','valEssays', essayProg);
+    }
+    function setRing(circleId, valueId, pct){
+      const c = document.getElementById(circleId); const v=document.getElementById(valueId);
+      const circ=314; const offset = Math.round(circ * (1 - pct/100));
+      c.setAttribute('stroke-dashoffset', offset); v.textContent = `${pct}%`;
+    }
+    function renderCompareForProfile(){
+      if (!AppState.profile) return;
+      const sample = AppState.matches.match[0] || AppState.matches.reach[0] || AppState.matches.safety[0] || SchoolDB[0];
+      const inCosts = {
+        tuition: sample.tuitionIn || sample.tuitionOut,
+        fourY: computeCost4Y(sample, 'in-state'),
+        travel: 500, grants: 5000
+      };
+      const outCosts = {
+        tuition: sample.tuitionOut || sample.tuitionIn,
+        fourY: computeCost4Y(sample, 'out-of-state'),
+        travel: 2500, merit: sample.ranking<50?12000:4000
+      };
+      const inEl=document.getElementById('inMetrics'), outEl=document.getElementById('outMetrics');
+      inEl.innerHTML = metricRows([
+        ["Average Tuition", `$${(inCosts.tuition).toLocaleString()}`, "positive"],
+        ["4-Year Total Cost", `$${inCosts.fourY.toLocaleString()}`],
+        ["Travel Costs", `$${inCosts.travel}/yr`, "positive"],
+        ["State Grants Available", `$${inCosts.grants}/yr`, "positive"],
+        ["Family Proximity", `< 3 hours`], ["Residency Benefits","Yes","positive"]
+      ]);
+      outEl.innerHTML = metricRows([
+        ["Average Tuition", `$${(outCosts.tuition).toLocaleString()}`, "negative"],
+        ["4-Year Total Cost", `$${outCosts.fourY.toLocaleString()}`],
+        ["Travel Costs", `$${outCosts.travel}/yr`, "negative"],
+        ["Merit Scholarships", `$${outCosts.merit}/yr`, "positive"],
+        ["Career Network", "National","positive"],
+        ["Program Ranking", sample.ranking<=20? "Top 20":"Top 100", "positive"]
+      ]);
+      setCompareInsight(sample);
+    }
+    function metricRows(rows){
+      return rows.map(([label,val,cls])=>`
+        <div class="comparison-metric">
+          <span class="metric-label">${label}</span>
+          <span class="metric-value ${cls||''}" style="${cls==='positive'?'color:#00C896;':cls==='negative'?'color:#FF6B6B;':''}">${val}</span>
+        </div>`).join('');
+    }
+    async function setCompareInsight(sample){
+      const textEl = document.getElementById('compareText');
+      const prompt = `Given a student with residency=${AppState.profile?.residency}, GPA=${AppState.profile?.gpa}, SAT=${AppState.profile?.sat||'n/a'}, budget=${AppState.profile?.budget||'n/a'}, compare in-state vs out-of-state for ${sample?.name}. Weigh ROI, cost, travel, merit. Short, specific recommendation.`;
+      if (API_CONFIG.USE_BACKEND){
+        try{
+          const res = await fetch(API_BASE+"/ai/chat",{ method:"POST", headers:{"Content-Type":"application/json"}, body:JSON.stringify({message:prompt})});
+          const data = await res.json(); textEl.textContent = data.response || "Insight unavailable.";
+          return;
+        }catch{ /* fallback */ }
+      }
+      const inROI = roiScore(sample,'in-state'), outROI = roiScore(sample,'out-of-state');
+      const pick = outROI>inROI? "out-of-state":"in-state";
+      textEl.innerHTML = `Local insight: For <b>${sample.name}</b>, ${pick} yields a better 10-year ROI given your inputs. If your merit is strong, out-of-state can close the gap further; otherwise, in-state keeps debt lower.`;
+    }
+
+    // ---------- Actions ----------
+    function addApplication(id){
+      const s = SchoolDB.find(x=>x.id===id) || [...AppState.matches.reach, ...AppState.matches.match, ...AppState.matches.safety].find(x=>x.id===id);
+      if (!s) return;
+      AppTracker.addSchool(s);
+      showToast(`Added ${s.name} to Applications`);
+    }
+    function toggleTask(appId, idx, checked){
+      const app = AppTracker.apps.find(a=>String(a.id)===String(appId)); if(!app) return;
+      app.tasks[idx].status = checked?'completed':'pending';
+      renderApplications(); renderDashboardStats();
+    }
+    function markSubmitted(appId){
+      const app = AppTracker.apps.find(a=>String(a.id)===String(appId)); if(!app) return;
+      app.submitted = true; showToast(`Submitted ${app.name}`);
+      renderApplications(); renderDashboardStats();
+    }
+    function viewCompare(id){
+      showTab('compare', document.querySelector('#navTabs button:nth-child(3)'));
+      const s = SchoolDB.find(x=>x.id===id) || AppState.matches.match[0];
+      if (s) setCompareInsight(s);
+      renderCompareForProfile();
+    }
+
+    // ---------- Planning submit ----------
+    document.getElementById('planningForm').addEventListener('submit', async (e)=>{
       e.preventDefault();
-      const gpa=parseFloat(document.getElementById("gpa").value);
-      const sat=parseInt(document.getElementById("sat").value);
-      const residency=document.getElementById("residency").value;
-      const budget=parseInt(document.getElementById("budget").value);
-      const major=document.getElementById("major").value;
-      const matchRes=await fetch("/api/match",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({gpa,sat,residency,budget,major})});
-      const { recos }=await matchRes.json();
-      const schRes=await fetch("/api/scholarships",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({gpa,major})});
-      const { scholarships }=await schRes.json();
-      AppState.recos=recos; AppState.scholarships=scholarships;
-      document.getElementById("recosContainer").innerHTML=`<h4>Reach Schools</h4><ul>${recos.reach.map(s=>`<li>${s.name}</li>`).join('')}</ul>
-        <h4>Match Schools</h4><ul>${recos.match.map(s=>`<li>${s.name}</li>`).join('')}</ul>
-        <h4>Safety Schools</h4><ul>${recos.safety.map(s=>`<li>${s.name}</li>`).join('')}</ul>`;
-      document.getElementById("scholarshipsContainer").innerHTML=scholarships.map(s=>`<div class="card"><b>${s.name}</b> - $${s.amount}</div>`).join('');
-      document.getElementById("recommendations").style.display="block";
+      const profile = {
+        residency: document.getElementById('residency').value,
+        state: (document.getElementById('homeState').value||'').toUpperCase(),
+        gpa: parseFloat(document.getElementById('gpa').value),
+        sat: parseInt(document.getElementById('sat').value)||null,
+        budget: parseInt(document.getElementById('budget').value)||null,
+        major: document.getElementById('major').value.trim(),
+        vibe: document.getElementById('vibe').value,
+        setting: document.getElementById('setting').value,
+        size: document.getElementById('size').value,
+        intern: document.getElementById('intern').value,
+        abroad: document.getElementById('abroad').value,
+        dei: document.getElementById('dei').value
+      };
+      AppState.profile = profile;
+
+      // Prefer backend; fallback local if down
+      if (API_CONFIG.USE_BACKEND){
+        try{
+          const mres = await fetch(API_BASE + "/match", { method:"POST", headers:{"Content-Type":"application/json"}, body:JSON.stringify(profile) });
+          if (!mres.ok) throw new Error("match failed");
+          const { recos } = await mres.json();
+          // Expect backend to send arrays of objects with same fields
+          AppState.matches = recos && (recos.reach || recos.match || recos.safety) ? recos : bucketizeSchools(profile);
+        }catch{
+          AppState.matches = bucketizeSchools(profile);
+        }
+        try{
+          const sres = await fetch(API_BASE + "/scholarships", { method:"POST", headers:{"Content-Type":"application/json"}, body:JSON.stringify(profile) });
+          if (!sres.ok) throw new Error("sch failed");
+          const { scholarships } = await sres.json();
+          AppState.scholarships = Array.isArray(scholarships) && scholarships.length ? scholarships : matchScholarships(profile);
+        }catch{
+          AppState.scholarships = matchScholarships(profile);
+        }
+      } else {
+        AppState.matches = bucketizeSchools(profile);
+        AppState.scholarships = matchScholarships(profile);
+      }
+
+      document.getElementById('recommendations').style.display='block';
+      renderMatches();
+      renderScholarships();
+      renderApplications();
+      renderDashboardStats();
+      renderCompareForProfile();
+      showToast('Plan generated ✅');
     });
 
-    // AI Chat
+    // ---------- AI Chat ----------
     async function sendChatMessage(){
-      const input=document.getElementById("chatInput");
-      const msg=input.value.trim(); if(!msg) return;
-      const chat=document.getElementById("chatMessages");
-      chat.innerHTML+=`<div class="message user">${msg}</div>`;
-      input.value="";
-      const res=await fetch("/api/ai/chat",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({message:msg})});
-      const data=await res.json();
-      chat.innerHTML+=`<div class="message ai">${data.response}</div>`;
-      chat.scrollTop=chat.scrollHeight;
+      const input = document.getElementById('chatInput'); const msg = input.value.trim(); if (!msg) return;
+      const box = document.getElementById('chatMessages'); input.value='';
+      box.innerHTML += `<div class="message user">${msg}</div>`;
+      try{
+        if (API_CONFIG.USE_BACKEND){
+          const res = await fetch(API_BASE + "/ai/chat", { method:"POST", headers:{"Content-Type":"application/json"}, body:JSON.stringify({message: msg, context:{profile:AppState.profile, matches:AppState.matches}}) });
+          const data = await res.json();
+          box.innerHTML += `<div class="message ai">${data.response || 'No response.'}</div>`;
+        } else {
+          const top = AppState.matches.match[0] || AppState.matches.reach[0] || AppState.matches.safety[0];
+          const fallback = top? `Based on your profile, ${top.name} looks promising. Want tasks to get an app ready?` : `Tell me your GPA, SAT, and budget to get started.`;
+          box.innerHTML += `<div class="message ai">${fallback}</div>`;
+        }
+      }catch{
+        box.innerHTML += `<div class="message ai">Assistant is offline. Try again later.</div>`;
+      }
+      box.scrollTop = box.scrollHeight;
     }
-    function handleChatEnter(e){ if(e.key==="Enter") sendChatMessage(); }
+    function handleChatEnter(e){ if (e.key==='Enter') sendChatMessage(); }
+
+    // ---------- Tests (Unit + Regression) ----------
+    const TestRunner = {
+      assert(name, cond){ if(!cond) throw new Error("❌ " + name); },
+      runAll(){
+        try{
+          const s1 = studentStrength({gpa:2.5, sat:1000});
+          const s2 = studentStrength({gpa:3.8, sat:1000});
+          this.assert("strength increases with GPA", s2 > s1);
+
+          const r = roiScore(SchoolDB[0], 'in-state');
+          this.assert("roiScore returns number", typeof r === 'number');
+
+          const b = bucketizeSchools({gpa:3.6, sat:1350, residency:'in-state', major:'CS', setting:'Urban', size:'Large (>15k)', vibe:'Collaborative'});
+          this.assert("has reach", Array.isArray(b.reach));
+          this.assert("has match", Array.isArray(b.match));
+          this.assert("has safety", Array.isArray(b.safety));
+
+          const ucD = SchoolDB.find(s=>s.name.includes('UC Davis'));
+          const inC = computeCost4Y(ucD, 'in-state'), outC = computeCost4Y(ucD, 'out-of-state');
+          this.assert("out-of-state >= in-state for UC", outC >= inC);
+
+          showToast("✅ Tests passed");
+        }catch(e){
+          console.error(e);
+          showToast(e.message || "Tests failed");
+        }
+      }
+    };
+    window.TestRunner = TestRunner;
+
+    // ---------- Init ----------
+    (function init(){
+      const savedTheme = localStorage.getItem('theme') || 'dark';
+      document.body.setAttribute('data-theme', savedTheme);
+      if (new URLSearchParams(location.search).get('test') === '1'){
+        document.getElementById('runTestsBtn').style.display = 'inline-flex';
+      }
+    })();
   </script>
 </body>
 </html>
