@@ -1,118 +1,55 @@
 <!doctype html>
 <html lang="en">
 <head>
-<meta charset="utf-8">
-<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no">
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no" />
 <title>Pathwise – California College Planner</title>
-<meta name="mobile-web-app-capable" content="yes">
-
+<meta name="mobile-web-app-capable" content="yes" />
 <style>
-/* ====== THEME ====== */
 :root{
-  --bg:#0A0F1A;
-  --card:#0F1624;
-  --cardSoft:#121B2C;
-  --surface:#0C1422;
-  --text:#D6E2F5;
-  --textMuted:#8FA3C7;
-  --textStrong:#FFFFFF;
-  --primary:#3B82F6;
-  --primarySoft:#2B5ED8;
-  --accent:#8B5CF6;
-  --success:#22C55E;
-  --warning:#F59E0B;
-  --danger:#EF4444;
+  --bg:#0A0F1A; --card:#0F1624; --cardSoft:#121B2C; --surface:#0C1422;
+  --text:#D6E2F5; --textMuted:#8FA3C7; --textStrong:#FFFFFF;
+  --primary:#3B82F6; --primarySoft:#2B5ED8; --accent:#8B5CF6;
+  --success:#22C55E; --warning:#F59E0B; --danger:#EF4444;
   --ring: rgba(59,130,246,.35);
   --shadow: 0 10px 30px rgba(0,0,0,.35);
-  --radius:16px;
-  --radiusSm:12px;
-  --radiusLg:22px;
-  --trans: all .25s ease;
+  --radius:16px; --radiusSm:12px; --radiusLg:22px; --trans: all .25s ease;
 }
-
 [data-theme="light"]{
-  --bg:#F2F6FF;
-  --card:#FFFFFF;
-  --cardSoft:#FFFFFF;
-  --surface:#FFFFFF;
-  --text:#1F2A44;
-  --textMuted:#5A6C8E;
-  --textStrong:#0B1220;
-  --primary:#2563EB;
-  --primarySoft:#1E40AF;
-  --accent:#7C3AED;
-  --success:#16A34A;
-  --warning:#D97706;
-  --danger:#DC2626;
-  --ring: rgba(37,99,235,.35);
+  --bg:#F2F6FF; --card:#FFFFFF; --cardSoft:#FFFFFF; --surface:#FFFFFF;
+  --text:#1F2A44; --textMuted:#5A6C8E; --textStrong:#0B1220;
+  --primary:#2563EB; --accent:#7C3AED; --ring: rgba(37,99,235,.35);
   --shadow: 0 10px 26px rgba(0,0,0,.12);
 }
-
-*{box-sizing:border-box}
-html,body{height:100%}
-body{
-  margin:0;
-  font-family:-apple-system,BlinkMacSystemFont,"SF Pro Text","Helvetica Neue",Inter,system-ui,Arial,sans-serif;
-  background:linear-gradient(180deg,var(--bg) 0%, #05070d 100%);
-  color:var(--text);
-}
-
-/* ====== HEADER / TABS ====== */
-.nav{
-  position:sticky;top:0;z-index:50;
-  backdrop-filter:saturate(1.2) blur(14px);
+*{box-sizing:border-box} html,body{height:100%}
+body{margin:0;font-family:-apple-system,BlinkMacSystemFont,"SF Pro Text",Inter,system-ui,Arial,sans-serif;
+  background:linear-gradient(180deg,var(--bg) 0%, #05070d 100%); color:var(--text);}
+.hidden{display:none!important}
+.nav{position:sticky;top:0;z-index:50;backdrop-filter:saturate(1.2) blur(14px);
   background:linear-gradient(180deg,rgba(10,15,26,.85),rgba(10,15,26,.55));
-  border-bottom:1px solid rgba(255,255,255,.06);
-}
-.nav-inner{
-  max-width:1200px;margin:0 auto;padding:14px 16px;
-  display:flex;gap:12px;flex-wrap:wrap;align-items:center;
-}
+  border-bottom:1px solid rgba(255,255,255,.06);}
+.nav-inner{max-width:1200px;margin:0 auto;padding:14px 16px;display:flex;gap:12px;flex-wrap:wrap;align-items:center}
 .brand{font-weight:800;letter-spacing:.3px;font-size:22px;margin-right:auto}
-.tab{
-  border:none;cursor:pointer;
-  padding:10px 16px;border-radius:9999px;
-  color:var(--textStrong); background:rgba(255,255,255,.06);
-  border:1px solid rgba(255,255,255,.08);
-  transition:var(--trans);
-}
-.tab:hover{transform:translateY(-1px)}
-.tab.active{background:var(--primary);border-color:transparent}
-.theme{
-  margin-left:6px;border:1px solid rgba(255,255,255,.1);
-  background:var(--card);color:var(--textStrong);
-  border-radius:9999px;padding:10px 14px;cursor:pointer;
-}
-
-/* ====== LAYOUT ====== */
+.tab{border:none;cursor:pointer;padding:10px 16px;border-radius:9999px;color:var(--textStrong);
+  background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.08);transition:var(--trans)}
+.tab:hover{transform:translateY(-1px)} .tab.active{background:var(--primary);border-color:transparent}
+.theme{margin-left:6px;border:1px solid rgba(255,255,255,.1);background:var(--card);color:var(--textStrong);
+  border-radius:9999px;padding:10px 14px;cursor:pointer}
 .container{max-width:1200px;margin:0 auto;padding:18px}
-.section{display:none}
-.section.active{display:block;animation:fade .25s ease}
+.section{display:none} .section.active{display:block;animation:fade .25s ease}
 @keyframes fade{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:none}}
-
-/* ====== DASHBOARD ====== */
-.panel{
-  background:linear-gradient(180deg,var(--card) 0%, var(--cardSoft) 100%);
-  border:1px solid rgba(255,255,255,.08);
-  box-shadow:var(--shadow);
-  border-radius:var(--radius);
-}
+.panel{background:linear-gradient(180deg,var(--card) 0%, var(--cardSoft) 100%);
+  border:1px solid rgba(255,255,255,.08);box-shadow:var(--shadow);border-radius:var(--radius)}
 .welcome{padding:22px 22px 14px;border-radius:var(--radius);margin:12px 0 22px}
 .stats{display:grid;gap:18px;grid-template-columns:repeat(3,minmax(0,1fr))}
-.stat{padding:22px;border-radius:var(--radius);background:linear-gradient(180deg,var(--surface),var(--card));border:1px solid rgba(255,255,255,.08)}
+.stat{padding:22px;border-radius:var(--radius);background:linear-gradient(180deg,var(--surface),var(--card));
+  border:1px solid rgba(255,255,255,.08)}
 .stat .k{color:var(--textMuted);font-size:14px;margin-bottom:8px}
 .stat .v{font-size:40px;font-weight:800;letter-spacing:.3px;color:var(--textStrong)}
-
-.cat{
-  margin-top:26px
-}
-.cat h3{margin:0 0 10px 0;font-size:18px}
+.cat{margin-top:26px} .cat h3{margin:0 0 10px 0;font-size:18px}
 .grid{display:grid;gap:16px;grid-template-columns:repeat(auto-fill,minmax(280px,1fr))}
-.card{
-  background:linear-gradient(180deg,var(--card),var(--cardSoft));
-  border:1px solid rgba(255,255,255,.08);
-  border-radius:var(--radiusSm);padding:16px;position:relative;overflow:hidden
-}
+.card{background:linear-gradient(180deg,var(--card),var(--cardSoft));border:1px solid rgba(255,255,255,.08);
+  border-radius:var(--radiusSm);padding:16px;position:relative;overflow:hidden}
 .card .name{font-weight:700}
 .badges{display:flex;gap:8px;flex-wrap:wrap;margin:8px 0 10px}
 .badge{font-size:12px;border-radius:9999px;padding:6px 10px;border:1px solid rgba(255,255,255,.12)}
@@ -122,48 +59,40 @@ body{
 .badge.weight{color:var(--accent);border-color:rgba(139,92,246,.35)}
 .scoreBar{height:8px;background:rgba(255,255,255,.08);border-radius:9999px;overflow:hidden;margin-top:10px}
 .scoreBar>span{display:block;height:100%;background:linear-gradient(90deg,var(--primary),var(--accent));width:0%}
-.more{margin-top:10px;font-size:13px;color:var(--textMuted)}
-.actions{display:flex;gap:8px;margin-top:12px}
+.more{margin-top:10px;font-size:13px;color:var(--textMuted)} .actions{display:flex;gap:8px;margin-top:12px}
 .btn{border:none;cursor:pointer;padding:10px 14px;border-radius:12px;font-weight:600}
 .btn.primary{background:var(--primary);color:#fff}
 .btn.ghost{background:transparent;border:1px solid rgba(255,255,255,.12);color:var(--textStrong)}
 .btn.warn{background:transparent;border:1px solid rgba(239,68,68,.35);color:var(--danger)}
 .btn:focus{outline:3px solid var(--ring);outline-offset:2px}
-
-/* ====== DISCOVERY ====== */
-.step{padding:18px;margin:12px 0}
-.input{width:100%;padding:14px;border-radius:12px;border:1px solid rgba(255,255,255,.14);background:var(--surface);color:var(--textStrong)}
+.step{padding:18px;margin:12px 0} .input{width:100%;padding:14px;border-radius:12px;border:1px solid rgba(255,255,255,.14);
+  background:var(--surface);color:var(--textStrong)}
 .label{font-size:13px;color:var(--textMuted);margin:0 0 6px 2px}
 .pillGrid{display:grid;gap:10px;grid-template-columns:repeat(auto-fill,minmax(120px,1fr))}
 .pill{padding:12px;border-radius:9999px;border:1px solid rgba(255,255,255,.14);text-align:center;cursor:pointer;background:var(--surface)}
 .pill.sel{background:linear-gradient(90deg,var(--primary),var(--accent));color:#fff;border-color:transparent}
-
-/* ====== DOCS / TIMELINE / AID ====== */
 .list{display:grid;gap:12px}
-.row{display:flex;gap:12px;align-items:center;justify-content:space-between;padding:14px;border-radius:12px;background:var(--surface);border:1px solid rgba(255,255,255,.08)}
-.row .left{display:flex;gap:12px;align-items:center}
-.dot{width:10px;height:10px;border-radius:50%}
-.dot.ok{background:var(--success)} .dot.warn{background:var(--warning)} .dot.miss{background:var(--danger)}
-
-.help{
-  position:fixed;bottom:18px;right:18px;z-index:70;
-  background:linear-gradient(90deg,var(--primary),var(--accent));
-  color:#fff;padding:12px 14px;border-radius:16px;box-shadow:var(--shadow);display:none;
-}
-.help.show{display:block}
-.backPlan{margin-left:10px}
-
-/* ====== UTIL ====== */
-.hidden{display:none!important}
-.mt{margin-top:14px}
-small, .muted{color:var(--textMuted)}
-a.link{color:var(--primary);text-decoration:none}
-a.link:hover{text-decoration:underline}
+.row{display:flex;gap:12px;align-items:center;justify-content:space-between;padding:14px;border-radius:12px;background:var(--surface);
+  border:1px solid rgba(255,255,255,.08)}
+.left{display:flex;gap:12px;align-items:center}
+.dot{width:10px;height:10px;border-radius:50%} .dot.ok{background:var(--success)} .dot.warn{background:var(--warning)} .dot.miss{background:var(--danger)}
+.muted, small{color:var(--textMuted)}
+/* Aid mini form */
+.gridform{display:grid;gap:12px;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));align-items:end}
+.kicker{font-weight:700}
+/* AI FAB */
+.assistantFab{position:fixed;bottom:22px;right:22px;width:56px;height:56px;border-radius:50%;
+  background:linear-gradient(135deg,var(--primary),var(--accent));color:#fff;
+  display:flex;align-items:center;justify-content:center;box-shadow:var(--shadow);cursor:pointer;z-index:80;
+  animation:float 3s ease-in-out infinite}
+.assistantFab:hover{transform:scale(1.05)}
+@keyframes float{0%{transform:translateY(0)}50%{transform:translateY(-6px)}100%{transform:translateY(0)}}
+.assistantPanel{position:fixed;bottom:90px;right:22px;max-width:280px;background:var(--card);
+  border:1px solid rgba(255,255,255,.12);padding:14px;border-radius:14px;box-shadow:var(--shadow);display:none;z-index:80}
+.assistantPanel.show{display:block;animation:fade .2s ease}
 </style>
 </head>
 <body>
-
-<!-- NAV -->
 <div class="nav">
   <div class="nav-inner">
     <div class="brand">Pathwise</div>
@@ -186,23 +115,14 @@ a.link:hover{text-decoration:underline}
           <h2 style="margin:0 0 4px 0">Your personalized California college roadmap is ready.</h2>
           <small class="muted">Powered by your profile, interests, and each school’s requirement profile.</small>
         </div>
-        <button class="btn ghost backPlan" onclick="showTab('planning',document.querySelector('.tab:nth-child(2)'))">↩︎ Back to Planning</button>
+        <button class="btn ghost" onclick="showTab('planning',document.querySelector('.tab:nth-child(2)'))">↩︎ Back to Planning</button>
       </div>
     </div>
 
     <div class="stats">
-      <div class="stat panel">
-        <div class="k">Your GPA</div>
-        <div class="v" id="statGPA">3.50</div>
-      </div>
-      <div class="stat panel">
-        <div class="k">Target schools</div>
-        <div class="v" id="statCount">9</div>
-      </div>
-      <div class="stat panel">
-        <div class="k">Days to UC/CSU deadline</div>
-        <div class="v" id="statDays">72</div>
-      </div>
+      <div class="stat panel"><div class="k">Your GPA</div><div class="v" id="statGPA">3.50</div></div>
+      <div class="stat panel"><div class="k">Target schools</div><div class="v" id="statCount">0</div></div>
+      <div class="stat panel"><div class="k">Days to UC/CSU deadline</div><div class="v" id="statDays">72</div></div>
     </div>
 
     <div id="schoolBuckets"></div>
@@ -211,32 +131,19 @@ a.link:hover{text-decoration:underline}
   <!-- PLANNING -->
   <section id="planning" class="section">
     <div class="panel step">
-      <h3 style="margin:0 0 10px 0">Step 1 — Tell us a bit about you</h3>
+      <h3 style="margin:0 0 10px 0">Step 1 — Tell us about you</h3>
       <label class="label">First name</label>
       <input id="firstName" class="input" placeholder="What should we call you?" />
-
       <div style="display:grid;gap:12px;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));margin-top:12px">
-        <div>
-          <label class="label">Grade level</label>
+        <div><label class="label">Grade level</label>
           <select id="grade" class="input">
-            <option value="">Select</option>
-            <option value="9">9th</option><option value="10">10th</option>
-            <option value="11">11th</option><option value="12">12th</option>
-            <option value="transfer">Transfer</option>
+            <option value="">Select</option><option value="9">9th</option><option value="10">10th</option>
+            <option value="11">11th</option><option value="12">12th</option><option value="transfer">Transfer</option>
           </select>
         </div>
-        <div>
-          <label class="label">GPA (weighted OK)</label>
-          <input id="gpa" type="number" step="0.01" min="0" max="5" class="input" placeholder="e.g., 3.75">
-        </div>
-        <div>
-          <label class="label">SAT (optional)</label>
-          <input id="sat" type="number" min="400" max="1600" class="input" placeholder="e.g., 1400">
-        </div>
-        <div>
-          <label class="label">AP/Honors courses</label>
-          <input id="ap" type="number" min="0" class="input" placeholder="e.g., 5">
-        </div>
+        <div><label class="label">GPA (weighted OK)</label><input id="gpa" type="number" step="0.01" min="0" max="5" class="input" placeholder="e.g., 3.75"></div>
+        <div><label class="label">SAT (optional)</label><input id="sat" type="number" min="400" max="1600" class="input" placeholder="e.g., 1400"></div>
+        <div><label class="label">AP/Honors courses</label><input id="ap" type="number" min="0" class="input" placeholder="e.g., 5"></div>
       </div>
     </div>
 
@@ -253,6 +160,7 @@ a.link:hover{text-decoration:underline}
     <div class="panel step">
       <button class="btn primary" onclick="finishPlanning()">Build my matches</button>
       <button class="btn ghost" style="margin-left:8px" onclick="showTab('dashboard',document.querySelector('.tab:nth-child(1)'))">Skip & view dashboard</button>
+      <button class="btn warn" style="margin-left:auto" onclick="resetPlanning()">Reset planning</button>
     </div>
   </section>
 
@@ -282,264 +190,205 @@ a.link:hover{text-decoration:underline}
   <section id="aid" class="section">
     <h3>Financial aid estimate (CA resident)</h3>
     <div class="panel step">
-      <div class="row"><div>Estimated Federal Pell Grant</div><div id="pell">$0</div></div>
-      <div class="row"><div>Cal Grant (if GPA ≥ 3.0 & income in range)</div><div id="cal">$0</div></div>
-      <div class="row"><div>Middle Class Scholarship</div><div class="muted">Check eligibility</div></div>
-      <div class="row"><div><b>Total estimated grant aid</b></div><div id="aidTotal">$0</div></div>
-      <small class="muted">These are estimates based on 2024-25 ranges; actual awards depend on FAFSA/CADAA.</small>
+      <!-- interactive mini form -->
+      <div class="gridform">
+        <div><label class="label">Household income (USD)</label><input id="inc" type="number" class="input" value="75000" /></div>
+        <div>
+          <label class="label">Family size</label>
+          <select id="fam" class="input">
+            <option>1</option><option>2</option><option selected>3</option><option>4</option>
+            <option>5</option><option>6</option><option>7</option><option>8</option>
+          </select>
+        </div>
+        <div>
+          <label class="label">Residency</label>
+          <select id="res" class="input">
+            <option value="ca" selected>California resident</option>
+            <option value="nonca">Non-resident</option>
+          </select>
+        </div>
+        <div>
+          <label class="label">System</label>
+          <select id="sys" class="input">
+            <option value="UC">UC</option><option value="CSU" selected>CSU</option>
+          </select>
+        </div>
+        <div><label class="label">GPA (auto from profile)</label><input id="aidGPA" type="number" step="0.01" class="input" /></div>
+        <div><button class="btn primary" onclick="calcAid()">Check eligibility</button></div>
+      </div>
+
+      <div class="list mt">
+        <div class="row"><div class="kicker">Estimated Federal Pell Grant</div><div id="pell">$0</div></div>
+        <div class="row"><div class="kicker">Cal Grant (if eligible)</div><div id="cal">$0</div></div>
+        <div class="row"><div class="kicker">Middle Class Scholarship</div><div id="mcs">—</div></div>
+        <div class="row"><div class="kicker">Total estimated grant aid</div><div id="aidTotal">$0</div></div>
+      </div>
+
+      <small class="muted">These are rough estimates based on 2024–25 ranges; actual awards depend on FAFSA/CADAA and campus packaging.</small>
     </div>
   </section>
 
 </div>
 
-<!-- AI HELP -->
-<div id="ai" class="help"></div>
+<!-- AI FAB + panel -->
+<div class="assistantFab" id="fab" onclick="toggleAssistant()" title="Need help?">
+  <span style="font-size:22px">🤖</span>
+</div>
+<div class="assistantPanel" id="assistant">
+  <div id="aiMsg" style="margin-bottom:8px">Need help picking schools? Try adding a few interests.</div>
+  <div style="display:flex;gap:8px;flex-wrap:wrap">
+    <button class="btn primary" onclick="suggestMajors()">Suggest majors</button>
+    <button class="btn ghost" onclick="suggestSchools()">Suggest schools</button>
+    <button class="btn ghost" onclick="toggleAssistant()">Close</button>
+  </div>
+</div>
 
 <script>
-/* =========================
-   STATE / CONSTANTS
-   ========================= */
-const state = {
-  name:"",
-  grade:"",
-  gpa:3.5,
-  sat:0,
-  ap:0,
-  interests:[],
-  prefs:[],
-  selected:[] // ids
-};
+/* ------------ STATE ------------ */
+const state = { name:"", grade:"", gpa:3.5, sat:0, ap:0, interests:[], prefs:[], selected:[] };
 
-const INTERESTS = [
-  "Computer Science","Engineering","Business","Biology","Pre-Med","Psychology",
-  "Economics","Art & Design","Music","Film & Media","Education","Nursing",
-  "Environmental Science","Data Science","Political Science","Mathematics",
-  "Physics","Chemistry","Communications","Sociology"
+const INTERESTS=["Computer Science","Engineering","Business","Biology","Pre-Med","Psychology","Economics","Art & Design","Music","Film & Media","Education","Nursing","Environmental Science","Data Science","Political Science","Mathematics","Physics","Chemistry","Communications","Sociology"];
+const PREFS=["Reputation / Prestige","Affordability","Close to Home","Big Campus Energy","Small Classes","Research Opportunities","Co-ops / Internships","Athletics / Spirit"];
+
+const SCHOOLS=[
+  {id:1,name:"UC Berkeley",sys:"UC",type:"public",weighting:"score-heavy",avgGPA:4.25,avgSAT:1450,acceptance:14,tuition:14226,requirements:["PIQ essays","No LOR (most majors)","Portfolio for some Arts"],majors:["CS","Engineering","Business","Economics","Biology"]},
+  {id:2,name:"UCLA",sys:"UC",type:"public",weighting:"score-heavy",avgGPA:4.26,avgSAT:1445,acceptance:12,tuition:13401,requirements:["PIQ essays","No LOR","Film supplements for some majors"],majors:["CS","Biology","Psychology","Film & Media"]},
+  {id:3,name:"UC San Diego",sys:"UC",type:"public",weighting:"balanced",avgGPA:4.16,avgSAT:1410,acceptance:31,tuition:14616,requirements:["PIQ essays","College selection required"],majors:["CS","Data Science","Biology","Economics"]},
+  {id:4,name:"UC Davis",sys:"UC",type:"public",weighting:"balanced",avgGPA:4.13,avgSAT:1350,acceptance:38,tuition:14597,requirements:["PIQ essays"],majors:["Biology","Animal Science","Psychology","CS"]},
+  {id:5,name:"UC Irvine",sys:"UC",type:"public",weighting:"balanced",avgGPA:4.08,avgSAT:1360,acceptance:27,tuition:13727,requirements:["PIQ essays"],majors:["CS","Engineering","Business","Nursing"]},
+  {id:6,name:"UC Santa Barbara",sys:"UC",type:"public",weighting:"balanced",avgGPA:4.15,avgSAT:1380,acceptance:30,tuition:14391,requirements:["PIQ essays"],majors:["CS","Physics","Biology","Economics"]},
+  {id:7,name:"UC Santa Cruz",sys:"UC",type:"public",weighting:"eca-heavy",avgGPA:3.96,avgSAT:1295,acceptance:51,tuition:13991,requirements:["PIQ essays"],majors:["CS","Art & Design","Psychology"]},
+  {id:8,name:"UC Riverside",sys:"UC",type:"public",weighting:"balanced",avgGPA:3.85,avgSAT:1250,acceptance:66,tuition:13923,requirements:["PIQ essays"],majors:["Biology","Engineering","Business"]},
+  {id:9,name:"UC Merced",sys:"UC",type:"public",weighting:"eca-heavy",avgGPA:3.6,avgSAT:1170,acceptance:87,tuition:13218,requirements:["PIQ essays"],majors:["Engineering","CS","Biology"]},
+  {id:20,name:"Cal Poly San Luis Obispo",sys:"CSU",type:"public",weighting:"score-heavy",avgGPA:4.06,avgSAT:1395,acceptance:33,tuition:10377,requirements:["Program-based review","Some portfolios (Architecture)"],majors:["Engineering","CS","Architecture","Business"]},
+  {id:21,name:"San Diego State",sys:"CSU",type:"public",weighting:"balanced",avgGPA:3.85,avgSAT:1270,acceptance:38,tuition:7720,requirements:["Impaction for many majors"],majors:["Business","Nursing","CS"]},
+  {id:22,name:"Cal State Long Beach",sys:"CSU",type:"public",weighting:"balanced",avgGPA:3.8,avgSAT:1240,acceptance:47,tuition:7378,requirements:["Impacted majors (Nursing/CS)"],majors:["Nursing","CS","Business","Art & Design"]},
+  {id:30,name:"Stanford University",sys:"Private",type:"private",weighting:"score-heavy",avgGPA:4.2,avgSAT:1520,acceptance:4,tuition:61500,requirements:["Common App","Essays","LORs","Tests optional"],majors:["CS","Engineering","Economics","Biology","Data Science"]},
+  {id:31,name:"Caltech",sys:"Private",type:"private",weighting:"score-heavy",avgGPA:4.3,avgSAT:1550,acceptance:3,tuition:60600,requirements:["Rigorous math/science","Essays","LORs"],majors:["CS","Physics","Mathematics","Chemistry"]},
+  {id:32,name:"USC",sys:"Private",type:"private",weighting:"balanced",avgGPA:3.9,avgSAT:1460,acceptance:9,tuition:66400,requirements:["Common App","Essays","LORs","Arts portfolios for some"],majors:["Business","Film & Media","CS","Engineering"]},
+  {id:33,name:"Pomona College",sys:"Private",type:"private",weighting:"balanced",avgGPA:4.0,avgSAT:1500,acceptance:7,tuition:63500,requirements:["Common App/Coalition","Essays","LORs"],majors:["Economics","Biology","Psychology","Math"]},
+  {id:34,name:"Santa Clara University",sys:"Private",type:"private",weighting:"eca-heavy",avgGPA:3.7,avgSAT:1380,acceptance:48,tuition:59700,requirements:["Common App","Essays","LORs"],majors:["Business","CS","Engineering"]},
+  {id:35,name:"Loyola Marymount (LMU)",sys:"Private",type:"private",weighting:"eca-heavy",avgGPA:3.7,avgSAT:1330,acceptance:46,tuition:58260,requirements:["Common App","Essays","LORs","Arts portfolios"],majors:["Film & Media","Business","Communications"]},
+  {id:36,name:"Pepperdine University",sys:"Private",type:"private",weighting:"eca-heavy",avgGPA:3.7,avgSAT:1320,acceptance:53,tuition:65200,requirements:["Common App","Essays","LORs"],majors:["Business","Psychology","Communications"]},
+  {id:37,name:"University of San Diego",sys:"Private",type:"private",weighting:"eca-heavy",avgGPA:3.7,avgSAT:1310,acceptance:48,tuition:57200,requirements:["Common App","Essays","LORs"],majors:["Business","Nursing","CS"]}
 ];
 
-const PREFS = [
-  "Reputation / Prestige","Affordability","Close to Home","Big Campus Energy",
-  "Small Classes","Research Opportunities","Co-ops / Internships","Athletics / Spirit"
-];
+/* ------------ UTIL ------------ */
+function $(s){return document.querySelector(s)} function clamp(n,min,max){return Math.min(max,Math.max(min,n))}
+function daysTo(d){return Math.max(0,Math.floor((new Date(d)-new Date())/(1000*60*60*24)))}
 
-/* School weighting:
-   - score-heavy: GPA/SAT weigh more in matching
-   - eca-heavy: AP/Interests weigh more
-   - balanced: even split
-*/
-const SCHOOLS = [
-  // UC
-  {id:1,  name:"UC Berkeley",           sys:"UC", type:"public",  weighting:"score-heavy",  avgGPA:4.25, avgSAT:1450, acceptance:14,  tuition:14226,
-    requirements:["PIQ essays","No LOR (most majors)","Portfolio for some Arts"], majors:["CS","Engineering","Business","Economics","Biology"]},
-  {id:2,  name:"UCLA",                  sys:"UC", type:"public",  weighting:"score-heavy",  avgGPA:4.26, avgSAT:1445, acceptance:12,  tuition:13401,
-    requirements:["PIQ essays","No LOR","Film majors require supplements"], majors:["CS","Biology","Psychology","Film & Media"]},
-  {id:3,  name:"UC San Diego",          sys:"UC", type:"public",  weighting:"balanced",     avgGPA:4.16, avgSAT:1410, acceptance:31,  tuition:14616,
-    requirements:["PIQ essays","Colleges within UCSD selection"], majors:["CS","Data Science","Biology","Economics"]},
-  {id:4,  name:"UC Davis",              sys:"UC", type:"public",  weighting:"balanced",     avgGPA:4.13, avgSAT:1350, acceptance:38,  tuition:14597,
-    requirements:["PIQ essays"], majors:["Biology","Animal Science","Psychology","CS"]},
-  {id:5,  name:"UC Irvine",             sys:"UC", type:"public",  weighting:"balanced",     avgGPA:4.08, avgSAT:1360, acceptance:27,  tuition:13727,
-    requirements:["PIQ essays"], majors:["CS","Engineering","Business","Nursing"]},
-  {id:6,  name:"UC Santa Barbara",      sys:"UC", type:"public",  weighting:"balanced",     avgGPA:4.15, avgSAT:1380, acceptance:30,  tuition:14391,
-    requirements:["PIQ essays"], majors:["CS","Physics","Biology","Economics"]},
-  {id:7,  name:"UC Santa Cruz",         sys:"UC", type:"public",  weighting:"eca-heavy",    avgGPA:3.96, avgSAT:1295, acceptance:51,  tuition:13991,
-    requirements:["PIQ essays"], majors:["CS","Art & Design","Psychology"]},
-  {id:8,  name:"UC Riverside",          sys:"UC", type:"public",  weighting:"balanced",     avgGPA:3.85, avgSAT:1250, acceptance:66,  tuition:13923,
-    requirements:["PIQ essays"], majors:["Biology","Engineering","Business"]},
-  {id:9,  name:"UC Merced",             sys:"UC", type:"public",  weighting:"eca-heavy",    avgGPA:3.6,  avgSAT:1170, acceptance:87,  tuition:13218,
-    requirements:["PIQ essays"], majors:["Engineering","CS","Biology"]},
+/* ------------ INIT ------------ */
+document.documentElement.setAttribute('data-theme', localStorage.getItem('theme')||'dark');
+$('#themeBtn').textContent = (document.documentElement.getAttribute('data-theme')==='dark'?'🌙 Theme':'☀️ Theme');
 
-  // CSU flagships (rough averages vary by program)
-  {id:20, name:"Cal Poly San Luis Obispo", sys:"CSU", type:"public", weighting:"score-heavy", avgGPA:4.06, avgSAT:1395, acceptance:33, tuition:10377,
-    requirements:["Program-based review","Some portfolios (Architecture)"], majors:["Engineering","CS","Architecture","Business"]},
-  {id:21, name:"San Diego State",          sys:"CSU", type:"public", weighting:"balanced",   avgGPA:3.85, avgSAT:1270, acceptance:38, tuition:7720,
-    requirements:["Impaction for many majors"], majors:["Business","Nursing","CS"]},
-  {id:22, name:"Cal State Long Beach",     sys:"CSU", type:"public", weighting:"balanced",   avgGPA:3.8,  avgSAT:1240, acceptance:47, tuition:7378,
-    requirements:["Impacted majors (Nursing/CS)"], majors:["Nursing","CS","Business","Art & Design"]},
+restoreState(); buildInterestPills(); buildPrefPills(); renderDashboard(); buildBuckets();
+$('#aidGPA').value = state.gpa?.toFixed(2) || 3.5;
+calcAid();
 
-  // Private CA
-  {id:30, name:"Stanford University",   sys:"Private", type:"private", weighting:"score-heavy", avgGPA:4.2, avgSAT:1520, acceptance:4,  tuition:61500,
-    requirements:["Common App","Essays","LORs","Standardized tests optional"], majors:["CS","Engineering","Economics","Biology","Data Science"]},
-  {id:31, name:"Caltech",               sys:"Private", type:"private", weighting:"score-heavy", avgGPA:4.3, avgSAT:1550, acceptance:3,  tuition:60600,
-    requirements:["Rigorous math/science","Essays","LORs"], majors:["CS","Physics","Mathematics","Chemistry"]},
-  {id:32, name:"USC",                   sys:"Private", type:"private", weighting:"balanced",    avgGPA:3.9, avgSAT:1460,  acceptance:9,  tuition:66400,
-    requirements:["Common App","Essays","LORs","Portfolios for some arts"], majors:["Business","Film & Media","CS","Engineering"]},
-  {id:33, name:"Pomona College",        sys:"Private", type:"private", weighting:"balanced",    avgGPA:4.0, avgSAT:1500,  acceptance:7,  tuition:63500,
-    requirements:["Common App/Coalition","Essays","LORs"], majors:["Economics","Biology","Psychology","Math"]},
-  {id:34, name:"Santa Clara University",sys:"Private", type:"private", weighting:"eca-heavy",   avgGPA:3.7, avgSAT:1380,  acceptance:48, tuition:59700,
-    requirements:["Common App","Essays","LORs"], majors:["Business","CS","Engineering"]},
-  {id:35, name:"Loyola Marymount (LMU)",sys:"Private", type:"private", weighting:"eca-heavy",   avgGPA:3.7, avgSAT:1330,  acceptance:46, tuition:58260,
-    requirements:["Common App","Essays","LORs","Portfolios for arts"], majors:["Film & Media","Business","Communications"]},
-  {id:36, name:"Pepperdine University", sys:"Private", type:"private", weighting:"eca-heavy",   avgGPA:3.7, avgSAT:1320,  acceptance:53, tuition:65200,
-    requirements:["Common App","Essays","LORs"], majors:["Business","Psychology","Communications"]},
-  {id:37, name:"University of San Diego",sys:"Private", type:"private", weighting:"eca-heavy",  avgGPA:3.7, avgSAT:1310,  acceptance:48, tuition:57200,
-    requirements:["Common App","Essays","LORs"], majors:["Business","Nursing","CS"]}
-];
-
-/* =========================
-   UTIL
-   ========================= */
-function $(sel){return document.querySelector(sel)}
-function daysTo(dateStr){
-  const d=new Date(dateStr), t=new Date();
-  return Math.max(0, Math.floor((d-t)/(1000*60*60*24)));
-}
-function clamp(n,min,max){return Math.min(max,Math.max(min,n))}
-
-/* =========================
-   INIT UI
-   ========================= */
-document.documentElement.setAttribute('data-theme','dark');
-restoreState();
-buildInterestPills(); buildPrefPills();
-renderDashboard(); buildBuckets();
-
-/* =========================
-   THEME / TABS
-   ========================= */
+/* ------------ THEME + TABS ------------ */
 function toggleTheme(){
-  const root=document.documentElement;
-  const cur=root.getAttribute('data-theme');
-  const nxt=cur==='dark'?'light':'dark';
-  root.setAttribute('data-theme',nxt);
-  localStorage.setItem('theme',nxt);
-  $('#themeBtn').textContent = (nxt==='dark'?'🌙 Theme':'☀️ Theme');
+  const root=document.documentElement; const cur=root.getAttribute('data-theme'); const next=cur==='dark'?'light':'dark';
+  root.setAttribute('data-theme',next); localStorage.setItem('theme',next);
+  $('#themeBtn').textContent = next==='dark'?'🌙 Theme':'☀️ Theme';
 }
-(function initTheme(){
-  const saved=localStorage.getItem('theme')||'dark';
-  document.documentElement.setAttribute('data-theme',saved);
-  $('#themeBtn').textContent = (saved==='dark'?'🌙 Theme':'☀️ Theme');
-})();
-
 function showTab(id, el){
   document.querySelectorAll('.section').forEach(s=>s.classList.remove('active'));
-  document.querySelectorAll('.tab').forEach(b=>b.classList.remove('active'));
   const sec=$("#"+id); if(sec) sec.classList.add('active');
+  document.querySelectorAll('.tab').forEach(b=>b.classList.remove('active'));
   if(el) el.classList.add('active');
-  // context AI nudge
-  if(id==='planning'){nudge("Want help choosing majors or schools? I can suggest based on your interests.")}
+  if(id==='planning') aiSay("Want help choosing majors or schools? I can suggest based on your interests.");
 }
 
-/* =========================
-   PLANNING UI
-   ========================= */
+/* ------------ PLANNING ------------ */
 function buildInterestPills(){
   const wrap=$("#interestGrid"); if(!wrap) return;
-  wrap.innerHTML = INTERESTS.map(v=>`<div class="pill" data-v="${v}" onclick="togglePill(this,'interests')">${v}</div>`).join('');
-  // restore
-  [...wrap.children].forEach(p=>{ if(state.interests.includes(p.dataset.v)) p.classList.add('sel'); });
+  wrap.innerHTML=INTERESTS.map(v=>`<div class="pill" data-v="${v}" onclick="togglePill(this,'interests')">${v}</div>`).join('');
+  [...wrap.children].forEach(p=>{if(state.interests.includes(p.dataset.v))p.classList.add('sel')});
 }
 function buildPrefPills(){
   const wrap=$("#prefGrid"); if(!wrap) return;
-  wrap.innerHTML = PREFS.map(v=>`<div class="pill" data-v="${v}" onclick="togglePill(this,'prefs')">${v}</div>`).join('');
-  [...wrap.children].forEach(p=>{ if(state.prefs.includes(p.dataset.v)) p.classList.add('sel'); });
+  wrap.innerHTML=PREFS.map(v=>`<div class="pill" data-v="${v}" onclick="togglePill(this,'prefs')">${v}</div>`).join('');
+  [...wrap.children].forEach(p=>{if(state.prefs.includes(p.dataset.v))p.classList.add('sel')});
 }
-function togglePill(el, key){
-  const v=el.dataset.v;
-  const list=state[key];
-  const i=list.indexOf(v);
-  if(i>-1){ list.splice(i,1); el.classList.remove('sel'); }
-  else { list.push(v); el.classList.add('sel'); }
+function togglePill(el,key){
+  const v=el.dataset.v; const list=state[key]; const i=list.indexOf(v);
+  if(i>-1){list.splice(i,1);el.classList.remove('sel')} else {list.push(v);el.classList.add('sel')}
   saveState();
 }
-
 function finishPlanning(){
-  // pull inputs
-  state.name = $("#firstName")?.value?.trim() || state.name;
-  state.grade = $("#grade")?.value || state.grade;
-  state.gpa = parseFloat($("#gpa")?.value) || state.gpa;
-  state.sat = parseInt($("#sat")?.value) || state.sat;
-  state.ap  = parseInt($("#ap")?.value) || state.ap;
-  saveState();
-  buildBuckets(); renderDashboard();
-  showTab('dashboard', document.querySelector('.tab:nth-child(1)'));
-  nudge("Nice! I rebuilt your matches using your latest info.");
+  state.name=$("#firstName")?.value?.trim()||state.name;
+  state.grade=$("#grade")?.value||state.grade;
+  state.gpa=parseFloat($("#gpa")?.value)||state.gpa;
+  state.sat=parseInt($("#sat")?.value)||state.sat;
+  state.ap=parseInt($("#ap")?.value)||state.ap;
+  saveState(); $('#aidGPA').value=state.gpa.toFixed(2);
+  buildBuckets(); renderDashboard(); calcAid();
+  showTab('dashboard',document.querySelector('.tab:nth-child(1)'));
+  aiSay("Nice! I rebuilt your matches using your latest info.");
+}
+function resetPlanning(){
+  if(!confirm("Reset your saved info and start over?")) return;
+  localStorage.removeItem('pwState');
+  Object.assign(state,{name:"",grade:"",gpa:3.5,sat:0,ap:0,interests:[],prefs:[],selected:[]});
+  // clear inputs
+  if($("#firstName")) $("#firstName").value="";
+  if($("#grade")) $("#grade").value="";
+  if($("#gpa")) $("#gpa").value="";
+  if($("#sat")) $("#sat").value="";
+  if($("#ap")) $("#ap").value="";
+  buildInterestPills(); buildPrefPills(); buildBuckets(); renderDashboard();
+  $('#aidGPA').value=state.gpa.toFixed(2); calcAid();
+  showTab('planning',document.querySelector('.tab:nth-child(2)'));
+  aiSay("All set. Start fresh — try selecting a few interests.");
 }
 
-/* =========================
-   MATCHING / BUCKETS
-   ========================= */
+/* ------------ MATCHING ------------ */
 function matchScore(s){
-  // base
-  let score = 50;
-
-  // GPA vs avg
-  if(state.gpa){ score += (state.gpa - s.avgGPA) * 22; }
-  // SAT vs avg
-  if(state.sat){ score += (state.sat - s.avgSAT)/12; }
-  // AP bonus
+  let score=50;
+  if(state.gpa) score += (state.gpa - s.avgGPA)*22;
+  if(state.sat) score += (state.sat - s.avgSAT)/12;
   score += (state.ap||0)*1.5;
-
-  // Interest matching boosts for majors present
   const interestHit = state.interests.some(i => s.majors?.some(m => i.toLowerCase().includes(m.toLowerCase()) || m.toLowerCase().includes(i.toLowerCase())));
   if(interestHit) score += 8;
-
-  // Preference signals
   if(state.prefs.includes("Reputation / Prestige") && s.acceptance <= 15) score += 8;
   if(state.prefs.includes("Affordability") && s.sys!=="Private") score += 8;
   if(state.prefs.includes("Small Classes") && s.sys==="Private") score += 6;
-  if(state.prefs.includes("Big Campus Energy") && (s.sys==="UC" || s.sys==="CSU")) score += 5;
-
-  // Weighting
+  if(state.prefs.includes("Big Campus Energy") && (s.sys==="UC"||s.sys==="CSU")) score += 5;
   if(s.weighting==="score-heavy"){
-    // double down on scores
     score += (state.gpa ? (state.gpa - s.avgGPA)*10 : 0);
     score += (state.sat ? (state.sat - s.avgSAT)/20 : 0);
-  }else if(s.weighting==="eca-heavy"){
+  } else if(s.weighting==="eca-heavy"){
     if(interestHit) score += 12;
     score += (state.ap||0)*1.5;
-  } // balanced = default
-
+  }
   return clamp(Math.round(score),0,100);
 }
-
-function bucketFor(s, score){
-  // use GPA delta + score
-  const gdiff = (state.gpa||0) - s.avgGPA;
-  if (gdiff < -0.35 || score < 45) return "reach";
-  if (gdiff > 0.25 || score > 75) return "safety";
+function bucketFor(s,score){
+  const gdiff=(state.gpa||0)-s.avgGPA;
+  if(gdiff<-0.35 || score<45) return "reach";
+  if(gdiff>0.25 || score>75) return "safety";
   return "match";
 }
-
 function buildBuckets(){
   const buckets={reach:[],match:[],safety:[]};
-  SCHOOLS.forEach(s=>{
-    const sc=matchScore(s);
-    buckets[bucketFor(s,sc)].push({...s,score:sc});
-  });
-
-  // sort by score desc
+  SCHOOLS.forEach(s=>{const sc=matchScore(s); buckets[bucketFor(s,sc)].push({...s,score:sc});});
   Object.keys(buckets).forEach(k=>buckets[k].sort((a,b)=>b.score-a.score));
-
   const root=$("#schoolBuckets"); if(!root) return;
-  const section = (title, badge, arr)=>`
+  const section=(title,badge,arr)=>`
     <div class="cat">
       <h3>${title} <span class="badge ${badge}">${badge==='reach'?'Aim High!':badge==='match'?'Great Fit!':'Solid Backup'}</span></h3>
-      <div class="grid">
-        ${arr.map(card).join('')}
-      </div>
+      <div class="grid">${arr.map(card).join('')}</div>
     </div>`;
-
-  root.innerHTML =
-    section("🎯 Reach schools","reach", buckets.reach) +
-    section("✅ Match schools","match", buckets.match) +
-    section("🛡️ Safety schools","safety", buckets.safety);
-
-  // animate score bars
-  root.querySelectorAll('.scoreBar span').forEach(el=>{
-    requestAnimationFrame(()=> el.style.width = el.dataset.w + "%");
-  });
-
-  // update count stat
-  $("#statCount").textContent = (buckets.reach.length + buckets.match.length + buckets.safety.length);
+  root.innerHTML=section("🎯 Reach schools","reach",buckets.reach)+section("✅ Match schools","match",buckets.match)+section("🛡️ Safety schools","safety",buckets.safety);
+  root.querySelectorAll('.scoreBar span').forEach(el=>requestAnimationFrame(()=>el.style.width=el.dataset.w+"%"));
+  $("#statCount").textContent=(buckets.reach.length+buckets.match.length+buckets.safety.length);
 }
-
 function card(s){
-  const req = (s.requirements||[]).slice(0,2).join(" • ");
-  return `
-  <div class="card">
+  const req=(s.requirements||[]).slice(0,2).join(" • ");
+  return `<div class="card">
     <div class="name">${s.name}</div>
     <div class="badges">
-      <span class="badge ${s.weighting==='score-heavy'?'weight':''}">${niceWeight(s.weighting)}</span>
+      <span class="badge weight">${s.weighting==='score-heavy'?'Score-heavy':s.weighting==='eca-heavy'?'ECA-heavy':'Balanced'}</span>
       <span class="badge">${s.sys}</span>
       <span class="badge">Acc ${s.acceptance}%</span>
     </div>
@@ -553,87 +402,73 @@ function card(s){
     </div>
   </div>`;
 }
-function niceWeight(w){
-  return w==='score-heavy'?'Score-heavy' : (w==='eca-heavy'?'ECA-heavy':'Balanced');
-}
-function toggleSelect(id){
-  const i=state.selected.indexOf(id);
-  if(i>-1) state.selected.splice(i,1); else state.selected.push(id);
-  saveState(); buildBuckets();
-}
-function removeCard(id){
-  // “Remove” means hide from buckets (blacklist)
-  state.selected = state.selected.filter(x=>x!==id);
-  SCHOOLS.splice(SCHOOLS.findIndex(s=>s.id===id),1);
-  saveState(); buildBuckets();
-}
+function toggleSelect(id){const i=state.selected.indexOf(id); if(i>-1)state.selected.splice(i,1); else state.selected.push(id); saveState(); buildBuckets();}
+function removeCard(id){const idx=SCHOOLS.findIndex(s=>s.id===id); if(idx>-1) SCHOOLS.splice(idx,1); state.selected=state.selected.filter(x=>x!==id); saveState(); buildBuckets();}
 function showDetails(id){
   const s=SCHOOLS.find(x=>x.id===id); if(!s) return;
-  const msg = `${s.name}\n\nSystem: ${s.sys}\nWeighting: ${niceWeight(s.weighting)}\nAcceptance: ${s.acceptance}%\nAvg GPA: ${s.avgGPA}  SAT: ${s.avgSAT || '—'}\n\nApplication requirements:\n- ${s.requirements.join('\n- ')}\n\nPopular majors:\n- ${(s.majors||[]).join('\n- ')}`;
-  alert(msg);
+  alert(`${s.name}\n\nSystem: ${s.sys}\nWeighting: ${s.weighting}\nAcceptance: ${s.acceptance}%\nAvg GPA: ${s.avgGPA}  SAT: ${s.avgSAT||'—'}\n\nApplication requirements:\n- ${s.requirements.join('\n- ')}\n\nPopular majors:\n- ${(s.majors||[]).join('\n- ')}`);
 }
 
-/* =========================
-   DASHBOARD NUMBERS
-   ========================= */
-function renderDashboard(){
-  $("#statGPA").textContent = (state.gpa||3.5).toFixed(2);
-  const days=daysTo('Nov 30, 2025');
-  $("#statDays").textContent = days;
-}
+/* ------------ DASHBOARD NUMBERS ------------ */
+function renderDashboard(){ $("#statGPA").textContent=(state.gpa||3.5).toFixed(2); $("#statDays").textContent=daysTo('Nov 30, 2025'); }
 
-/* =========================
-   FINANCIAL AID (quick estimate)
-   ========================= */
-(function aid(){
-  // quickly infer Pell & CalGrant from GPA & a mid income (can wire later to inputs)
-  const income = 75000;
-  let pell = income<70000 ? (income<50000?7395:3000) : 0;
-  let cal = (state.gpa>=3.0 && income<80000) ? 12570 : 0;
-  $("#pell").textContent = `$${pell.toLocaleString()}`;
-  $("#cal").textContent = `$${cal.toLocaleString()}`;
-  $("#aidTotal").textContent = `$${(pell+cal).toLocaleString()}`;
-})();
+/* ------------ FINANCIAL AID CALC ------------ */
+function calcAid(){
+  const inc=+($('#inc')?.value||0), fam=parseInt($('#fam')?.value||'1',10), res=$('#res')?.value||'ca', sys=$('#sys')?.value||'CSU';
+  const gpa=parseFloat($('#aidGPA')?.value||state.gpa||0);
 
-/* =========================
-   AI HELPER (context nudges)
-   ========================= */
-let aiTimer=null;
-function nudge(text){
-  const a=$("#ai"); if(!a) return;
-  a.textContent = "🤖 " + text;
-  a.classList.add('show');
-  clearTimeout(aiTimer);
-  aiTimer=setTimeout(()=>a.classList.remove('show'), 5500);
-}
-// idle nudge on planning page if nothing selected in 45s
-let idleTimer=null;
-document.addEventListener('visibilitychange',()=>clearTimeout(idleTimer));
-function startIdleNudge(){
-  clearTimeout(idleTimer);
-  idleTimer=setTimeout(()=>{
-    if($('#planning').classList.contains('active') && state.interests.length===0){
-      nudge("Try tapping a few interests — that unlocks smarter school matches.");
+  // Pell (very rough brackets + slight family-size lift)
+  let pell=0;
+  const lift=Math.max(0, fam-4)*7000; // increases thresholds a bit with family size
+  if(inc<=30000+lift) pell=7395;
+  else if(inc<=50000+lift) pell=4200;
+  else if(inc<=70000+lift) pell=1500;
+
+  // Cal Grant (rough ceilings & GPA >=3.0)
+  let cal=0;
+  if(res==='ca' && gpa>=3.0){
+    const ceilings={1:76000,2:99000,3:106000,4:123000,5:131000,6:140000,7:149000,8:158000};
+    const ceil=ceilings[fam]||158000;
+    if(inc<=ceil) cal = (sys==='UC'?12570:7000); // UC higher tuition component
+  }
+
+  // Middle Class Scholarship (UC/CSU only; rough)
+  let mcs=0;
+  if(res==='ca' && (sys==='UC'||sys==='CSU')){
+    if(inc>=80000 && inc<=217000){
+      if(inc<=120000) mcs=4000; else if(inc<=170000) mcs=3000; else mcs=1500;
     }
-  },45000);
-}
-startIdleNudge();
+  }
 
-/* =========================
-   PERSISTENCE
-   ========================= */
+  $('#pell').textContent=`$${pell.toLocaleString()}`;
+  $('#cal').textContent=`$${cal.toLocaleString()}`;
+  $('#mcs').textContent= mcs? `$${mcs.toLocaleString()}` : '—';
+  $('#aidTotal').textContent=`$${(pell+cal+mcs).toLocaleString()}`;
+}
+// live recalc
+['inc','fam','res','sys','aidGPA'].forEach(id=>{const el=$('#'+id); if(el) el.addEventListener('input',calcAid)});
+
+/* ------------ AI ASSISTANT ------------ */
+function toggleAssistant(){ $('#assistant').classList.toggle('show'); }
+function aiSay(t){ $('#aiMsg').textContent=t; $('#assistant').classList.add('show'); }
+function suggestMajors(){
+  const picks = INTERESTS.slice(0,20).filter(i=>!state.interests.includes(i)).slice(0,3);
+  aiSay(`Try adding: ${picks.join(', ')} — then rebuild matches.`);
+}
+function suggestSchools(){
+  const strong=SCHOOLS.map(s=>({s,score:matchScore(s)})).sort((a,b)=>b.score-a.score).slice(0,3).map(x=>x.s.name);
+  aiSay(`Based on your profile, top picks: ${strong.join(', ')}.`);
+}
+
+/* ------------ PERSISTENCE ------------ */
 function saveState(){ localStorage.setItem('pwState', JSON.stringify(state)); }
 function restoreState(){
-  try{
-    const s=JSON.parse(localStorage.getItem('pwState')||"{}");
-    Object.assign(state,s);
-    // hydrate inputs
-    if($("#firstName")) $("#firstName").value = state.name||"";
-    if($("#grade")) $("#grade").value = state.grade||"";
-    if($("#gpa")) $("#gpa").value = state.gpa||"";
-    if($("#sat")) $("#sat").value = state.sat||"";
-    if($("#ap"))  $("#ap").value  = state.ap||"";
-  }catch(e){}
+  try{ Object.assign(state, JSON.parse(localStorage.getItem('pwState')||"{}")); }catch(e){}
+  if($("#firstName")) $("#firstName").value=state.name||"";
+  if($("#grade")) $("#grade").value=state.grade||"";
+  if($("#gpa")) $("#gpa").value=state.gpa||"";
+  if($("#sat")) $("#sat").value=state.sat||"";
+  if($("#ap")) $("#ap").value=state.ap||"";
 }
 </script>
 </body>
