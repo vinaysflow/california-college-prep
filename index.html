@@ -3,9 +3,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Pathwise - California College Success Platform</title>
+    <title>Pathwise - Discover Your College Path</title>
     <meta name="apple-mobile-web-app-capable" content="yes">
-    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
     <style>
         * {
             margin: 0;
@@ -30,197 +29,196 @@
             --shadow-large: 0 10px 30px rgba(0, 0, 0, 0.15);
         }
         
-        @media (prefers-color-scheme: dark) {
-            :root {
-                --background: #000000;
-                --card: #1C1C1E;
-                --text-primary: #FFFFFF;
-                --text-secondary: #EBEBF5;
-                --text-tertiary: #ACACB0;
-            }
-        }
-        
         body {
             font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
             background: var(--background);
             color: var(--text-primary);
             line-height: 1.5;
-            padding-bottom: env(safe-area-inset-bottom);
         }
         
-        .app-container {
-            max-width: 100%;
-            min-height: 100vh;
-            display: flex;
-            flex-direction: column;
-        }
-        
-        .journey-header {
-            background: linear-gradient(135deg, var(--primary), var(--secondary));
-            padding: 60px 20px 30px;
-            color: white;
-            text-align: center;
-        }
-        
-        .student-greeting {
-            font-size: 32px;
-            font-weight: 700;
-            margin-bottom: 8px;
-        }
-        
-        .journey-status {
-            font-size: 18px;
-            opacity: 0.9;
-        }
-        
-        .progress-overview {
-            display: flex;
-            gap: 12px;
-            margin-top: 20px;
-            padding: 16px;
-            background: rgba(255, 255, 255, 0.15);
-            border-radius: var(--border-radius);
-            overflow-x: auto;
-        }
-        
-        .progress-item {
-            flex: 1;
-            min-width: 100px;
-            text-align: center;
-        }
-        
-        .progress-value {
-            font-size: 24px;
-            font-weight: 700;
-        }
-        
-        .progress-label {
-            font-size: 12px;
-            opacity: 0.9;
-        }
-        
-        .main-nav {
-            background: var(--card);
-            padding: 12px;
-            display: flex;
-            gap: 8px;
-            overflow-x: auto;
-            border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+        /* Progress Bar */
+        .progress-container {
+            background: white;
+            padding: 20px;
+            box-shadow: var(--shadow);
             position: sticky;
             top: 0;
             z-index: 100;
-            -webkit-overflow-scrolling: touch;
         }
         
-        .main-nav::-webkit-scrollbar {
-            display: none;
+        .progress-steps {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 20px;
+            position: relative;
         }
         
-        .nav-pill {
-            padding: 10px 16px;
-            border-radius: 20px;
-            border: none;
-            background: var(--background);
-            color: var(--text-secondary);
-            font-size: 15px;
-            font-weight: 600;
-            white-space: nowrap;
+        .progress-line {
+            position: absolute;
+            top: 20px;
+            left: 0;
+            right: 0;
+            height: 2px;
+            background: #E5E5EA;
+            z-index: 1;
+        }
+        
+        .progress-line-active {
+            position: absolute;
+            top: 20px;
+            left: 0;
+            height: 2px;
+            background: var(--primary);
+            z-index: 2;
+            transition: width 0.5s ease;
+        }
+        
+        .progress-step {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            position: relative;
+            z-index: 3;
             cursor: pointer;
+        }
+        
+        .progress-circle {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: white;
+            border: 2px solid #E5E5EA;
+            display: flex;
+            align-items: center;
+            justify-content: center;
             transition: all 0.3s ease;
         }
         
-        .nav-pill.active {
+        .progress-step.active .progress-circle {
+            border-color: var(--primary);
             background: var(--primary);
             color: white;
-            transform: scale(1.05);
+            transform: scale(1.1);
         }
         
-        .content-area {
-            padding: 20px;
-            flex: 1;
-            max-width: 1200px;
+        .progress-step.completed .progress-circle {
+            border-color: var(--success);
+            background: var(--success);
+            color: white;
+        }
+        
+        .progress-label {
+            margin-top: 8px;
+            font-size: 12px;
+            color: var(--text-tertiary);
+            text-align: center;
+        }
+        
+        .progress-step.active .progress-label {
+            color: var(--primary);
+            font-weight: 600;
+        }
+        
+        /* Main Container */
+        .main-container {
+            max-width: 800px;
             margin: 0 auto;
-            width: 100%;
+            padding: 20px;
         }
         
-        .section {
+        /* Phase Containers */
+        .phase {
             display: none;
-        }
-        
-        .section.active {
-            display: block;
             animation: fadeIn 0.3s ease;
         }
         
+        .phase.active {
+            display: block;
+        }
+        
         @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(10px); }
+            from { opacity: 0; transform: translateY(20px); }
             to { opacity: 1; transform: translateY(0); }
         }
         
-        .section-title {
-            font-size: 24px;
-            font-weight: 700;
-            margin-bottom: 16px;
+        .phase-header {
+            text-align: center;
+            margin-bottom: 40px;
         }
         
+        .phase-title {
+            font-size: 32px;
+            font-weight: 700;
+            margin-bottom: 12px;
+        }
+        
+        .phase-subtitle {
+            font-size: 18px;
+            color: var(--text-secondary);
+        }
+        
+        /* Cards */
         .card {
             background: var(--card);
             border-radius: var(--border-radius);
-            padding: 20px;
+            padding: 24px;
             margin-bottom: 20px;
             box-shadow: var(--shadow);
         }
         
-        .schools-grid {
+        .question-card {
+            text-align: center;
+            padding: 40px;
+        }
+        
+        .question-text {
+            font-size: 24px;
+            font-weight: 600;
+            margin-bottom: 32px;
+        }
+        
+        .options-grid {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-            gap: 12px;
-            margin-bottom: 20px;
+            gap: 16px;
+            margin-bottom: 24px;
         }
         
-        .school-card {
-            background: var(--card);
+        .option-card {
+            padding: 20px;
+            border: 2px solid #E5E5EA;
             border-radius: var(--border-radius);
-            padding: 16px;
-            border: 2px solid transparent;
             cursor: pointer;
             transition: all 0.3s ease;
-            position: relative;
         }
         
-        .school-card.selected {
+        .option-card:hover {
             border-color: var(--primary);
-            background: linear-gradient(to right, rgba(0, 122, 255, 0.05), transparent);
-        }
-        
-        .school-card:hover {
             transform: translateY(-2px);
             box-shadow: var(--shadow);
         }
         
-        .school-name {
+        .option-card.selected {
+            border-color: var(--primary);
+            background: rgba(0, 122, 255, 0.05);
+        }
+        
+        .option-icon {
+            font-size: 32px;
+            margin-bottom: 8px;
+        }
+        
+        .option-title {
             font-weight: 600;
             margin-bottom: 4px;
         }
         
-        .school-details {
-            font-size: 12px;
+        .option-description {
+            font-size: 14px;
             color: var(--text-tertiary);
         }
         
-        .fit-indicator {
-            position: absolute;
-            top: 8px;
-            right: 8px;
-            width: 12px;
-            height: 12px;
-            border-radius: 50%;
-        }
-        
-        .fit-reach { background: var(--danger); }
-        .fit-match { background: var(--warning); }
-        .fit-safety { background: var(--success); }
-        
+        /* Input Fields */
         .input-group {
             margin-bottom: 20px;
         }
@@ -249,20 +247,30 @@
         .input-field:focus {
             outline: none;
             border-color: var(--primary);
-            background: var(--card);
+            background: white;
         }
         
-        .btn-primary {
-            background: linear-gradient(135deg, var(--primary), var(--secondary));
-            color: white;
-            border: none;
+        /* Buttons */
+        .button-container {
+            display: flex;
+            gap: 12px;
+            justify-content: center;
+            margin-top: 32px;
+        }
+        
+        .btn {
             padding: 16px 32px;
             border-radius: var(--border-radius);
             font-size: 17px;
             font-weight: 600;
             cursor: pointer;
             transition: all 0.3s ease;
-            width: 100%;
+            border: none;
+        }
+        
+        .btn-primary {
+            background: var(--primary);
+            color: white;
         }
         
         .btn-primary:hover {
@@ -274,12 +282,6 @@
             background: var(--background);
             color: var(--text-primary);
             border: 2px solid var(--primary);
-            padding: 14px 24px;
-            border-radius: var(--border-radius);
-            font-size: 15px;
-            font-weight: 600;
-            cursor: pointer;
-            transition: all 0.3s ease;
         }
         
         .btn-secondary:hover {
@@ -287,1113 +289,825 @@
             color: white;
         }
         
-        /* Financial Aid Calculator Styles */
-        .aid-result-card {
-            background: linear-gradient(135deg, rgba(52, 199, 89, 0.1), rgba(0, 122, 255, 0.1));
-            border-radius: var(--border-radius);
-            padding: 24px;
-            margin-bottom: 20px;
+        .btn:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
         }
         
-        .aid-amount {
-            font-size: 36px;
-            font-weight: 700;
-            color: var(--success);
-            margin-bottom: 8px;
-        }
-        
-        .aid-breakdown {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
-            gap: 16px;
-            margin-top: 20px;
-        }
-        
-        .aid-item {
-            padding: 12px;
-            background: var(--card);
-            border-radius: 8px;
-            text-align: center;
-        }
-        
-        .aid-item-label {
-            font-size: 12px;
-            color: var(--text-tertiary);
-            text-transform: uppercase;
-            margin-bottom: 4px;
-        }
-        
-        .aid-item-value {
-            font-size: 20px;
-            font-weight: 600;
-        }
-        
-        /* Document Tracker Styles */
-        .document-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-            gap: 16px;
+        /* Interest Tags */
+        .interest-tags {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 12px;
             margin-bottom: 24px;
         }
         
-        .document-card {
-            background: var(--card);
-            border-radius: var(--border-radius);
-            padding: 16px;
-            border: 2px solid var(--background);
-            position: relative;
+        .interest-tag {
+            padding: 10px 20px;
+            background: var(--background);
+            border-radius: 20px;
+            cursor: pointer;
             transition: all 0.3s ease;
+            border: 2px solid transparent;
         }
         
-        .document-card.complete {
-            border-color: var(--success);
-            background: linear-gradient(to right, rgba(52, 199, 89, 0.05), transparent);
+        .interest-tag:hover {
+            border-color: var(--primary);
         }
         
-        .document-card.pending {
-            border-color: var(--warning);
-            background: linear-gradient(to right, rgba(255, 149, 0, 0.05), transparent);
+        .interest-tag.selected {
+            background: var(--primary);
+            color: white;
         }
         
-        .document-card.missing {
-            border-color: var(--danger);
-            background: linear-gradient(to right, rgba(255, 59, 48, 0.05), transparent);
-        }
-        
-        .document-icon {
-            font-size: 24px;
-            margin-bottom: 8px;
-        }
-        
-        .document-title {
-            font-weight: 600;
-            margin-bottom: 4px;
-        }
-        
-        .document-status {
-            font-size: 14px;
-            color: var(--text-tertiary);
-            margin-bottom: 12px;
-        }
-        
-        .upload-area {
-            border: 2px dashed var(--text-tertiary);
+        /* Discovery Results */
+        .discovery-results {
+            padding: 24px;
+            background: linear-gradient(135deg, rgba(0, 122, 255, 0.05), rgba(88, 86, 214, 0.05));
             border-radius: var(--border-radius);
-            padding: 20px;
-            text-align: center;
+            margin-bottom: 24px;
+        }
+        
+        .result-item {
+            display: flex;
+            justify-content: space-between;
+            padding: 12px 0;
+            border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+        }
+        
+        .result-item:last-child {
+            border-bottom: none;
+        }
+        
+        .result-label {
+            font-weight: 600;
+        }
+        
+        .result-value {
+            color: var(--primary);
+            font-weight: 600;
+        }
+        
+        /* Navigation Tabs (Hidden Initially) */
+        .main-nav {
+            background: var(--card);
+            padding: 12px;
+            display: none;
+            gap: 8px;
+            overflow-x: auto;
+            border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+            position: sticky;
+            top: 60px;
+            z-index: 50;
+        }
+        
+        .main-nav.unlocked {
+            display: flex;
+        }
+        
+        .nav-pill {
+            padding: 10px 16px;
+            border-radius: 20px;
+            border: none;
+            background: var(--background);
+            color: var(--text-secondary);
+            font-size: 15px;
+            font-weight: 600;
+            white-space: nowrap;
             cursor: pointer;
             transition: all 0.3s ease;
         }
         
-        .upload-area:hover {
-            border-color: var(--primary);
-            background: rgba(0, 122, 255, 0.05);
+        .nav-pill.active {
+            background: var(--primary);
+            color: white;
         }
         
-        /* College Match Results */
-        .college-match {
+        .nav-pill:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+        
+        /* Personality Quiz */
+        .personality-card {
+            padding: 24px;
+            background: var(--card);
+            border-radius: var(--border-radius);
+            margin-bottom: 20px;
+        }
+        
+        .slider-container {
+            margin: 24px 0;
+        }
+        
+        .slider-labels {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 12px;
+            font-size: 14px;
+        }
+        
+        .slider {
+            width: 100%;
+            -webkit-appearance: none;
+            height: 6px;
+            border-radius: 3px;
+            background: #E5E5EA;
+            outline: none;
+        }
+        
+        .slider::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            appearance: none;
+            width: 24px;
+            height: 24px;
+            border-radius: 50%;
+            background: var(--primary);
+            cursor: pointer;
+        }
+        
+        /* School Recommendations */
+        .school-rec-card {
+            background: var(--card);
+            border-radius: var(--border-radius);
+            padding: 20px;
+            margin-bottom: 16px;
             display: flex;
             justify-content: space-between;
             align-items: center;
-            padding: 15px;
-            margin: 10px 0;
-            border-radius: 10px;
-            border-left: 5px solid;
+            transition: all 0.3s ease;
         }
         
-        .college-match.reach {
-            border-left-color: var(--danger);
-            background: linear-gradient(to right, rgba(255, 59, 48, 0.05), transparent);
+        .school-rec-card:hover {
+            transform: translateX(4px);
+            box-shadow: var(--shadow-large);
         }
         
-        .college-match.target {
-            border-left-color: var(--warning);
-            background: linear-gradient(to right, rgba(255, 149, 0, 0.05), transparent);
-        }
-        
-        .college-match.safety {
-            border-left-color: var(--success);
-            background: linear-gradient(to right, rgba(52, 199, 89, 0.05), transparent);
-        }
-        
-        .college-info {
-            flex: 1;
-        }
-        
-        .college-info h3 {
+        .school-info h3 {
             font-size: 18px;
             margin-bottom: 4px;
         }
         
-        .college-info p {
+        .school-match-reason {
             font-size: 14px;
             color: var(--text-secondary);
         }
         
-        .admission-chance {
-            text-align: right;
-        }
-        
-        .chance-percentage {
-            font-size: 28px;
+        .match-score {
+            font-size: 24px;
             font-weight: 700;
-            background: linear-gradient(135deg, var(--primary), var(--secondary));
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-        }
-        
-        .chance-label {
-            font-size: 12px;
-            color: var(--text-tertiary);
-            text-transform: uppercase;
-        }
-        
-        .impacted-badge {
-            display: inline-block;
-            padding: 4px 8px;
-            background: var(--danger);
-            color: white;
-            border-radius: 12px;
-            font-size: 11px;
-            font-weight: 600;
-            margin-left: 8px;
-        }
-        
-        .action-card {
-            background: var(--card);
-            border-radius: var(--border-radius);
-            padding: 20px;
-            margin-bottom: 16px;
-            box-shadow: var(--shadow);
-            transition: all 0.3s ease;
-        }
-        
-        .action-card:hover {
-            transform: translateY(-2px);
-            box-shadow: var(--shadow-large);
-        }
-        
-        .timeline-container {
-            position: relative;
-            padding-left: 40px;
-        }
-        
-        .timeline-item {
-            background: var(--card);
-            border-radius: var(--border-radius);
-            padding: 16px;
-            margin-bottom: 16px;
-            position: relative;
-            box-shadow: var(--shadow);
-        }
-        
-        .timeline-dot {
-            position: absolute;
-            left: -34px;
-            top: 20px;
-            width: 16px;
-            height: 16px;
-            border-radius: 50%;
-            background: var(--primary);
-            border: 3px solid var(--card);
-        }
-        
-        .timeline-date {
-            font-size: 13px;
-            color: var(--text-tertiary);
-            margin-bottom: 4px;
-        }
-        
-        .timeline-title {
-            font-weight: 600;
-            margin-bottom: 4px;
-        }
-        
-        .ai-chat-button {
-            position: fixed;
-            bottom: 24px;
-            right: 24px;
-            width: 60px;
-            height: 60px;
-            border-radius: 50%;
-            background: linear-gradient(135deg, var(--primary), var(--secondary));
-            color: white;
-            border: none;
-            box-shadow: var(--shadow-large);
-            cursor: pointer;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 28px;
-            transition: all 0.3s ease;
-            z-index: 999;
-        }
-        
-        .ai-chat-button:hover {
-            transform: scale(1.1);
-        }
-        
-        .ai-chat-window {
-            position: fixed;
-            bottom: 100px;
-            right: 24px;
-            width: 360px;
-            max-width: calc(100vw - 48px);
-            height: 500px;
-            max-height: 60vh;
-            background: var(--card);
-            border-radius: var(--border-radius);
-            box-shadow: var(--shadow-large);
-            display: none;
-            flex-direction: column;
-            z-index: 998;
-            animation: slideUp 0.3s ease-out;
-        }
-        
-        @keyframes slideUp {
-            from { transform: translateY(20px); opacity: 0; }
-            to { transform: translateY(0); opacity: 1; }
-        }
-        
-        .ai-chat-window.active {
-            display: flex;
-        }
-        
-        .ai-chat-header {
-            padding: 16px 20px;
-            background: linear-gradient(135deg, var(--primary), var(--secondary));
-            color: white;
-            border-radius: var(--border-radius) var(--border-radius) 0 0;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
-        
-        .ai-chat-messages {
-            flex: 1;
-            overflow-y: auto;
-            padding: 20px;
-            display: flex;
-            flex-direction: column;
-            gap: 12px;
-        }
-        
-        .ai-message {
-            max-width: 80%;
-            padding: 12px 16px;
-            border-radius: 18px;
-            font-size: 15px;
-            line-height: 1.4;
-        }
-        
-        .ai-message.user {
-            align-self: flex-end;
-            background: var(--primary);
-            color: white;
-        }
-        
-        .ai-message.assistant {
-            align-self: flex-start;
-            background: var(--background);
-            color: var(--text-primary);
-        }
-        
-        .ai-chat-input {
-            display: flex;
-            gap: 8px;
-            padding: 12px;
-            border-top: 1px solid var(--background);
-        }
-        
-        .ai-chat-input input {
-            flex: 1;
-            padding: 12px;
-            border: none;
-            background: var(--background);
-            border-radius: 20px;
-            font-size: 15px;
-        }
-        
-        .ai-chat-input button {
-            padding: 12px 20px;
-            background: var(--primary);
-            color: white;
-            border: none;
-            border-radius: 20px;
-            font-weight: 600;
-            cursor: pointer;
+            color: var(--primary);
         }
         
         @media (max-width: 768px) {
-            .document-grid {
+            .options-grid {
                 grid-template-columns: 1fr;
             }
             
-            .schools-grid {
-                grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+            .progress-label {
+                font-size: 10px;
+                max-width: 60px;
             }
             
-            .ai-chat-window {
-                right: 0;
-                bottom: 0;
-                width: 100%;
-                height: 100vh;
-                max-height: 100vh;
-                border-radius: 0;
-            }
-            
-            .ai-chat-header {
-                border-radius: 0;
+            .phase-title {
+                font-size: 24px;
             }
         }
     </style>
 </head>
 <body>
-    <div class="app-container">
-        <div class="journey-header">
-            <h1 class="student-greeting">Welcome to Your College Journey! 🎓</h1>
-            <p class="journey-status">Your personalized path to UC & CSU success</p>
+    <!-- Progress Bar -->
+    <div class="progress-container">
+        <div class="progress-steps">
+            <div class="progress-line"></div>
+            <div class="progress-line-active" id="progressLine" style="width: 0%;"></div>
             
-            <div class="progress-overview">
-                <div class="progress-item">
-                    <div class="progress-value">3.85</div>
-                    <div class="progress-label">Current GPA</div>
+            <div class="progress-step active" onclick="goToPhase(0)">
+                <div class="progress-circle">1</div>
+                <div class="progress-label">Discover</div>
+            </div>
+            <div class="progress-step" onclick="goToPhase(1)">
+                <div class="progress-circle">2</div>
+                <div class="progress-label">Explore</div>
+            </div>
+            <div class="progress-step" onclick="goToPhase(2)">
+                <div class="progress-circle">3</div>
+                <div class="progress-label">Academic</div>
+            </div>
+            <div class="progress-step" onclick="goToPhase(3)">
+                <div class="progress-circle">4</div>
+                <div class="progress-label">Match</div>
+            </div>
+            <div class="progress-step" onclick="goToPhase(4)">
+                <div class="progress-circle">5</div>
+                <div class="progress-label">Plan</div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Navigation (Initially Hidden) -->
+    <nav class="main-nav" id="mainNav">
+        <button class="nav-pill" onclick="showDashboard()">🏠 Dashboard</button>
+        <button class="nav-pill" onclick="showSchools()">🎯 Schools</button>
+        <button class="nav-pill" onclick="showFinancial()">💰 Financial</button>
+        <button class="nav-pill" onclick="showDocuments()">📄 Documents</button>
+        <button class="nav-pill" onclick="showTimeline()">📅 Timeline</button>
+    </nav>
+    
+    <div class="main-container">
+        <!-- Phase 1: Discovery -->
+        <div id="phase-0" class="phase active">
+            <div class="phase-header">
+                <h1 class="phase-title">Let's Start Your Journey 🚀</h1>
+                <p class="phase-subtitle">No pressure - we'll discover your path together</p>
+            </div>
+            
+            <div class="card question-card">
+                <div class="question-text">How are you feeling about college?</div>
+                <div class="options-grid">
+                    <div class="option-card" onclick="selectFeeling('excited')">
+                        <div class="option-icon">😊</div>
+                        <div class="option-title">Excited</div>
+                        <div class="option-description">Ready to explore possibilities</div>
+                    </div>
+                    <div class="option-card" onclick="selectFeeling('uncertain')">
+                        <div class="option-icon">🤔</div>
+                        <div class="option-title">Uncertain</div>
+                        <div class="option-description">Not sure what I want yet</div>
+                    </div>
+                    <div class="option-card" onclick="selectFeeling('overwhelmed')">
+                        <div class="option-icon">😰</div>
+                        <div class="option-title">Overwhelmed</div>
+                        <div class="option-description">It feels like a lot</div>
+                    </div>
+                    <div class="option-card" onclick="selectFeeling('curious')">
+                        <div class="option-icon">🔍</div>
+                        <div class="option-title">Curious</div>
+                        <div class="option-description">Want to learn more</div>
+                    </div>
                 </div>
-                <div class="progress-item">
-                    <div class="progress-value">$19,465</div>
-                    <div class="progress-label">Est. Aid/Year</div>
+            </div>
+            
+            <div class="card">
+                <h3 style="margin-bottom: 16px;">Quick Check-In</h3>
+                <div class="input-group">
+                    <label class="input-label">What grade are you in?</label>
+                    <select class="input-field" id="gradeLevel">
+                        <option value="">Select...</option>
+                        <option value="9">9th Grade</option>
+                        <option value="10">10th Grade</option>
+                        <option value="11">11th Grade</option>
+                        <option value="12">12th Grade</option>
+                        <option value="transfer">Transfer Student</option>
+                    </select>
                 </div>
-                <div class="progress-item">
-                    <div class="progress-value">5</div>
-                    <div class="progress-label">Target Schools</div>
+                
+                <div class="input-group">
+                    <label class="input-label">What's your first name? (Optional)</label>
+                    <input type="text" class="input-field" id="firstName" placeholder="Just so we can personalize your experience">
                 </div>
-                <div class="progress-item">
-                    <div class="progress-value" id="daysLeft">--</div>
-                    <div class="progress-label">Days Left</div>
-                </div>
+            </div>
+            
+            <div class="button-container">
+                <button class="btn btn-primary" onclick="nextPhase()" id="phase0Next">Continue →</button>
             </div>
         </div>
         
-        <nav class="main-nav">
-            <button class="nav-pill active" onclick="switchSection('dashboard')">🏠 Dashboard</button>
-            <button class="nav-pill" onclick="switchSection('schools')">🎯 Schools</button>
-            <button class="nav-pill" onclick="switchSection('calculator')">📊 Calculator</button>
-            <button class="nav-pill" onclick="switchSection('financial')">💰 Financial Aid</button>
-            <button class="nav-pill" onclick="switchSection('documents')">📄 Documents</button>
-            <button class="nav-pill" onclick="switchSection('timeline')">📅 Timeline</button>
-            <button class="nav-pill" onclick="switchSection('strategy')">🧠 Strategy</button>
-        </nav>
-        
-        <div class="content-area">
-            <!-- Dashboard Section -->
-            <div id="dashboard" class="section active">
-                <h2 class="section-title">Your College Dashboard</h2>
-                
-                <div class="card">
-                    <h3 style="margin-bottom: 16px;">🎯 Your Target Schools</h3>
-                    <div class="schools-grid">
-                        <div class="school-card selected" onclick="showSchoolDetails('UC Berkeley')">
-                            <div class="fit-indicator fit-reach"></div>
-                            <div class="school-name">UC Berkeley</div>
-                            <div class="school-details">
-                                <div>Reach - 28% chance</div>
-                                <div>GPA needed: 4.25</div>
-                            </div>
-                        </div>
-                        <div class="school-card selected" onclick="showSchoolDetails('UCLA')">
-                            <div class="fit-indicator fit-reach"></div>
-                            <div class="school-name">UCLA</div>
-                            <div class="school-details">
-                                <div>Reach - 25% chance</div>
-                                <div>GPA needed: 4.23</div>
-                            </div>
-                        </div>
-                        <div class="school-card selected" onclick="showSchoolDetails('UC San Diego')">
-                            <div class="fit-indicator fit-match"></div>
-                            <div class="school-name">UC San Diego</div>
-                            <div class="school-details">
-                                <div>Match - 45% chance</div>
-                                <div>GPA needed: 4.15</div>
-                            </div>
-                        </div>
-                        <div class="school-card selected" onclick="showSchoolDetails('UC Davis')">
-                            <div class="fit-indicator fit-match"></div>
-                            <div class="school-name">UC Davis</div>
-                            <div class="school-details">
-                                <div>Match - 52% chance</div>
-                                <div>GPA needed: 4.05</div>
-                            </div>
-                        </div>
-                        <div class="school-card selected" onclick="showSchoolDetails('UC Riverside')">
-                            <div class="fit-indicator fit-safety"></div>
-                            <div class="school-name">UC Riverside</div>
-                            <div class="school-details">
-                                <div>Safety - 78% chance</div>
-                                <div>GPA needed: 3.75</div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                
-                <div class="card">
-                    <h3 style="margin-bottom: 16px;">📈 What You Need to Do</h3>
-                    <div class="action-card">
-                        <h4>1. Improve Your GPA</h4>
-                        <p>You need 0.4 points to reach UC Berkeley's average. Take 3 more AP/Honors classes.</p>
-                    </div>
-                    <div class="action-card">
-                        <h4>2. Complete Personal Insight Questions</h4>
-                        <p>4 essays required for UC applications. Start with your leadership experience.</p>
-                    </div>
-                    <div class="action-card">
-                        <h4>3. Apply for Financial Aid</h4>
-                        <p>You qualify for $19,465/year. Submit FAFSA by March 2.</p>
-                    </div>
+        <!-- Phase 2: Interest Discovery -->
+        <div id="phase-1" class="phase">
+            <div class="phase-header">
+                <h1 class="phase-title">What Interests You? 💭</h1>
+                <p class="phase-subtitle">Select all that spark your curiosity (you can change these later)</p>
+            </div>
+            
+            <div class="card">
+                <h3 style="margin-bottom: 16px;">Academic Interests</h3>
+                <div class="interest-tags" id="academicInterests">
+                    <div class="interest-tag" onclick="toggleInterest(this, 'stem')">🔬 Science & Tech</div>
+                    <div class="interest-tag" onclick="toggleInterest(this, 'arts')">🎨 Arts & Design</div>
+                    <div class="interest-tag" onclick="toggleInterest(this, 'business')">💼 Business</div>
+                    <div class="interest-tag" onclick="toggleInterest(this, 'health')">⚕️ Health & Medicine</div>
+                    <div class="interest-tag" onclick="toggleInterest(this, 'social')">🤝 Social Sciences</div>
+                    <div class="interest-tag" onclick="toggleInterest(this, 'humanities')">📚 Humanities</div>
+                    <div class="interest-tag" onclick="toggleInterest(this, 'environment')">🌱 Environment</div>
+                    <div class="interest-tag" onclick="toggleInterest(this, 'education')">👩‍🏫 Education</div>
                 </div>
             </div>
             
-            <!-- Schools Section -->
-            <div id="schools" class="section">
-                <h2 class="section-title">School-Specific Requirements</h2>
-                <div id="schoolsContent">
-                    <!-- Will be populated by JavaScript -->
+            <div class="card">
+                <h3 style="margin-bottom: 16px;">Activities You Enjoy</h3>
+                <div class="interest-tags" id="activityInterests">
+                    <div class="interest-tag" onclick="toggleInterest(this, 'sports')">⚽ Sports</div>
+                    <div class="interest-tag" onclick="toggleInterest(this, 'music')">🎵 Music</div>
+                    <div class="interest-tag" onclick="toggleInterest(this, 'leadership')">👥 Leadership</div>
+                    <div class="interest-tag" onclick="toggleInterest(this, 'volunteer')">💝 Volunteering</div>
+                    <div class="interest-tag" onclick="toggleInterest(this, 'debate')">💬 Debate</div>
+                    <div class="interest-tag" onclick="toggleInterest(this, 'creative')">✨ Creating Things</div>
+                    <div class="interest-tag" onclick="toggleInterest(this, 'research')">🔍 Research</div>
+                    <div class="interest-tag" onclick="toggleInterest(this, 'travel')">✈️ Travel</div>
                 </div>
             </div>
             
-            <!-- Calculator Section -->
-            <div id="calculator" class="section">
-                <h2 class="section-title">Admission Calculator</h2>
+            <div class="card personality-card">
+                <h3 style="margin-bottom: 16px;">How Do You Learn Best?</h3>
                 
-                <div class="card">
-                    <h3 style="margin-bottom: 20px;">Calculate Your Chances</h3>
-                    
-                    <div class="input-group">
-                        <label class="input-label">Weighted GPA</label>
-                        <input type="number" class="input-field" id="gpa" value="3.85" step="0.01" max="5.0">
+                <div class="slider-container">
+                    <div class="slider-labels">
+                        <span>Small Classes</span>
+                        <span>Large Lectures</span>
                     </div>
-                    
-                    <div class="input-group">
-                        <label class="input-label">SAT Score (Optional)</label>
-                        <input type="number" class="input-field" id="sat" placeholder="1350" max="1600">
-                    </div>
-                    
-                    <div class="input-group">
-                        <label class="input-label">Intended Major</label>
-                        <select class="input-field" id="major">
-                            <option value="computer-science">Computer Science</option>
-                            <option value="engineering">Engineering</option>
-                            <option value="business">Business</option>
-                            <option value="biology">Biology</option>
-                            <option value="psychology">Psychology</option>
-                            <option value="undeclared">Undeclared</option>
-                        </select>
-                    </div>
-                    
-                    <div class="input-group">
-                        <label class="input-label">AP/Honors Courses Taken</label>
-                        <input type="number" class="input-field" id="apCourses" value="5" max="20">
-                    </div>
-                    
-                    <button class="btn-primary" onclick="calculateAdmissions()">Calculate My Chances</button>
+                    <input type="range" class="slider" id="classSize" min="0" max="100" value="50">
                 </div>
                 
-                <div id="calculatorResults" style="display: none;">
-                    <div class="card">
-                        <h3 style="margin-bottom: 20px;">Your College Matches</h3>
-                        <div id="collegeMatches"></div>
+                <div class="slider-container">
+                    <div class="slider-labels">
+                        <span>Theory & Concepts</span>
+                        <span>Hands-On Practice</span>
                     </div>
+                    <input type="range" class="slider" id="learningStyle" min="0" max="100" value="50">
+                </div>
+                
+                <div class="slider-container">
+                    <div class="slider-labels">
+                        <span>Independent Study</span>
+                        <span>Group Projects</span>
+                    </div>
+                    <input type="range" class="slider" id="collaborationStyle" min="0" max="100" value="50">
                 </div>
             </div>
             
-            <!-- Financial Aid Section -->
-            <div id="financial" class="section">
-                <h2 class="section-title">Financial Aid Calculator</h2>
-                <p style="color: var(--text-secondary); margin-bottom: 24px;">
-                    Get an estimate of your financial aid eligibility for California colleges
-                </p>
-                
-                <div class="card">
-                    <h3 style="margin-bottom: 20px;">Family Financial Information</h3>
-                    
-                    <div class="input-group">
-                        <label class="input-label">Family Annual Income</label>
-                        <input type="number" class="input-field" id="familyIncome" value="75000" onchange="calculateAid()">
-                        <small style="color: var(--text-tertiary);">Total household income before taxes</small>
-                    </div>
-                    
-                    <div class="input-group">
-                        <label class="input-label">Family Size</label>
-                        <select class="input-field" id="familySize" onchange="calculateAid()">
-                            <option value="2">2 people</option>
-                            <option value="3">3 people</option>
-                            <option value="4" selected>4 people</option>
-                            <option value="5">5 people</option>
-                            <option value="6">6+ people</option>
-                        </select>
-                    </div>
-                    
-                    <div class="input-group">
-                        <label class="input-label">Number in College</label>
-                        <select class="input-field" id="numberInCollege" onchange="calculateAid()">
-                            <option value="1" selected>1 (just you)</option>
-                            <option value="2">2 students</option>
-                            <option value="3">3+ students</option>
-                        </select>
-                    </div>
-                    
-                    <div class="input-group">
-                        <label class="input-label">Your GPA</label>
-                        <input type="number" class="input-field" id="studentGPA" value="3.85" step="0.01" max="5.0" onchange="calculateAid()">
-                    </div>
-                    
-                    <div class="input-group">
-                        <label class="input-label">California Resident?</label>
-                        <select class="input-field" id="caResident" onchange="calculateAid()">
-                            <option value="yes" selected>Yes</option>
-                            <option value="no">No</option>
-                        </select>
-                    </div>
-                    
-                    <button class="btn-primary" onclick="calculateAid()">Calculate My Aid</button>
-                </div>
-                
-                <div id="aidResults" style="display: none;">
-                    <div class="aid-result-card">
-                        <h3>Your Estimated Financial Aid</h3>
-                        <div class="aid-amount" id="totalAid">$0</div>
-                        <p style="color: var(--text-secondary);">Per year, based on your eligibility</p>
-                        
-                        <div class="aid-breakdown">
-                            <div class="aid-item">
-                                <div class="aid-item-label">Federal Pell Grant</div>
-                                <div class="aid-item-value" id="pellGrant">$0</div>
-                            </div>
-                            <div class="aid-item">
-                                <div class="aid-item-label">Cal Grant</div>
-                                <div class="aid-item-value" id="calGrant">$0</div>
-                            </div>
-                            <div class="aid-item">
-                                <div class="aid-item-label">Middle Class Scholarship</div>
-                                <div class="aid-item-value" id="middleClass">$0</div>
-                            </div>
-                            <div class="aid-item">
-                                <div class="aid-item-label">UC/CSU Grant</div>
-                                <div class="aid-item-value" id="systemGrant">$0</div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            
-            <!-- Documents Section -->
-            <div id="documents" class="section">
-                <h2 class="section-title">Document Tracker</h2>
-                <p style="color: var(--text-secondary); margin-bottom: 24px;">
-                    Track all required application documents
-                </p>
-                
-                <div class="document-grid">
-                    <div class="document-card complete">
-                        <div class="document-icon">📄</div>
-                        <div class="document-title">Official Transcript</div>
-                        <div class="document-status">Uploaded Oct 15, 2024</div>
-                        <button class="btn-secondary" style="width: 100%;">View</button>
-                    </div>
-                    
-                    <div class="document-card pending">
-                        <div class="document-icon">🎓</div>
-                        <div class="document-title">SAT Score Report</div>
-                        <div class="document-status">Self-reported • Awaiting official</div>
-                        <button class="btn-secondary" style="width: 100%;">Update</button>
-                    </div>
-                    
-                    <div class="document-card missing">
-                        <div class="document-icon">💰</div>
-                        <div class="document-title">FAFSA</div>
-                        <div class="document-status">Not started • Due Mar 2</div>
-                        <button class="btn-primary" style="width: 100%; padding: 12px;">Start FAFSA</button>
-                    </div>
-                    
-                    <div class="document-card complete">
-                        <div class="document-icon">📝</div>
-                        <div class="document-title">Personal Statement</div>
-                        <div class="document-status">4 essays complete</div>
-                        <button class="btn-secondary" style="width: 100%;">Review</button>
-                    </div>
-                    
-                    <div class="document-card missing">
-                        <div class="document-icon">🏆</div>
-                        <div class="document-title">Activities List</div>
-                        <div class="document-status">Not uploaded</div>
-                        <div class="upload-area" onclick="uploadDocument('activities')">
-                            <div>📤 Click to upload</div>
-                            <small>PDF, DOC, or DOCX</small>
-                        </div>
-                    </div>
-                    
-                    <div class="document-card missing">
-                        <div class="document-icon">✉️</div>
-                        <div class="document-title">Recommendations</div>
-                        <div class="document-status">1 of 3 received</div>
-                        <button class="btn-secondary" style="width: 100%;">Track Status</button>
-                    </div>
-                </div>
-            </div>
-            
-            <!-- Timeline Section -->
-            <div id="timeline" class="section">
-                <h2 class="section-title">Application Timeline</h2>
-                
-                <div class="timeline-container">
-                    <div class="timeline-item">
-                        <div class="timeline-dot"></div>
-                        <div class="timeline-date">August 1, 2025</div>
-                        <div class="timeline-title">UC Application Opens</div>
-                        <p style="font-size: 14px; color: var(--text-secondary);">Start filling out your application</p>
-                    </div>
-                    
-                    <div class="timeline-item">
-                        <div class="timeline-dot" style="background: var(--warning);"></div>
-                        <div class="timeline-date">October 1, 2025</div>
-                        <div class="timeline-title">FAFSA Opens</div>
-                        <p style="font-size: 14px; color: var(--text-secondary);">Submit for financial aid</p>
-                    </div>
-                    
-                    <div class="timeline-item">
-                        <div class="timeline-dot" style="background: var(--danger);"></div>
-                        <div class="timeline-date">November 15, 2025</div>
-                        <div class="timeline-title">🎯 Optimal Submission Date</div>
-                        <p style="font-size: 14px; color: var(--text-secondary);">Submit 2 weeks early for 23% better chances</p>
-                    </div>
-                    
-                    <div class="timeline-item">
-                        <div class="timeline-dot" style="background: var(--danger);"></div>
-                        <div class="timeline-date">November 30, 2025</div>
-                        <div class="timeline-title">UC/CSU Application Deadline</div>
-                        <p style="font-size: 14px; color: var(--text-secondary);">Final deadline - no extensions!</p>
-                    </div>
-                    
-                    <div class="timeline-item">
-                        <div class="timeline-dot"></div>
-                        <div class="timeline-date">March 2, 2026</div>
-                        <div class="timeline-title">Cal Grant Deadline</div>
-                        <p style="font-size: 14px; color: var(--text-secondary);">Submit GPA verification</p>
-                    </div>
-                    
-                    <div class="timeline-item">
-                        <div class="timeline-dot" style="background: var(--success);"></div>
-                        <div class="timeline-date">March 15-30, 2026</div>
-                        <div class="timeline-title">UC Decisions Released</div>
-                        <p style="font-size: 14px; color: var(--text-secondary);">Admission decisions arrive!</p>
-                    </div>
-                </div>
-            </div>
-            
-            <!-- Strategy Section -->
-            <div id="strategy" class="section">
-                <h2 class="section-title">Game Theory Strategy</h2>
-                
-                <div class="card">
-                    <h3 style="margin-bottom: 16px;">🎯 Nash Equilibrium Strategy</h3>
-                    <p>Based on game theory, your optimal application portfolio:</p>
-                    <ul style="margin-top: 12px; padding-left: 20px;">
-                        <li><strong>2 Reach Schools:</strong> UC Berkeley, UCLA</li>
-                        <li><strong>3 Match Schools:</strong> UC San Diego, UC Davis, UC Irvine</li>
-                        <li><strong>2 Safety Schools:</strong> UC Riverside, UC Merced</li>
-                    </ul>
-                </div>
-                
-                <div class="card">
-                    <h3 style="margin-bottom: 16px;">⏰ Optimal Timing</h3>
-                    <p><strong>Submit by November 15:</strong> Applications submitted 2 weeks early have 23% higher acceptance rates due to:</p>
-                    <ul style="margin-top: 12px; padding-left: 20px;">
-                        <li>Avoiding technical issues near deadline</li>
-                        <li>Showing genuine interest</li>
-                        <li>More time for review if issues arise</li>
-                    </ul>
-                </div>
-                
-                <div class="card">
-                    <h3 style="margin-bottom: 16px;">💰 Financial Strategy</h3>
-                    <p>Your estimated costs after aid:</p>
-                    <ul style="margin-top: 12px; padding-left: 20px;">
-                        <li><strong>UC Schools:</strong> ~$16,500/year after $19,465 in aid</li>
-                        <li><strong>CSU Schools:</strong> ~$9,000/year after aid</li>
-                        <li><strong>Total 4-year cost:</strong> ~$66,000 (UC) or ~$36,000 (CSU)</li>
-                    </ul>
-                </div>
+            <div class="button-container">
+                <button class="btn btn-secondary" onclick="previousPhase()">← Back</button>
+                <button class="btn btn-primary" onclick="nextPhase()">Continue →</button>
             </div>
         </div>
         
-        <!-- AI Chat Button -->
-        <button class="ai-chat-button" onclick="toggleChat()">💬</button>
+        <!-- Phase 3: Academic Profile -->
+        <div id="phase-2" class="phase">
+            <div class="phase-header">
+                <h1 class="phase-title">Academic Snapshot 📚</h1>
+                <p class="phase-subtitle">Just the basics - we'll help you improve where needed</p>
+            </div>
+            
+            <div class="card">
+                <h3 style="margin-bottom: 16px;">Current Academic Standing</h3>
+                <p style="color: var(--text-secondary); margin-bottom: 16px;">Don't worry about being perfect - we'll show you realistic options</p>
+                
+                <div class="input-group">
+                    <label class="input-label">Approximate GPA (Optional)</label>
+                    <input type="number" class="input-field" id="gpa" placeholder="3.5" step="0.1" max="5.0">
+                    <small style="color: var(--text-tertiary);">Leave blank if you're not sure</small>
+                </div>
+                
+                <div class="input-group">
+                    <label class="input-label">Have you taken the SAT/ACT?</label>
+                    <select class="input-field" id="testStatus">
+                        <option value="not-taken">Not yet</option>
+                        <option value="planning">Planning to take it</option>
+                        <option value="taken">Yes, I have scores</option>
+                        <option value="not-taking">Not planning to take it</option>
+                    </select>
+                </div>
+                
+                <div class="input-group" id="satScoreInput" style="display: none;">
+                    <label class="input-label">SAT Score (Optional)</label>
+                    <input type="number" class="input-field" id="satScore" placeholder="1200" max="1600">
+                </div>
+                
+                <div class="input-group">
+                    <label class="input-label">Challenging Courses</label>
+                    <select class="input-field" id="challengingCourses">
+                        <option value="0">Haven't taken any yet</option>
+                        <option value="1-2">1-2 AP/Honors courses</option>
+                        <option value="3-5">3-5 AP/Honors courses</option>
+                        <option value="6+">6+ AP/Honors courses</option>
+                    </select>
+                </div>
+            </div>
+            
+            <div class="card">
+                <h3 style="margin-bottom: 16px;">What Matters to You?</h3>
+                <div class="options-grid">
+                    <div class="option-card" onclick="togglePreference(this, 'location')">
+                        <div class="option-icon">📍</div>
+                        <div class="option-title">Location</div>
+                    </div>
+                    <div class="option-card" onclick="togglePreference(this, 'cost')">
+                        <div class="option-icon">💰</div>
+                        <div class="option-title">Affordability</div>
+                    </div>
+                    <div class="option-card" onclick="togglePreference(this, 'size')">
+                        <div class="option-icon">👥</div>
+                        <div class="option-title">School Size</div>
+                    </div>
+                    <div class="option-card" onclick="togglePreference(this, 'diversity')">
+                        <div class="option-icon">🌈</div>
+                        <div class="option-title">Diversity</div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="button-container">
+                <button class="btn btn-secondary" onclick="previousPhase()">← Back</button>
+                <button class="btn btn-primary" onclick="nextPhase()">See My Matches →</button>
+            </div>
+        </div>
         
-        <!-- AI Chat Window -->
-        <div class="ai-chat-window" id="chatWindow">
-            <div class="ai-chat-header">
-                <span>AI College Counselor</span>
-                <button onclick="toggleChat()" style="background: none; border: none; color: white; font-size: 20px; cursor: pointer;">×</button>
+        <!-- Phase 4: Initial Matches -->
+        <div id="phase-3" class="phase">
+            <div class="phase-header">
+                <h1 class="phase-title">Your Personalized Matches 🎯</h1>
+                <p class="phase-subtitle">Based on your interests and profile</p>
             </div>
-            <div class="ai-chat-messages" id="chatMessages">
-                <div class="ai-message assistant">Hi! I'm your AI college counselor. I can help with UC/CSU applications, financial aid, essays, and strategy. What would you like to know?</div>
+            
+            <div class="discovery-results">
+                <h3 style="margin-bottom: 16px;">Your Discovery Summary</h3>
+                <div class="result-item">
+                    <span class="result-label">Top Interests:</span>
+                    <span class="result-value" id="topInterests">Science & Tech, Arts</span>
+                </div>
+                <div class="result-item">
+                    <span class="result-label">Learning Style:</span>
+                    <span class="result-value" id="learningStyleResult">Hands-on, Collaborative</span>
+                </div>
+                <div class="result-item">
+                    <span class="result-label">Academic Level:</span>
+                    <span class="result-value" id="academicLevel">Strong (3.5+ GPA)</span>
+                </div>
             </div>
-            <div class="ai-chat-input">
-                <input type="text" id="chatInput" placeholder="Ask anything..." onkeypress="if(event.key==='Enter') sendMessage()">
-                <button onclick="sendMessage()">Send</button>
+            
+            <div class="card">
+                <h3 style="margin-bottom: 16px;">🎯 Schools That Fit You</h3>
+                <div id="schoolRecommendations">
+                    <!-- Will be populated dynamically -->
+                </div>
+            </div>
+            
+            <div class="card">
+                <h3 style="margin-bottom: 16px;">📚 Suggested Majors</h3>
+                <div id="majorRecommendations">
+                    <!-- Will be populated dynamically -->
+                </div>
+            </div>
+            
+            <div class="button-container">
+                <button class="btn btn-secondary" onclick="previousPhase()">← Adjust My Preferences</button>
+                <button class="btn btn-primary" onclick="nextPhase()">Build My Plan →</button>
+            </div>
+        </div>
+        
+        <!-- Phase 5: Action Plan -->
+        <div id="phase-4" class="phase">
+            <div class="phase-header">
+                <h1 class="phase-title">Your Personalized Action Plan 🚀</h1>
+                <p class="phase-subtitle">Let's turn your discoveries into action</p>
+            </div>
+            
+            <div class="card">
+                <h3 style="margin-bottom: 16px;">🎉 Congratulations!</h3>
+                <p>You've completed the discovery process. Based on your responses, we've unlocked your personalized college planning tools.</p>
+            </div>
+            
+            <div class="card">
+                <h3 style="margin-bottom: 16px;">Your Next Steps</h3>
+                <ol style="line-height: 2; padding-left: 20px;">
+                    <li><strong>Explore Your Matches:</strong> Review the schools we've identified for you</li>
+                    <li><strong>Financial Planning:</strong> Calculate your expected costs and aid</li>
+                    <li><strong>Academic Improvement:</strong> See specific steps to strengthen your profile</li>
+                    <li><strong>Timeline:</strong> Get your personalized application schedule</li>
+                    <li><strong>Documents:</strong> Track everything you need to submit</li>
+                </ol>
+            </div>
+            
+            <div class="card">
+                <h3 style="margin-bottom: 16px;">🔓 Full Platform Unlocked!</h3>
+                <p>You now have access to all features. Use the navigation menu above to explore:</p>
+                <ul style="line-height: 2; padding-left: 20px; margin-top: 12px;">
+                    <li>Dashboard - Your personalized overview</li>
+                    <li>Schools - Detailed information about your matches</li>
+                    <li>Financial - Calculate costs and aid</li>
+                    <li>Documents - Track application materials</li>
+                    <li>Timeline - See all important dates</li>
+                </ul>
+            </div>
+            
+            <div class="button-container">
+                <button class="btn btn-secondary" onclick="previousPhase()">← Review My Matches</button>
+                <button class="btn btn-primary" onclick="unlockFullPlatform()">Go to Dashboard →</button>
             </div>
         </div>
     </div>
     
     <script>
-        // California College Database
-        const collegeDatabase = {
-            'UC Berkeley': {
-                system: 'UC',
-                location: 'Berkeley, CA',
-                acceptanceRate: 14.5,
-                gpa: { minimum: 3.0, average: 4.25, recommended: 4.3 },
-                sat: { average: 1450, range: [1330, 1530] },
-                testOptional: true,
-                tuition: { resident: 14226, nonResident: 44008 },
-                roomBoard: 17652,
-                totalCost: { resident: 36078, nonResident: 65880 },
-                majors: {
-                    'computer-science': { impacted: true, additionalGPA: 0.3, acceptance: 3 },
-                    'engineering': { impacted: true, additionalGPA: 0.25, acceptance: 8 },
-                    'business': { impacted: true, additionalGPA: 0.2, acceptance: 4 },
-                    'biology': { impacted: false, additionalGPA: 0.1, acceptance: 15 },
-                    'psychology': { impacted: false, additionalGPA: 0, acceptance: 18 }
-                },
-                deadlines: {
-                    application: 'November 30',
-                    fafsa: 'March 2',
-                    housing: 'May 1'
-                }
+        // User journey data
+        let userJourney = {
+            currentPhase: 0,
+            feeling: '',
+            grade: '',
+            name: '',
+            interests: {
+                academic: [],
+                activities: []
             },
-            'UCLA': {
-                system: 'UC',
-                location: 'Los Angeles, CA',
-                acceptanceRate: 11.0,
-                gpa: { minimum: 3.0, average: 4.23, recommended: 4.28 },
-                sat: { average: 1440, range: [1300, 1530] },
-                testOptional: true,
-                tuition: { resident: 13401, nonResident: 43473 },
-                roomBoard: 16763,
-                totalCost: { resident: 34164, nonResident: 64237 },
-                majors: {
-                    'computer-science': { impacted: true, additionalGPA: 0.35, acceptance: 3.5 },
-                    'engineering': { impacted: true, additionalGPA: 0.3, acceptance: 7 },
-                    'business': { impacted: true, additionalGPA: 0.25, acceptance: 5 },
-                    'biology': { impacted: false, additionalGPA: 0.1, acceptance: 16 },
-                    'psychology': { impacted: false, additionalGPA: 0.1, acceptance: 14 }
-                },
-                deadlines: {
-                    application: 'November 30',
-                    fafsa: 'March 2',
-                    housing: 'June 1'
-                }
+            learningPreferences: {
+                classSize: 50,
+                style: 50,
+                collaboration: 50
             },
-            'UC San Diego': {
-                system: 'UC',
-                location: 'La Jolla, CA',
-                acceptanceRate: 31.5,
-                gpa: { minimum: 3.0, average: 4.15, recommended: 4.2 },
-                sat: { average: 1420, range: [1270, 1520] },
-                testOptional: true,
-                tuition: { resident: 14415, nonResident: 44487 },
-                roomBoard: 15254,
-                totalCost: { resident: 33669, nonResident: 63741 },
-                majors: {
-                    'computer-science': { impacted: true, additionalGPA: 0.25, acceptance: 6 },
-                    'engineering': { impacted: true, additionalGPA: 0.2, acceptance: 12 },
-                    'biology': { impacted: true, additionalGPA: 0.15, acceptance: 20 },
-                    'psychology': { impacted: false, additionalGPA: 0, acceptance: 35 }
-                },
-                deadlines: {
-                    application: 'November 30',
-                    fafsa: 'March 2',
-                    housing: 'May 1'
-                }
+            academicProfile: {
+                gpa: null,
+                testStatus: '',
+                satScore: null,
+                apCourses: ''
             },
-            'UC Davis': {
-                system: 'UC',
-                location: 'Davis, CA',
-                acceptanceRate: 39.0,
-                gpa: { minimum: 3.0, average: 4.05, recommended: 4.1 },
-                sat: { average: 1370, range: [1220, 1480] },
-                testOptional: true,
-                tuition: { resident: 14495, nonResident: 44567 },
-                roomBoard: 16100,
-                totalCost: { resident: 34595, nonResident: 64667 },
-                majors: {
-                    'computer-science': { impacted: true, additionalGPA: 0.2, acceptance: 12 },
-                    'engineering': { impacted: true, additionalGPA: 0.15, acceptance: 18 },
-                    'biology': { impacted: false, additionalGPA: 0.1, acceptance: 35 },
-                    'psychology': { impacted: false, additionalGPA: 0, acceptance: 38 }
-                },
-                deadlines: {
-                    application: 'November 30',
-                    fafsa: 'March 2',
-                    housing: 'May 1'
-                }
-            },
-            'UC Riverside': {
-                system: 'UC',
-                location: 'Riverside, CA',
-                acceptanceRate: 57.0,
-                gpa: { minimum: 3.0, average: 3.75, recommended: 3.85 },
-                sat: { average: 1250, range: [1110, 1380] },
-                testOptional: true,
-                tuition: { resident: 13473, nonResident: 43487 },
-                roomBoard: 15300,
-                totalCost: { resident: 32773, nonResident: 62787 },
-                majors: {
-                    'computer-science': { impacted: false, additionalGPA: 0.1, acceptance: 35 },
-                    'engineering': { impacted: false, additionalGPA: 0.1, acceptance: 40 },
-                    'biology': { impacted: false, additionalGPA: 0, acceptance: 55 },
-                    'psychology': { impacted: false, additionalGPA: 0, acceptance: 60 }
-                },
-                deadlines: {
-                    application: 'November 30',
-                    fafsa: 'March 2',
-                    housing: 'May 1'
-                }
-            }
+            preferences: [],
+            completedPhases: []
         };
         
-        // Calculate admission chances
-        function calculateAdmissionChance(school, profile) {
-            const schoolData = collegeDatabase[school];
-            if (!schoolData) return 50;
-            
-            let baseChance = schoolData.acceptanceRate;
-            
-            // GPA factor
-            const gpaGap = profile.gpa - schoolData.gpa.average;
-            baseChance += gpaGap * 15;
-            
-            // SAT factor (if available)
-            if (profile.sat && schoolData.sat) {
-                const satGap = profile.sat - schoolData.sat.average;
-                baseChance += satGap * 0.03;
-            }
-            
-            // Major-specific adjustment
-            if (profile.major && schoolData.majors[profile.major]) {
-                const majorData = schoolData.majors[profile.major];
-                if (majorData.impacted) {
-                    baseChance *= 0.7;
-                }
-            }
-            
-            // AP courses bonus
-            if (profile.apCourses) {
-                baseChance += profile.apCourses * 1.5;
-            }
-            
-            return Math.max(5, Math.min(95, Math.round(baseChance)));
-        }
-        
-        // Calculate admissions for all schools
-        function calculateAdmissions() {
-            const profile = {
-                gpa: parseFloat(document.getElementById('gpa').value) || 0,
-                sat: parseInt(document.getElementById('sat').value) || 0,
-                major: document.getElementById('major').value,
-                apCourses: parseInt(document.getElementById('apCourses').value) || 0
-            };
-            
-            if (profile.gpa === 0) {
-                alert('Please enter your GPA to continue');
-                return;
-            }
-            
-            let results = [];
-            Object.keys(collegeDatabase).forEach(schoolName => {
-                const chance = calculateAdmissionChance(schoolName, profile);
-                let category = 'safety';
-                if (chance < 30) category = 'reach';
-                else if (chance < 60) category = 'target';
+        // Phase navigation
+        function nextPhase() {
+            if (validateCurrentPhase()) {
+                userJourney.completedPhases.push(userJourney.currentPhase);
+                userJourney.currentPhase++;
+                updateProgress();
+                showPhase(userJourney.currentPhase);
                 
-                results.push({
-                    name: schoolName,
-                    chance: chance,
-                    category: category,
-                    data: collegeDatabase[schoolName]
-                });
-            });
-            
-            // Sort by chance
-            results.sort((a, b) => b.chance - a.chance);
-            
-            // Display results
-            const matchesDiv = document.getElementById('collegeMatches');
-            let html = '';
-            
-            results.forEach(result => {
-                html += `
-                    <div class="college-match ${result.category}">
-                        <div class="college-info">
-                            <h3>${result.name}</h3>
-                            <p>${result.category.charAt(0).toUpperCase() + result.category.slice(1)} School • ${result.data.acceptanceRate}% acceptance rate</p>
-                        </div>
-                        <div class="admission-chance">
-                            <div class="chance-percentage">${result.chance}%</div>
-                            <div class="chance-label">Your Chance</div>
-                        </div>
-                    </div>
-                `;
-            });
-            
-            matchesDiv.innerHTML = html;
-            document.getElementById('calculatorResults').style.display = 'block';
-        }
-        
-        // Financial Aid Calculation
-        function calculateAid() {
-            const income = parseInt(document.getElementById('familyIncome').value) || 0;
-            const familySize = parseInt(document.getElementById('familySize').value);
-            const numberInCollege = parseInt(document.getElementById('numberInCollege').value);
-            const gpa = parseFloat(document.getElementById('studentGPA').value) || 0;
-            const isResident = document.getElementById('caResident').value === 'yes';
-            
-            if (income === 0) {
-                document.getElementById('aidResults').style.display = 'none';
-                return;
-            }
-            
-            // Calculate Expected Family Contribution (simplified)
-            let efc = Math.max(0, (income - 30000 * familySize) * 0.47 / numberInCollege);
-            
-            // Federal Pell Grant calculation
-            let pellGrant = 0;
-            if (efc < 6000) {
-                pellGrant = Math.max(0, 7395 - efc);
-            }
-            
-            // Cal Grant calculation (California residents only)
-            let calGrant = 0;
-            if (isResident) {
-                if (income < 80000 && gpa >= 3.0) {
-                    calGrant = 12570;
-                } else if (income < 120000 && gpa >= 2.0) {
-                    calGrant = 1648;
+                // Generate recommendations when reaching phase 3
+                if (userJourney.currentPhase === 3) {
+                    generateRecommendations();
                 }
             }
+        }
+        
+        function previousPhase() {
+            if (userJourney.currentPhase > 0) {
+                userJourney.currentPhase--;
+                updateProgress();
+                showPhase(userJourney.currentPhase);
+            }
+        }
+        
+        function goToPhase(phase) {
+            // Only allow going to completed phases or current phase
+            if (phase <= userJourney.currentPhase) {
+                showPhase(phase);
+            }
+        }
+        
+        function showPhase(phase) {
+            document.querySelectorAll('.phase').forEach(p => p.classList.remove('active'));
+            document.getElementById(`phase-${phase}`).classList.add('active');
             
-            // Middle Class Scholarship (California residents)
-            let middleClass = 0;
-            if (isResident && income >= 80000 && income <= 177000) {
-                const percentage = Math.max(0.1, Math.min(0.4, (177000 - income) / 97000 * 0.3 + 0.1));
-                middleClass = Math.round(14000 * percentage);
+            // Update progress indicators
+            document.querySelectorAll('.progress-step').forEach((step, index) => {
+                step.classList.remove('active', 'completed');
+                if (index < phase) {
+                    step.classList.add('completed');
+                } else if (index === phase) {
+                    step.classList.add('active');
+                }
+            });
+        }
+        
+        function updateProgress() {
+            const progress = (userJourney.currentPhase / 4) * 100;
+            document.getElementById('progressLine').style.width = `${progress}%`;
+        }
+        
+        function validateCurrentPhase() {
+            switch(userJourney.currentPhase) {
+                case 0:
+                    // Validate phase 1 - at least grade selected
+                    const grade = document.getElementById('gradeLevel').value;
+                    if (!grade) {
+                        alert('Please select your grade level');
+                        return false;
+                    }
+                    userJourney.grade = grade;
+                    userJourney.name = document.getElementById('firstName').value || 'Student';
+                    return true;
+                    
+                case 1:
+                    // Validate phase 2 - at least some interests selected
+                    if (userJourney.interests.academic.length === 0 && userJourney.interests.activities.length === 0) {
+                        alert('Please select at least one interest');
+                        return false;
+                    }
+                    // Save learning preferences
+                    userJourney.learningPreferences = {
+                        classSize: document.getElementById('classSize').value,
+                        style: document.getElementById('learningStyle').value,
+                        collaboration: document.getElementById('collaborationStyle').value
+                    };
+                    return true;
+                    
+                case 2:
+                    // Save academic profile
+                    userJourney.academicProfile = {
+                        gpa: document.getElementById('gpa').value || null,
+                        testStatus: document.getElementById('testStatus').value,
+                        satScore: document.getElementById('satScore').value || null,
+                        apCourses: document.getElementById('challengingCourses').value
+                    };
+                    return true;
+                    
+                default:
+                    return true;
+            }
+        }
+        
+        // Selection handlers
+        function selectFeeling(feeling) {
+            document.querySelectorAll('.option-card').forEach(card => card.classList.remove('selected'));
+            event.target.closest('.option-card').classList.add('selected');
+            userJourney.feeling = feeling;
+        }
+        
+        function toggleInterest(element, interest) {
+            element.classList.toggle('selected');
+            const type = element.parentElement.id === 'academicInterests' ? 'academic' : 'activities';
+            const index = userJourney.interests[type].indexOf(interest);
+            
+            if (index > -1) {
+                userJourney.interests[type].splice(index, 1);
+            } else {
+                userJourney.interests[type].push(interest);
+            }
+        }
+        
+        function togglePreference(element, preference) {
+            element.classList.toggle('selected');
+            const index = userJourney.preferences.indexOf(preference);
+            
+            if (index > -1) {
+                userJourney.preferences.splice(index, 1);
+            } else {
+                userJourney.preferences.push(preference);
+            }
+        }
+        
+        // Show/hide SAT score input
+        document.getElementById('testStatus')?.addEventListener('change', function() {
+            const satInput = document.getElementById('satScoreInput');
+            if (this.value === 'taken') {
+                satInput.style.display = 'block';
+            } else {
+                satInput.style.display = 'none';
+            }
+        });
+        
+        // Generate personalized recommendations
+        function generateRecommendations() {
+            // Update summary
+            const interests = [...userJourney.interests.academic, ...userJourney.interests.activities];
+            document.getElementById('topInterests').textContent = interests.slice(0, 3).join(', ') || 'Exploring options';
+            
+            // Learning style
+            const style = userJourney.learningPreferences.style > 50 ? 'Hands-on' : 'Theoretical';
+            const collab = userJourney.learningPreferences.collaboration > 50 ? 'Collaborative' : 'Independent';
+            document.getElementById('learningStyleResult').textContent = `${style}, ${collab}`;
+            
+            // Academic level
+            const gpa = userJourney.academicProfile.gpa;
+            let level = 'Developing';
+            if (gpa >= 4.0) level = 'Excellent (4.0+ GPA)';
+            else if (gpa >= 3.5) level = 'Strong (3.5+ GPA)';
+            else if (gpa >= 3.0) level = 'Good (3.0+ GPA)';
+            document.getElementById('academicLevel').textContent = level;
+            
+            // Generate school recommendations
+            const schools = generateSchoolMatches();
+            const schoolsHtml = schools.map(school => `
+                <div class="school-rec-card">
+                    <div class="school-info">
+                        <h3>${school.name}</h3>
+                        <div class="school-match-reason">${school.reason}</div>
+                    </div>
+                    <div class="match-score">${school.match}%</div>
+                </div>
+            `).join('');
+            document.getElementById('schoolRecommendations').innerHTML = schoolsHtml;
+            
+            // Generate major recommendations
+            const majors = generateMajorMatches();
+            const majorsHtml = majors.map(major => `
+                <div class="interest-tag selected" style="cursor: default; margin: 8px;">
+                    ${major}
+                </div>
+            `).join('');
+            document.getElementById('majorRecommendations').innerHTML = majorsHtml;
+        }
+        
+        function generateSchoolMatches() {
+            const schools = [];
+            const hasSTEM = userJourney.interests.academic.includes('stem');
+            const hasArts = userJourney.interests.academic.includes('arts');
+            const gpa = userJourney.academicProfile.gpa || 3.5;
+            
+            // Logic to match schools based on profile
+            if (gpa >= 4.0) {
+                schools.push(
+                    { name: 'UC Berkeley', match: 85, reason: 'Strong academics, matches your interests' },
+                    { name: 'UCLA', match: 82, reason: 'Diverse programs, great location' }
+                );
+            } else if (gpa >= 3.5) {
+                schools.push(
+                    { name: 'UC San Diego', match: 88, reason: 'Balanced academics, innovative programs' },
+                    { name: 'UC Davis', match: 90, reason: 'Supportive environment, strong programs' }
+                );
+            } else {
+                schools.push(
+                    { name: 'UC Santa Cruz', match: 92, reason: 'Alternative learning style, beautiful campus' },
+                    { name: 'UC Riverside', match: 94, reason: 'Growing programs, supportive community' }
+                );
             }
             
-            // UC/CSU system grant
-            let systemGrant = 0;
-            if (income < 80000) {
-                systemGrant = Math.max(0, Math.min(5000, 14000 - pellGrant - calGrant));
+            if (hasSTEM) {
+                schools.push({ name: 'Cal Poly SLO', match: 87, reason: 'Hands-on engineering programs' });
             }
             
-            // Calculate total
-            const totalAid = pellGrant + calGrant + middleClass + systemGrant;
+            if (hasArts) {
+                schools.push({ name: 'UC Irvine', match: 85, reason: 'Strong arts programs' });
+            }
             
-            // Display results
-            document.getElementById('pellGrant').textContent = `$${pellGrant.toLocaleString()}`;
-            document.getElementById('calGrant').textContent = `$${calGrant.toLocaleString()}`;
-            document.getElementById('middleClass').textContent = `$${middleClass.toLocaleString()}`;
-            document.getElementById('systemGrant').textContent = `$${systemGrant.toLocaleString()}`;
-            document.getElementById('totalAid').textContent = `$${totalAid.toLocaleString()}`;
-            
-            document.getElementById('aidResults').style.display = 'block';
+            return schools.slice(0, 5);
         }
         
-        // Show school details
-        function showSchoolDetails(schoolName) {
-            const school = collegeDatabase[schoolName];
-            if (!school) return;
+        function generateMajorMatches() {
+            const majors = [];
+            const interests = userJourney.interests.academic;
             
-            alert(`${schoolName}\n\n` +
-                  `Acceptance Rate: ${school.acceptanceRate}%\n` +
-                  `Average GPA: ${school.gpa.average}\n` +
-                  `SAT Range: ${school.sat.range[0]}-${school.sat.range[1]}\n` +
-                  `Total Cost (CA Resident): $${school.totalCost.resident.toLocaleString()}\n\n` +
-                  `Application Deadline: ${school.deadlines.application}`);
-        }
-        
-        // Toggle AI chat
-        function toggleChat() {
-            const chatWindow = document.getElementById('chatWindow');
-            chatWindow.classList.toggle('active');
-        }
-        
-        // Send AI message
-        function sendMessage() {
-            const input = document.getElementById('chatInput');
-            const message = input.value.trim();
-            
-            if (!message) return;
-            
-            const messagesDiv = document.getElementById('chatMessages');
-            
-            // Add user message
-            messagesDiv.innerHTML += `<div class="ai-message user">${message}</div>`;
-            
-            // Simulate AI response
-            const responses = {
-                'requirements': 'UC requires completion of A-G courses: 4 years English, 3 years Math (4 recommended), 2 years History, 2 years Lab Science, 2 years Foreign Language, 1 year Visual/Performing Arts, and 1 year College Prep Elective.',
-                'deadline': 'UC and CSU applications are due November 30. I recommend submitting by November 15 for optimal chances.',
-                'gpa': 'UC uses a weighted GPA for 10th and 11th grade A-G courses. Honors/AP courses get an extra point.',
-                'essays': 'UC requires 4 Personal Insight Questions (350 words each) chosen from 8 prompts. Focus on unique experiences and specific details.',
-                'financial': 'Based on your profile, you may qualify for Cal Grant ($12,570), Pell Grant (up to $7,395), and Middle Class Scholarship if family income is under $177,000.'
+            const majorMap = {
+                'stem': ['Computer Science', 'Engineering', 'Biology', 'Physics'],
+                'arts': ['Graphic Design', 'Fine Arts', 'Music', 'Theater'],
+                'business': ['Business Administration', 'Marketing', 'Finance', 'Entrepreneurship'],
+                'health': ['Pre-Med', 'Nursing', 'Public Health', 'Kinesiology'],
+                'social': ['Psychology', 'Sociology', 'Anthropology', 'Political Science'],
+                'humanities': ['English', 'History', 'Philosophy', 'Communications'],
+                'environment': ['Environmental Science', 'Sustainability', 'Marine Biology'],
+                'education': ['Education', 'Child Development', 'Special Education']
             };
             
-            let response = 'I can help with UC/CSU requirements, deadlines, GPA calculations, essays, and financial aid. What specific question do you have?';
-            
-            for (const [key, value] of Object.entries(responses)) {
-                if (message.toLowerCase().includes(key)) {
-                    response = value;
-                    break;
+            interests.forEach(interest => {
+                if (majorMap[interest]) {
+                    majors.push(...majorMap[interest].slice(0, 2));
                 }
+            });
+            
+            // Add undecided if no clear path
+            if (majors.length === 0) {
+                majors.push('Undeclared/Exploratory', 'Liberal Arts', 'General Studies');
             }
             
-            setTimeout(() => {
-                messagesDiv.innerHTML += `<div class="ai-message assistant">${response}</div>`;
-                messagesDiv.scrollTop = messagesDiv.scrollHeight;
-            }, 500);
+            return majors.slice(0, 6);
+        }
+        
+        function unlockFullPlatform() {
+            // Show navigation
+            document.getElementById('mainNav').classList.add('unlocked');
             
-            input.value = '';
-        }
-        
-        // Upload document simulation
-        function uploadDocument(type) {
-            alert(`Document upload for ${type} would open here. In production, this would handle file uploads securely.`);
-        }
-        
-        // Switch between sections
-        function switchSection(sectionName) {
-            document.querySelectorAll('.section').forEach(section => {
-                section.classList.remove('active');
-            });
-            document.querySelectorAll('.nav-pill').forEach(pill => {
-                pill.classList.remove('active');
-            });
+            // Store journey data
+            localStorage.setItem('userJourney', JSON.stringify(userJourney));
+            localStorage.setItem('platformUnlocked', 'true');
             
-            document.getElementById(sectionName).classList.add('active');
-            event.target.classList.add('active');
+            // In production, this would transition to the full platform
+            alert('🎉 Congratulations! Your personalized college platform is now ready. The full dashboard with all features is now accessible.');
+            
+            // Could redirect to full platform or show additional sections
+            showDashboard();
         }
         
-        // Calculate days until deadline
-        function updateDaysLeft() {
-            const deadline = new Date('November 30, 2025');
-            const today = new Date();
-            const daysLeft = Math.floor((deadline - today) / (1000 * 60 * 60 * 24));
-            document.getElementById('daysLeft').textContent = daysLeft > 0 ? daysLeft : '--';
+        // Placeholder functions for full platform navigation
+        function showDashboard() {
+            alert('Dashboard: View your personalized overview, top schools, and action items');
         }
         
-        // Initialize on load
+        function showSchools() {
+            alert('Schools: Explore your matched schools in detail with requirements and deadlines');
+        }
+        
+        function showFinancial() {
+            alert('Financial Aid: Calculate your expected costs and available aid');
+        }
+        
+        function showDocuments() {
+            alert('Documents: Track all required application materials');
+        }
+        
+        function showTimeline() {
+            alert('Timeline: See your personalized application schedule');
+        }
+        
+        // Initialize
         document.addEventListener('DOMContentLoaded', () => {
-            updateDaysLeft();
-            calculateAid(); // Calculate initial aid with default values
+            // Check if user has already completed discovery
+            const savedJourney = localStorage.getItem('userJourney');
+            if (savedJourney) {
+                const saved = JSON.parse(savedJourney);
+                if (saved.completedPhases.length === 5) {
+                    document.getElementById('mainNav').classList.add('unlocked');
+                }
+            }
         });
     </script>
 </body>
