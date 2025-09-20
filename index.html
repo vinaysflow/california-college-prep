@@ -2908,48 +2908,130 @@ class UIController {
   }
   
   bindEvents() {
-    // Form submission
-    this.planningForm.addEventListener('submit', (e) => {
-      e.preventDefault();
-      this.handlePlanningSubmit();
-    });
+    console.log('Binding events...');
     
-    // Form validation on change
-    this.planningForm.querySelectorAll('input, select').forEach(input => {
-      input.addEventListener('blur', () => this.validateField(input));
-      input.addEventListener('input', () => this.updateMatchPreview());
-    });
+    // Form submission - ensure form exists
+    if (this.planningForm) {
+      console.log('Setting up form submit handler');
+      
+      // Remove any existing submit handlers
+      const newForm = this.planningForm.cloneNode(true);
+      this.planningForm.parentNode.replaceChild(newForm, this.planningForm);
+      this.planningForm = newForm;
+      
+      // Add fresh submit handler
+      this.planningForm.addEventListener('submit', (e) => {
+        e.preventDefault();
+        console.log('Form submit triggered!');
+        this.handlePlanningSubmit();
+      });
+      
+      // Setup input handlers for live preview
+      const inputs = this.planningForm.querySelectorAll('input, select');
+      console.log(`Found ${inputs.length} form inputs`);
+      
+      inputs.forEach(input => {
+        // For text inputs
+        if (input.type === 'text' || input.type === 'number' || input.type === 'email') {
+          input.addEventListener('input', () => {
+            console.log(`Input changed: ${input.name} = ${input.value}`);
+            this.updateMatchPreview();
+          });
+        }
+        
+        // For select dropdowns
+        if (input.tagName === 'SELECT') {
+          input.addEventListener('change', () => {
+            console.log(`Select changed: ${input.name} = ${input.value}`);
+            this.updateMatchPreview();
+          });
+        }
+        
+        // Validation on blur
+        input.addEventListener('blur', () => {
+          this.validateField(input);
+        });
+      });
+    } else {
+      console.error('Planning form not found!');
+    }
     
-    // Navigation
-    this.tabs.forEach(tab => {
-      tab.addEventListener('click', () => this.switchTab(tab.dataset.tab));
-    });
+    // Navigation buttons
+    if (this.tabs) {
+      this.tabs.forEach(tab => {
+        tab.addEventListener('click', () => this.switchTab(tab.dataset.tab));
+      });
+    }
     
-    this.backBtn.addEventListener('click', () => this.showPlanning());
-    this.themeBtn.addEventListener('click', () => this.toggleTheme());
-    this.resetBtn.addEventListener('click', () => this.confirmReset());
-    this.profileBtn.addEventListener('click', () => this.showProfile());
-    this.discoverBtn.addEventListener('click', () => this.openDiscovery());
-    this.parentModeBtn.addEventListener('click', () => this.toggleParentMode());
+    if (this.backBtn) {
+      this.backBtn.addEventListener('click', () => this.showPlanning());
+    }
     
-    // Filters
-    document.getElementById('filterState').addEventListener('change', () => this.filterSchools());
-    document.getElementById('filterType').addEventListener('change', () => this.filterSchools());
-    document.getElementById('searchSchool').addEventListener('input', debounce(() => this.filterSchools(), 300));
+    if (this.themeBtn) {
+      this.themeBtn.addEventListener('click', () => this.toggleTheme());
+    }
     
-    // Scholarship filters
-    document.getElementById('filterAmount')?.addEventListener('change', () => this.filterScholarships());
-    document.getElementById('filterDeadline')?.addEventListener('change', () => this.filterScholarships());
-    document.getElementById('filterEssay')?.addEventListener('change', () => this.filterScholarships());
-    document.getElementById('filterMatch')?.addEventListener('change', () => this.filterScholarships());
+    if (this.resetBtn) {
+      this.resetBtn.addEventListener('click', () => this.confirmReset());
+    }
+    
+    if (this.profileBtn) {
+      this.profileBtn.addEventListener('click', () => this.showProfile());
+    }
+    
+    if (this.discoverBtn) {
+      this.discoverBtn.addEventListener('click', () => this.openDiscovery());
+    }
+    
+    if (this.parentModeBtn) {
+      this.parentModeBtn.addEventListener('click', () => this.toggleParentMode());
+    }
+    
+    // School filters - check if elements exist before adding listeners
+    const filterState = document.getElementById('filterState');
+    const filterType = document.getElementById('filterType');
+    const searchSchool = document.getElementById('searchSchool');
+    
+    if (filterState) {
+      filterState.addEventListener('change', () => this.filterSchools());
+    }
+    if (filterType) {
+      filterType.addEventListener('change', () => this.filterSchools());
+    }
+    if (searchSchool) {
+      searchSchool.addEventListener('input', debounce(() => this.filterSchools(), 300));
+    }
+    
+    // Scholarship filters - check if elements exist
+    const filterAmount = document.getElementById('filterAmount');
+    const filterDeadline = document.getElementById('filterDeadline');
+    const filterEssay = document.getElementById('filterEssay');
+    const filterMatch = document.getElementById('filterMatch');
+    
+    if (filterAmount) {
+      filterAmount.addEventListener('change', () => this.filterScholarships());
+    }
+    if (filterDeadline) {
+      filterDeadline.addEventListener('change', () => this.filterScholarships());
+    }
+    if (filterEssay) {
+      filterEssay.addEventListener('change', () => this.filterScholarships());
+    }
+    if (filterMatch) {
+      filterMatch.addEventListener('change', () => this.filterScholarships());
+    }
     
     // AI Assistant
-    this.aiBubble.addEventListener('click', () => this.handleAIClick());
+    if (this.aiBubble) {
+      this.aiBubble.addEventListener('click', () => this.handleAIClick());
+    }
     
     // Keyboard navigation
     document.addEventListener('keydown', (e) => {
       if (e.key === 'Escape') this.closeModals();
     });
+    
+    console.log('Event binding complete');
   }
   
   setupSubscriptions() {
@@ -3053,24 +3135,65 @@ class UIController {
   }
   
   updateMatchPreview() {
-    const form = this.planningForm;
-    const formData = new FormData(form);
+    console.log('updateMatchPreview called');
     
-    const tempUser = {
-      gpa: parseFloat(formData.get('gpa')) || null,
-      sat: parseInt(formData.get('sat')) || null,
-      ap: parseInt(formData.get('ap')) || 0,
-      interests: formData.get('interests') || null,
-      homeState: formData.get('homeState') || null
+    const form = document.getElementById('planningForm');
+    if (!form) {
+      console.error('Form not found');
+      return;
+    }
+    
+    // Get form values directly
+    const formData = {
+      gpa: parseFloat(document.getElementById('gpa')?.value) || null,
+      sat: parseInt(document.getElementById('sat')?.value) || null,
+      ap: parseInt(document.getElementById('ap')?.value) || 0,
+      interests: document.getElementById('interests')?.value || null,
+      homeState: document.getElementById('homeState')?.value || null,
+      income: parseInt(document.getElementById('income')?.value) || null,
+      grade: document.getElementById('grade')?.value || null,
+      firstName: document.getElementById('firstName')?.value || null
     };
     
-    let matchCount = 0;
+    console.log('Form data:', formData);
+    
+    let schoolMatches = 0;
+    let scholarshipMatches = 0;
+    
+    // Count matching schools
     SCHOOLS_DB.forEach(school => {
-      const score = SchoolMatcher.calculateMatch(school, tempUser);
-      if (score >= 50) matchCount++;
+      const score = SchoolMatcher.calculateMatch(school, formData);
+      if (score >= 40) {
+        schoolMatches++;
+      }
     });
     
-    document.getElementById('matchCounter').textContent = `${matchCount} potential matches`;
+    // Count eligible scholarships
+    if (formData.gpa || formData.income) {
+      const scholarships = ScholarshipEngine.matchScholarships(formData);
+      scholarshipMatches = scholarships.filter(s => s.eligible).length;
+    }
+    
+    // Update the counter
+    const matchCounter = document.getElementById('matchCounter');
+    if (matchCounter) {
+      let text = '';
+      if (schoolMatches > 0 && scholarshipMatches > 0) {
+        text = `${schoolMatches} schools, ${scholarshipMatches} scholarships`;
+        matchCounter.classList.add('scholarship');
+      } else if (schoolMatches > 0) {
+        text = `${schoolMatches} potential matches`;
+        matchCounter.classList.remove('scholarship');
+      } else {
+        text = '0 potential matches';
+        matchCounter.classList.remove('scholarship');
+      }
+      
+      console.log('Setting match counter to:', text);
+      matchCounter.textContent = text;
+    } else {
+      console.error('Match counter element not found');
+    }
   }
   
   showPlanning() {
@@ -3134,12 +3257,23 @@ class UIController {
   renderSchools() {
     const user = this.appState.get('user');
     const mySchoolIds = this.appState.get('mySchools') || [];
+    const filters = this.appState.get('filters') || {};
     
     const reach = [];
     const match = [];
     const safety = [];
     
     SCHOOLS_DB.forEach(school => {
+      // Apply filters
+      if (filters.state && school.state !== filters.state) return;
+      if (filters.type) {
+        if (filters.type === 'public' && school.type !== 'public') return;
+        if (filters.type === 'private' && school.type !== 'private') return;
+        if (filters.type !== 'public' && filters.type !== 'private' && school.system !== filters.type) return;
+      }
+      if (filters.search && !school.name.toLowerCase().includes(filters.search.toLowerCase()) && 
+          !school.city.toLowerCase().includes(filters.search.toLowerCase())) return;
+      
       const category = SchoolMatcher.categorizeSchool(school, user);
       const card = this.createSchoolCard(school, mySchoolIds.includes(school.id));
       
