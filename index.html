@@ -8,47 +8,29 @@
 
   <!-- Tailwind (CDN) -->
   <script src="https://cdn.tailwindcss.com"></script>
-
-  <!-- Tailwind config (brand colors) -->
   <script>
     tailwind.config = {
       theme: {
         extend: {
           colors: {
-            brand: {
-              primary: "#007AFF",
-              secondary: "#5856D6",
-              success: "#34C759",
-              warning: "#FF9500",
-              danger: "#FF3B30"
-            }
+            brand: { primary:"#007AFF", secondary:"#5856D6", success:"#34C759", warning:"#FF9500", danger:"#FF3B30" }
           },
-          boxShadow: {
-            soft: "0 8px 30px rgba(0,0,0,0.08)"
-          }
+          boxShadow: { soft:"0 8px 30px rgba(0,0,0,.08)" }
         }
       },
       darkMode: "class"
     }
   </script>
-
   <style>
-    /* Small, tasteful animations */
-    @keyframes slideUp { from {transform: translateY(16px); opacity: 0;} to {transform: translateY(0); opacity: 1;} }
-    @keyframes pulseOnce { 0% {transform: scale(1)} 50% {transform: scale(1.05)} 100% {transform: scale(1)} }
+    @keyframes slideUp { from {transform: translateY(16px); opacity: 0} to {transform: translateY(0); opacity: 1} }
     .animate-slideUp { animation: slideUp .35s ease both; }
-    .animate-pulseOnce { animation: pulseOnce .25s ease both; }
-    /* Hide default number spinners on iOS/Chrome */
     input[type="number"]::-webkit-outer-spin-button,
-    input[type="number"]::-webkit-inner-spin-button { -webkit-appearance: none; margin: 0; }
-    input[type="number"] { -moz-appearance: textfield; }
+    input[type="number"]::-webkit-inner-spin-button { -webkit-appearance:none; margin:0 }
+    input[type="number"] { -moz-appearance:textfield }
   </style>
 </head>
-
 <body class="h-full bg-slate-50 text-slate-900 dark:bg-slate-950 dark:text-slate-100">
-  <!-- ===========================
-       Consent & Email Modal
-  ============================ -->
+  <!-- Consent -->
   <div id="consentModal" class="fixed inset-0 z-[70] hidden">
     <div class="absolute inset-0 bg-black/60"></div>
     <div class="relative mx-auto w-full max-w-lg p-4 sm:p-6 animate-slideUp">
@@ -58,18 +40,15 @@
           <div class="flex-1">
             <h3 class="text-xl font-semibold">Welcome to Pathwise</h3>
             <p class="mt-1 text-sm text-slate-500 dark:text-slate-400">
-              We store your progress in your browser. Add your email if you want deadline reminders.
-              We don’t sell or share your data. Ever.
+              We store your progress in your browser. Add email if you want deadline reminders. We never sell or share data.
             </p>
           </div>
         </div>
-
         <div class="mt-4">
           <label class="text-xs font-medium text-slate-500 dark:text-slate-400">Email for reminders (optional)</label>
           <input id="consentEmail" type="email" placeholder="you@email.com"
-                 class="mt-1 w-full rounded-xl border border-slate-200 bg-slate-50 px-3 py-2 text-sm outline-none ring-brand.primary/0 focus:border-brand.primary focus:ring-2 focus:ring-brand.primary/20 dark:border-slate-700 dark:bg-slate-800" />
+            class="mt-1 w-full rounded-xl border border-slate-200 bg-slate-50 px-3 py-2 text-sm outline-none focus:border-brand.primary focus:ring-2 focus:ring-brand.primary/20 dark:border-slate-700 dark:bg-slate-800" />
         </div>
-
         <div class="mt-6 grid gap-3 sm:grid-cols-2">
           <button id="consentAccept" class="rounded-xl bg-gradient-to-r from-brand.primary to-brand.secondary px-4 py-2.5 text-white font-semibold">Yes, let’s go!</button>
           <button id="consentDecline" class="rounded-xl border border-slate-200 bg-white px-4 py-2.5 font-semibold dark:border-slate-700 dark:bg-slate-800">No thanks</button>
@@ -78,18 +57,13 @@
     </div>
   </div>
 
-  <!-- ===========================
-       Nav / Header
-  ============================ -->
-  <header class="sticky top-0 z-50 bg-white/80 backdrop-blur supports-[backdrop-filter]:backdrop-blur border-b border-slate-200 dark:bg-slate-950/70 dark:border-slate-800">
+  <!-- Header -->
+  <header class="sticky top-0 z-50 bg-white/80 backdrop-blur border-b border-slate-200 dark:bg-slate-950/70 dark:border-slate-800">
     <div class="mx-auto flex max-w-6xl items-center justify-between px-4 py-3">
       <div class="flex items-center gap-2">
-        <button id="backBtn" class="hidden rounded-lg border border-slate-200 px-2 py-1 text-brand.primary hover:bg-slate-100 dark:border-slate-700 dark:hover:bg-slate-800">
-          ← Back
-        </button>
+        <button id="backBtn" class="hidden rounded-lg border border-slate-200 px-2 py-1 text-brand.primary hover:bg-slate-100 dark:border-slate-700 dark:hover:bg-slate-800">← Back</button>
         <h1 class="text-xl font-semibold bg-gradient-to-r from-brand.primary to-brand.secondary bg-clip-text text-transparent">Pathwise</h1>
       </div>
-
       <nav class="flex gap-2 overflow-x-auto">
         <button class="tab-btn rounded-full px-3 py-1.5 text-sm font-semibold border border-slate-200 bg-white dark:bg-slate-900 dark:border-slate-700" data-tab="dashboard">🏠 Dashboard</button>
         <button class="tab-btn rounded-full px-3 py-1.5 text-sm font-semibold border border-slate-200 bg-white dark:bg-slate-900 dark:border-slate-700" data-tab="planning">📝 Planning</button>
@@ -97,7 +71,6 @@
         <button class="tab-btn rounded-full px-3 py-1.5 text-sm font-semibold border border-slate-200 bg-white dark:bg-slate-900 dark:border-slate-700" data-tab="timeline">📅 Timeline</button>
         <button class="tab-btn rounded-full px-3 py-1.5 text-sm font-semibold border border-slate-200 bg-white dark:bg-slate-900 dark:border-slate-700" data-tab="financial">💸 Financial Aid</button>
       </nav>
-
       <div class="flex items-center gap-2">
         <button id="shareBtn" class="rounded-lg border border-slate-200 px-2 py-1 text-sm hover:bg-slate-100 dark:border-slate-700 dark:hover:bg-slate-800">Share</button>
         <button id="themeToggle" class="rounded-lg border border-slate-200 px-2 py-1 text-sm hover:bg-slate-100 dark:border-slate-700 dark:hover:bg-slate-800">🌙</button>
@@ -105,19 +78,15 @@
     </div>
   </header>
 
-  <!-- ===========================
-       Onboarding / Discovery
-  ============================ -->
-  <main class="mx-auto max-w-6xl px-4 pb-20">
+  <main class="mx-auto max-w-6xl px-4 pb-24">
+    <!-- Onboarding -->
     <section id="onboarding" class="mt-6">
       <div class="mx-auto max-w-xl">
-        <!-- Progress -->
         <div class="mb-4">
           <div class="flex items-center justify-between text-xs text-slate-500 dark:text-slate-400">
-            <span id="progressLabel">Getting started</span>
-            <span id="progressPct">20%</span>
+            <span id="progressLabel">Getting started</span><span id="progressPct">20%</span>
           </div>
-          <div class="mt-1 h-2 w-full rounded-full bg-slate-200 dark:bg-slate-800">
+          <div class="mt-1 h-2 rounded-full bg-slate-200 dark:bg-slate-800">
             <div id="progressBar" class="h-2 w-[20%] rounded-full bg-gradient-to-r from-brand.primary to-brand.secondary transition-all"></div>
           </div>
         </div>
@@ -125,16 +94,13 @@
         <!-- Step 1 -->
         <div id="step1" class="animate-slideUp rounded-2xl border border-slate-200 bg-white p-5 shadow-soft dark:border-slate-800 dark:bg-slate-900">
           <h2 class="text-2xl font-bold">Let’s get started</h2>
-          <p class="mt-1 text-slate-500 dark:text-slate-400">Tell us a little about you.</p>
-
+          <p class="mt-1 text-slate-500 dark:text-slate-400">Tell us a bit about you.</p>
           <div class="mt-4 grid gap-4">
             <div>
               <label class="text-xs font-semibold text-slate-500 dark:text-slate-400">First name <span class="text-brand.danger">*</span></label>
-              <input id="firstName" type="text" placeholder="What should we call you?"
-                     class="mt-1 w-full rounded-xl border border-slate-200 bg-slate-50 px-3 py-2 outline-none focus:border-brand.primary focus:ring-2 focus:ring-brand.primary/20 dark:border-slate-700 dark:bg-slate-800" />
+              <input id="firstName" type="text" class="mt-1 w-full rounded-xl border border-slate-200 bg-slate-50 px-3 py-2 outline-none focus:border-brand.primary focus:ring-2 focus:ring-brand.primary/20 dark:border-slate-700 dark:bg-slate-800" />
               <p id="nameError" class="mt-1 hidden text-xs text-brand.danger">Please enter your name.</p>
             </div>
-
             <div>
               <label class="text-xs font-semibold text-slate-500 dark:text-slate-400">Current grade <span class="text-brand.danger">*</span></label>
               <select id="gradeLevel" class="mt-1 w-full rounded-xl border border-slate-200 bg-slate-50 px-3 py-2 outline-none focus:border-brand.primary focus:ring-2 focus:ring-brand.primary/20 dark:border-slate-700 dark:bg-slate-800">
@@ -148,7 +114,6 @@
               <p id="gradeError" class="mt-1 hidden text-xs text-brand.danger">Please select a grade.</p>
             </div>
           </div>
-
           <div class="mt-5 flex gap-3">
             <button id="step1Next" class="flex-1 rounded-xl bg-gradient-to-r from-brand.primary to-brand.secondary px-4 py-2.5 font-semibold text-white">Continue →</button>
           </div>
@@ -160,15 +125,37 @@
           <p class="mt-1 text-slate-500 dark:text-slate-400">Pick as many as you want.</p>
 
           <div class="mt-3 grid grid-cols-2 gap-2 sm:grid-cols-4">
-            <!-- pills -->
-            <button data-interest="stem" class="interest rounded-full border border-slate-200 bg-slate-50 px-3 py-2 text-sm font-semibold hover:border-brand.primary hover:bg-white dark:border-slate-700 dark:bg-slate-800">🔬 STEM</button>
-            <button data-interest="arts" class="interest rounded-full border border-slate-200 bg-slate-50 px-3 py-2 text-sm font-semibold hover:border-brand.primary hover:bg-white dark:border-slate-700 dark:bg-slate-800">🎨 Arts</button>
-            <button data-interest="business" class="interest rounded-full border border-slate-200 bg-slate-50 px-3 py-2 text-sm font-semibold hover:border-brand.primary hover:bg-white dark:border-slate-700 dark:bg-slate-800">💼 Business</button>
-            <button data-interest="health" class="interest rounded-full border border-slate-200 bg-slate-50 px-3 py-2 text-sm font-semibold hover:border-brand.primary hover:bg-white dark:border-slate-700 dark:bg-slate-800">🏥 Health</button>
-            <button data-interest="social" class="interest rounded-full border border-slate-200 bg-slate-50 px-3 py-2 text-sm font-semibold hover:border-brand.primary hover:bg-white dark:border-slate-700 dark:bg-slate-800">🤝 Social</button>
-            <button data-interest="humanities" class="interest rounded-full border border-slate-200 bg-slate-50 px-3 py-2 text-sm font-semibold hover:border-brand.primary hover:bg-white dark:border-slate-700 dark:bg-slate-800">📚 Humanities</button>
-            <button data-interest="education" class="interest rounded-full border border-slate-200 bg-slate-50 px-3 py-2 text-sm font-semibold hover:border-brand.primary hover:bg-white dark:border-slate-700 dark:bg-slate-800">🎓 Education</button>
-            <button data-interest="unsure" class="interest rounded-full border border-slate-200 bg-slate-50 px-3 py-2 text-sm font-semibold hover:border-brand.primary hover:bg-white dark:border-slate-700 dark:bg-slate-800">🤔 Not sure</button>
+            <button data-interest="stem" class="interest chip">🔬 STEM</button>
+            <button data-interest="arts" class="interest chip">🎨 Arts</button>
+            <button data-interest="business" class="interest chip">💼 Business</button>
+            <button data-interest="health" class="interest chip">🏥 Health</button>
+            <button data-interest="social" class="interest chip">🤝 Social</button>
+            <button data-interest="humanities" class="interest chip">📚 Humanities</button>
+            <button data-interest="education" class="interest chip">🎓 Education</button>
+            <button data-interest="unsure" class="interest chip">🤔 Not sure</button>
+          </div>
+
+          <!-- Intended majors (new) -->
+          <h3 class="mt-5 text-lg font-semibold">Intended majors (optional)</h3>
+          <p class="text-sm text-slate-500 dark:text-slate-400">This helps personalize impacted majors and tips.</p>
+          <div class="mt-2 grid grid-cols-2 gap-2 sm:grid-cols-4">
+            <!-- keep classes static (no dynamic tailwind) -->
+            <button class="major chip" data-major="Computer Science">💻 Computer Science</button>
+            <button class="major chip" data-major="Data Science">📊 Data Science</button>
+            <button class="major chip" data-major="Engineering">🛠️ Engineering</button>
+            <button class="major chip" data-major="Biology">🧬 Biology</button>
+            <button class="major chip" data-major="Pre-Med">🩺 Pre-Med</button>
+            <button class="major chip" data-major="Nursing">🧑‍⚕️ Nursing</button>
+            <button class="major chip" data-major="Business">💼 Business</button>
+            <button class="major chip" data-major="Economics">📈 Economics</button>
+            <button class="major chip" data-major="Psychology">🧠 Psychology</button>
+            <button class="major chip" data-major="Political Science">🏛️ Political Science</button>
+            <button class="major chip" data-major="Communications">🗣️ Communications</button>
+            <button class="major chip" data-major="Design">🎨 Design</button>
+            <button class="major chip" data-major="Music">🎵 Music</button>
+            <button class="major chip" data-major="Performing Arts">🎭 Performing Arts</button>
+            <button class="major chip" data-major="Environmental Science">🌱 Environmental Science</button>
+            <button class="major chip" data-major="Mathematics">➗ Mathematics</button>
           </div>
 
           <div class="mt-5 flex gap-3">
@@ -181,14 +168,12 @@
         <div id="step3" class="mt-4 hidden animate-slideUp rounded-2xl border border-slate-200 bg-white p-5 shadow-soft dark:border-slate-800 dark:bg-slate-900">
           <h2 class="text-2xl font-bold">What matters most?</h2>
           <p class="mt-1 text-slate-500 dark:text-slate-400">Pick your priorities.</p>
-
           <div class="mt-3 grid gap-3">
-            <button data-preference="reputation" class="pref w-full rounded-xl border border-slate-200 bg-slate-50 p-3 text-left font-semibold hover:border-brand.primary hover:bg-white dark:border-slate-700 dark:bg-slate-800">🏆 School reputation</button>
-            <button data-preference="cost" class="pref w-full rounded-xl border border-slate-200 bg-slate-50 p-3 text-left font-semibold hover:border-brand.primary hover:bg-white dark:border-slate-700 dark:bg-slate-800">💰 Affordability</button>
-            <button data-preference="location" class="pref w-full rounded-xl border border-slate-200 bg-slate-50 p-3 text-left font-semibold hover:border-brand.primary hover:bg-white dark:border-slate-700 dark:bg-slate-800">📍 Location vibes</button>
-            <button data-preference="size" class="pref w-full rounded-xl border border-slate-200 bg-slate-50 p-3 text-left font-semibold hover:border-brand.primary hover:bg-white dark:border-slate-700 dark:bg-slate-800">👥 Campus size</button>
+            <button data-preference="reputation" class="pref pill">🏆 School reputation</button>
+            <button data-preference="cost" class="pref pill">💰 Affordability</button>
+            <button data-preference="location" class="pref pill">📍 Location vibes</button>
+            <button data-preference="size" class="pref pill">👥 Campus size</button>
           </div>
-
           <div class="mt-5 flex gap-3">
             <button class="rounded-xl border border-slate-200 px-4 py-2.5 font-semibold dark:border-slate-700" id="step3Back">← Back</button>
             <button class="flex-1 rounded-xl bg-gradient-to-r from-brand.primary to-brand.secondary px-4 py-2.5 font-semibold text-white" id="step3Next">Continue →</button>
@@ -199,24 +184,12 @@
         <div id="step4" class="mt-4 hidden animate-slideUp rounded-2xl border border-slate-200 bg-white p-5 shadow-soft dark:border-slate-800 dark:bg-slate-900">
           <h2 class="text-2xl font-bold">Academic snapshot</h2>
           <p class="mt-1 text-slate-500 dark:text-slate-400">Optional, but helps accuracy.</p>
-
           <div class="mt-4 grid gap-4 sm:grid-cols-3">
-            <div>
-              <label class="text-xs font-semibold text-slate-500 dark:text-slate-400">GPA (0–5)</label>
-              <input id="gpa" type="number" step="0.01" min="0" max="5" class="mt-1 w-full rounded-xl border border-slate-200 bg-slate-50 px-3 py-2 outline-none focus:border-brand.primary focus:ring-2 focus:ring-brand.primary/20 dark:border-slate-700 dark:bg-slate-800">
-            </div>
-            <div>
-              <label class="text-xs font-semibold text-slate-500 dark:text-slate-400">SAT (400–1600)</label>
-              <input id="sat" type="number" step="10" min="400" max="1600" class="mt-1 w-full rounded-xl border border-slate-200 bg-slate-50 px-3 py-2 outline-none focus:border-brand.primary focus:ring-2 focus:ring-brand.primary/20 dark:border-slate-700 dark:bg-slate-800">
-            </div>
-            <div>
-              <label class="text-xs font-semibold text-slate-500 dark:text-slate-400">AP/Honors courses</label>
-              <input id="ap" type="number" min="0" class="mt-1 w-full rounded-xl border border-slate-200 bg-slate-50 px-3 py-2 outline-none focus:border-brand.primary focus:ring-2 focus:ring-brand.primary/20 dark:border-slate-700 dark:bg-slate-800">
-            </div>
+            <div><label class="text-xs font-semibold text-slate-500 dark:text-slate-400">GPA (0–5)</label><input id="gpa" type="number" step="0.01" min="0" max="5" class="mt-1 w-full rounded-xl border border-slate-200 bg-slate-50 px-3 py-2 outline-none focus:border-brand.primary focus:ring-2 focus:ring-brand.primary/20 dark:border-slate-700 dark:bg-slate-800"></div>
+            <div><label class="text-xs font-semibold text-slate-500 dark:text-slate-400">SAT (400–1600)</label><input id="sat" type="number" step="10" min="400" max="1600" class="mt-1 w-full rounded-xl border border-slate-200 bg-slate-50 px-3 py-2 outline-none focus:border-brand.primary focus:ring-2 focus:ring-brand.primary/20 dark:border-slate-700 dark:bg-slate-800"></div>
+            <div><label class="text-xs font-semibold text-slate-500 dark:text-slate-400">AP/Honors courses</label><input id="ap" type="number" min="0" class="mt-1 w-full rounded-xl border border-slate-200 bg-slate-50 px-3 py-2 outline-none focus:border-brand.primary focus:ring-2 focus:ring-brand.primary/20 dark:border-slate-700 dark:bg-slate-800"></div>
           </div>
-
           <p id="matchPreview" class="mt-2 text-sm text-slate-500 dark:text-slate-400">Enter GPA/SAT to preview matches…</p>
-
           <div class="mt-5 flex gap-3">
             <button class="rounded-xl border border-slate-200 px-4 py-2.5 font-semibold dark:border-slate-700" id="step4Back">← Back</button>
             <button class="flex-1 rounded-xl bg-gradient-to-r from-brand.primary to-brand.secondary px-4 py-2.5 font-semibold text-white" id="finishBtn">See my matches →</button>
@@ -225,44 +198,24 @@
       </div>
     </section>
 
-    <!-- ===========================
-         Dashboard + Tabs
-    ============================ -->
+    <!-- App -->
     <section id="app" class="mt-6 hidden">
-      <!-- Welcome -->
       <div class="rounded-2xl bg-gradient-to-r from-brand.primary to-brand.secondary p-6 text-white">
         <h2 class="text-2xl font-bold">Welcome back, <span id="userName">Student</span> 👋</h2>
         <p class="mt-1 opacity-90">Your personalized California college roadmap is ready.</p>
       </div>
-
-      <!-- Stats -->
       <div class="mt-4 grid gap-4 sm:grid-cols-3">
-        <div class="rounded-2xl border border-slate-200 bg-white p-5 shadow-soft dark:border-slate-800 dark:bg-slate-900">
-          <p class="text-xs font-semibold text-slate-500 dark:text-slate-400">Your GPA</p>
-          <p id="statGPA" class="mt-1 text-3xl font-bold">—</p>
-        </div>
-        <div class="rounded-2xl border border-slate-200 bg-white p-5 shadow-soft dark:border-slate-800 dark:bg-slate-900">
-          <p class="text-xs font-semibold text-slate-500 dark:text-slate-400">Target schools</p>
-          <p id="statSchools" class="mt-1 text-3xl font-bold">—</p>
-        </div>
-        <div class="rounded-2xl border border-slate-200 bg-white p-5 shadow-soft dark:border-slate-800 dark:bg-slate-900">
-          <p class="text-xs font-semibold text-slate-500 dark:text-slate-400">Days to UC/CSU deadline</p>
-          <p id="daysLeft" class="mt-1 text-3xl font-bold">—</p>
-        </div>
+        <div class="card"><p class="label">Your GPA</p><p id="statGPA" class="stat">—</p></div>
+        <div class="card"><p class="label">Target schools</p><p id="statSchools" class="stat">—</p></div>
+        <div class="card"><p class="label">Days to UC/CSU deadline</p><p id="daysLeft" class="stat">—</p></div>
       </div>
 
-      <!-- Tabbed content -->
       <div class="mt-6 space-y-6">
-        <!-- Schools (default tab) -->
         <div id="tab-dashboard" class="tab-pane">
           <h3 class="mb-3 text-xl font-semibold">🎯 Your schools</h3>
-
-          <div id="schoolsWrap" class="space-y-8">
-            <!-- Buckets get injected here -->
-          </div>
+          <div id="schoolsWrap" class="space-y-8"></div>
         </div>
 
-        <!-- Planning -->
         <div id="tab-planning" class="tab-pane hidden">
           <h3 class="mb-3 text-xl font-semibold">📝 Planning</h3>
           <div class="rounded-2xl border border-slate-200 bg-white p-5 shadow-soft dark:border-slate-800 dark:bg-slate-900">
@@ -274,466 +227,428 @@
           </div>
         </div>
 
-        <!-- Documents -->
         <div id="tab-documents" class="tab-pane hidden">
           <h3 class="mb-3 text-xl font-semibold">📄 Documents checklist</h3>
-          <div id="docsList" class="grid gap-3 sm:grid-cols-2">
-            <!-- Items injected -->
-          </div>
-
+          <div id="docsList" class="grid gap-3 sm:grid-cols-2"></div>
           <div class="mt-4 rounded-2xl border border-slate-200 bg-white p-4 text-sm shadow-soft dark:border-slate-800 dark:bg-slate-900">
             <p><span class="font-semibold">Progress:</span> <span id="docProgressPct">0%</span></p>
-            <div class="mt-2 h-2 rounded-full bg-slate-200 dark:bg-slate-800">
-              <div id="docProgressBar" class="h-2 w-0 rounded-full bg-gradient-to-r from-brand.warning to-brand.danger"></div>
-            </div>
+            <div class="mt-2 h-2 rounded-full bg-slate-200 dark:bg-slate-800"><div id="docProgressBar" class="h-2 w-0 rounded-full bg-gradient-to-r from-brand.warning to-brand.danger"></div></div>
           </div>
         </div>
 
-        <!-- Timeline -->
         <div id="tab-timeline" class="tab-pane hidden">
           <h3 class="mb-3 text-xl font-semibold">📅 Timeline</h3>
-          <div id="timelineList" class="grid gap-3">
-            <!-- items injected -->
-          </div>
+          <div id="timelineList" class="grid gap-3"></div>
         </div>
 
-        <!-- Financial Aid -->
         <div id="tab-financial" class="tab-pane hidden">
           <h3 class="mb-3 text-xl font-semibold">💸 Financial Aid</h3>
-
           <div class="rounded-2xl border border-slate-200 bg-white p-5 shadow-soft dark:border-slate-800 dark:bg-slate-900">
             <div class="grid gap-4 sm:grid-cols-3">
-              <div>
-                <label class="text-xs font-semibold text-slate-500 dark:text-slate-400">Family income (USD)</label>
-                <input id="faIncome" type="number" value="75000" class="mt-1 w-full rounded-xl border border-slate-200 bg-slate-50 px-3 py-2 outline-none focus:border-brand.primary focus:ring-2 focus:ring-brand.primary/20 dark:border-slate-700 dark:bg-slate-800">
-              </div>
-              <div>
-                <label class="text-xs font-semibold text-slate-500 dark:text-slate-400">Household size</label>
-                <input id="faHousehold" type="number" value="4" class="mt-1 w-full rounded-xl border border-slate-200 bg-slate-50 px-3 py-2 outline-none focus:border-brand.primary focus:ring-2 focus:ring-brand.primary/20 dark:border-slate-700 dark:bg-slate-800">
-              </div>
-              <div>
-                <label class="text-xs font-semibold text-slate-500 dark:text-slate-400">Students in college</label>
-                <input id="faStudents" type="number" value="1" class="mt-1 w-full rounded-xl border border-slate-200 bg-slate-50 px-3 py-2 outline-none focus:border-brand.primary focus:ring-2 focus:ring-brand.primary/20 dark:border-slate-700 dark:bg-slate-800">
-              </div>
+              <div><label class="text-xs font-semibold text-slate-500 dark:text-slate-400">Family income (USD)</label><input id="faIncome" type="number" value="75000" class="mt-1 w-full rounded-xl border border-slate-200 bg-slate-50 px-3 py-2 outline-none focus:border-brand.primary focus:ring-2 focus:ring-brand.primary/20 dark:border-slate-700 dark:bg-slate-800"></div>
+              <div><label class="text-xs font-semibold text-slate-500 dark:text-slate-400">Household size</label><input id="faHousehold" type="number" value="4" class="mt-1 w-full rounded-xl border border-slate-200 bg-slate-50 px-3 py-2 outline-none focus:border-brand.primary focus:ring-2 focus:ring-brand.primary/20 dark:border-slate-700 dark:bg-slate-800"></div>
+              <div><label class="text-xs font-semibold text-slate-500 dark:text-slate-400">Students in college</label><input id="faStudents" type="number" value="1" class="mt-1 w-full rounded-xl border border-slate-200 bg-slate-50 px-3 py-2 outline-none focus:border-brand.primary focus:ring-2 focus:ring-brand.primary/20 dark:border-slate-700 dark:bg-slate-800"></div>
             </div>
-
             <button id="calcAid" class="mt-4 w-full rounded-xl bg-brand.primary py-2.5 font-semibold text-white sm:w-auto sm:px-6">Calculate</button>
-
-            <div id="aidResult" class="mt-4 grid gap-3 sm:grid-cols-3">
-              <!-- cards injected -->
-            </div>
-
-            <p class="mt-3 text-xs text-slate-500 dark:text-slate-400">Estimates use 2024–2025 guidelines for CA residents; actual awards depend on FAFSA/CADAA and campus policies.</p>
+            <div id="aidResult" class="mt-4 grid gap-3 sm:grid-cols-3"></div>
+            <p class="mt-3 text-xs text-slate-500 dark:text-slate-400">Estimates use 2024–2025 guidelines; actual awards depend on FAFSA/CADAA and campus policies.</p>
           </div>
         </div>
       </div>
     </section>
   </main>
 
-  <!-- ===========================
-       AI Helper Bubble
-  ============================ -->
-  <div id="aiBubble" class="fixed bottom-6 right-4 z-[60] hidden">
-    <div class="relative max-w-xs rounded-2xl bg-gradient-to-br from-brand.primary to-brand.secondary p-3 text-sm text-white shadow-soft">
-      <button id="aiClose" class="absolute -right-2 -top-2 grid h-6 w-6 place-items-center rounded-full bg-black/70 text-xs">✕</button>
-      <p id="aiText" class="pr-6">Need help? I can guide you.</p>
+  <!-- Help FAB -->
+  <button id="helpBtn" class="fixed bottom-6 right-4 z-[60] rounded-full bg-gradient-to-br from-brand.primary to-brand.secondary p-3 text-white shadow-soft">❓</button>
+
+  <!-- Help Modal -->
+  <div id="helpModal" class="fixed inset-0 z-[70] hidden">
+    <div class="absolute inset-0 bg-black/60"></div>
+    <div class="relative mx-auto w-full max-w-lg p-4 sm:p-6 animate-slideUp">
+      <div class="rounded-2xl bg-white p-6 shadow-soft dark:bg-slate-900">
+        <div class="flex items-center justify-between">
+          <h3 class="text-xl font-semibold">Need help?</h3>
+          <button id="helpClose" class="rounded-lg border border-slate-200 px-2 py-1 text-sm hover:bg-slate-100 dark:border-slate-700 dark:hover:bg-slate-800">✕</button>
+        </div>
+        <div id="helpContent" class="mt-3 space-y-2 text-sm text-slate-600 dark:text-slate-300">
+          <p class="font-semibold">Quick answers</p>
+          <div class="flex flex-wrap gap-2">
+            <button class="qa chip" data-q="reach">What makes a school “reach/match/safety”?</button>
+            <button class="qa chip" data-q="piq">How do UC PIQs work?</button>
+            <button class="qa chip" data-q="majors">How should I pick a major?</button>
+            <button class="qa chip" data-q="aid">How is aid estimated?</button>
+          </div>
+          <div id="qaAnswer" class="rounded-xl border border-slate-200 bg-slate-50 p-3 dark:border-slate-700 dark:bg-slate-800"></div>
+        </div>
+      </div>
     </div>
   </div>
 
-  <!-- ===========================
-       Achievement Toast
-  ============================ -->
+  <!-- Toasts -->
   <div id="toaster" class="fixed top-4 right-4 z-[60] space-y-2"></div>
 
   <script>
-    /***********************
-     * STATE & CONSTANTS
-     ***********************/
-    const deadline = new Date('November 30, 2025');
-    const $ = (sel) => document.querySelector(sel);
-    const $$ = (sel) => document.querySelectorAll(sel);
+    /* ---------- helpers & base styles ---------- */
+    const $ = s => document.querySelector(s);
+    const $$ = s => document.querySelectorAll(s);
+    const dayDiff = (a,b)=>Math.max(0, Math.ceil((a-b)/86400000));
+    const save = (s)=>localStorage.setItem("pathwise", JSON.stringify(state));
+    const load = ()=>{
+      const raw = localStorage.getItem("pathwise");
+      if (raw) try { Object.assign(state, JSON.parse(raw)); } catch {}
+    };
+    const setTheme = m => { document.documentElement.classList.toggle("dark", m==="dark"); localStorage.setItem("theme", m); $("#themeToggle").textContent = m==="dark" ? "☀️" : "🌙"; };
+    const toast = (title,msg)=>{ const div=document.createElement("div"); div.className="animate-slideUp rounded-xl border border-slate-200 bg-white p-3 shadow-soft dark:border-slate-800 dark:bg-slate-900"; div.innerHTML=`<p class="font-semibold">${title}</p><p class="text-sm text-slate-500 dark:text-slate-400">${msg}</p>`; $("#toaster").appendChild(div); setTimeout(()=>div.remove(),3000); };
 
+    /* ---------- state ---------- */
+    const deadline = new Date("Nov 30, 2025");
     let state = {
-      firstName: "",
-      gradeLevel: "",
-      interests: [],
-      preferences: [],
-      gpa: null,
-      sat: null,
-      ap: 0,
-      email: "",
-      consent: false,
-      tasks: [],
-      docs: {
-        profile: true,
-        transcripts: false,
-        recommendations: false,
-        personal_statement: false,
-        fafsa: false,
-      }
+      firstName:"", gradeLevel:"", interests:[], majors:[], preferences:[],
+      gpa:null, sat:null, ap:0, email:"", consent:false, tasks:[],
+      docs:{ profile:true, transcripts:false, recommendations:false, personal_statement:false, fafsa:false }
     };
 
+    /* ---------- schools: review style + reqs + notes + impacted majors ---------- */
     const schools = [
-      { id:1, name:"UC Berkeley", gpa:4.25, sat:1450, rate:14.5, tuition:14226 },
-      { id:2, name:"UCLA", gpa:4.26, sat:1445, rate:12.3, tuition:13401 },
-      { id:3, name:"UC San Diego", gpa:4.16, sat:1410, rate:31.5, tuition:14616 },
-      { id:4, name:"UC Davis", gpa:4.13, sat:1350, rate:37.6, tuition:14597 },
-      { id:5, name:"UC Irvine", gpa:4.08, sat:1360, rate:26.5, tuition:13727 },
-      { id:6, name:"UC Santa Barbara", gpa:4.15, sat:1380, rate:29.6, tuition:14391 },
-      { id:7, name:"Cal Poly SLO", gpa:4.06, sat:1395, rate:32.5, tuition:10377 },
-      { id:8, name:"UC Santa Cruz", gpa:3.96, sat:1295, rate:51.3, tuition:13991 },
-      { id:9, name:"San Diego State", gpa:3.85, sat:1270, rate:37.8, tuition:7720 }
+      { id:1, name:"UC Berkeley", gpa:4.25, sat:1450, rate:14.5, tuition:14226,
+        review:"scores", req:{ essays:true, letters:false, portfolio:false, testOptional:true, app:"UC App" },
+        majors:{ impacted:["Computer Science","Data Science","Engineering","Economics"] },
+        notes:["L&S CS is selective; declare after prerequisites with GPA", "EECS (Engineering) is extremely competitive"]
+      },
+      { id:2, name:"UCLA", gpa:4.26, sat:1445, rate:12.3, tuition:13401,
+        review:"scores", req:{ essays:true, letters:false, portfolio:false, testOptional:true, app:"UC App" },
+        majors:{ impacted:["Computer Science","Engineering","Business","Biology"] },
+        notes:["CS & Engineering are highly competitive", "Portfolio required only for certain Arts programs"]
+      },
+      { id:3, name:"UC San Diego", gpa:4.16, sat:1410, rate:31.5, tuition:14616,
+        review:"scores", req:{ essays:true, letters:false, portfolio:false, testOptional:true, app:"UC App" },
+        majors:{ impacted:["Computer Science","Data Science","Engineering"] },
+        notes:["Many majors are capped (CS, DS). Consider alternate major strategy."]
+      },
+      { id:4, name:"UC Davis", gpa:4.13, sat:1350, rate:37.6, tuition:14597,
+        review:"balanced", req:{ essays:true, letters:false, portfolio:false, testOptional:true, app:"UC App" },
+        majors:{ impacted:["Computer Science","Engineering","Nursing"] },
+        notes:["Strong life sciences; CS selective; Nursing highly competitive."]
+      },
+      { id:5, name:"UC Irvine", gpa:4.08, sat:1360, rate:26.5, tuition:13727,
+        review:"balanced", req:{ essays:true, letters:false, portfolio:false, testOptional:true, app:"UC App" },
+        majors:{ impacted:["Computer Science","Engineering","Nursing","Business"] },
+        notes:["CS/Engineering selective; Business majors impacted."]
+      },
+      { id:6, name:"UC Santa Barbara", gpa:4.15, sat:1380, rate:29.6, tuition:14391,
+        review:"balanced", req:{ essays:true, letters:false, portfolio:false, testOptional:true, app:"UC App" },
+        majors:{ impacted:["Computer Science","Engineering"] },
+        notes:["CS/Engineering selective; strong for physics & engineering."]
+      },
+      { id:7, name:"Cal Poly SLO", gpa:4.06, sat:1395, rate:32.5, tuition:10377,
+        review:"eca", req:{ essays:false, letters:false, portfolio:false, testOptional:true, app:"Cal State Apply" },
+        majors:{ impacted:["Computer Science","Engineering","Business"] },
+        notes:["Multi-factor MCA emphasizes course rigor & ECs; apply ‘Learn by Doing’ angle."]
+      },
+      { id:8, name:"UC Santa Cruz", gpa:3.96, sat:1295, rate:51.3, tuition:13991,
+        review:"balanced", req:{ essays:true, letters:false, portfolio:false, testOptional:true, app:"UC App" },
+        majors:{ impacted:["Computer Science","Engineering"] },
+        notes:["CS selective; cool research in games & human-centered computing."]
+      },
+      { id:9, name:"San Diego State", gpa:3.85, sat:1270, rate:37.8, tuition:7720,
+        review:"balanced", req:{ essays:false, letters:false, portfolio:false, testOptional:true, app:"Cal State Apply" },
+        majors:{ impacted:["Nursing","Business","Computer Science"] },
+        notes:["Some majors impacted; CSU generally no essays at application time."]
+      }
     ];
 
-    /***********************
-     * UTILITIES
-     ***********************/
-    const save = () => localStorage.setItem("pathwise", JSON.stringify(state));
-    const load = () => {
-      const raw = localStorage.getItem("pathwise");
-      if (!raw) return;
-      try { state = { ...state, ...JSON.parse(raw) }; } catch {}
-    };
-
-    const setTheme = (mode) => {
-      if (mode === "dark") document.documentElement.classList.add("dark");
-      else document.documentElement.classList.remove("dark");
-      localStorage.setItem("theme", mode);
-      $("#themeToggle").textContent = mode === "dark" ? "☀️" : "🌙";
-    };
-
-    const toast = (title, msg) => {
-      const div = document.createElement("div");
-      div.className = "animate-slideUp rounded-xl border border-slate-200 bg-white p-3 shadow-soft dark:border-slate-800 dark:bg-slate-900";
-      div.innerHTML = `<p class="font-semibold">${title}</p><p class="text-sm text-slate-500 dark:text-slate-400">${msg}</p>`;
-      $("#toaster").appendChild(div);
-      setTimeout(()=>div.remove(), 3000);
-    };
-
-    const dayDiff = (a,b) => Math.max(0, Math.ceil((a-b)/86400000));
-
-    /***********************
-     * ON LOAD
-     ***********************/
+    /* ---------- setup ---------- */
     (function init(){
-      // theme
+      // theme + saved state
       setTheme(localStorage.getItem("theme") || "light");
+      load();
 
       // consent
-      load();
       if (!state.consent) $("#consentModal").classList.remove("hidden");
+      $("#consentAccept").onclick = ()=>{ state.consent = true; const e=$("#consentEmail").value.trim(); if (e) state.email=e; save(state); $("#consentModal").classList.add("hidden"); toast("Journey started","Welcome to Pathwise!") };
+      $("#consentDecline").onclick = ()=> $("#consentModal").classList.add("hidden");
 
-      // if user already onboarded show app
-      if (state.firstName) {
-        $("#onboarding").classList.add("hidden");
-        $("#app").classList.remove("hidden");
-        $("#backBtn").classList.remove("hidden");
-        hydrateApp();
-      }
+      // already onboarded?
+      if (state.firstName) { $("#onboarding").classList.add("hidden"); $("#app").classList.remove("hidden"); $("#backBtn").classList.remove("hidden"); hydrateApp(); }
 
-      // events
-      $("#consentAccept").onclick = () => {
-        state.consent = true;
-        const email = $("#consentEmail").value.trim();
-        if (email) state.email = email;
-        save();
-        $("#consentModal").classList.add("hidden");
-        toast("Journey started", "Welcome to Pathwise!");
-      };
-      $("#consentDecline").onclick = () => $("#consentModal").classList.add("hidden");
-      $("#themeToggle").onclick = () => setTheme(document.documentElement.classList.contains("dark") ? "light" : "dark");
-      $("#shareBtn").onclick = () => {
-        const text = "Check out Pathwise – smart CA college planning";
-        if (navigator.share) navigator.share({ title:"Pathwise", text, url: location.href });
-        else { navigator.clipboard.writeText(location.href); toast("Link copied", "Share it with friends!"); }
+      // theme/share
+      $("#themeToggle").onclick = ()=> setTheme(document.documentElement.classList.contains("dark") ? "light" : "dark");
+      $("#shareBtn").onclick = ()=> { const text="Check out Pathwise – smart CA college planning"; if (navigator.share) navigator.share({title:"Pathwise",text,url:location.href}); else { navigator.clipboard.writeText(location.href); toast("Link copied","Share it with friends!"); } };
+
+      /* onboarding events */
+      $("#step1Next").onclick = ()=>{
+        const name=$("#firstName").value.trim(), grade=$("#gradeLevel").value;
+        let ok=true; if(!name){$("#nameError").classList.remove("hidden"); ok=false}else $("#nameError").classList.add("hidden");
+        if(!grade){$("#gradeError").classList.remove("hidden"); ok=false}else $("#gradeError").classList.add("hidden");
+        if(!ok) return; state.firstName=name; state.gradeLevel=grade; save(state); gotoStep(2);
       };
 
-      // onboarding nav
-      $("#step1Next").onclick = () => {
-        const name = $("#firstName").value.trim();
-        const grade = $("#gradeLevel").value;
-        let ok = true;
-        if (!name) { $("#nameError").classList.remove("hidden"); ok=false; } else $("#nameError").classList.add("hidden");
-        if (!grade){ $("#gradeError").classList.remove("hidden"); ok=false; } else $("#gradeError").classList.add("hidden");
-        if (!ok) return;
-        state.firstName = name; state.gradeLevel = grade; save();
-        gotoStep(2);
-      };
-      $("#step2Back").onclick = () => gotoStep(1);
-      $("#step2Next").onclick = () => {
-        if (state.interests.length===0) { showAI("Pick a couple interests—or 'Not sure' works too!"); return; }
-        gotoStep(3);
-      };
-      $("#step3Back").onclick = () => gotoStep(2);
-      $("#step3Next").onclick = () => {
-        if (state.preferences.length===0) { showAI("Choose 1–2 priorities so we can tailor picks."); return; }
-        gotoStep(4);
-      };
-      $("#step4Back").onclick = () => gotoStep(3);
-      $("#finishBtn").onclick = finishOnboarding;
-      ["gpa","sat","ap"].forEach(id => $(`#${id}`).addEventListener("input", previewMatches));
+      $$(".interest").forEach(b=> b.onclick=()=> togglePick(b,state.interests,b.dataset.interest,"unsure",".interest"));
+      $$(".major").forEach(b=> b.onclick=()=> togglePick(b,state.majors,b.dataset.major,null,".major"));
+      $("#step2Back").onclick = ()=> gotoStep(1);
+      $("#step2Next").onclick = ()=> { if (state.interests.length===0) return showHelpAuto("Pick a couple interests—or choose “Not sure”."); gotoStep(3); };
 
-      // interest / preference toggles
-      $$(".interest").forEach(btn=>{
-        btn.onclick = () => {
-          const k = btn.dataset.interest;
-          btn.classList.toggle("ring-2");
-          btn.classList.toggle("ring-brand.primary/40");
-          if (btn.classList.contains("ring-2")) {
-            if (k!=="unsure") {
-              // turn off "unsure"
-              const u = document.querySelector('[data-interest="unsure"]');
-              if (u) { u.classList.remove("ring-2","ring-brand.primary/40"); state.interests = state.interests.filter(x=>x!=="unsure"); }
-            }
-            if (!state.interests.includes(k)) state.interests.push(k);
-          } else {
-            state.interests = state.interests.filter(x=>x!==k);
-          }
-          save();
-        };
+      $$(".pref").forEach(b=> b.onclick=()=> toggleFlag(b,state.preferences,b.dataset.preference));
+      $("#step3Back").onclick = ()=> gotoStep(2);
+      $("#step3Next").onclick = ()=> { if (state.preferences.length===0) return showHelpAuto("Choose 1–2 priorities so we can tailor picks."); gotoStep(4); };
+
+      ["gpa","sat","ap"].forEach(id=> $(`#${id}`).addEventListener("input", previewMatches));
+      $("#step4Back").onclick = ()=> gotoStep(3);
+      $("#finishBtn").onclick = ()=>{
+        state.gpa = parseFloat($("#gpa").value)||null;
+        state.sat = parseInt($("#sat").value)||null;
+        state.ap  = parseInt($("#ap").value)||0;
+        save(state);
+        $("#onboarding").classList.add("hidden"); $("#app").classList.remove("hidden"); $("#backBtn").classList.remove("hidden");
+        hydrateApp(); toast("Profile complete","Your college journey begins!");
+      };
+
+      // tabs (ensure visible in all themes)
+      $$(".tab-btn").forEach(b=> b.onclick = ()=>{
+        $$(".tab-btn").forEach(x=> x.classList.remove("bg-brand.primary","text-white"));
+        b.classList.add("bg-brand.primary","text-white");
+        $$(".tab-pane").forEach(p=> p.classList.add("hidden"));
+        $(`#tab-${b.dataset.tab}`).classList.remove("hidden");
+        if (b.dataset.tab==="financial") calcAid();
       });
-      $$(".pref").forEach(btn=>{
-        btn.onclick = () => {
-          const k = btn.dataset.preference;
-          btn.classList.toggle("ring-2");
-          btn.classList.toggle("ring-brand.primary/40");
-          if (btn.classList.contains("ring-2")) {
-            if (!state.preferences.includes(k)) state.preferences.push(k);
-          } else {
-            state.preferences = state.preferences.filter(x=>x!==k);
-          }
-          save();
-        };
-      });
-
-      // tabs
-      $$(".tab-btn").forEach(b=>{
-        b.onclick = (e) => {
-          const tab = b.dataset.tab;
-          $$(".tab-btn").forEach(x=>x.classList.remove("bg-brand.primary","text-white"));
-          b.classList.add("bg-brand.primary","text-white");
-          $$(".tab-pane").forEach(p=>p.classList.add("hidden"));
-          $(`#tab-${tab}`).classList.remove("hidden");
-          if (tab==="financial") calcAid(); // keep financial tab fresh
-        };
-      });
-      // default selected tab
       document.querySelector('[data-tab="dashboard"]').click();
 
       // planning
-      $("#addTask").onclick = () => {
-        const val = $("#newTask").value.trim();
-        if (!val) return;
-        state.tasks.push({ text: val, done:false });
-        $("#newTask").value = "";
-        save(); renderTasks();
-      };
+      $("#addTask").onclick = ()=>{ const v=$("#newTask").value.trim(); if(!v) return; state.tasks.push({text:v,done:false}); $("#newTask").value=""; save(state); renderTasks(); };
 
-      // AI bubble timer
-      setTimeout(()=> showAI("Need help choosing schools? I can explain reach/match/safety."), 7000);
-      $("#aiClose").onclick = () => $("#aiBubble").classList.add("hidden");
-      $("#backBtn").onclick = () => {
-        // reset to onboarding from app
-        $("#app").classList.add("hidden");
-        $("#onboarding").classList.remove("hidden");
-        document.documentElement.scrollTop = 0;
-      };
+      // back
+      $("#backBtn").onclick = ()=>{ $("#app").classList.add("hidden"); $("#onboarding").classList.remove("hidden"); document.documentElement.scrollTop=0; };
+
+      // help
+      $("#helpBtn").onclick = ()=> $("#helpModal").classList.remove("hidden");
+      $("#helpClose").onclick = ()=> $("#helpModal").classList.add("hidden");
+      $$(".qa").forEach(b=> b.onclick = ()=> showQA(b.dataset.q));
+
+      // initial help nudge
+      setTimeout(()=> showHelpAuto("Need help choosing schools? I can explain reach/match/safety."), 6500);
     })();
 
-    /***********************
-     * ONBOARDING HELPERS
-     ***********************/
+    /* ---------- UI helpers ---------- */
     function gotoStep(n){
-      // progress
-      const pct = [20,40,60,80,100][n-1] || 20;
-      $("#progressPct").textContent = pct + "%";
-      $("#progressBar").style.width = pct + "%";
-      $("#progressLabel").textContent = [
-        "Getting started","Building your profile","Priorities","Almost there","Ready"
-      ][n-1] || "Getting started";
-
-      // swap cards
+      const pct=[20,40,60,80,100][n-1]||20;
+      $("#progressPct").textContent=pct+"%";
+      $("#progressBar").style.width=pct+"%";
+      $("#progressLabel").textContent=["Getting started","Building your profile","Priorities","Almost there","Ready"][n-1]||"Getting started";
       [1,2,3,4].forEach(i=> $("#step"+i).classList.toggle("hidden", i!==n));
-      document.documentElement.scrollTop = 0;
+      document.documentElement.scrollTop=0;
     }
-
-    function previewMatches(){
-      const gpa = parseFloat($("#gpa").value)||0;
-      const sat = parseInt($("#sat").value)||0;
-      let count=0;
-      for (const s of schools){
-        const score = matchScore(s,gpa,sat,(parseInt($("#ap").value)||0));
-        if (score>=50) count++;
+    function togglePick(btn, arr, val, clearVal, selector){
+      const on = btn.classList.toggle("ring-2");
+      btn.classList.toggle("ring-brand.primary/40", on);
+      if (on) {
+        if (clearVal){ // clear "unsure" if choosing others
+          if (val!==clearVal) {
+            const unsure = document.querySelector(`${selector}[data-${selector===".major"?"major":"interest"}="${clearVal}"]`);
+            if (unsure) unsure.classList.remove("ring-2","ring-brand.primary/40");
+            const i = arr.indexOf(clearVal); if (i>-1) arr.splice(i,1);
+          }
+        }
+        if (!arr.includes(val)) arr.push(val);
+      } else {
+        const i = arr.indexOf(val); if (i>-1) arr.splice(i,1);
       }
-      $("#matchPreview").textContent = gpa || sat ? `~${count} likely matches so far` : "Enter GPA/SAT to preview matches…";
+      save(state);
+    }
+    function toggleFlag(btn, arr, val){
+      const on = btn.classList.toggle("ring-2");
+      btn.classList.toggle("ring-brand.primary/40", on);
+      if (on){ if(!arr.includes(val)) arr.push(val); } else { const i=arr.indexOf(val); if(i>-1) arr.splice(i,1); }
+      save(state);
+    }
+    function previewMatches(){
+      const g = parseFloat($("#gpa").value)||0, s = parseInt($("#sat").value)||0, a = parseInt($("#ap").value)||0;
+      let count=0; for (const sc of schools){ if (matchScore(sc,g,s,a)>=50) count++; }
+      $("#matchPreview").textContent = (g||s) ? `~${count} likely matches so far` : "Enter GPA/SAT to preview matches…";
     }
 
-    function finishOnboarding(){
-      state.gpa = parseFloat($("#gpa").value) || null;
-      state.sat = parseInt($("#sat").value) || null;
-      state.ap = parseInt($("#ap").value) || 0;
-      save();
-
-      $("#onboarding").classList.add("hidden");
-      $("#app").classList.remove("hidden");
-      $("#backBtn").classList.remove("hidden");
-      hydrateApp();
-      toast("Profile complete","Your college journey begins!");
-    }
-
-    /***********************
-     * APP RENDER
-     ***********************/
+    /* ---------- render app ---------- */
     function hydrateApp(){
       $("#userName").textContent = state.firstName || "Student";
       $("#statGPA").textContent = state.gpa ? state.gpa.toFixed(2) : "—";
       $("#daysLeft").textContent = dayDiff(deadline, new Date());
-      renderSchools();
-      renderTasks();
-      renderDocs();
-      renderTimeline();
-      calcAid();
+      renderSchools(); renderTasks(); renderDocs(); renderTimeline(); calcAid();
     }
 
-    function matchScore(school, gpa = state.gpa, sat = state.sat, ap = state.ap){
+    /* ---------- scoring (review style aware + majors/impaction) ---------- */
+    function matchScore(sc, g=state.gpa, s=state.sat, ap=state.ap){
       let score = 50;
-      if (gpa) score += (gpa - school.gpa) * 20;
-      if (sat) score += (sat - school.sat) / 10;
-      if (state.interests.includes("stem") && (school.name.includes("UC") || school.name.includes("Poly"))) score += 6;
-      if (state.preferences.includes("reputation") && school.rate < 30) score += 6;
-      if (state.preferences.includes("cost") && school.tuition < 12000) score += 8;
-      score += (ap||0) * 1.5;
+
+      // weights shift by school review style
+      const w = { gpa: sc.review==="scores" ? 26 : sc.review==="balanced" ? 20 : 14,
+                  sat: sc.review==="scores" ? 10 : 8,
+                  ap : sc.review==="eca"    ? 8  : 4 };
+
+      if (g) score += (g - sc.gpa) * w.gpa;
+      if (s) score += (s - sc.sat) / (sc.review==="scores"?8:10);
+      if (ap) score += ap * w.ap * 0.5;
+
+      // interests alignment (small bonus)
+      if (state.interests.includes("stem") && (sc.name.includes("UC") || sc.name.includes("Poly"))) score += 4;
+      if (state.interests.includes("arts") && sc.req.portfolio) score += 3;
+
+      // impacted majors reduce match a bit if chosen
+      if (state.majors.some(m => sc.majors.impacted.includes(m))) score -= 6;
+
+      // preferences
+      if (state.preferences.includes("reputation") && sc.rate < 30) score += 5;
+      if (state.preferences.includes("cost") && sc.tuition < 12000) score += 6;
+
       return Math.max(0, Math.min(100, Math.round(score)));
     }
-
-    function bucketBy(score){
-      if (score < 45) return "reach";
-      if (score > 70) return "safety";
-      return "match";
-    }
+    function bucketBy(score){ if (score<45) return "reach"; if (score>70) return "safety"; return "match"; }
 
     function renderSchools(){
       const buckets = { reach:[], match:[], safety:[] };
-      schools.forEach(s=>{
-        const score = matchScore(s);
-        const bucket = bucketBy(score);
-        buckets[bucket].push(card(s, score));
-      });
-
-      const bucketUI = (title, note, color, key) => `
+      for (const sc of schools){
+        const score = matchScore(sc);
+        buckets[bucketBy(score)].push(schoolCard(sc, score));
+      }
+      const label = (title, note, cls) => `
         <div>
           <div class="mb-2 flex items-center gap-2">
-            <div class="rounded-full bg-${color}-100 px-2 py-0.5 text-xs font-bold text-${color}-700 dark:bg-${color}-900/40 dark:text-${color}-200">${title}</div>
+            <span class="rounded-full px-2 py-0.5 text-xs font-bold ${cls}">${title}</span>
             <span class="text-sm text-slate-500 dark:text-slate-400">${note}</span>
           </div>
-          <div class="grid gap-3 sm:grid-cols-2">${buckets[key].join("") || emptyCard()}</div>
+          <div class="grid gap-3 sm:grid-cols-2">${buckets[title.toLowerCase()].join("") || emptyCard()}</div>
         </div>
       `;
-
+      // static color classes (no dynamic strings)
       $("#schoolsWrap").innerHTML =
-        bucketUI("Reach","Shoot your shot 🚀","rose","reach") +
-        bucketUI("Match","You got this ✅","green","match") +
-        bucketUI("Safety","Solid backup 🛡️","blue","safety");
+        label("reach","Shoot your shot 🚀","bg-rose-100 text-rose-700 dark:bg-rose-900/40 dark:text-rose-200") +
+        label("match","You got this ✅","bg-green-100 text-green-700 dark:bg-green-900/40 dark:text-green-200") +
+        label("safety","Solid backup 🛡️","bg-blue-100 text-blue-700 dark:bg-blue-900/40 dark:text-blue-200");
 
       $("#statSchools").textContent = (buckets.reach.length + buckets.match.length + buckets.safety.length).toString();
     }
 
-    function card(s, score){
-      const level = score>70 ? "High" : score>50 ? "Medium" : "Low";
-      const badge = score>70 ? "bg-green-100 text-green-700 dark:bg-green-900/40 dark:text-green-200"
-                  : score>50 ? "bg-amber-100 text-amber-700 dark:bg-amber-900/40 dark:text-amber-200"
-                  : "bg-rose-100 text-rose-700 dark:bg-rose-900/40 dark:text-rose-200";
+    function reqChips(req){
+      const chip = (label,on,clsOn,clsOff)=>`<span class="rounded-full px-2 py-0.5 text-[11px] font-semibold ${on?clsOn:clsOff}">${label}${on?"":" N/A"}</span>`;
+      return [
+        chip("Essays", req.essays, "bg-indigo-100 text-indigo-700 dark:bg-indigo-900/40 dark:text-indigo-200", "bg-slate-200 text-slate-700 dark:bg-slate-800 dark:text-slate-300"),
+        chip("Letters", req.letters, "bg-emerald-100 text-emerald-700 dark:bg-emerald-900/40 dark:text-emerald-200", "bg-slate-200 text-slate-700 dark:bg-slate-800 dark:text-slate-300"),
+        chip("Portfolio", req.portfolio, "bg-amber-100 text-amber-700 dark:bg-amber-900/40 dark:text-amber-200", "bg-slate-200 text-slate-700 dark:bg-slate-800 dark:text-slate-300"),
+        chip("Test-optional", req.testOptional, "bg-teal-100 text-teal-700 dark:bg-teal-900/40 dark:text-teal-200", "bg-slate-200 text-slate-700 dark:bg-slate-800 dark:text-slate-300"),
+        `<span class="rounded-full px-2 py-0.5 text-[11px] font-semibold bg-sky-100 text-sky-700 dark:bg-sky-900/40 dark:text-sky-200">${req.app}</span>`
+      ].join(" ");
+    }
+    function tipsFor(sc, score){
+      const tips=[];
+      if (sc.review==="scores" && state.gpa && state.gpa < sc.gpa-0.2) tips.push("Raise core GPA trend; use PIQs to show rigor and growth.");
+      if (sc.review==="eca" && state.ap<6) tips.push("Show meaningful EC impact (leadership, hours, outcomes).");
+      if (state.majors.some(m=>sc.majors.impacted.includes(m))) tips.push("Your major is impacted here—add a related alternate major just in case.");
+      if (state.preferences.includes("cost") && sc.tuition>12000) tips.push("Flag for scholarships & need-based aid on this campus.");
+      if (score<45) tips.push("Consider retesting SAT/ACT (if offered as optional) or strengthening senior schedule.");
+      return tips.length ? `<ul class="ml-4 list-disc text-sm text-slate-600 dark:text-slate-300">${tips.map(t=>`<li>${t}</li>`).join("")}</ul>` : `<p class="text-sm text-slate-500 dark:text-slate-400">Solid fit—keep momentum!</p>`;
+    }
+    function schoolCard(sc, score){
+      const reviewTag = sc.review==="scores" ? "Scores-heavy" : sc.review==="eca" ? "ECA-heavy" : "Balanced";
+      const reviewCls = sc.review==="scores" ? "bg-fuchsia-100 text-fuchsia-700 dark:bg-fuchsia-900/40 dark:text-fuchsia-200"
+                      : sc.review==="eca"    ? "bg-amber-100 text-amber-700 dark:bg-amber-900/40 dark:text-amber-200"
+                                             : "bg-slate-100 text-slate-700 dark:bg-slate-800 dark:text-slate-200";
+      const matchCls = score>70 ? "bg-green-100 text-green-700 dark:bg-green-900/40 dark:text-green-200"
+                   : score>50 ? "bg-amber-100 text-amber-700 dark:bg-amber-900/40 dark:text-amber-200"
+                              : "bg-rose-100 text-rose-700 dark:bg-rose-900/40 dark:text-rose-200";
+
+      const impacted = state.majors.filter(m => sc.majors.impacted.includes(m));
+      const impHtml = impacted.length ? `<div class="text-xs text-rose-600 dark:text-rose-300 mt-1">Impacted major(s): ${impacted.join(", ")}</div>` : "";
+
+      const detailsId = `d-${sc.id}`;
       return `
         <div class="rounded-2xl border border-slate-200 bg-white p-4 shadow-soft dark:border-slate-800 dark:bg-slate-900">
           <div class="flex items-start justify-between">
             <div>
-              <p class="text-lg font-bold">${s.name}</p>
-              <p class="text-xs text-slate-500 dark:text-slate-400">Acceptance: ${s.rate}%</p>
+              <p class="text-lg font-bold">${sc.name}</p>
+              <p class="text-xs text-slate-500 dark:text-slate-400">Acceptance: ${sc.rate}%</p>
+              ${impHtml}
             </div>
-            <span class="rounded-full px-2 py-0.5 text-xs font-bold ${badge}">${score}% match</span>
+            <div class="text-right">
+              <div class="mb-1"><span class="rounded-full px-2 py-0.5 text-xs font-bold ${matchCls}">${score}% match</span></div>
+              <div><span class="rounded-full px-2 py-0.5 text-[11px] font-bold ${reviewCls}">${reviewTag}</span></div>
+            </div>
           </div>
+
           <div class="mt-3 grid grid-cols-3 gap-2 text-xs">
-            <div class="rounded-xl border border-slate-200 p-2 dark:border-slate-700">
-              <p class="font-semibold">Avg GPA</p><p>${s.gpa}</p>
-            </div>
-            <div class="rounded-xl border border-slate-200 p-2 dark:border-slate-700">
-              <p class="font-semibold">Avg SAT</p><p>${s.sat}</p>
-            </div>
-            <div class="rounded-xl border border-slate-200 p-2 dark:border-slate-700">
-              <p class="font-semibold">Tuition</p><p>$${s.tuition.toLocaleString()}/yr</p>
-            </div>
+            <div class="rounded-xl border border-slate-200 p-2 dark:border-slate-700"><p class="font-semibold">Avg GPA</p><p>${sc.gpa}</p></div>
+            <div class="rounded-xl border border-slate-200 p-2 dark:border-slate-700"><p class="font-semibold">Avg SAT</p><p>${sc.sat}</p></div>
+            <div class="rounded-xl border border-slate-200 p-2 dark:border-slate-700"><p class="font-semibold">Tuition</p><p>$${sc.tuition.toLocaleString()}/yr</p></div>
+          </div>
+
+          <div class="mt-3 flex flex-wrap gap-1">${reqChips(sc.req)}</div>
+
+          <button class="mt-3 w-full rounded-xl border border-slate-200 px-3 py-2 text-sm font-semibold hover:bg-slate-50 dark:border-slate-700 dark:hover:bg-slate-800"
+                  onclick="document.getElementById('${detailsId}').classList.toggle('hidden')">View details & tips</button>
+
+          <div id="${detailsId}" class="mt-3 hidden rounded-xl border border-slate-200 p-3 text-sm dark:border-slate-700">
+            <p class="font-semibold">Notes</p>
+            <ul class="ml-4 list-disc text-slate-600 dark:text-slate-300">${sc.notes.map(n=>`<li>${n}</li>`).join("")}</ul>
+            <p class="mt-3 font-semibold">Personalized tips</p>
+            ${tipsFor(sc, score)}
           </div>
         </div>
       `;
     }
-    function emptyCard(){
-      return `<div class="rounded-2xl border border-dashed border-slate-300 p-4 text-sm text-slate-500 dark:border-slate-700 dark:text-slate-400">No schools in this bucket yet. Adjust GPA/SAT or preferences.</div>`;
-    }
+    function emptyCard(){ return `<div class="rounded-2xl border border-dashed border-slate-300 p-4 text-sm text-slate-500 dark:border-slate-700 dark:text-slate-400">No schools in this bucket yet. Adjust GPA/SAT or preferences.</div>`; }
 
+    /* ---------- planning ---------- */
     function renderTasks(){
-      const ul = $("#todoList");
-      ul.innerHTML = "";
+      const ul=$("#todoList"); ul.innerHTML="";
       state.tasks.forEach((t,i)=>{
-        const li = document.createElement("li");
-        li.className = "flex items-center justify-between rounded-xl border border-slate-200 bg-white p-3 text-sm dark:border-slate-800 dark:bg-slate-900";
-        li.innerHTML = `
-          <label class="flex items-center gap-2">
-            <input type="checkbox" ${t.done?"checked":""} class="h-4 w-4 rounded border-slate-300 text-brand.primary focus:ring-brand.primary">
-            <span class="${t.done?"line-through text-slate-400":""}">${t.text}</span>
-          </label>
-          <button class="text-slate-400 hover:text-brand.danger">🗑️</button>
-        `;
-        const [checkbox, del] = li.querySelectorAll("input,button");
-        checkbox.onchange = (e)=>{ state.tasks[i].done = e.target.checked; save(); renderTasks(); };
-        del.onclick = ()=>{ state.tasks.splice(i,1); save(); renderTasks(); };
+        const li=document.createElement("li");
+        li.className="flex items-center justify-between rounded-xl border border-slate-200 bg-white p-3 text-sm dark:border-slate-800 dark:bg-slate-900";
+        li.innerHTML=`<label class="flex items-center gap-2"><input type="checkbox" ${t.done?"checked":""} class="h-4 w-4 rounded border-slate-300 text-brand.primary focus:ring-brand.primary"><span class="${t.done?"line-through text-slate-400":""}">${t.text}</span></label><button class="text-slate-400 hover:text-brand.danger">🗑️</button>`;
+        const [cb,del]=li.querySelectorAll("input,button");
+        cb.onchange=e=>{ state.tasks[i].done=e.target.checked; save(state); renderTasks(); };
+        del.onclick=()=>{ state.tasks.splice(i,1); save(state); renderTasks(); };
         ul.appendChild(li);
       });
     }
 
+    /* ---------- documents ---------- */
     function renderDocs(){
-      const wrap = $("#docsList");
-      wrap.innerHTML = "";
-      const items = [
+      const wrap=$("#docsList"); wrap.innerHTML="";
+      const items=[
         ["profile","Personal info","Completed","success"],
         ["transcripts","Transcripts","Request from counselor by Oct 15","warning"],
-        ["recommendations","Recommendation letters","Need 2–3 teachers","danger"],
-        ["personal_statement","Personal statement","4 UC PIQs","danger"],
+        ["recommendations","Recommendation letters","Need 2–3 teachers (for non-UCs)","danger"],
+        ["personal_statement","Personal statement (UC PIQs)","4 short essays for UC","danger"],
         ["fafsa","FAFSA/CADAA","Opens Oct 1, 2025","danger"]
       ];
-      let done = 0;
-      items.forEach(([key,title,desc,theme])=>{
-        const on = !!state.docs[key];
-        if (on) done++;
-        wrap.insertAdjacentHTML("beforeend", `
+      let done=0;
+      for (const [k,title,desc,theme] of items){
+        const on=!!state.docs[k]; if(on) done++;
+        wrap.insertAdjacentHTML("beforeend",`
           <div class="flex items-start gap-3 rounded-2xl border border-slate-200 bg-white p-4 shadow-soft dark:border-slate-800 dark:bg-slate-900">
             <input type="checkbox" ${on?"checked":""} class="mt-0.5 h-4 w-4 rounded border-slate-300 text-brand.primary focus:ring-brand.primary">
-            <div class="flex-1">
-              <p class="font-semibold">${title}</p>
-              <p class="text-sm text-slate-500 dark:text-slate-400">${desc}</p>
-            </div>
+            <div class="flex-1"><p class="font-semibold">${title}</p><p class="text-sm text-slate-500 dark:text-slate-400">${desc}</p></div>
             <span class="rounded-full px-2 py-0.5 text-xs font-bold ${
-              theme==="success" ? "bg-green-100 text-green-700 dark:bg-green-900/40 dark:text-green-200" :
-              theme==="warning" ? "bg-amber-100 text-amber-700 dark:bg-amber-900/40 dark:text-amber-200" :
+              theme==="success"?"bg-green-100 text-green-700 dark:bg-green-900/40 dark:text-green-200":
+              theme==="warning"?"bg-amber-100 text-amber-700 dark:bg-amber-900/40 dark:text-amber-200":
               "bg-rose-100 text-rose-700 dark:bg-rose-900/40 dark:text-rose-200"
             }">${on?"Done":"Pending"}</span>
           </div>
         `);
         const cb = wrap.lastElementChild.querySelector("input");
-        cb.onchange = () => { state.docs[key] = cb.checked; save(); renderDocs(); };
-      });
-      const pct = Math.round(done / items.length * 100);
-      $("#docProgressPct").textContent = pct + "%";
-      $("#docProgressBar").style.width = pct + "%";
+        cb.onchange = ()=>{ state.docs[k]=cb.checked; save(state); renderDocs(); }
+      }
+      const pct = Math.round(done/items.length*100);
+      $("#docProgressPct").textContent = pct+"%";
+      $("#docProgressBar").style.width = pct+"%";
     }
 
+    /* ---------- timeline ---------- */
     function renderTimeline(){
-      const list = $("#timelineList");
-      const items = [
-        { date:"Aug 1, 2025", title:"UC application opens", color:"brand" , tip:"Start PIQs + activities list" },
-        { date:"Oct 1, 2025", title:"FAFSA/CADAA opens", color:"green", tip:"Submit ASAP for max aid" },
-        { date:"Nov 15, 2025", title:"Priority submission", color:"amber", tip:"Early submission suggests interest" },
-        { date:"Nov 30, 2025", title:"UC/CSU deadline", color:"rose", tip:"No extensions; submit!" },
-        { date:"Mar 15–30, 2026", title:"Decisions released", color:"brand", tip:"Check portals" }
+      const list=$("#timelineList");
+      const items=[
+        {date:"Aug 1, 2025", title:"UC application opens", tip:"Start PIQs + activities list"},
+        {date:"Oct 1, 2025", title:"FAFSA/CADAA opens", tip:"Submit ASAP for max aid"},
+        {date:"Nov 15, 2025", title:"Priority submission", tip:"Early submission shows interest"},
+        {date:"Nov 30, 2025", title:"UC/CSU deadline", tip:"No extensions; submit!"},
+        {date:"Mar 15–30, 2026", title:"Decisions released", tip:"Check portals"}
       ];
       list.innerHTML = items.map(i=>`
         <div class="rounded-2xl border border-slate-200 bg-white p-4 shadow-soft dark:border-slate-800 dark:bg-slate-900">
@@ -744,37 +659,53 @@
       `).join("");
     }
 
-    /***********************
-     * FINANCIAL AID
-     ***********************/
+    /* ---------- aid ---------- */
     function calcAid(){
-      const income = parseInt($("#faIncome").value)||0;
-      const gpa = state.gpa || 3.2;
-      // Very simple heuristics (budget friendly demo)
-      const pell = income < 65000 ? (income < 50000 ? 7395 : 3500) : 0;
-      const calGrant = (income < 80000 && gpa >= 3.0) ? 12570 : 0;
-      const mcs = (income >= 80000 && income <= 177000) ? Math.max(0, 3000 - Math.floor((income-80000)/5000)*250) : 0;
-      const total = pell + calGrant + mcs;
-
-      const card = (label, amount) => `
-        <div class="rounded-2xl border border-slate-200 bg-white p-4 text-center shadow-soft dark:border-slate-800 dark:bg-slate-900">
-          <p class="text-xs text-slate-500 dark:text-slate-400">${label}</p>
-          <p class="mt-1 text-2xl font-bold">$${amount.toLocaleString()}</p>
-        </div>
-      `;
-      $("#aidResult").innerHTML = card("Pell Grant", pell) + card("Cal Grant A/B", calGrant) + card("Middle Class Scholarship", mcs) +
+      const income=parseInt($("#faIncome").value)||0;
+      const pell = income<65000 ? (income<50000?7395:3500) : 0;
+      const cal  = (income<80000 && (state.gpa??3.2)>=3.0) ? 12570 : 0;
+      const mcs  = (income>=80000 && income<=177000) ? Math.max(0, 3000 - Math.floor((income-80000)/5000)*250) : 0;
+      const total = pell+cal+mcs;
+      const card=(l,a)=>`<div class="rounded-2xl border border-slate-200 bg-white p-4 text-center shadow-soft dark:border-slate-800 dark:bg-slate-900"><p class="text-xs text-slate-500 dark:text-slate-400">${l}</p><p class="mt-1 text-2xl font-bold">$${a.toLocaleString()}</p></div>`;
+      $("#aidResult").innerHTML = card("Pell Grant",pell)+card("Cal Grant A/B",cal)+card("Middle Class Scholarship",mcs)+
         `<div class="sm:col-span-3 mt-2 rounded-2xl border border-slate-200 bg-slate-50 p-4 text-center font-semibold dark:border-slate-800 dark:bg-slate-900">Estimated annual aid: $${total.toLocaleString()}</div>`;
     }
     $("#calcAid")?.addEventListener("click", calcAid);
 
-    /***********************
-     * AI BUBBLE
-     ***********************/
-    function showAI(text){
-      $("#aiText").textContent = text;
-      $("#aiBubble").classList.remove("hidden");
-      setTimeout(()=> $("#aiBubble").classList.add("hidden"), 9000);
+    /* ---------- help (smarter) ---------- */
+    function showHelpAuto(text){
+      // open mini modal if user is stuck (less intrusive than bubble-on-top-of-buttons)
+      $("#helpModal").classList.remove("hidden");
+      showQA("custom", text);
     }
+    function showQA(key, override){
+      const ans=$("#qaAnswer");
+      const majors = state.majors.length ? `You're exploring: <b>${state.majors.join(", ")}</b>. ` : "";
+      const map={
+        reach:`${majors}We bucket by your profile vs campus profile. <b>Reach</b> ~ acceptance <30% or your stats below average; <b>Match</b> ~ close to averages; <b>Safety</b> ~ your stats clearly above. We also tweak by school style (scores/balanced/ECA) and impacted majors.`,
+        piq:`UC uses 4 short “PIQs” (~350 words each). Show impact, growth, and voice. Tie examples to your interests/major signals. No letters required at submit; some UCs may request later.`,
+        majors:`Pick what excites you now; it’s fine to pivot. For impacted majors (e.g., CS, Nursing), also choose a related alternate (e.g., DS, Math, Cognitive Sci).`,
+        aid:`Estimator uses Pell (need), Cal Grant (CA resident + GPA), and Middle Class Scholarship (income-based). Exact awards vary—submit FAFSA/CADAA early.`,
+        custom: override || "Ask away!"
+      };
+      ans.innerHTML = `<div class="prose dark:prose-invert prose-sm max-w-none">${map[key]}</div>`;
+    }
+
+    /* ---------- tiny CSS aliases ---------- */
+    // (keep classes static so Tailwind CDN always renders)
+    document.head.insertAdjacentHTML("beforeend", `
+      <style>
+        .chip { border:1px solid rgb(226,232,240); background:#f8fafc; padding:.5rem .75rem; border-radius:9999px; font-weight:600; font-size:.875rem }
+        .chip:hover { background:white }
+        .pill { border:1px solid rgb(226,232,240); background:#f8fafc; padding:.75rem; border-radius:.75rem; text-align:left; font-weight:600 }
+        .pill:hover { background:white }
+        .card { border:1px solid rgb(226,232,240); background:white; border-radius:1rem; padding:1.25rem; box-shadow:0 8px 30px rgba(0,0,0,.08) }
+        .label { font-size:.75rem; font-weight:700; color:rgb(100,116,139) }
+        .stat { margin-top:.25rem; font-size:1.75rem; font-weight:800 }
+        .dark .chip, .dark .pill { background:#0f172a; border-color:#334155 }
+        .dark .chip:hover, .dark .pill:hover { background:#0b1220 }
+      </style>
+    `);
   </script>
 </body>
 </html>
