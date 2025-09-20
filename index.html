@@ -396,6 +396,40 @@
 </div>
 
 <script>
+/* ===== Pathwise native bridge (drop-in) ===== */
+(function () {
+  const listeners = {};
+  function emitToNative(type, payload = {}) {
+    try {
+      // iOS
+      if (window.webkit?.messageHandlers?.pathwise) {
+        window.webkit.messageHandlers.pathwise.postMessage({ type, payload });
+      }
+      // Android
+      if (window.Android?.postMessage) {
+        window.Android.postMessage(JSON.stringify({ type, payload }));
+      }
+    } catch (e) { /* no-op */ }
+  }
+
+  // Public API native can call (and web can also use internally)
+  window.PathwiseBridge = {
+    on(type, cb) { (listeners[type] ||= []).push(cb); },
+    setUser(u)       { try { window.__pw_setUser?.(u); } catch{} },
+    reset()          { try { window.__pw_reset?.(); } catch{} },
+    navigate(dest)   { try { window.__pw_nav?.(dest); } catch{} }, // 'planner' | 'dashboard'
+    setTheme(mode)   { try { document.documentElement.setAttribute('data-theme', mode);
+                              localStorage.setItem('pw_theme', mode);} catch{} },
+    selectSchools(ids){ try { window.__pw_selectSchools?.(ids); } catch{} },
+    getState()       { try { return window.__pw_getState?.() || "{}"; } catch{ return "{}"; } }
+  };
+
+  window.__pw_emit_native = emitToNative;                   // web → native
+  window.__pw_emit_local  = (type,p)=>{ (listeners[type]||[]).forEach(cb=>cb(p)); };
+
+  setTimeout(()=>emitToNative('ready', {}), 0);
+})();
+
 /* ========================
    DATA & UTILITIES
    ======================== */
@@ -608,7 +642,7 @@ function makeDocsForSchool(s){
   if(s.requirements.essays>0) items.push({key:`${s.id}_essays`, label:`${s.name}: essays (${s.requirements.essays})`, due:addDays(s.deadlines.app,-15)});
   if(s.requirements.recs) items.push({key:`${s.id}_recs`, label:`${s.name}: 2 recommendations`, due:addDays(s.deadlines.app,-21)});
   items.push({key:`${s.id}_transcript`, label:`${s.name}: transcript request`, due:addDays(s.deadlines.app,-30)});
-  // FAFSA (once per user, but show as global doc on CA/NY/TX/MA/IL)
+  // FAFSA (once per state key)
   if(['CA','NY','TX','MA','IL'].includes(user.homeState||'')){
     items.push({key:`fafsa_${s.state}`, label:`FAFSA for ${s.state}`, due:(s.state==='CA'?'Oct 1 2025':'Oct 1 2025')});
   }
@@ -660,7 +694,7 @@ function renderPlanner(){
     $('#p_ap').value='';
     $('#p_pref').value='';
     $('#p_interest').value='';
-    $('#p_states').value='';
+    { const sel = $('#p_states'); Array.from(sel.options).forEach(o => o.selected = false); }
     UI.matchPreview.textContent = '0 matches yet';
   }else{
     // preload
@@ -673,7 +707,6 @@ function renderPlanner(){
     $('#p_ap').value = user.ap||'';
     $('#p_pref').value = user.pref||'';
     $('#p_interest').value = user.interest||'';
-    // multi-select states
     const sel = $('#p_states');
     const states = user.targetStates||[];
     Array.from(sel.options).forEach(o => { o.selected = states.includes(o.value) });
@@ -786,7 +819,6 @@ function removeSchool(id){
 }
 function quickAid(id){
   setActiveTab('aid'); renderAidTab();
-  // nudge AI
   aiPing("I broke down your aid per school — want me to explain Pell vs state grants?");
 }
 function quickReq(id){
@@ -816,19 +848,29 @@ function renderAidTab(){
   }).join('');
 }
 
-/* Docs tab */
+/* Docs tab (dedup by key) */
 function renderDocsTab(){
-  // base: build docs per selected school
-  const docs = [];
+  // Build docs per selected school, but de-duplicate by key
+  const docMap = new Map();
+
   mySchools.forEach(id=>{
     const s=SCHOOLS.find(x=>x.id===id);
-    makeDocsForSchool(s).forEach(d=>{ docs.push({...d, schoolId:s.id}); if(!(d.key in docState)) docState[d.key]={done:false,label:d.label,due:d.due,schoolId:s.id}; });
+    makeDocsForSchool(s).forEach(d=>{
+      if(!docMap.has(d.key)) docMap.set(d.key, {...d, schoolId:s.id});
+      if(!(d.key in docState)){
+        docState[d.key] = {done:false,label:d.label,due:d.due,schoolId:s.id};
+      }
+    });
   });
   saveAll();
 
-  if(docs.length===0){ UI.docList.innerHTML = `<div class="muted">Add schools to generate your checklist.</div>`; UI.docsProgress.textContent='0% done'; return; }
+  const docs = Array.from(docMap.values());
+  if(docs.length===0){
+    UI.docList.innerHTML = `<div class="muted">Add schools to generate your checklist.</div>`;
+    UI.docsProgress.textContent='0% done';
+    return;
+  }
 
-  // render
   let done=0;
   UI.docList.innerHTML = docs.map(d=>{
     const st = docState[d.key] || {done:false,label:d.label,due:d.due,schoolId:d.schoolId};
@@ -859,7 +901,6 @@ function toggleDoc(key,checked){
 
 /* Timeline tab */
 function renderTimelineTab(){
-  // collect all deadlines: app & priority + docs
   const items = [];
   mySchools.forEach(id=>{
     const s=SCHOOLS.find(x=>x.id===id);
@@ -870,15 +911,12 @@ function renderTimelineTab(){
     const d=docState[k];
     items.push({label:d.label, date:d.due, done:d.done});
   });
-  // add FAFSA generic milestone once
   if(user && user.homeState){
     items.push({label:`FAFSA opens`, date:'Oct 1 2025'});
   }
 
-  // sort by date
   items.sort((a,b)=> new Date(a.date) - new Date(b.date));
 
-  // render
   if(items.length===0){ UI.tlList.innerHTML = `<div class="muted">Add schools to see your timeline.</div>`; return; }
   UI.tlList.innerHTML = items.map(it=>{
     const cls = it.done ? 'urg-green' : urgencyClass(it.date);
@@ -912,6 +950,18 @@ function aiPing(msg){
 }
 
 /* ========================
+   RESET (shared)
+   ======================== */
+function resetAll(){
+  localStorage.removeItem(LS_KEYS.user);
+  localStorage.removeItem(LS_KEYS.my);
+  localStorage.removeItem(LS_KEYS.docs);
+  user=null; mySchools=[]; docState={};
+  renderPlanner();
+  aiPing("Fresh slate — let’s plan smart 🤝");
+}
+
+/* ========================
    EVENTS
    ======================== */
 UI.themeBtn.onclick = ()=>{
@@ -923,12 +973,7 @@ UI.themeBtn.onclick = ()=>{
 };
 UI.resetBtn.onclick = ()=>{
   if(confirm('Reset everything and start planning again?')){
-    localStorage.removeItem(LS_KEYS.user);
-    localStorage.removeItem(LS_KEYS.my);
-    localStorage.removeItem(LS_KEYS.docs);
-    user=null; mySchools=[]; docState={};
-    renderPlanner();
-    aiPing("Fresh slate — let’s plan smart 🤝");
+    resetAll();
   }
 };
 UI.backPlanningBtn.onclick = ()=>{ renderPlanner(); scheduleAI(); };
@@ -941,7 +986,6 @@ UI.backPlanningBtn.onclick = ()=>{ renderPlanner(); scheduleAI(); };
 $('#p_states').addEventListener('change', previewMatches);
 
 UI.startBtn.onclick = ()=>{
-  // minimal validation
   const name = $('#p_name').value.trim();
   const grade = $('#p_grade').value;
   const home = $('#p_homeState').value;
@@ -949,7 +993,6 @@ UI.startBtn.onclick = ()=>{
     aiPing('Name, grade, and home state are required to tailor results 📌');
     return;
   }
-  // build user model
   const sel = $('#p_states');
   user = {
     name,
@@ -969,6 +1012,11 @@ UI.startBtn.onclick = ()=>{
   scheduleAI();
 };
 
+// tab clicks
+UI.tabs.forEach(tab=>{
+  tab.addEventListener('click', ()=> setActiveTab(tab.dataset.tab));
+});
+
 // filter listeners
 UI.filters.state.onchange = ()=>renderSchoolsTab();
 UI.filters.sys.onchange = ()=>renderSchoolsTab();
@@ -977,7 +1025,6 @@ UI.filters.q.oninput = ()=>renderSchoolsTab();
 // AI bubble click → helpful action
 UI.aiBubble.onclick = ()=>{
   if(UI.planner.classList.contains('hidden')){
-    // On dashboard → highlight My Schools or open aid
     if(mySchools.length===0){
       setActiveTab('schools'); aiPing('Tap “Add” on a few schools — I’ll build docs & deadlines automatically.');
     }else{
@@ -988,7 +1035,7 @@ UI.aiBubble.onclick = ()=>{
   }
 };
 
-/* Preview match count while planning */
+/* Preview match count while planning (safe if user is null) */
 function previewMatches(){
   const tempUser = {
     gpa: Number($('#p_gpa').value||0),
@@ -999,13 +1046,15 @@ function previewMatches(){
     homeState: $('#p_homeState').value||'',
     targetStates: Array.from($('#p_states').selectedOptions).map(o=>o.value)
   };
-  // temporarily set a bare user to reuse scoring safely
   const prev = user;
-  user = {...user, ...tempUser};
-  const allowStates = (tempUser.targetStates && tempUser.targetStates.length>0) ? new Set(tempUser.targetStates) : null;
-  let count = SCHOOLS.filter(s=> !allowStates || allowStates.has(s.state)).filter(s=>matchScore(s)>50).length;
+  user = { ...(user||{}), ...tempUser };           // safe when user is null
+  const allowStates = (tempUser.targetStates && tempUser.targetStates.length>0)
+    ? new Set(tempUser.targetStates) : null;
+  const count = SCHOOLS
+    .filter(s=> !allowStates || allowStates.has(s.state))
+    .filter(s=> matchScore(s) > 50).length;
   UI.matchPreview.textContent = `${count} potential matches`;
-  user = prev; // restore
+  user = prev;
 }
 
 /* ========================
@@ -1049,6 +1098,41 @@ function runTests(){
     console.error('Tests failed:', e.message);
   }
 }
+
+/* =========================
+   Native Bridge → App wiring
+   ========================= */
+window.__pw_reset = function () {
+  try { resetAll(); } catch (e) { console.warn('__pw_reset issue', e); }
+};
+
+window.__pw_nav = function (dest) {  // 'planner' | 'dashboard'
+  try {
+    if (dest === 'planner') renderPlanner();
+    else renderDashboard();
+  } catch (e) { console.warn('__pw_nav issue', e); }
+};
+
+window.__pw_setUser = function (u) {
+  try {
+    user = { ...(user||{}), ...(u||{}) };
+    saveAll();
+    renderDashboard();
+  } catch (e) { console.warn('__pw_setUser issue', e); }
+};
+
+window.__pw_selectSchools = function (ids) {
+  try {
+    mySchools = Array.isArray(ids) ? ids.slice(0) : [];
+    saveAll();
+    renderSchoolsTab(); renderAidTab(); renderDocsTab(); renderTimelineTab();
+  } catch (e) { console.warn('__pw_selectSchools issue', e); }
+};
+
+window.__pw_getState = function () {
+  try { return JSON.stringify({ user, mySchools, docState }); }
+  catch (e) { return "{}"; }
+};
 </script>
 </body>
 </html>
